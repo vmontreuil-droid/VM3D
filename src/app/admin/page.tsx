@@ -14,6 +14,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import AdminSearchPanel from '@/app/admin/admin-search-panel'
+import AdminUploadPanel from '@/app/admin/admin-upload-panel'
 import ProjectMap from '@/components/projects/project-map'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -514,6 +515,8 @@ export default async function AdminPage() {
             worden.
           </section>
         )}
+
+        <AdminUploadPanel projects={projectsWithProfiles} />
 
         <AdminSearchPanel
           customers={customersWithMeta}
