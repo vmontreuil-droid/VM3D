@@ -193,6 +193,20 @@ export default async function AdminPage() {
 
   const ticketCount = ticketCountRaw ?? 0
   const subscriptionCount = 0
+  const hasResendApiKey = Boolean(process.env.RESEND_API_KEY)
+  const hasMailFrom = Boolean(
+    process.env.TICKET_NOTIFICATIONS_FROM || process.env.RESEND_FROM_EMAIL
+  )
+  const hasPublicSiteUrl = Boolean(
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || process.env.VERCEL_URL
+  )
+  const ticketMailEnabled = hasResendApiKey && hasMailFrom && hasPublicSiteUrl
+
+  const missingTicketMailConfig = [
+    hasResendApiKey ? null : 'RESEND_API_KEY',
+    hasMailFrom ? null : 'TICKET_NOTIFICATIONS_FROM of RESEND_FROM_EMAIL',
+    hasPublicSiteUrl ? null : 'NEXT_PUBLIC_SITE_URL of SITE_URL of VERCEL_URL',
+  ].filter(Boolean)
 
   return (
     <AppShell isAdmin>
@@ -345,6 +359,24 @@ export default async function AdminPage() {
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
                   Snelle toegang tot klanten, werven en opvolging.
                 </p>
+              </div>
+
+              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Ticket notificaties
+                </p>
+                <p
+                  className={`mt-1.5 text-xs font-semibold ${
+                    ticketMailEnabled ? 'text-emerald-300' : 'text-amber-300'
+                  }`}
+                >
+                  {ticketMailEnabled ? 'Actief' : 'Niet volledig geconfigureerd'}
+                </p>
+                {!ticketMailEnabled && (
+                  <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
+                    Ontbreekt: {missingTicketMailConfig.join(' · ')}
+                  </p>
+                )}
               </div>
 
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
