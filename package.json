@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:belgium-test": "node scripts/import-belgium-test-data.mjs",
+    "seed:belgium-test:dry": "node scripts/import-belgium-test-data.mjs --dry-run",
+    "seed:belgium-test:cleanup": "node scripts/remove-belgium-test-data.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",

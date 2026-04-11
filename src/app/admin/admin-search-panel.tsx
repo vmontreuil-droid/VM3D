@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Edit, Eye, PlusCircle, Ticket } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 type CustomerItem = {
@@ -91,6 +92,22 @@ function getStatusClass(status?: string | null) {
       return 'badge-success'
     default:
       return 'badge-neutral'
+  }
+}
+
+function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
+  const shared =
+    'group relative inline-flex h-8 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 text-[10px] font-semibold text-[var(--text-main)] transition hover:-translate-y-px'
+
+  switch (tone) {
+    case 'blue':
+      return `${shared} hover:border-sky-400/45 hover:bg-[var(--bg-card)]/80`
+    case 'orange':
+      return `${shared} hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80`
+    case 'green':
+      return `${shared} hover:border-emerald-400/45 hover:bg-[var(--bg-card)]/80`
+    default:
+      return `${shared} hover:border-white/15 hover:bg-[var(--bg-card)]/80`
   }
 }
 
@@ -243,25 +260,25 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
       </div>
 
       {(customerSearch.trim() || projectSearch.trim()) ? (
-        <div className="space-y-4 border-t border-[var(--border-soft)] px-4 py-4 sm:px-5">
+        <div className="space-y-3 border-t border-[var(--border-soft)] px-4 py-3.5 sm:px-5">
           {customerSearch.trim() ? (
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
-              <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
                     Resultaten
                   </p>
-                  <h4 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                  <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
                     Klanten
                   </h4>
                 </div>
-                <p className="text-[11px] text-[var(--text-soft)]">
+                <p className="text-[10px] text-[var(--text-soft)]">
                   {filteredCustomers.length} gevonden
                 </p>
               </div>
 
               {filteredCustomers.length === 0 ? (
-                <div className="px-4 py-5 text-sm text-[var(--text-soft)]">
+                <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
                   Geen klanten gevonden voor deze zoekopdracht.
                 </div>
               ) : (
@@ -269,37 +286,59 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                   {filteredCustomers.map((customer) => (
                     <div
                       key={customer.id}
-                      className="flex flex-col gap-3 px-4 py-4 lg:flex-row lg:items-center lg:justify-between"
+                      className="flex flex-col gap-2.5 px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--text-main)]">
+                        <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
                           {getCustomerName(customer)}
                         </p>
-                        <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          {[customer.email, customer.city, customer.vat_number]
+                        <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
+                          {[customer.phone, customer.email, customer.city]
                             .filter(Boolean)
                             .join(' · ') || 'Geen extra gegevens'}
                         </p>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:justify-end">
                         <Link
                           href={`/admin/customers/${customer.id}`}
-                          className="btn-secondary btn-sm"
+                          className={getActionButtonClass('blue')}
                         >
-                          Open
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
+                            <Eye className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Open</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                         </Link>
                         <Link
                           href={`/admin/customers/${customer.id}/edit`}
-                          className="btn-secondary btn-sm"
+                          className={getActionButtonClass('neutral')}
                         >
-                          Bewerk
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
+                            <Edit className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Bewerk</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
                         </Link>
                         <Link
                           href={`/admin/projects/new?customer=${customer.id}`}
-                          className="btn-primary btn-sm"
+                          className={getActionButtonClass('orange')}
                         >
-                          Nieuw project
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
+                            <PlusCircle className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Nieuw project</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
+                        </Link>
+                        <Link
+                          href={`/dashboard/tickets?customer=${customer.id}`}
+                          className={getActionButtonClass('green')}
+                        >
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
+                            <Ticket className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Ticket</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
                         </Link>
                       </div>
                     </div>
@@ -311,22 +350,22 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
 
           {projectSearch.trim() ? (
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
-              <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
                     Resultaten
                   </p>
-                  <h4 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                  <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
                     Werven
                   </h4>
                 </div>
-                <p className="text-[11px] text-[var(--text-soft)]">
+                <p className="text-[10px] text-[var(--text-soft)]">
                   {filteredProjects.length} gevonden
                 </p>
               </div>
 
               {filteredProjects.length === 0 ? (
-                <div className="px-4 py-5 text-sm text-[var(--text-soft)]">
+                <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
                   Geen werven gevonden voor deze zoekopdracht.
                 </div>
               ) : (
@@ -334,20 +373,20 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                   {filteredProjects.map((project) => (
                     <div
                       key={String(project.id)}
-                      className="flex flex-col gap-3 px-4 py-4 lg:flex-row lg:items-center lg:justify-between"
+                      className="flex flex-col gap-2.5 px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--text-main)]">
+                        <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
                           {project.title || '—'}
                         </p>
-                        <p className="mt-1 text-xs text-[var(--text-soft)]">
+                        <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                           {[project.address, getProjectCustomerName(project), formatDate(project.created_at)]
                             .filter(Boolean)
                             .join(' · ')}
                         </p>
-                        <div className="mt-2">
+                        <div className="mt-1.5">
                           <span
-                            className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${getStatusClass(
+                            className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${getStatusClass(
                               project.status
                             )}`}
                           >
@@ -356,18 +395,26 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:justify-end">
                         <Link
                           href={`/admin/projects/${project.id}`}
-                          className="btn-secondary btn-sm"
+                          className={getActionButtonClass('blue')}
                         >
-                          Open
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
+                            <Eye className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Open</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                         </Link>
                         <Link
                           href={`/admin/projects/${project.id}/edit`}
-                          className="btn-secondary btn-sm"
+                          className={getActionButtonClass('neutral')}
                         >
-                          Bewerk
+                          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
+                            <Edit className="h-3 w-3" />
+                          </span>
+                          <span className="pr-1">Bewerk</span>
+                          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
                         </Link>
                       </div>
                     </div>
