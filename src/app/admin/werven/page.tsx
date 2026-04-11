@@ -1,22 +1,23 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import AppShell from '@/components/app-shell'
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import AdminProjectSearch from '@/app/admin/admin-project-search'
+import ProjectMap from '@/components/projects/project-map'
 import {
-  Users,
+  Activity,
+  ArrowLeft,
+  BarChart3,
+  CircleDollarSign,
+  Download,
   FolderOpen,
   PlusCircle,
   Ticket,
-  BarChart3,
-  CreditCard,
   UploadCloud,
-  Activity,
-  Download,
+  Users,
+  Wallet,
 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import AppShell from '@/components/app-shell'
-import AdminSearchPanel from '@/app/admin/admin-search-panel'
-import AdminUploadPanel from '@/app/admin/admin-upload-panel'
-import ProjectMap from '@/components/projects/project-map'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 function getStatusLabel(status: string | null) {
   switch (status) {
@@ -33,7 +34,7 @@ function getStatusLabel(status: string | null) {
   }
 }
 
-export default async function AdminPage() {
+export default async function AdminWervenPage() {
   const supabase = await createClient()
 
   const {
@@ -44,13 +45,13 @@ export default async function AdminPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const { data: currentProfile } = await supabase
     .from('profiles')
     .select('role, full_name, company_name')
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'admin') {
+  if (currentProfile?.role !== 'admin') {
     redirect('/dashboard')
   }
 
@@ -62,14 +63,6 @@ export default async function AdminPage() {
     .order('created_at', { ascending: false })
 
   const safeProjects = projects ?? []
-
-  const { data: customers, error: customersError } = await adminSupabase
-    .from('profiles')
-    .select('id, full_name, company_name, email, vat_number, city, phone, created_at, role')
-    .neq('role', 'admin')
-    .order('company_name', { ascending: true })
-
-  const safeCustomers = customers ?? []
 
   const uniqueUserIds = Array.from(
     new Set(safeProjects.map((project: any) => project.user_id).filter(Boolean))
@@ -113,57 +106,11 @@ export default async function AdminPage() {
     profiles: project.user_id ? profilesMap.get(project.user_id) ?? null : null,
   }))
 
-  const projectCounts = new Map<string, number>()
-  const latestProjectDates = new Map<string, string | null>()
-
-  for (const project of safeProjects) {
-    const key = String(project.user_id ?? '')
-    if (!key) continue
-
-    projectCounts.set(key, (projectCounts.get(key) ?? 0) + 1)
-
-    const currentLatest = latestProjectDates.get(key)
-    if (!currentLatest) {
-      latestProjectDates.set(key, project.created_at ?? null)
-    } else if (
-      project.created_at &&
-      new Date(project.created_at).getTime() > new Date(currentLatest).getTime()
-    ) {
-      latestProjectDates.set(key, project.created_at)
-    }
-  }
-
-  const customersWithMeta = safeCustomers.map((customer: any) => ({
-    ...customer,
-    project_count: projectCounts.get(String(customer.id)) ?? 0,
-    last_project_at: latestProjectDates.get(String(customer.id)) ?? null,
-  }))
-
-  const customerCount = customersWithMeta.length
-  const totalProjects = projectsWithProfiles.length
-  const submittedProjects = projectsWithProfiles.filter(
-    (project: any) => project.status === 'ingediend'
-  ).length
-  const activeProjects = projectsWithProfiles.filter(
-    (project: any) =>
-      project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
-  ).length
-  const completedProjects = projectsWithProfiles.filter(
-    (project: any) => project.status === 'afgerond'
-  ).length
-
-  const latestProject = projectsWithProfiles[0] ?? null
-  const latestCustomer =
-    latestProject?.profiles?.company_name ||
-    latestProject?.profiles?.full_name ||
-    latestProject?.profiles?.email ||
-    '—'
-
   let totalFiles = 0
   let finalFiles = 0
   let clientFiles = 0
   let filesError: any = null
+  let projectFiles: { id: number; project_id: number; file_type?: string | null }[] = []
 
   if (safeProjects.length > 0) {
     const { data: files, error } = await adminSupabase
@@ -177,6 +124,7 @@ export default async function AdminPage() {
     filesError = error
 
     const safeFiles = files ?? []
+    projectFiles = safeFiles
     totalFiles = safeFiles.length
     finalFiles = safeFiles.filter(
       (file: any) => file.file_type === 'final_file'
@@ -186,9 +134,129 @@ export default async function AdminPage() {
     ).length
   }
 
-  const hasLoadError = Boolean(projectsError || profilesError || customersError || filesError)
-  const ticketCount = 0
-  const subscriptionCount = 0
+  const totalProjects = projectsWithProfiles.length
+  const linkedCustomers = uniqueUserIds.length
+  const activeProjects = projectsWithProfiles.filter(
+    (project: any) =>
+      project.status === 'in_behandeling' ||
+      project.status === 'klaar_voor_betaling'
+  ).length
+  const submittedProjects = projectsWithProfiles.filter(
+    (project: any) => project.status === 'ingediend'
+  ).length
+
+  const billingRelevantProjects = projectsWithProfiles.filter((project: any) => {
+    const priceValue = Number(project.price)
+    const hasPrice =
+      project.price !== null &&
+      project.price !== undefined &&
+      Number.isFinite(priceValue) &&
+      priceValue > 0
+
+    return (
+      hasPrice ||
+      project.status === 'klaar_voor_betaling' ||
+      Boolean(project.is_paid ?? project.paid)
+    )
+  })
+
+  const invoiceReadyCount = billingRelevantProjects.length
+  const paidProjectsCount = billingRelevantProjects.filter((project: any) =>
+    Boolean(project.is_paid ?? project.paid)
+  ).length
+  const unpaidProjectsCount = billingRelevantProjects.filter(
+    (project: any) => !Boolean(project.is_paid ?? project.paid)
+  ).length
+
+  const totalProjectValue = projectsWithProfiles.reduce(
+    (sum: number, project: any) => {
+      const priceValue = Number(project.price)
+      return Number.isFinite(priceValue) && priceValue > 0
+        ? sum + priceValue
+        : sum
+    },
+    0
+  )
+
+  const paidRevenueAmount = projectsWithProfiles.reduce(
+    (sum: number, project: any) => {
+      const priceValue = Number(project.price)
+      const isPaid = Boolean(project.is_paid ?? project.paid)
+
+      return isPaid && Number.isFinite(priceValue) && priceValue > 0
+        ? sum + priceValue
+        : sum
+    },
+    0
+  )
+
+  const pricedProjectsCount = projectsWithProfiles.filter((project: any) => {
+    const priceValue = Number(project.price)
+    return Number.isFinite(priceValue) && priceValue > 0
+  }).length
+
+  const averageProjectValue =
+    pricedProjectsCount > 0 ? totalProjectValue / pricedProjectsCount : 0
+
+  const formattedTotalProjectValue = new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(totalProjectValue)
+
+  const formattedPaidRevenue = new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(paidRevenueAmount)
+
+  const formattedAverageProjectValue = new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(averageProjectValue)
+
+  const latestProject = projectsWithProfiles[0] ?? null
+  const latestProjectLabel =
+    latestProject?.title || latestProject?.address || '—'
+  const latestCustomerLabel =
+    latestProject?.profiles?.company_name ||
+    latestProject?.profiles?.full_name ||
+    latestProject?.profiles?.email ||
+    '—'
+
+  const highestValueProject =
+    [...projectsWithProfiles].sort(
+      (a: any, b: any) => Number(b.price || 0) - Number(a.price || 0)
+    )[0] ?? null
+
+  const highestValueProjectLabel =
+    highestValueProject?.title || highestValueProject?.address || '—'
+
+  const hasLoadError = Boolean(projectsError || profilesError || filesError)
+
+  const searchProjects = projectsWithProfiles.map((project: any) => {
+    const priceValue = Number(project.price)
+
+    return {
+      id: project.id,
+      title: project.title || 'Ongetitelde werf',
+      description: project.description ?? null,
+      address: project.address ?? null,
+      status: project.status || 'ingediend',
+      price:
+        Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null,
+      currency: project.currency || 'EUR',
+      created_at: project.created_at ?? null,
+      klantEmail:
+        project.profiles?.company_name ||
+        project.profiles?.full_name ||
+        project.profiles?.email ||
+        null,
+      paid: Boolean(project.is_paid ?? project.paid),
+      userId: project.user_id ?? null,
+    }
+  })
 
   return (
     <AppShell isAdmin>
@@ -206,29 +274,40 @@ export default async function AdminPage() {
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  Welkom, {profile?.full_name || profile?.company_name || 'Admin'}
+                  Wervenbeheer
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Centraal overzicht van klanten, werven, bestanden en opvolgingen
-                  binnen het platform.
+                  Beheer alle werven, volg voortgang op en hou facturatie en
+                  opleveringen centraal bij in dezelfde ritmiek als het
+                  klantenoverzicht.
                 </p>
+
+                <div className="mt-4 max-w-[260px]">
+                  <Link
+                    href="/admin"
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Dashboard
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar adminoverzicht
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
               <div className="w-full xl:max-w-[820px]">
                 <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
-                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
-                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{customerCount}</p>
-                      </div>
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
-                        <Users className="h-4.5 w-4.5 text-[var(--accent)]" />
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
@@ -237,6 +316,18 @@ export default async function AdminPage() {
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
                         <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{linkedCustomers}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <Users className="h-4.5 w-4.5 text-[var(--accent)]" />
                       </div>
                     </div>
                   </div>
@@ -280,23 +371,23 @@ export default async function AdminPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Ingediend</p>
-                        <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Facturatie</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{invoiceReadyCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
-                        <BarChart3 className="h-4.5 w-4.5 text-amber-400" />
+                        <Wallet className="h-4.5 w-4.5 text-amber-400" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(6,182,212,0.08),rgba(6,182,212,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Tickets</p>
-                        <p className="mt-1 text-lg font-semibold text-sky-400">{ticketCount}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                        <p className="mt-1 text-lg font-semibold text-cyan-400">{unpaidProjectsCount}</p>
                       </div>
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
-                        <Ticket className="h-4.5 w-4.5 text-sky-400" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-400/10">
+                        <BarChart3 className="h-4.5 w-4.5 text-cyan-400" />
                       </div>
                     </div>
                   </div>
@@ -304,11 +395,11 @@ export default async function AdminPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(236,72,153,0.08),rgba(236,72,153,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Abonnementen</p>
-                        <p className="mt-1 text-lg font-semibold text-pink-400">{subscriptionCount}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Omzet</p>
+                        <p className="mt-1 text-sm font-semibold text-pink-400">{formattedPaidRevenue}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-400/10">
-                        <CreditCard className="h-4.5 w-4.5 text-pink-400" />
+                        <CircleDollarSign className="h-4.5 w-4.5 text-pink-400" />
                       </div>
                     </div>
                   </div>
@@ -324,11 +415,11 @@ export default async function AdminPage() {
                   Wervenkaart
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Visueel overzicht van alle werven en locaties.
+                  Visueel overzicht van alle werven en hun locaties.
                 </p>
               </div>
 
-              <div className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
+              <div id="wervenkaart" className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
                 <ProjectMap projects={projectsWithProfiles} height="100%" />
               </div>
             </div>
@@ -339,71 +430,11 @@ export default async function AdminPage() {
                   Sneltoetsen
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Snelle toegang tot klanten, werven en opvolging.
+                  Snelle toegang tot de belangrijkste werfacties.
                 </p>
               </div>
 
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                <Link
-                  href="/admin/customers"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Users className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Klanten
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Open alle klantfiches.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/admin/werven"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <FolderOpen className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Werven
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Ga naar het centrale werfoverzicht.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/admin/customers/new"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <PlusCircle className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Nieuwe klant
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Maak meteen een nieuwe klantfiche aan.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
                 <Link
                   href="/admin/projects/new"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
@@ -418,7 +449,47 @@ export default async function AdminPage() {
                         Nieuwe werf
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Start snel een nieuw dossier op.
+                        Start meteen een nieuw dossier.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/customers"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Users className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Klanten
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Open alle gekoppelde klantfiches.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/projects/statistics"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <BarChart3 className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Statistieken
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk cijfers, voortgang en omzet.
                       </span>
                     </span>
                   </div>
@@ -445,68 +516,106 @@ export default async function AdminPage() {
                 </Link>
 
                 <Link
-                  href="/admin/projects/statistics"
+                  href="#wervenkaart"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <BarChart3 className="h-4 w-4" />
+                      <FolderOpen className="h-4 w-4" />
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Statistieken
+                        Wervenkaart
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk cijfers en voortgang van werven.
+                        Spring direct naar alle zichtbare locaties.
                       </span>
                     </span>
                   </div>
                 </Link>
 
-                <Link
-                  href="/dashboard/abonnement"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <CreditCard className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Abonnement
+                {latestProject ? (
+                  <Link
+                    href={`/admin/projects/${latestProject.id}`}
+                    className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <FolderOpen className="h-4 w-4" />
                       </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk formule, opties en historiek.
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Recente werf
+                        </span>
+                        <span className="mt-0.5 block truncate text-[11px] leading-4 text-[var(--text-soft)]">
+                          {latestProjectLabel}
+                        </span>
                       </span>
-                    </span>
-                  </div>
-                </Link>
+                    </div>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/admin"
+                    className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <FolderOpen className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Wervenoverzicht
+                        </span>
+                        <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Er zijn nog geen recente werven beschikbaar.
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                )}
+              </div>
 
-                <Link
-                  href="/admin?view=uploads"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <UploadCloud className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Uploads
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Ga direct naar recente uploads en bestanden.
-                      </span>
-                    </span>
+              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                  Snelle info
+                </p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Laatste werf</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {latestProjectLabel}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      {latestCustomerLabel}
+                    </p>
                   </div>
-                </Link>
+
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Gemiddeld</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {formattedAverageProjectValue}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Richtprijs per werf
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Hoogste waarde</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {formattedTotalProjectValue}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Topdossier: {highestValueProjectLabel}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
         </section>
 
         {hasLoadError && (
@@ -516,11 +625,11 @@ export default async function AdminPage() {
           </section>
         )}
 
-        <AdminUploadPanel projects={projectsWithProfiles} />
-
-        <AdminSearchPanel
-          customers={customersWithMeta}
-          projects={projectsWithProfiles}
+        <AdminProjectSearch
+          projects={searchProjects}
+          projectFiles={projectFiles}
+          adminUserId={user.id}
+          hideResultsUntilSearch
         />
       </div>
     </AppShell>

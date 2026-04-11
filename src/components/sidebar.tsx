@@ -101,8 +101,9 @@ export default function Sidebar({
     },
     {
       label: 'Werven',
-      href: '/admin',
-      match: (pathname) => pathname.startsWith('/admin/projects'),
+      href: '/admin/werven',
+      match: (pathname) =>
+        pathname === '/admin/werven' || pathname.startsWith('/admin/projects'),
       icon: <FolderOpen className="h-[17px] w-[17px]" />,
     },
     {

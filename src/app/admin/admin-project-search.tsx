@@ -3,7 +3,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { getStatusClass, getStatusLabel, getStatusIcon } from '@/lib/status'
-import { FileText, Clock, CheckCircle, Check } from 'lucide-react'
+import {
+  ArrowUpDown,
+  Check,
+  CheckCircle,
+  Clock,
+  Edit,
+  Eye,
+  FileText,
+  UploadCloud,
+  Users,
+  Wallet,
+} from 'lucide-react'
 
 type Project = {
   id: number
@@ -16,6 +27,7 @@ type Project = {
   created_at?: string | null
   klantEmail?: string | null
   paid?: boolean | null
+  userId?: string | null
 }
 
 type ProjectFile = {
@@ -28,6 +40,7 @@ type Props = {
   projects: Project[]
   projectFiles: ProjectFile[]
   adminUserId: string
+  hideResultsUntilSearch?: boolean
 }
 
 type SortKey =
@@ -54,9 +67,44 @@ function getStatusIconComponent(iconName: string) {
   }
 }
 
+function formatDate(value?: string | null) {
+  if (!value) return '—'
+  try {
+    return new Date(value).toLocaleDateString('nl-BE')
+  } catch {
+    return '—'
+  }
+}
+
+function formatPrice(value: number | null, currency?: string | null) {
+  if (value === null || value === undefined) return 'Nog niet bepaald'
+  return `${value} ${currency || 'EUR'}`
+}
+
+function getActionButtonClass(
+  tone: 'neutral' | 'blue' | 'green' | 'orange' | 'purple'
+) {
+  const shared =
+    'group relative inline-flex h-8 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 text-[10px] font-semibold text-[var(--text-main)] transition hover:-translate-y-px'
+
+  switch (tone) {
+    case 'blue':
+      return `${shared} hover:border-sky-400/45 hover:bg-[var(--bg-card)]/80`
+    case 'green':
+      return `${shared} hover:border-emerald-400/45 hover:bg-[var(--bg-card)]/80`
+    case 'orange':
+      return `${shared} hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80`
+    case 'purple':
+      return `${shared} hover:border-fuchsia-400/45 hover:bg-[var(--bg-card)]/80`
+    default:
+      return `${shared} hover:border-white/15 hover:bg-[var(--bg-card)]/80`
+  }
+}
+
 export default function AdminProjectSearch({
   projects,
   projectFiles,
+  hideResultsUntilSearch = false,
 }: Props) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -65,8 +113,8 @@ export default function AdminProjectSearch({
   const [paymentFilter, setPaymentFilter] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-  const [sortKey, setSortKey] = useState<SortKey>('created_at')
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
+  const [sortKey, setSortKey] = useState<SortKey>('title')
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -216,15 +264,18 @@ export default function AdminProjectSearch({
     rowsPerPage,
   ])
 
+  const shouldShowResults = !hideResultsUntilSearch || search.trim() !== ''
+  const visibleProjects = shouldShowResults ? filteredAndSortedProjects : []
+
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredAndSortedProjects.length / rowsPerPage)
+    Math.ceil(visibleProjects.length / rowsPerPage)
   )
 
   const safeCurrentPage = Math.min(currentPage, totalPages)
   const startIndex = (safeCurrentPage - 1) * rowsPerPage
   const endIndex = startIndex + rowsPerPage
-  const paginatedProjects = filteredAndSortedProjects.slice(startIndex, endIndex)
+  const paginatedProjects = visibleProjects.slice(startIndex, endIndex)
 
   const resetFilters = () => {
     setSearch('')
@@ -234,19 +285,11 @@ export default function AdminProjectSearch({
     setPaymentFilter('')
     setMinPrice('')
     setMaxPrice('')
-    setSortKey('created_at')
-    setSortDirection('desc')
+    setSortKey('title')
+    setSortDirection('asc')
     setRowsPerPage(10)
     setCurrentPage(1)
   }
-
-  const sortIndicator = (key: SortKey) => {
-    if (sortKey !== key) return '↕'
-    return sortDirection === 'asc' ? '↑' : '↓'
-  }
-
-  const headerButtonClass =
-    'flex items-center gap-2 text-left text-sm font-semibold text-[var(--text-soft)] transition hover:text-[var(--text-main)]'
 
   const renderPageNumbers = () => {
     const pages: number[] = []
@@ -266,282 +309,258 @@ export default function AdminProjectSearch({
   }
 
   return (
-    <section className="mt-8">
-      <div className="mb-6 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-5 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-[var(--text-main)]">
-              Wervenoverzicht
-            </h2>
-            <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Zoek, filter, sorteer en blader door alle werven.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-[var(--text-muted)]">
-              {filteredAndSortedProjects.length} resultaat
-              {filteredAndSortedProjects.length !== 1 ? 'en' : ''}
+    <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+      <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
+        <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                Wervenlijst
+              </p>
+              <h2 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                Alle werven
+              </h2>
+              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+                Zoek, filter en open werfdossiers in dezelfde compacte stijl als
+                het klantenoverzicht.
+              </p>
             </div>
 
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="btn-secondary px-4 py-2 text-sm"
+            <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-right">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                Resultaten
+              </p>
+              <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
+                {visibleProjects.length}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_210px_150px_auto]">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Zoek werf, klant, locatie..."
+              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+            />
+
+            <select
+              value={sortKey}
+              onChange={(e) => handleSort(e.target.value as SortKey)}
+              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             >
-              Reset
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-7">
-          <input
-            type="text"
-            placeholder="Zoek werf"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-          />
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)]"
-          >
-            <option value="">Alle statussen</option>
-            <option value="ingediend">Ingediend</option>
-            <option value="in_behandeling">In behandeling</option>
-            <option value="klaar_voor_betaling">Klaar voor betaling</option>
-            <option value="afgerond">Afgerond</option>
-          </select>
-
-          <input
-            type="text"
-            placeholder="Filter op locatie"
-            value={addressFilter}
-            onChange={(e) => setAddressFilter(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-          />
-
-          <input
-            type="text"
-            placeholder="Filter op klant"
-            value={clientFilter}
-            onChange={(e) => setClientFilter(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-          />
-
-          <select
-            value={paymentFilter}
-            onChange={(e) => setPaymentFilter(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)]"
-          >
-            <option value="">Betaling: alles</option>
-            <option value="paid">Betaald</option>
-            <option value="unpaid">Openstaand</option>
-          </select>
-
-          <input
-            type="number"
-            placeholder="Min prijs"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-          />
-
-          <input
-            type="number"
-            placeholder="Max prijs"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
-          />
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <label className="text-sm text-[var(--text-soft)]">Rijen per pagina</label>
-
-          <select
-            value={rowsPerPage}
-            onChange={(e) => setRowsPerPage(Number(e.target.value))}
-            className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)]"
-          >
-            <option value={5}>5 rijen</option>
-            <option value={10}>10 rijen</option>
-            <option value={20}>20 rijen</option>
-            <option value={50}>50 rijen</option>
-            <option value={100}>100 rijen</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-        <div className="hidden grid-cols-[1.8fr_1.5fr_1.1fr_1fr_1fr_100px_140px] gap-4 border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-5 py-4 md:grid">
-          <button
-            type="button"
-            onClick={() => handleSort('title')}
-            className={headerButtonClass}
-          >
-            <span>Werf</span>
-            <span>{sortIndicator('title')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSort('klantEmail')}
-            className={headerButtonClass}
-          >
-            <span>Klant</span>
-            <span>{sortIndicator('klantEmail')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSort('status')}
-            className={headerButtonClass}
-          >
-            <span>Status</span>
-            <span>{sortIndicator('status')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSort('price')}
-            className={headerButtonClass}
-          >
-            <span>Prijs</span>
-            <span>{sortIndicator('price')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSort('created_at')}
-            className={headerButtonClass}
-          >
-            <span>Datum</span>
-            <span>{sortIndicator('created_at')}</span>
-          </button>
-
-          <div className="text-sm font-semibold text-[var(--text-soft)]">
-            Files
-          </div>
-
-          <div className="text-sm font-semibold text-[var(--text-soft)]">
-            Actie
-          </div>
-        </div>
-
-        {paginatedProjects.length === 0 ? (
-          <div className="px-5 py-6 text-sm text-[var(--text-soft)]">
-            Geen werven gevonden voor deze filters.
-          </div>
-        ) : (
-          <div className="divide-y divide-[var(--border-soft)]">
-            {paginatedProjects.map((project) => (
-              <div
-                key={project.id}
-                className="grid gap-4 px-5 py-5 md:grid-cols-[1.8fr_1.5fr_1.1fr_1fr_1fr_100px_140px] md:items-center"
-              >
-                <div>
-                  <p className="font-semibold text-[var(--text-main)]">
-                    {project.title}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--text-soft)]">
-                    {project.description || 'Geen beschrijving'}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-muted)]">
-                    {project.address || 'Geen locatie'}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-[var(--text-main)]">
-                    {project.klantEmail || 'Onbekend'}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-muted)]">
-                    {project.paid ? 'Betaald' : 'Openstaand'}
-                  </p>
-                </div>
-
-                <div>
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${getStatusClass(
-                      project.status
-                    )}`}
-                  >
-                    {getStatusIconComponent(getStatusIcon(project.status))}
-                    {getStatusLabel(project.status)}
-                  </span>
-                </div>
-
-                <div className="text-sm font-medium text-[var(--text-main)]">
-                  {project.price !== null && project.price !== undefined
-                    ? `${project.price} ${project.currency || 'EUR'}`
-                    : 'Nog niet bepaald'}
-                </div>
-
-                <div className="text-sm text-[var(--text-soft)]">
-                  {project.created_at
-                    ? new Date(project.created_at).toLocaleDateString('nl-BE')
-                    : 'Onbekend'}
-                </div>
-
-                <div className="text-sm text-[var(--text-soft)]">
-                  {fileCountByProject.get(project.id) || 0}
-                </div>
-
-                <div>
-                  <Link
-                    href={`/admin/projects/${project.id}`}
-                    className="btn-primary px-4 py-2 text-sm"
-                  >
-                    Open
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="flex flex-col gap-4 border-t border-[var(--border-soft)] bg-[var(--bg-card-2)] px-5 py-4 md:flex-row md:items-center md:justify-between">
-          <div className="text-sm text-[var(--text-soft)]">
-            Pagina {safeCurrentPage} van {totalPages}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={safeCurrentPage === 1}
-              className="btn-page"
-            >
-              Vorige
-            </button>
-
-            {renderPageNumbers().map((page) => (
-              <button
-                key={page}
-                type="button"
-                onClick={() => setCurrentPage(page)}
-                className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
-              >
-                {page}
-              </button>
-            ))}
+              <option value="title">Sorteer op naam</option>
+              <option value="address">Sorteer op locatie</option>
+              <option value="klantEmail">Sorteer op klant</option>
+              <option value="status">Sorteer op status</option>
+              <option value="price">Sorteer op prijs</option>
+              <option value="created_at">Sorteer op datum</option>
+            </select>
 
             <button
               type="button"
               onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
               }
-              disabled={safeCurrentPage === totalPages}
-              className="btn-page"
+              className="group relative flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
             >
-              Volgende
+              <ArrowUpDown className="h-3.5 w-3.5" />
+              <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+            </button>
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="group relative flex h-9 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+            >
+              <span className="pr-2">Reset</span>
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
             </button>
           </div>
+
         </div>
       </div>
+
+      {shouldShowResults ? (
+        <div className="p-4 sm:p-5">
+          <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
+          <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                Resultaten
+              </p>
+              <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
+                Werven
+              </h4>
+            </div>
+            <p className="text-[10px] text-[var(--text-soft)]">
+              {paginatedProjects.length} op deze pagina
+            </p>
+          </div>
+
+          {paginatedProjects.length === 0 ? (
+            <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
+              Geen werven gevonden voor deze filters.
+            </div>
+          ) : (
+            <div className="divide-y divide-[var(--border-soft)]">
+              {paginatedProjects.map((project) => (
+                <div
+                  key={project.id}
+                  className="flex flex-col gap-2.5 px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
+                        {project.title}
+                      </p>
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getStatusClass(
+                          project.status
+                        )}`}
+                      >
+                        {getStatusIconComponent(getStatusIcon(project.status))}
+                        {getStatusLabel(project.status)}
+                      </span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                          project.paid ? 'badge-success' : 'badge-warning'
+                        }`}
+                      >
+                        {project.paid ? 'Betaald' : 'Openstaand'}
+                      </span>
+                      <span className="badge-neutral px-2 py-0.5 text-[10px] font-semibold">
+                        {fileCountByProject.get(project.id) || 0} files
+                      </span>
+                    </div>
+
+                    <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
+                      {[project.description, project.address]
+                        .filter(Boolean)
+                        .join(' · ') || 'Geen extra gegevens'}
+                    </p>
+
+                    <div className="mt-1.5 flex flex-wrap gap-1.5 text-[10px] text-[var(--text-soft)]">
+                      <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
+                        Klant: {project.klantEmail || 'Onbekend'}
+                      </span>
+                      <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
+                        Prijs: {formatPrice(project.price, project.currency)}
+                      </span>
+                      <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
+                        Datum: {formatDate(project.created_at)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 sm:justify-end">
+                    <Link
+                      href={`/admin/projects/${project.id}`}
+                      className={getActionButtonClass('blue')}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
+                        <Eye className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Open</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
+                    </Link>
+
+                    <Link
+                      href={`/admin/projects/${project.id}/edit`}
+                      className={getActionButtonClass('neutral')}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
+                        <Edit className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Bewerk</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
+                    </Link>
+
+                    <Link
+                      href={`/admin/projects/${project.id}`}
+                      className={getActionButtonClass('orange')}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
+                        <UploadCloud className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Bestanden</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
+                    </Link>
+
+                    <Link
+                      href={`/admin/projects/${project.id}`}
+                      className={getActionButtonClass('purple')}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-fuchsia-500/12 text-fuchsia-200">
+                        <Wallet className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Facturatie</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-fuchsia-400/80" />
+                    </Link>
+
+                    {project.userId ? (
+                      <Link
+                        href={`/admin/customers/${project.userId}`}
+                        className={getActionButtonClass('green')}
+                      >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
+                          <Users className="h-3 w-3" />
+                        </span>
+                        <span className="pr-1">Klant</span>
+                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+          {visibleProjects.length > 0 ? (
+            <div className="mt-3 flex flex-col gap-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="text-[11px] text-[var(--text-soft)]">
+                Pagina {safeCurrentPage} van {totalPages}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={safeCurrentPage === 1}
+                  className="btn-page"
+                >
+                  Vorige
+                </button>
+
+                {renderPageNumbers().map((page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                  disabled={safeCurrentPage === totalPages}
+                  className="btn-page"
+                >
+                  Volgende
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   )
 }
