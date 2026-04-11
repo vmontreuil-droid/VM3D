@@ -30,6 +30,7 @@ type Props = {
     warning_detail?: string
     setup?: string
     error?: string
+    error_detail?: string
   }>
 }
 
@@ -158,7 +159,15 @@ async function updateCustomer(formData: FormData) {
 
   if (authUpdateError) {
     console.error('authUpdateError:', authUpdateError)
-    redirect(`/admin/customers/${id}/edit?error=auth_update`)
+    const authErrorParams = new URLSearchParams({
+      error: 'auth_update',
+    })
+
+    if (authUpdateError.message) {
+      authErrorParams.set('error_detail', authUpdateError.message)
+    }
+
+    redirect(`/admin/customers/${id}/edit?${authErrorParams.toString()}`)
   }
 
   const profileUpdate = {
@@ -392,6 +401,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const saveError = resolvedSearchParams?.error === 'save'
   const passwordSetupError = resolvedSearchParams?.error === 'password_setup'
   const authUpdateFailed = resolvedSearchParams?.error === 'auth_update'
+  const authUpdateFailedDetail = resolvedSearchParams?.error_detail?.trim()
   const missingEmailError = resolvedSearchParams?.error === 'missing_email'
   const updated = resolvedSearchParams?.updated === '1'
   const inviteSent = resolvedSearchParams?.invite === '1'
@@ -446,6 +456,11 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             {authUpdateFailed && (
               <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                 De login-instellingen van deze klant konden niet bijgewerkt worden.
+                {authUpdateFailedDetail && (
+                  <p className="mt-1 text-xs text-red-100/90">
+                    Admin detail: {authUpdateFailedDetail}
+                  </p>
+                )}
               </div>
             )}
 
