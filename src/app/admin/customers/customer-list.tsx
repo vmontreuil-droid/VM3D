@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { ArrowUpDown, Edit, Eye, PlusCircle, Ticket } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import AdminCustomerActions from './admin-customer-actions'
 
 type CustomerItem = {
   id: string
@@ -14,6 +16,7 @@ type CustomerItem = {
   created_at?: string | null
   project_count?: number
   last_project_at?: string | null
+  is_active?: boolean | null
 }
 
 type SortKey =
@@ -68,6 +71,22 @@ function formatDate(value?: string | null) {
     return new Date(value).toLocaleDateString('nl-BE')
   } catch {
     return '—'
+  }
+}
+
+function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
+  const shared =
+    'group relative inline-flex h-8 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 text-[10px] font-semibold text-[var(--text-main)] transition hover:-translate-y-px'
+
+  switch (tone) {
+    case 'blue':
+      return `${shared} hover:border-sky-400/45 hover:bg-[var(--bg-card)]/80`
+    case 'orange':
+      return `${shared} hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80`
+    case 'green':
+      return `${shared} hover:border-emerald-400/45 hover:bg-[var(--bg-card)]/80`
+    default:
+      return `${shared} hover:border-white/15 hover:bg-[var(--bg-card)]/80`
   }
 }
 
@@ -137,13 +156,6 @@ export default function CustomerList({
   const shouldShowResults = !hideResultsUntilSearch || search.trim() !== ''
   const visibleCustomers = shouldShowResults ? filteredCustomers : []
 
-  const totalPages = 1
-  const safeCurrentPage = 1
-  const paginatedCustomers = visibleCustomers
-
-  const visibleFrom = visibleCustomers.length === 0 ? 0 : 1
-  const visibleTo = visibleCustomers.length
-
   return (
     <section
       className={
@@ -163,29 +175,30 @@ export default function CustomerList({
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                {embedded ? 'Snelle zoekopdracht' : 'Overzicht'}
+                {embedded ? 'Snelle zoekopdracht' : 'Klantenlijst'}
               </p>
               <h2 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
                 {embedded ? 'Klanten' : 'Alle klanten'}
               </h2>
               <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                {embedded
-                  ? 'Zoek rechtstreeks op klantnaam, btw, stad of e-mail.'
-                  : 'Zoek, sorteer en open klantfiches met directe acties per klant.'}
+                Zoek, sorteer en open klantfiches in dezelfde compacte stijl als
+                de snelle zoekresultaten.
               </p>
             </div>
 
             {embedded ? null : (
-              <div className="card-mini text-center">
-                <p className="text-xs text-[var(--text-muted)]">Resultaten</p>
-                <p className="text-lg font-semibold text-[var(--text-main)]">
+              <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-right">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                  Resultaten
+                </p>
+                <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
                   {visibleCustomers.length}
                 </p>
               </div>
             )}
           </div>
 
-          <div className={`grid gap-2 ${embedded ? 'md:grid-cols-[1fr_auto]' : 'lg:grid-cols-[1.4fr_260px]'}`}>
+          <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_210px_150px_auto]">
             <input
               type="text"
               value={search}
@@ -197,241 +210,163 @@ export default function CustomerList({
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
-            {embedded ? (
-              shouldShowResults ? (
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <span className="pr-2">Reset</span>
-                </button>
-              ) : null
-            ) : (
-              <div className={`rounded-lg border border-[var(--border-soft)] px-2.5 py-1.5 text-[10px] text-[var(--text-soft)] ${embedded ? 'bg-[var(--bg-main)]' : 'bg-[var(--bg-card)]'}`}>
-                {visibleCustomers.length} klant{visibleCustomers.length !== 1 ? 'en' : ''} gevonden
-              </div>
-            )}
+            <select
+              value={sortKey}
+              onChange={(e) => handleSort(e.target.value as SortKey)}
+              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+            >
+              <option value="name">Sorteer op naam</option>
+              <option value="city">Sorteer op stad</option>
+              <option value="email">Sorteer op e-mail</option>
+              <option value="vat_number">Sorteer op btw</option>
+              <option value="project_count">Sorteer op werven</option>
+              <option value="last_project_at">Sorteer op activiteit</option>
+            </select>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
+                setCurrentPage(1)
+              }}
+              className="group relative flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+            >
+              <ArrowUpDown className="h-3.5 w-3.5" />
+              <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+            </button>
+
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="group relative flex h-9 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+            >
+              <span className="pr-2">Reset</span>
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+            </button>
           </div>
         </div>
       </div>
 
       {shouldShowResults ? (
-        <>
-          <div className="hidden lg:block">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px]">
-            <thead className="bg-[var(--bg-card-2)] text-left">
-              <tr className="border-b border-[var(--border-soft)]">
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('name')} className="inline-flex items-center gap-1">
-                    Klant
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('vat_number')} className="inline-flex items-center gap-1">
-                    BTW
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('city')} className="inline-flex items-center gap-1">
-                    Stad
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('email')} className="inline-flex items-center gap-1">
-                    Contact
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('project_count')} className="inline-flex items-center gap-1">
-                    Werven
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  <button onClick={() => handleSort('last_project_at')} className="inline-flex items-center gap-1">
-                    Laatste activiteit
-                    <span>↕</span>
-                  </button>
-                </th>
-                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  Acties
-                </th>
-              </tr>
-            </thead>
+        <div className="p-4 sm:p-5">
+          <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
+            <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                  Resultaten
+                </p>
+                <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
+                  Klanten
+                </h4>
+              </div>
+              <p className="text-[10px] text-[var(--text-soft)]">
+                {visibleCustomers.length} gevonden
+              </p>
+            </div>
 
-            <tbody>
-              {paginatedCustomers.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className="px-5 py-8 text-sm text-[var(--text-soft)]"
-                  >
-                    Geen klanten gevonden voor deze filters.
-                  </td>
-                </tr>
-              ) : (
-                paginatedCustomers.map((customer) => (
-                  <tr
+            {visibleCustomers.length === 0 ? (
+              <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
+                Geen klanten gevonden voor deze filters.
+              </div>
+            ) : (
+              <div className="divide-y divide-[var(--border-soft)]">
+                {visibleCustomers.map((customer) => (
+                  <div
                     key={customer.id}
-                    className="border-b border-[var(--border-soft)] transition hover:bg-[var(--bg-card-2)]"
+                    className="flex flex-col gap-2.5 px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <td className="px-5 py-4 align-top">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-[var(--text-main)]">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
                           {getCustomerName(customer)}
                         </p>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4 align-top text-sm text-[var(--text-main)]">
-                      {customer.vat_number || '—'}
-                    </td>
-
-                    <td className="px-5 py-4 align-top text-sm text-[var(--text-main)]">
-                      {customer.city || '—'}
-                    </td>
-
-                    <td className="px-5 py-4 align-top">
-                      <div className="space-y-1">
-                        <p className="text-sm text-[var(--text-main)]">
-                          {customer.email || '—'}
-                        </p>
-                        <p className="text-xs text-[var(--text-soft)]">
-                          {customer.phone || '—'}
-                        </p>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-4 align-top">
-                      <span className="badge-neutral px-3 py-1 text-xs font-semibold">
-                        {customer.project_count || 0}
-                      </span>
-                    </td>
-
-                    <td className="px-5 py-4 align-top text-sm text-[var(--text-main)]">
-                      {formatDate(customer.last_project_at)}
-                    </td>
-
-                    <td className="px-5 py-4 align-top">
-                      <div className="flex flex-wrap gap-2">
-                        <Link
-                          href={`/admin/customers/${customer.id}`}
-                          className="btn-secondary btn-sm"
+                        <span className="badge-neutral px-2 py-0.5 text-[10px] font-semibold">
+                          {customer.project_count || 0} werven
+                        </span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                            customer.is_active === false ? 'badge-warning' : 'badge-success'
+                          }`}
                         >
-                          Open
-                        </Link>
-
-                        <Link
-                          href={`/admin/customers/${customer.id}/edit`}
-                          className="btn-secondary btn-sm"
-                        >
-                          Bewerk
-                        </Link>
-
-                        <Link
-                          href={`/admin/projects/new?customer=${customer.id}`}
-                          className="btn-primary btn-sm"
-                        >
-                          Nieuwe werf
-                        </Link>
+                          {customer.is_active === false ? 'Inactief' : 'Actief'}
+                        </span>
                       </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      <div className="grid gap-3 p-4 lg:hidden">
-        {paginatedCustomers.length === 0 ? (
-          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 text-sm text-[var(--text-soft)]">
-            Geen klanten gevonden voor deze filters.
+                      <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
+                        {[customer.phone, customer.email, customer.city]
+                          .filter(Boolean)
+                          .join(' · ') || 'Geen extra gegevens'}
+                      </p>
+
+                      <div className="mt-1.5 flex flex-wrap gap-1.5 text-[10px] text-[var(--text-soft)]">
+                        <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
+                          BTW: {customer.vat_number || '—'}
+                        </span>
+                        <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
+                          Laatste activiteit: {formatDate(customer.last_project_at)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 sm:justify-end">
+                      <Link
+                        href={`/admin/customers/${customer.id}`}
+                        className={getActionButtonClass('blue')}
+                      >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
+                          <Eye className="h-3 w-3" />
+                        </span>
+                        <span className="pr-1">Open</span>
+                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
+                      </Link>
+
+                      <Link
+                        href={`/admin/customers/${customer.id}/edit`}
+                        className={getActionButtonClass('neutral')}
+                      >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
+                          <Edit className="h-3 w-3" />
+                        </span>
+                        <span className="pr-1">Bewerk</span>
+                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
+                      </Link>
+
+                      <Link
+                        href={`/admin/projects/new?customer=${customer.id}`}
+                        className={getActionButtonClass('orange')}
+                      >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
+                          <PlusCircle className="h-3 w-3" />
+                        </span>
+                        <span className="pr-1">Nieuwe werf</span>
+                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
+                      </Link>
+
+                      <Link
+                        href={`/dashboard/tickets?customer=${customer.id}`}
+                        className={getActionButtonClass('green')}
+                      >
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
+                          <Ticket className="h-3 w-3" />
+                        </span>
+                        <span className="pr-1">Ticket</span>
+                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
+                      </Link>
+
+                      <AdminCustomerActions
+                        customerId={customer.id}
+                        customerName={getCustomerName(customer)}
+                        currentActive={customer.is_active}
+                        compact
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        ) : (
-          paginatedCustomers.map((customer) => (
-            <div
-              key={customer.id}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--text-main)]">
-                    {getCustomerName(customer)}
-                  </p>
-                </div>
-
-                <span className="badge-neutral px-3 py-1 text-xs font-semibold">
-                  {customer.project_count || 0} werven
-                </span>
-              </div>
-
-              <div className="mt-4 grid gap-2 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-muted)]">Email</span>
-                  <span className="truncate text-[var(--text-main)]">
-                    {customer.email || '—'}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-muted)]">BTW</span>
-                  <span className="text-[var(--text-main)]">
-                    {customer.vat_number || '—'}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-muted)]">Stad</span>
-                  <span className="text-[var(--text-main)]">
-                    {customer.city || '—'}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-[var(--text-muted)]">Laatste activiteit</span>
-                  <span className="text-[var(--text-main)]">
-                    {formatDate(customer.last_project_at)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link
-                  href={`/admin/customers/${customer.id}`}
-                  className="btn-secondary btn-sm"
-                >
-                  Open
-                </Link>
-
-                <Link
-                  href={`/admin/customers/${customer.id}/edit`}
-                  className="btn-secondary btn-sm"
-                >
-                  Bewerk
-                </Link>
-
-                <Link
-                  href={`/admin/projects/new?customer=${customer.id}`}
-                  className="btn-primary btn-sm"
-                >
-                  Nieuwe werf
-                </Link>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
-        </>
+        </div>
       ) : null}
 
     </section>

@@ -1,20 +1,42 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createClient as createAdminClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 
-function generateTemporaryPassword(length = 16) {
-  const chars =
-    'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*'
-  let result = ''
+const BUCKET_NAME = 'project-files'
 
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
+async function requireAdmin() {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
+
+  if (authError || !user) {
+    return {
+      error: NextResponse.json({ error: 'Niet ingelogd.' }, { status: 401 }),
+    }
   }
 
-  return result
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profileError || profile?.role !== 'admin') {
+    return {
+      error: NextResponse.json({ error: 'Geen toegang.' }, { status: 403 }),
+    }
+  }
+
+  return { adminSupabase: createAdminClient() }
 }
 
-export async function POST(request: Request) {
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = await createClient()
 
@@ -50,140 +72,204 @@ export async function POST(request: Request) {
       )
     }
 
+    const { id } = await context.params
     const body = await request.json()
+    const isActive = Boolean(body.isActive)
 
-    const fullName = String(body.fullName || '').trim()
-    const companyName = String(body.companyName || '').trim()
-    const email = String(body.email || '')
-      .trim()
-      .toLowerCase()
-    const phone = String(body.phone || '').trim()
-
-    if (!fullName) {
+    if (!id) {
       return NextResponse.json(
-        { error: 'Naam contactpersoon is verplicht.' },
+        { error: 'Klant-ID ontbreekt.' },
         { status: 400 }
       )
     }
 
-    if (!companyName) {
+    const adminSupabase = createAdminClient()
+
+    const { data: customer, error } = await adminSupabase
+      .from('profiles')
+      .update({ is_active: isActive })
+      .eq('id', id)
+      .neq('role', 'admin')
+      .select('id, full_name, company_name, email, is_active')
+      .single()
+
+    if (error || !customer) {
       return NextResponse.json(
-        { error: 'Bedrijfsnaam is verplicht.' },
-        { status: 400 }
+        { error: error?.message || 'Klant niet gevonden.' },
+        { status: 404 }
       )
     }
 
-    if (!email) {
-      return NextResponse.json(
-        { error: 'E-mailadres is verplicht.' },
-        { status: 400 }
-      )
-    }
-
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!supabaseUrl || !supabaseServiceRoleKey) {
-      return NextResponse.json(
-        { error: 'Supabase admin configuratie ontbreekt.' },
-        { status: 500 }
-      )
-    }
-
-    const supabaseAdmin = createAdminClient(
-      supabaseUrl,
-      supabaseServiceRoleKey,
+    const { error: authUpdateError } = await adminSupabase.auth.admin.updateUserById(
+      id,
       {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
+        user_metadata: {
+          is_active: isActive,
         },
       }
     )
 
-    const temporaryPassword = generateTemporaryPassword()
-
-    const { data: authUserData, error: authCreateError } =
-      await supabaseAdmin.auth.admin.createUser({
-        email,
-        password: temporaryPassword,
-        email_confirm: true,
-        user_metadata: {
-          full_name: fullName,
-          company_name: companyName,
-          phone,
-          role: 'client',
-          is_active: true,
-        },
-      })
-
-    if (authCreateError || !authUserData.user) {
-      return NextResponse.json(
-        {
-          error:
-            authCreateError?.message || 'Kon auth gebruiker niet aanmaken.',
-        },
-        { status: 400 }
-      )
+    if (authUpdateError) {
+      console.warn('Kon auth metadata niet bijwerken:', authUpdateError.message)
     }
 
-    const newUserId = authUserData.user.id
-
-    const { error: insertProfileError } = await supabaseAdmin
-      .from('profiles')
-      .insert({
-        id: newUserId,
-        full_name: fullName,
-        company_name: companyName,
-        email,
-        phone: phone || null,
-        role: 'client',
-        is_active: true,
-      })
-
-    if (insertProfileError) {
-      await supabaseAdmin.auth.admin.deleteUser(newUserId)
-
-      return NextResponse.json(
-        {
-          error:
-            insertProfileError.message || 'Kon klantprofiel niet opslaan.',
-        },
-        { status: 400 }
-      )
-    }
-
-    const redirectTo = process.env.NEXT_PUBLIC_SITE_URL
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/login`
-      : undefined
-
-    const { error: resetError } = await supabaseAdmin.auth.resetPasswordForEmail(
-      email,
-      redirectTo ? { redirectTo } : undefined
+    return NextResponse.json({
+      success: true,
+      message: isActive ? 'Klant staat nu actief.' : 'Klant staat nu inactief.',
+      customer,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : 'Onbekende serverfout.',
+      },
+      { status: 500 }
     )
+  }
+}
 
-    if (resetError) {
+export async function DELETE(
+  _request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const adminCheck = await requireAdmin()
+    if (adminCheck.error) return adminCheck.error
+
+    const { id } = await context.params
+
+    if (!id) {
+      return NextResponse.json({ error: 'Klant-ID ontbreekt.' }, { status: 400 })
+    }
+
+    const adminSupabase = adminCheck.adminSupabase
+
+    const { data: customer, error: customerError } = await adminSupabase
+      .from('profiles')
+      .select('id, email, company_name, full_name, role')
+      .eq('id', id)
+      .neq('role', 'admin')
+      .single()
+
+    if (customerError || !customer) {
       return NextResponse.json(
-        {
-          error:
-            `Klant aangemaakt, maar resetlink kon niet verstuurd worden: ${resetError.message}`,
-        },
+        { error: customerError?.message || 'Klant niet gevonden.' },
+        { status: 404 }
+      )
+    }
+
+    const { data: projects, error: projectsError } = await adminSupabase
+      .from('projects')
+      .select('id')
+      .eq('user_id', id)
+
+    if (projectsError) {
+      return NextResponse.json(
+        { error: projectsError.message || 'Kon gekoppelde werven niet ophalen.' },
         { status: 500 }
+      )
+    }
+
+    const projectIds = (projects ?? []).map((project) => project.id)
+
+    if (projectIds.length > 0) {
+      const { data: files, error: filesLookupError } = await adminSupabase
+        .from('project_files')
+        .select('file_path')
+        .in('project_id', projectIds)
+
+      if (filesLookupError) {
+        return NextResponse.json(
+          { error: filesLookupError.message || 'Kon bestanden niet ophalen.' },
+          { status: 500 }
+        )
+      }
+
+      const filePaths = (files ?? [])
+        .map((file) => file.file_path)
+        .filter(Boolean)
+
+      if (filePaths.length > 0) {
+        const { error: storageError } = await adminSupabase.storage
+          .from(BUCKET_NAME)
+          .remove(filePaths)
+
+        if (storageError) {
+          console.warn(
+            'Kon storagebestanden niet volledig verwijderen:',
+            storageError.message
+          )
+        }
+      }
+
+      const { error: timelineError } = await adminSupabase
+        .from('project_timeline')
+        .delete()
+        .in('project_id', projectIds)
+
+      if (timelineError) {
+        return NextResponse.json(
+          { error: timelineError.message || 'Kon projecthistoriek niet verwijderen.' },
+          { status: 500 }
+        )
+      }
+
+      const { error: filesError } = await adminSupabase
+        .from('project_files')
+        .delete()
+        .in('project_id', projectIds)
+
+      if (filesError) {
+        return NextResponse.json(
+          { error: filesError.message || 'Kon projectbestanden niet verwijderen.' },
+          { status: 500 }
+        )
+      }
+
+      const { error: projectDeleteError } = await adminSupabase
+        .from('projects')
+        .delete()
+        .in('id', projectIds)
+
+      if (projectDeleteError) {
+        return NextResponse.json(
+          { error: projectDeleteError.message || 'Kon gekoppelde werven niet verwijderen.' },
+          { status: 500 }
+        )
+      }
+    }
+
+    const { error: profileDeleteError } = await adminSupabase
+      .from('profiles')
+      .delete()
+      .eq('id', id)
+
+    if (profileDeleteError) {
+      return NextResponse.json(
+        { error: profileDeleteError.message || 'Kon klantprofiel niet verwijderen.' },
+        { status: 500 }
+      )
+    }
+
+    const { error: authDeleteError } = await adminSupabase.auth.admin.deleteUser(id)
+
+    if (authDeleteError) {
+      console.warn(
+        'Auth gebruiker kon niet volledig verwijderd worden:',
+        authDeleteError.message
       )
     }
 
     return NextResponse.json({
       success: true,
-      message:
-        'Klant succesvol aangemaakt. De resetlink werd per e-mail verstuurd.',
-      customer: {
-        id: newUserId,
-        full_name: fullName,
-        company_name: companyName,
-        email,
-        phone,
-        role: 'client',
-        is_active: true,
+      message: 'Klant succesvol verwijderd.',
+      deletedCustomer: {
+        id: customer.id,
+        email: customer.email,
+        company_name: customer.company_name,
+        full_name: customer.full_name,
+        deleted_projects: projectIds.length,
       },
     })
   } catch (error) {

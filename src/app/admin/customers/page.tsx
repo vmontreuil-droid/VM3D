@@ -5,6 +5,19 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CustomerList from './customer-list'
 import CustomersMap from '@/components/customers/customers-map'
+import {
+  ArrowLeft,
+  BadgeCheck,
+  BarChart3,
+  CircleDollarSign,
+  FolderOpen,
+  MapPin,
+  PlusCircle,
+  Ticket,
+  UserCheck,
+  Users,
+  Wallet,
+} from 'lucide-react'
 
 export default async function AdminCustomersPage() {
   const supabase = await createClient()
@@ -43,12 +56,17 @@ export default async function AdminCustomersPage() {
 
   let projectCounts = new Map<string, number>()
   let latestProjectDates = new Map<string, string | null>()
+  let invoiceReadyCount = 0
+  let unpaidProjectsCount = 0
+  let paidProjectsCount = 0
+  let totalQuotedAmount = 0
+  let paidRevenueAmount = 0
   let projectsError: any = null
 
   if (customerIds.length > 0) {
     const { data: projects, error: pError } = await adminSupabase
       .from('projects')
-      .select('id, user_id, created_at, status')
+      .select('*')
       .in('user_id', customerIds)
 
     projectsError = pError
@@ -68,6 +86,33 @@ export default async function AdminCustomersPage() {
         ) {
           latestProjectDates.set(key, project.created_at)
         }
+
+        const priceValue = Number(project.price)
+        const hasPrice =
+          project.price !== null &&
+          project.price !== undefined &&
+          Number.isFinite(priceValue) &&
+          priceValue > 0
+        const isPaid = Boolean(project.is_paid ?? project.paid)
+        const isBillingRelevant =
+          hasPrice || project.status === 'klaar_voor_betaling' || isPaid
+
+        if (isBillingRelevant) {
+          if (hasPrice) {
+            totalQuotedAmount += priceValue
+          }
+
+          invoiceReadyCount += 1
+
+          if (isPaid) {
+            paidProjectsCount += 1
+            if (hasPrice) {
+              paidRevenueAmount += priceValue
+            }
+          } else {
+            unpaidProjectsCount += 1
+          }
+        }
       }
     }
   }
@@ -79,17 +124,34 @@ export default async function AdminCustomersPage() {
   }))
 
   const totalCustomers = customersWithMeta.length
+  const totalCustomerProjects = customersWithMeta.reduce(
+    (sum: number, customer: any) => sum + (customer.project_count || 0),
+    0
+  )
+  const activeCustomers = customersWithMeta.filter(
+    (customer: any) => customer.is_active !== false
+  ).length
   const customersWithVat = customersWithMeta.filter(
     (customer: any) => customer.vat_number
   ).length
-  const customersWithEmail = customersWithMeta.filter(
-    (customer: any) => customer.email
-  ).length
-  const customersWithProjects = customersWithMeta.filter(
-    (customer: any) => customer.project_count > 0
-  ).length
+  const formattedQuotedAmount = new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(totalQuotedAmount)
+  const formattedPaidRevenue = new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(paidRevenueAmount)
 
-  const latestCustomer = customersWithMeta[0] ?? null
+  const latestCustomer =
+    [...customersWithMeta].sort(
+      (a: any, b: any) =>
+        new Date(b.created_at ?? 0).getTime() -
+        new Date(a.created_at ?? 0).getTime()
+    )[0] ?? null
+
   const latestCustomerLabel =
     latestCustomer?.company_name ||
     latestCustomer?.full_name ||
@@ -117,6 +179,44 @@ export default async function AdminCustomersPage() {
         ).toFixed(1)
       : '0.0'
 
+  const customerLocations = customersWithMeta
+    .map((customer: any) => {
+      const latitude = Number(customer.latitude)
+      const longitude = Number(customer.longitude)
+
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+        return null
+      }
+
+      return {
+        name:
+          customer.company_name ||
+          customer.full_name ||
+          customer.city ||
+          customer.email ||
+          'Klant',
+        latitude,
+        longitude,
+      }
+    })
+    .filter(Boolean) as { name: string; latitude: number; longitude: number }[]
+
+  const mapLocations =
+    customerLocations.length > 0
+      ? customerLocations
+      : [
+          { name: 'Antwerpen', latitude: 51.2195, longitude: 4.4025 },
+          { name: 'Brussel', latitude: 50.8503, longitude: 4.3517 },
+          { name: 'Gent', latitude: 51.0543, longitude: 3.7196 },
+          { name: 'Charleroi', latitude: 50.4108, longitude: 4.4446 },
+          { name: 'Liège', latitude: 50.6292, longitude: 5.5693 },
+          { name: 'Leuven', latitude: 50.8798, longitude: 4.7005 },
+          { name: 'Mons', latitude: 50.4501, longitude: 3.9557 },
+          { name: 'Tournai', latitude: 50.6041, longitude: 3.3891 },
+          { name: 'Ypres', latitude: 50.8769, longitude: 2.8849 },
+          { name: 'Hasselt', latitude: 50.9309, longitude: 5.3345 },
+        ]
+
   const hasLoadError = Boolean(error || projectsError)
 
   return (
@@ -130,260 +230,362 @@ export default async function AdminCustomersPage() {
 
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href="/admin" className="btn-secondary">
-                    ← Admin
-                  </Link>
-
-                  <Link href="/admin/customers/new" className="btn-primary">
-                    + Nieuwe klant
-                  </Link>
-
-                  <Link href="/admin/projects/new" className="btn-secondary">
-                    + Nieuwe werf
-                  </Link>
-
-                  {latestCustomer ? (
-                    <Link
-                      href={`/admin/customers/${latestCustomer.id}`}
-                      className="btn-secondary"
-                    >
-                      Laatste klant
-                    </Link>
-                  ) : null}
-                </div>
-
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Klantenbeheer
+                  Adminportaal
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  Klanten
+                  Klantenbeheer
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Overzicht van alle klanten met snelle toegang tot fiche,
-                  bewerking en werfopvolging.
+                  Beheer klantfiches, btw-gegevens en facturatie vanuit één
+                  centraal overzicht met dezelfde ritmiek als het admin
+                  dashboard.
                 </p>
+
+                <div className="mt-4 max-w-[260px]">
+                  <Link
+                    href="/admin"
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Dashboard
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar adminoverzicht
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
-              <div className="flex w-full flex-col gap-4 xl:w-auto">
-                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
-                  <div className="flex items-center gap-4 px-4 py-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
-                      KL
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Module
-                      </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-                        Klantenbeheer
-                      </p>
-                      <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Fiches, relaties en opvolging
-                      </p>
+              <div className="w-full xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalCustomers}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <Users className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 xl:w-auto xl:grid-cols-4">
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Totaal</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {totalCustomers}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalCustomerProjects}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Met btw</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {customersWithVat}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="mt-1 text-lg font-semibold text-green-500">{activeCustomers}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                        <UserCheck className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Met e-mail</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {customersWithEmail}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Met btw</p>
+                        <p className="mt-1 text-lg font-semibold text-blue-500">{customersWithVat}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                        <BadgeCheck className="h-4.5 w-4.5 text-blue-500" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Met werven</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {customersWithProjects}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Facturatie</p>
+                        <p className="mt-1 text-lg font-semibold text-purple-500">{invoiceReadyCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
+                        <Wallet className="h-4.5 w-4.5 text-purple-500" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{unpaidProjectsCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <Wallet className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(6,182,212,0.08),rgba(6,182,212,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Betaald</p>
+                        <p className="mt-1 text-lg font-semibold text-cyan-400">{paidProjectsCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-400/10">
+                        <BadgeCheck className="h-4.5 w-4.5 text-cyan-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(236,72,153,0.08),rgba(236,72,153,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Omzet</p>
+                        <p className="mt-1 text-sm font-semibold text-pink-400">{formattedPaidRevenue}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-400/10">
+                        <CircleDollarSign className="h-4.5 w-4.5 text-pink-400" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Snelle info
-              </p>
+          <div className="grid items-stretch gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
+              <div className="border-b border-[var(--border-soft)] px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Klantenkaart
+                </p>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Visueel overzicht van alle klantlocaties en spreiding.
+                </p>
+              </div>
 
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Laatste klant</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {latestCustomerLabel}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    {latestCustomer?.city || latestCustomer?.email || '—'}
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Meeste werven</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {mostActiveCustomerLabel}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    {mostActiveCustomer?.project_count ?? 0} project(en)
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Recentste werfactiviteit
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {latestCustomer?.last_project_at
-                      ? new Date(
-                          latestCustomer.last_project_at
-                        ).toLocaleDateString('nl-BE')
-                      : '—'}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Laatste activiteit bij recente klant
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Gemiddelde koppeling
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {averageProjectsPerCustomer}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Werven per klant
-                  </p>
-                </div>
+              <div id="klantenkaart" className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
+                <CustomersMap locations={mapLocations} height="100%" />
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Quick actions
-              </p>
+            <div className="flex h-full flex-col rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Sneltoetsen
+                </p>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Snelle toegang tot de belangrijkste klantacties.
+                </p>
+              </div>
 
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <Link
                   href="/admin/customers/new"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuwe klant
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Maak meteen een nieuwe klantfiche aan.
-                  </p>
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <PlusCircle className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Nieuwe klant
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Maak meteen een nieuwe klantfiche aan.
+                      </span>
+                    </span>
+                  </div>
                 </Link>
 
                 <Link
                   href="/admin/projects/new"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuwe werf
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Start snel een dossier voor een klant.
-                  </p>
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <FolderOpen className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Nieuwe werf
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Start snel een nieuw dossier voor een klant.
+                      </span>
+                    </span>
+                  </div>
                 </Link>
 
                 <Link
-                  href="/admin"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                  href="/admin/customers/statistics"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Naar werven
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Open het centrale wervenoverzicht.
-                  </p>
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <BarChart3 className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Statistieken
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk groei, spreiding en activiteit.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/dashboard/tickets"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Ticket className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Tickets
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Volg supportvragen en meldingen op.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="#klantenkaart"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Klantenkaart
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Spring direct naar alle zichtbare locaties.
+                      </span>
+                    </span>
+                  </div>
                 </Link>
 
                 {latestCustomer ? (
                   <Link
                     href={`/admin/customers/${latestCustomer.id}`}
-                    className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                    className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                   >
-                    <p className="text-sm font-semibold text-[var(--text-main)]">
-                      Open recente klant
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Ga direct naar de laatste klantenfiche.
-                    </p>
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Users className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Recente klant
+                        </span>
+                        <span className="mt-0.5 block truncate text-[11px] leading-4 text-[var(--text-soft)]">
+                          {latestCustomerLabel}
+                        </span>
+                      </span>
+                    </div>
                   </Link>
                 ) : (
-                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4">
-                    <p className="text-sm font-semibold text-[var(--text-main)]">
-                      Nog geen klanten
+                  <Link
+                    href="/admin"
+                    className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Users className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Klantenoverzicht
+                        </span>
+                        <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Er zijn nog geen recente klantfiches beschikbaar.
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                )}
+              </div>
+
+              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                  Snelle info
+                </p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Top klant</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {mostActiveCustomerLabel}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Zodra klanten bestaan, verschijnt hier een snelle link.
+                      {mostActiveCustomer?.project_count ?? 0} werf(en)
                     </p>
                   </div>
-                )}
+
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Gemiddeld</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {averageProjectsPerCustomer}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Werven per klant
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-[var(--text-muted)]">Facturatie</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {formattedQuotedAmount}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      {invoiceReadyCount} dossier(s), {unpaidProjectsCount} openstaand
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {hasLoadError && (
-          <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <section className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-4 text-sm text-red-200 shadow-sm">
             Klanten of projectkoppelingen konden niet volledig geladen worden.
-          </div>
+          </section>
         )}
 
-        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-              Kaart
-            </p>
-            <h2 className="mt-2 text-xl font-semibold text-[var(--text-main)]">
-              Klanten geografisch
-            </h2>
-            <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Overzicht van klantlocaties over heel België.
-            </p>
-          </div>
-          <div className="p-4 sm:p-5">
-            <CustomersMap 
-              locations={[
-                { name: 'Antwerpen', latitude: 51.2195, longitude: 4.4025 },
-                { name: 'Brussel', latitude: 50.8503, longitude: 4.3517 },
-                { name: 'Gent', latitude: 51.0543, longitude: 3.7196 },
-                { name: 'Charleroi', latitude: 50.4108, longitude: 4.4446 },
-                { name: 'Liège', latitude: 50.6292, longitude: 5.5693 },
-                { name: 'Leuven', latitude: 50.8798, longitude: 4.7005 },
-                { name: 'Mons', latitude: 50.4501, longitude: 3.9557 },
-                { name: 'Tournai', latitude: 50.6041, longitude: 3.3891 },
-                { name: 'Ypres', latitude: 50.8769, longitude: 2.8849 },
-                { name: 'Hasselt', latitude: 50.9309, longitude: 5.3345 },
-              ]}
-            />
-          </div>
-        </section>
-
-        <CustomerList customers={customersWithMeta} />
+        <CustomerList customers={customersWithMeta} hideResultsUntilSearch />
       </div>
     </AppShell>
   )

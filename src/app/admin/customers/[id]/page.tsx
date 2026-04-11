@@ -4,6 +4,7 @@ import AppShell from '@/components/app-shell'
 import CustomerMap from '@/components/customers/customer-map'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import AdminCustomerActions from '../admin-customer-actions'
 
 type Props = {
   params: Promise<{
@@ -235,6 +236,22 @@ export default async function AdminCustomerDetailPage({
                   <span className="badge-neutral px-3 py-1 text-xs font-semibold">
                     E-mail: {display(customer.email)}
                   </span>
+                  <span
+                    className={`px-3 py-1 text-xs font-semibold ${
+                      customer.is_active === false ? 'badge-warning' : 'badge-success'
+                    }`}
+                  >
+                    {customer.is_active === false ? 'Inactief' : 'Actief'}
+                  </span>
+                </div>
+
+                <div className="mt-4">
+                  <AdminCustomerActions
+                    customerId={customer.id}
+                    customerName={title}
+                    currentActive={customer.is_active}
+                    redirectTo="/admin/customers"
+                  />
                 </div>
               </div>
 
