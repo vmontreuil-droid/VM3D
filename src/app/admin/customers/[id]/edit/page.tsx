@@ -443,49 +443,49 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
               <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
                 <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                  <div className="card-mini">
+                  <div className="card-mini border-[var(--accent)]/35 bg-[var(--accent)]/8">
                     <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {totalProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini">
+                  <div className="card-mini border-sky-500/30 bg-sky-500/10">
                     <p className="text-xs text-[var(--text-muted)]">Ingediend</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    <p className="mt-1 text-sm font-semibold text-sky-200">
                       {submittedProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini">
+                  <div className="card-mini border-amber-500/30 bg-amber-500/10">
                     <p className="text-xs text-[var(--text-muted)]">In behandeling</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    <p className="mt-1 text-sm font-semibold text-amber-200">
                       {inProgressProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini">
+                  <div className="card-mini border-orange-500/30 bg-orange-500/10">
                     <p className="text-xs text-[var(--text-muted)]">Klaar voor betaling</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    <p className="mt-1 text-sm font-semibold text-orange-200">
                       {readyForPaymentProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini">
+                  <div className="card-mini border-emerald-500/30 bg-emerald-500/10">
                     <p className="text-xs text-[var(--text-muted)]">Afgerond</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    <p className="mt-1 text-sm font-semibold text-emerald-200">
                       {completedProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini">
+                  <div className="card-mini border-violet-500/30 bg-violet-500/10">
                     <p className="text-xs text-[var(--text-muted)]">Actieve werven</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    <p className="mt-1 text-sm font-semibold text-violet-200">
                       {activeProjects}
                     </p>
                   </div>
 
-                  <div className="card-mini sm:col-span-2 xl:col-span-3">
+                  <div className="card-mini sm:col-span-2 xl:col-span-3 border-[var(--border-soft)]/90 bg-[var(--bg-card)]/60">
                     <p className="text-xs text-[var(--text-muted)]">Laatste werfdatum</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {latestProjectDate}
