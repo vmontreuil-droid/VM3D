@@ -27,6 +27,7 @@ type Props = {
     updated?: string
     invite?: string
     warning?: string
+    warning_detail?: string
     setup?: string
     error?: string
   }>
@@ -255,7 +256,14 @@ async function updateCustomer(formData: FormData) {
 
     if (resetError) {
       console.error('resetError:', resetError)
-      redirect(`/admin/customers/${id}/edit?updated=1&warning=invite_failed`)
+      const inviteFailureParams = new URLSearchParams({
+        updated: '1',
+        warning: 'invite_failed',
+      })
+      if (resetError.message) {
+        inviteFailureParams.set('warning_detail', resetError.message)
+      }
+      redirect(`/admin/customers/${id}/edit?${inviteFailureParams.toString()}`)
     }
 
     redirect(`/admin/customers/${id}/edit?updated=1&invite=1`)
@@ -388,6 +396,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const updated = resolvedSearchParams?.updated === '1'
   const inviteSent = resolvedSearchParams?.invite === '1'
   const inviteFailed = resolvedSearchParams?.warning === 'invite_failed'
+  const inviteFailedDetail = resolvedSearchParams?.warning_detail?.trim()
   const manualPasswordSet = resolvedSearchParams?.setup === 'manual'
 
   return (
@@ -410,6 +419,11 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             {inviteFailed && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
                 Klant werd opgeslagen, maar de uitnodigingsmail kon niet verzonden worden.
+                {inviteFailedDetail && (
+                  <p className="mt-1 text-xs text-amber-100/90">
+                    Admin detail: {inviteFailedDetail}
+                  </p>
+                )}
               </div>
             )}
 
