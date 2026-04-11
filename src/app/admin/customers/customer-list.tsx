@@ -28,6 +28,8 @@ type SortDirection = 'asc' | 'desc'
 
 type Props = {
   customers: CustomerItem[]
+  hideResultsUntilSearch?: boolean
+  embedded?: boolean
 }
 
 function getCustomerName(customer: CustomerItem) {
@@ -69,9 +71,12 @@ function formatDate(value?: string | null) {
   }
 }
 
-export default function CustomerList({ customers }: Props) {
+export default function CustomerList({
+  customers,
+  hideResultsUntilSearch = false,
+  embedded = false,
+}: Props) {
   const [search, setSearch] = useState('')
-  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [sortKey, setSortKey] = useState<SortKey>('name')
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc')
@@ -84,6 +89,13 @@ export default function CustomerList({ customers }: Props) {
       setSortDirection(key === 'last_project_at' || key === 'project_count' ? 'desc' : 'asc')
     }
     setCurrentPage(1)
+  }
+
+  function resetFilters() {
+    setSearch('')
+    setCurrentPage(1)
+    setSortKey('name')
+    setSortDirection('asc')
   }
 
   const filteredCustomers = useMemo(() => {
@@ -122,43 +134,58 @@ export default function CustomerList({ customers }: Props) {
     return sorted
   }, [customers, search, sortKey, sortDirection])
 
-  const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / rowsPerPage))
-  const safeCurrentPage = Math.min(currentPage, totalPages)
-  const startIndex = (safeCurrentPage - 1) * rowsPerPage
-  const paginatedCustomers = filteredCustomers.slice(
-    startIndex,
-    startIndex + rowsPerPage
-  )
+  const shouldShowResults = !hideResultsUntilSearch || search.trim() !== ''
+  const visibleCustomers = shouldShowResults ? filteredCustomers : []
 
-  const visibleFrom = filteredCustomers.length === 0 ? 0 : startIndex + 1
-  const visibleTo = Math.min(startIndex + rowsPerPage, filteredCustomers.length)
+  const totalPages = 1
+  const safeCurrentPage = 1
+  const paginatedCustomers = visibleCustomers
+
+  const visibleFrom = visibleCustomers.length === 0 ? 0 : 1
+  const visibleTo = visibleCustomers.length
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-      <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-start justify-between gap-4">
+    <section
+      className={
+        embedded
+          ? 'space-y-3'
+          : 'overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm'
+      }
+    >
+      <div
+        className={
+          embedded
+            ? 'space-y-3'
+            : 'border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5'
+        }
+      >
+        <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-                Overzicht
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                {embedded ? 'Snelle zoekopdracht' : 'Overzicht'}
               </p>
-              <h2 className="mt-2 text-xl font-semibold text-[var(--text-main)]">
-                Alle klanten
+              <h2 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                {embedded ? 'Klanten' : 'Alle klanten'}
               </h2>
-              <p className="mt-1 text-sm text-[var(--text-soft)]">
-                Zoek, sorteer en open klantfiches met directe acties per klant.
+              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+                {embedded
+                  ? 'Zoek rechtstreeks op klantnaam, btw, stad of e-mail.'
+                  : 'Zoek, sorteer en open klantfiches met directe acties per klant.'}
               </p>
             </div>
 
-            <div className="card-mini text-center">
-              <p className="text-xs text-[var(--text-muted)]">Resultaten</p>
-              <p className="text-lg font-semibold text-[var(--text-main)]">
-                {filteredCustomers.length}
-              </p>
-            </div>
+            {embedded ? null : (
+              <div className="card-mini text-center">
+                <p className="text-xs text-[var(--text-muted)]">Resultaten</p>
+                <p className="text-lg font-semibold text-[var(--text-main)]">
+                  {visibleCustomers.length}
+                </p>
+              </div>
+            )}
           </div>
 
-          <div className="grid gap-3 lg:grid-cols-[1.2fr_180px_240px]">
+          <div className={`grid gap-2 ${embedded ? 'md:grid-cols-[1fr_auto]' : 'lg:grid-cols-[1.4fr_260px]'}`}>
             <input
               type="text"
               value={search}
@@ -167,33 +194,32 @@ export default function CustomerList({ customers }: Props) {
                 setCurrentPage(1)
               }}
               placeholder="Zoek klant, btw, stad, mail..."
-              className="input-dark w-full px-3 py-2.5 text-sm"
+              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
-            <select
-              value={rowsPerPage}
-              onChange={(e) => {
-                setRowsPerPage(Number(e.target.value))
-                setCurrentPage(1)
-              }}
-              className="input-dark w-full px-3 py-2.5 text-sm"
-            >
-              <option value={5}>5 rijen</option>
-              <option value={10}>10 rijen</option>
-              <option value={20}>20 rijen</option>
-              <option value={50}>50 rijen</option>
-              <option value={100}>100 rijen</option>
-            </select>
-
-            <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-sm text-[var(--text-soft)]">
-              Pagina {safeCurrentPage} van {totalPages} · {visibleFrom}-{visibleTo} van{' '}
-              {filteredCustomers.length}
-            </div>
+            {embedded ? (
+              shouldShowResults ? (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <span className="pr-2">Reset</span>
+                </button>
+              ) : null
+            ) : (
+              <div className={`rounded-lg border border-[var(--border-soft)] px-2.5 py-1.5 text-[10px] text-[var(--text-soft)] ${embedded ? 'bg-[var(--bg-main)]' : 'bg-[var(--bg-card)]'}`}>
+                {visibleCustomers.length} klant{visibleCustomers.length !== 1 ? 'en' : ''} gevonden
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="hidden lg:block">
+      {shouldShowResults ? (
+        <>
+          <div className="hidden lg:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1100px]">
             <thead className="bg-[var(--bg-card-2)] text-left">
@@ -405,39 +431,9 @@ export default function CustomerList({ customers }: Props) {
         )}
       </div>
 
-      <div className="border-t border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-[var(--text-soft)]">
-            Pagina {safeCurrentPage} van {totalPages}
-          </p>
+        </>
+      ) : null}
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-              disabled={safeCurrentPage === 1}
-              className="btn-page"
-            >
-              Vorige
-            </button>
-
-            <div className="btn-page-active">
-              {safeCurrentPage}
-            </div>
-
-            <button
-              type="button"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-              disabled={safeCurrentPage === totalPages}
-              className="btn-page"
-            >
-              Volgende
-            </button>
-          </div>
-        </div>
-      </div>
     </section>
   )
 }

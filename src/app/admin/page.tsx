@@ -1,8 +1,19 @@
 import Link from 'next/link'
+import {
+  Users,
+  FolderOpen,
+  PlusCircle,
+  Ticket,
+  BarChart3,
+  CreditCard,
+  UploadCloud,
+  Activity,
+  Download,
+} from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
-import ProjectList from '@/app/dashboard/project-list'
+import AdminSearchPanel from '@/app/admin/admin-search-panel'
 import ProjectMap from '@/components/projects/project-map'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -51,6 +62,14 @@ export default async function AdminPage() {
 
   const safeProjects = projects ?? []
 
+  const { data: customers, error: customersError } = await adminSupabase
+    .from('profiles')
+    .select('id, full_name, company_name, email, vat_number, city, phone, created_at, role')
+    .neq('role', 'admin')
+    .order('company_name', { ascending: true })
+
+  const safeCustomers = customers ?? []
+
   const uniqueUserIds = Array.from(
     new Set(safeProjects.map((project: any) => project.user_id).filter(Boolean))
   )
@@ -93,7 +112,33 @@ export default async function AdminPage() {
     profiles: project.user_id ? profilesMap.get(project.user_id) ?? null : null,
   }))
 
-  const customerCount = uniqueUserIds.length
+  const projectCounts = new Map<string, number>()
+  const latestProjectDates = new Map<string, string | null>()
+
+  for (const project of safeProjects) {
+    const key = String(project.user_id ?? '')
+    if (!key) continue
+
+    projectCounts.set(key, (projectCounts.get(key) ?? 0) + 1)
+
+    const currentLatest = latestProjectDates.get(key)
+    if (!currentLatest) {
+      latestProjectDates.set(key, project.created_at ?? null)
+    } else if (
+      project.created_at &&
+      new Date(project.created_at).getTime() > new Date(currentLatest).getTime()
+    ) {
+      latestProjectDates.set(key, project.created_at)
+    }
+  }
+
+  const customersWithMeta = safeCustomers.map((customer: any) => ({
+    ...customer,
+    project_count: projectCounts.get(String(customer.id)) ?? 0,
+    last_project_at: latestProjectDates.get(String(customer.id)) ?? null,
+  }))
+
+  const customerCount = customersWithMeta.length
   const totalProjects = projectsWithProfiles.length
   const submittedProjects = projectsWithProfiles.filter(
     (project: any) => project.status === 'ingediend'
@@ -140,7 +185,9 @@ export default async function AdminPage() {
     ).length
   }
 
-  const hasLoadError = Boolean(projectsError || profilesError || filesError)
+  const hasLoadError = Boolean(projectsError || profilesError || customersError || filesError)
+  const ticketCount = 0
+  const subscriptionCount = 0
 
   return (
     <AppShell isAdmin>
@@ -153,29 +200,6 @@ export default async function AdminPage() {
 
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href="/admin/customers" className="btn-secondary">
-                    Klanten
-                  </Link>
-
-                  <Link href="/admin/customers/new" className="btn-secondary">
-                    + Klant
-                  </Link>
-
-                  <Link href="/admin/projects/new" className="btn-primary">
-                    + Project
-                  </Link>
-
-                  {latestProject ? (
-                    <Link
-                      href={`/admin/projects/${latestProject.id}`}
-                      className="btn-secondary"
-                    >
-                      Laatste project
-                    </Link>
-                  ) : null}
-                </div>
-
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Adminportaal
                 </p>
@@ -190,209 +214,298 @@ export default async function AdminPage() {
                 </p>
               </div>
 
-              <div className="flex w-full flex-col gap-4 xl:w-auto">
-                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
-                  <div className="flex items-center gap-4 px-4 py-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
-                      AD
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Omgeving
-                      </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-                        VM3D Admin Cloud
-                      </p>
-                      <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Beveiligd beheerplatform
-                      </p>
+              <div className="w-full xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{customerCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <Users className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 xl:w-auto xl:grid-cols-6">
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Klanten</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {customerCount}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Projecten</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalProjects}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Projecten</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {totalProjects}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="mt-1 text-lg font-semibold text-green-500">{activeProjects}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                        <Activity className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Ingediend</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {submittedProjects}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                        <p className="mt-1 text-lg font-semibold text-blue-500">{clientFiles}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                        <UploadCloud className="h-4.5 w-4.5 text-blue-500" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Actief</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {activeProjects}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                        <p className="mt-1 text-lg font-semibold text-purple-500">{finalFiles}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
+                        <Download className="h-4.5 w-4.5 text-purple-500" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Bestanden</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {totalFiles}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Ingediend</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <BarChart3 className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Afgerond</p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {completedProjects}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Tickets</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{ticketCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                        <Ticket className="h-4.5 w-4.5 text-sky-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(236,72,153,0.08),rgba(236,72,153,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Abonnementen</p>
+                        <p className="mt-1 text-lg font-semibold text-pink-400">{subscriptionCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-400/10">
+                        <CreditCard className="h-4.5 w-4.5 text-pink-400" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Snelle info
-              </p>
-
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Laatste project</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {latestProject?.title || 'Nog geen project'}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    {latestProject?.status
-                      ? getStatusLabel(latestProject.status)
-                      : '—'}
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Laatste klant</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {latestCustomer}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Gekoppeld aan recent project
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Klantuploads</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {clientFiles}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Bestanden door klanten aangeleverd
-                  </p>
-                </div>
-
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Opleverbestanden</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {finalFiles}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Klaar voor levering of download
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Quick actions
-              </p>
-
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <Link
-                  href="/admin/customers/new"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
-                >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuwe klant
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Maak meteen een nieuwe klantfiche aan.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/admin/projects/new"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
-                >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuw project
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Start snel een nieuw dossier op.
-                  </p>
-                </Link>
-
-                <Link
-                  href="/admin/customers"
-                  className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
-                >
-                  <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Beheer klanten
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Zoek en open bestaande klantfiches.
-                  </p>
-                </Link>
-
-                {latestProject ? (
-                  <Link
-                    href={`/admin/projects/${latestProject.id}`}
-                    className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
-                  >
-                    <p className="text-sm font-semibold text-[var(--text-main)]">
-                      Open recent project
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Ga verder op het laatst aangemaakte dossier.
-                    </p>
-                  </Link>
-                ) : (
-                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4">
-                    <p className="text-sm font-semibold text-[var(--text-main)]">
-                      Nog geen project
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Zodra een project bestaat, verschijnt het hier.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-            <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
+          <div className="grid items-stretch gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                   Projectkaart
-                </h2>
+                </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
                   Visueel overzicht van alle projecten en locaties.
                 </p>
               </div>
 
-              <div className="min-h-[260px] sm:min-h-[320px] lg:min-h-[380px]">
-                <ProjectMap projects={projectsWithProfiles} />
+              <div className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
+                <ProjectMap projects={projectsWithProfiles} height="100%" />
+              </div>
+            </div>
+
+            <div className="flex h-full flex-col rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Sneltoetsen
+                </p>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Snelle toegang tot klanten, werven en opvolging.
+                </p>
+              </div>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <Link
+                  href="/admin/customers"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Users className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Klanten
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Open alle klantfiches.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <FolderOpen className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Werven
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Ga naar het centrale werfoverzicht.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/customers/new"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <PlusCircle className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Nieuwe klant
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Maak meteen een nieuwe klantfiche aan.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/projects/new"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <PlusCircle className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Nieuwe werf
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Start snel een nieuw dossier op.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/dashboard/tickets"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Ticket className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Tickets
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Volg supportvragen en meldingen op.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/projects/statistics"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <BarChart3 className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Statistieken
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk cijfers en voortgang van projecten.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/dashboard/abonnement"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <CreditCard className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Abonnement
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk formule, opties en historiek.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin?view=uploads"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <UploadCloud className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Uploads
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Ga direct naar recente uploads en bestanden.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
+
         </section>
 
         {hasLoadError && (
@@ -402,12 +515,9 @@ export default async function AdminPage() {
           </section>
         )}
 
-        <ProjectList
+        <AdminSearchPanel
+          customers={customersWithMeta}
           projects={projectsWithProfiles}
-          title="Alle projecten"
-          description="Zoek, filter, sorteer en beheer alle projecten van klanten."
-          showCustomerColumn
-          showAdminActions
         />
       </div>
     </AppShell>

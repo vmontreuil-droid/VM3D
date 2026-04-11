@@ -178,7 +178,15 @@ function ProjectMarker({ project }: { project: Project }) {
   )
 }
 
-export default function ProjectMapInner({ projects }: { projects: Project[] }) {
+export default function ProjectMapInner({
+  projects,
+  height = '420px',
+}: {
+  projects: Project[]
+  height?: number | string
+}) {
+  const resolvedHeight = typeof height === 'number' ? `${height}px` : height
+
   const validProjects = projects.filter(
     (p) =>
       p.latitude !== null &&
@@ -193,7 +201,7 @@ export default function ProjectMapInner({ projects }: { projects: Project[] }) {
       : [50.8503, 4.3517]
 
   return (
-    <div className="project-map-wrapper">
+    <div className="project-map-wrapper" style={{ height: resolvedHeight }}>
       <MapContainer
         center={center}
         zoom={8}

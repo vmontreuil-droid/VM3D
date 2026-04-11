@@ -1,5 +1,15 @@
 import Link from 'next/link'
-import { FolderOpen, Activity, UploadCloud, Download } from 'lucide-react'
+import {
+  FolderOpen,
+  Activity,
+  UploadCloud,
+  Download,
+  Users,
+  PlusCircle,
+  BarChart3,
+  Ticket,
+  CreditCard,
+} from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
@@ -132,6 +142,98 @@ export default async function DashboardPage() {
 
   const monogram = getInitials(customerDisplayName)
 
+  const quickLinks = isAdmin
+    ? [
+        {
+          href: '/admin/customers',
+          label: 'Klanten',
+          description: 'Open alle klantfiches.',
+          icon: Users,
+        },
+        {
+          href: '/admin',
+          label: 'Werven',
+          description: 'Ga naar het werfoverzicht.',
+          icon: FolderOpen,
+        },
+        {
+          href: '/admin/customers/new',
+          label: 'Nieuwe klant',
+          description: 'Voeg snel een klant toe.',
+          icon: PlusCircle,
+        },
+        {
+          href: '/admin/projects/new',
+          label: 'Nieuwe werf',
+          description: 'Start een nieuw project.',
+          icon: PlusCircle,
+        },
+        {
+          href: '/dashboard/tickets',
+          label: 'Tickets',
+          description: 'Beheer vragen en opvolgingen.',
+          icon: Ticket,
+        },
+        {
+          href: '/dashboard/abonnement',
+          label: 'Abonnement',
+          description: 'Bekijk formule en opties.',
+          icon: CreditCard,
+        },
+        {
+          href: '/admin/projects/statistics',
+          label: 'Statistieken',
+          description: 'Bekijk cijfers en voortgang.',
+          icon: BarChart3,
+        },
+        {
+          href: '/admin?view=uploads',
+          label: 'Uploads',
+          description: 'Ga naar bestanden en uploads.',
+          icon: UploadCloud,
+        },
+      ]
+    : [
+        {
+          href: '/dashboard',
+          label: 'Mijn projecten',
+          description: 'Overzicht van je werven.',
+          icon: FolderOpen,
+        },
+        {
+          href: '/dashboard/tickets',
+          label: 'Tickets',
+          description: 'Meld een vraag of opvolging.',
+          icon: Ticket,
+        },
+        {
+          href: '/dashboard/abonnement',
+          label: 'Abonnement',
+          description: 'Bekijk je formule en opties.',
+          icon: CreditCard,
+        },
+        {
+          href: '/dashboard',
+          label: 'Uploads',
+          description: 'Bekijk je aangeleverde bestanden.',
+          icon: UploadCloud,
+        },
+        {
+          href: '/dashboard',
+          label: 'Oplevering',
+          description: 'Open je finale bestanden.',
+          icon: Download,
+        },
+        {
+          href: latestProject ? `/dashboard/projects/${latestProject.id}` : '/dashboard',
+          label: 'Recent project',
+          description: latestProject
+            ? latestProject.title || 'Ga verder in je laatste dossier.'
+            : 'Nog geen recent project beschikbaar.',
+          icon: Activity,
+        },
+      ]
+
   return (
     <AppShell isAdmin={isAdmin}>
       <div className="space-y-3 sm:space-y-4 lg:space-y-4">
@@ -258,16 +360,37 @@ export default async function DashboardPage() {
 
             <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Sneltoets
+                Sneltoetsen
               </p>
-              {latestProject ? (
-                <Link
-                  href={`/dashboard/projects/${latestProject.id}`}
-                  className="mt-1.5 inline-flex text-xs font-medium text-[var(--accent)] transition hover:text-[var(--accent-hover)]"
-                >
-                  Ga naar recent project →
-                </Link>
-              ) : null}
+
+              <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
+                {quickLinks.map((item) => {
+                  const Icon = item.icon
+
+                  return (
+                    <Link
+                      key={item.href + item.label}
+                      href={item.href}
+                      className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                    >
+                      <div className="flex items-start gap-2.5">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                          <Icon className="h-4 w-4" />
+                        </span>
+
+                        <span className="min-w-0">
+                          <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                            {item.label}
+                          </span>
+                          <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                            {item.description}
+                          </span>
+                        </span>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </section>

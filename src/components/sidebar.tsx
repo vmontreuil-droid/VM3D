@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Home, LayoutDashboard, Users, FileText, ChevronLeft, ChevronRight, X, Edit, PenTool, Plus, List, UploadCloud, Eye, BarChart3, Settings, Copy, Download, Trash2, Search } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FileText, ChevronLeft, ChevronRight, X, Edit, PenTool, Plus, List, UploadCloud, Eye, BarChart3, Settings, Copy, Download, Trash2, Search, Ticket, CreditCard } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -54,10 +54,54 @@ export default function Sidebar({
     },
     {
       label: 'Dashboard',
-      href: '/dashboard',
+      href: isAdmin ? '/admin' : '/dashboard',
       match: (pathname) =>
-        pathname === '/dashboard' || pathname.startsWith('/dashboard/'),
+        pathname === '/dashboard' ||
+        pathname.startsWith('/dashboard/') ||
+        pathname === '/admin',
       icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
+      children: isAdmin
+        ? [
+            {
+              label: 'Overzicht',
+              href: '/admin',
+              icon: <List className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/admin',
+            },
+            {
+              label: 'Tickets',
+              href: '/dashboard/tickets',
+              icon: <Ticket className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/tickets',
+            },
+            {
+              label: 'Abonnement',
+              href: '/dashboard/abonnement',
+              icon: <CreditCard className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/abonnement',
+            },
+          ]
+        : [
+            {
+              label: 'Mijn projecten',
+              href: '/dashboard',
+              icon: <List className="h-[14px] w-[14px]" />,
+              match: (pathname) =>
+                pathname === '/dashboard' || pathname.startsWith('/dashboard/projects/'),
+            },
+            {
+              label: 'Tickets',
+              href: '/dashboard/tickets',
+              icon: <Ticket className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/tickets',
+            },
+            {
+              label: 'Abonnement',
+              href: '/dashboard/abonnement',
+              icon: <CreditCard className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/abonnement',
+            },
+          ],
     },
   ]
 
