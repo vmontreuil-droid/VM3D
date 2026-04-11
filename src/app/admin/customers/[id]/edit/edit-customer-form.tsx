@@ -778,6 +778,74 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     </div>
                   </div>
 
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-2 sm:col-span-2">
+                      <label className={fieldLabelClass}>Straat</label>
+                      <input
+                        type="text"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. Kerkstraat"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>Nr</label>
+                      <input
+                        type="text"
+                        value={houseNumber}
+                        onChange={(e) => setHouseNumber(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. 12"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>Bus</label>
+                      <input
+                        type="text"
+                        value={bus}
+                        onChange={(e) => setBus(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. A"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>Postcode</label>
+                      <input
+                        type="text"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. 9000"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>Gemeente</label>
+                      <input
+                        type="text"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. Gent"
+                      />
+                    </div>
+
+                    <div className="grid gap-2 sm:col-span-2">
+                      <label className={fieldLabelClass}>Land</label>
+                      <input
+                        type="text"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. België"
+                      />
+                    </div>
+                  </div>
+
                   <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-3">
                     <p className="text-sm font-semibold text-[var(--text-main)]">
                       {addressPreview || 'Nog geen adres beschikbaar'}
@@ -788,6 +856,16 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         {addressLookupMessage}
                       </p>
                     )}
+
+                    <button
+                      type="button"
+                      onClick={() => void handleAddressLookup(false)}
+                      disabled={addressLookupLoading}
+                      className="mt-3 inline-flex items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <Search className="h-4 w-4 text-[var(--accent)]" />
+                      {addressLookupLoading ? 'Adres zoeken...' : 'Kaartpositie opnieuw bepalen'}
+                    </button>
                   </div>
                 </div>
               </div>
