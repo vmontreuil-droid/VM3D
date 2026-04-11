@@ -434,6 +434,12 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                 <p className="mt-1.5 text-xs text-[var(--text-soft)]">
                   Volledige klantenfiche met alle bewerkbare gegevens.
                 </p>
+
+                <div className="mt-2">
+                  <Link href="/admin" className="btn-secondary">
+                    Terug naar dashboard
+                  </Link>
+                </div>
               </div>
 
               <div className="w-full xl:max-w-[640px]">
