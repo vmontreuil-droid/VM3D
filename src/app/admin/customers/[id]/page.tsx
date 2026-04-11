@@ -188,7 +188,7 @@ export default async function AdminCustomerDetailPage({
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+      <div className="space-y-1 sm:space-y-2">
         {(updated || created || inviteSent || inviteFailed || manualPasswordSet) && (
           <section className="space-y-3">
             {updated && (
@@ -225,7 +225,7 @@ export default async function AdminCustomerDetailPage({
         )}
 
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 sm:px-5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
@@ -346,7 +346,7 @@ export default async function AdminCustomerDetailPage({
             </div>
           </div>
 
-          <div className="grid gap-2 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-2 px-4 py-2 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
             <section className={sectionClass}>
               <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
                 <p className={sectionHeadingClass}>Overzicht</p>
@@ -559,7 +559,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={shellClass}>
-              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] px-4 py-2 sm:px-5">
                 <p className={sectionHeadingClass}>Communicatie</p>
                 <h2 className={sectionTitleClass}>
                   <Mail className="h-4 w-4 text-[var(--accent)]" />
@@ -570,7 +570,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-2 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div className="grid gap-2 px-4 py-2 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">E-mail</p>
                   <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
@@ -664,7 +664,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={shellClass}>
-              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] px-4 py-2 sm:px-5">
                 <p className={sectionHeadingClass}>Financieel</p>
                 <h2 className={sectionTitleClass}>
                   <CreditCard className="h-4 w-4 text-[var(--accent)]" />
@@ -732,7 +732,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={shellClass}>
-              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] px-4 py-2 sm:px-5">
                 <p className={sectionHeadingClass}>Locatie</p>
                 <h2 className={sectionTitleClass}>
                   <MapPinned className="h-4 w-4 text-[var(--accent)]" />
@@ -799,9 +799,9 @@ export default async function AdminCustomerDetailPage({
             </section>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <section className={shellClass}>
-              <div className="border-b border-[var(--border-soft)] px-4 py-4">
+              <div className="border-b border-[var(--border-soft)] px-4 py-2">
                 <p className={sectionHeadingClass}>Kaart</p>
                 <h2 className={sectionTitleClass}>
                   <MapPinned className="h-4 w-4 text-[var(--accent)]" />
@@ -812,7 +812,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="px-4 py-4">
+              <div className="px-4 py-2">
                 <CustomerMap
                   latitude={customer.latitude}
                   longitude={customer.longitude}
@@ -822,7 +822,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={shellClass}>
-              <div className="flex items-center justify-between gap-2 border-b border-[var(--border-soft)] px-4 py-4">
+              <div className="flex items-center justify-between gap-2 border-b border-[var(--border-soft)] px-4 py-2">
                 <div>
                   <p className={sectionHeadingClass}>Projecten</p>
                   <h2 className={sectionTitleClass}>
@@ -842,7 +842,7 @@ export default async function AdminCustomerDetailPage({
                 </Link>
               </div>
 
-              <div className="grid gap-2 px-4 py-4">
+              <div className="grid gap-2 px-4 py-2">
                 {recentProjects.length === 0 ? (
                   <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4 text-sm text-[var(--text-soft)]">
                     Nog geen werven gevonden.
@@ -898,7 +898,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={sectionClass}>
-              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 sm:px-5">
                 <p className={sectionHeadingClass}>Notities</p>
                 <h2 className={sectionTitleClass}>
                   <MessageSquare className="h-4 w-4 text-[var(--accent)]" />
@@ -913,7 +913,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={sectionClass}>
-              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 sm:px-5">
                 <p className={sectionHeadingClass}>Toegang</p>
                 <h2 className={sectionTitleClass}>
                   <KeyRound className="h-4 w-4 text-[var(--accent)]" />
