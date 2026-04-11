@@ -255,7 +255,7 @@ export default async function NewCustomerPage() {
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Adminportaal
@@ -294,7 +294,7 @@ export default async function NewCustomerPage() {
                 </div>
               </div>
 
-              <div className="w-full xl:max-w-[400px]">
+              <div className="w-full xl:ml-auto xl:max-w-[400px]">
                 <div className="grid w-full grid-cols-2 gap-2">
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
