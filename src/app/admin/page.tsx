@@ -459,6 +459,10 @@ export default async function AdminPage({ searchParams }: Props) {
                 <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
                   Na wijziging van env-vars: herstart de dev-server.
                 </p>
+                <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
+                  Detectie: API sleutel = {ticketMailConfig.apiKeyKey || 'niet gevonden'} · From ={' '}
+                  {ticketMailConfig.fromAddressKey || 'niet gevonden'}
+                </p>
                 {ticketMailEnabled && (
                   <form action={sendTicketTestEmail} className="mt-2">
                     <button type="submit" className="btn-secondary">

@@ -5,8 +5,15 @@ type TicketMailInput = {
   text: string
 }
 
-function getApiKey() {
-  return process.env.RESEND_API_KEY || process.env.TICKET_RESEND_API_KEY || ''
+function pickFirstEnv(keys: string[]) {
+  for (const key of keys) {
+    const value = process.env[key]
+    if (value && value.trim()) {
+      return { key, value: value.trim() }
+    }
+  }
+
+  return { key: null as string | null, value: '' }
 }
 
 function getBaseUrl() {
@@ -17,29 +24,39 @@ function getBaseUrl() {
 }
 
 function getFromAddress() {
-  return (
-    process.env.TICKET_NOTIFICATIONS_FROM ||
-    process.env.RESEND_FROM_EMAIL ||
-    process.env.RESEND_FROM ||
-    process.env.EMAIL_FROM ||
-    ''
-  )
+  return pickFirstEnv([
+    'TICKET_NOTIFICATIONS_FROM',
+    'RESEND_FROM_EMAIL',
+    'RESEND_FROM',
+    'EMAIL_FROM',
+    'NEXT_PUBLIC_RESEND_FROM_EMAIL',
+    'NEXT_PUBLIC_EMAIL_FROM',
+  ])
 }
 
 export function getTicketNotificationConfig() {
-  const apiKey = getApiKey()
-  const fromAddress = getFromAddress()
+  const apiKeyMatch = pickFirstEnv([
+    'RESEND_API_KEY',
+    'TICKET_RESEND_API_KEY',
+    'RESEND_API_TOKEN',
+    'NEXT_PUBLIC_RESEND_API_KEY',
+  ])
+  const fromAddressMatch = getFromAddress()
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || process.env.VERCEL_URL || ''
 
   return {
-    apiKey,
-    fromAddress,
+    apiKey: apiKeyMatch.value,
+    fromAddress: fromAddressMatch.value,
+    apiKeyKey: apiKeyMatch.key,
+    fromAddressKey: fromAddressMatch.key,
     siteUrl,
-    enabled: Boolean(apiKey && fromAddress),
+    enabled: Boolean(apiKeyMatch.value && fromAddressMatch.value),
     missing: [
-      apiKey ? null : 'RESEND_API_KEY',
-      fromAddress ? null : 'TICKET_NOTIFICATIONS_FROM of RESEND_FROM_EMAIL (1 van beide)',
+      apiKeyMatch.value ? null : 'RESEND_API_KEY (of alias)',
+      fromAddressMatch.value
+        ? null
+        : 'TICKET_NOTIFICATIONS_FROM of RESEND_FROM_EMAIL (1 van beide)',
     ].filter(Boolean),
     warnings: [
       siteUrl ? null : 'NEXT_PUBLIC_SITE_URL of SITE_URL (aanbevolen voor correcte links)',
