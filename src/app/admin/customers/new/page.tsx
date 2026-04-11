@@ -203,16 +203,15 @@ async function createCustomer(formData: FormData) {
   }
 
   if (sendInvite && passwordMode !== 'manual') {
-    const inviteResult = await adminSupabase.auth.admin.inviteUserByEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/login`,
-      data: {
-        full_name: fullName || null,
-        company_name: companyName || null,
-      },
-    })
+    const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/login`,
+      }
+    )
 
-    if (inviteResult.error) {
-      console.error('inviteError:', inviteResult.error)
+    if (resetError) {
+      console.error('resetError:', resetError)
       redirect(`/admin/customers/${createdUser.id}?warning=invite_failed`)
     }
 

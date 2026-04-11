@@ -671,7 +671,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       onChange={(e) => setInvoiceEmail(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
                       placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
-                      required
                     />
                     <input
                       type="hidden"
@@ -831,7 +830,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setPaymentTermDays(e.target.value)}
                         className={softSelectClass}
                         style={nativeSelectStyle}
-                        required
                       >
                         <option value="">Selecteer betalingstermijn</option>
                         <option value="0">Contant / onmiddellijk</option>
@@ -856,7 +854,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setQuoteValidityDays(e.target.value)}
                         className={softSelectClass}
                         style={nativeSelectStyle}
-                        required
                       >
                         <option value="">Selecteer geldigheid</option>
                         <option value="7">7 dagen</option>
@@ -880,7 +877,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setPaymentMethod(e.target.value)}
                         className={softSelectClass}
                         style={nativeSelectStyle}
-                        required
                       >
                         <option value="">Selecteer betaalwijze</option>
                         <option value="overschrijving">Overschrijving</option>
@@ -903,7 +899,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setCurrency(e.target.value)}
                         className={softSelectClass}
                         style={nativeSelectStyle}
-                        required
                       >
                         <option value="EUR">EUR — Euro</option>
                         <option value="USD">USD — US Dollar</option>
@@ -933,7 +928,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setVatRate(e.target.value)}
                         className={softSelectClass}
                         style={nativeSelectStyle}
-                        required
                       >
                         <option value="">Selecteer btw-tarief</option>
                         <option value="21%">21%</option>
@@ -974,7 +968,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setIban(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
                         placeholder="Bijv. BE68 5390 0754 7034"
-                        required
                       />
                     </div>
 
@@ -987,7 +980,6 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         onChange={(e) => setBic(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
                         placeholder="Bijv. GKCCBEBB"
-                        required
                       />
                     </div>
                   </div>
