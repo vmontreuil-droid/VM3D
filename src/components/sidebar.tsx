@@ -21,6 +21,7 @@ type NavItem = {
   children?: {
     label: string
     href: string
+    icon?: React.ReactNode
     match: (pathname: string) => boolean
   }[]
 }

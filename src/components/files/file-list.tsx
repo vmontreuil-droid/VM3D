@@ -16,7 +16,7 @@ type Props = {
 
 function getFileExtension(name: string) {
   const parts = name.split('.')
-  return parts.length > 1 ? parts.pop()?.toUpperCase() : 'FILE'
+  return parts.length > 1 ? parts.pop()?.toUpperCase() ?? 'FILE' : 'FILE'
 }
 
 function getFileIcon(extension: string) {
