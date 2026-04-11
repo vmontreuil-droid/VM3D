@@ -6,12 +6,14 @@ type Props = {
   latitude: number
   longitude: number
   label?: string
+  height?: number | string
 }
 
 export default function CustomerMapInner({
   latitude,
   longitude,
   label,
+  height = 260,
 }: Props) {
   const [mounted, setMounted] = useState(false)
   const [LeafletComponents, setLeafletComponents] = useState<any>(null)
@@ -53,10 +55,14 @@ export default function CustomerMapInner({
     latitude,
     longitude,
   ])
+  const resolvedHeight = typeof height === 'number' ? `${height}px` : height
 
   if (!mounted || !LeafletComponents || !markerIcon) {
     return (
-      <div className="flex h-[260px] items-center justify-center text-sm text-[var(--text-soft)]">
+      <div
+        className="flex items-center justify-center text-sm text-[var(--text-soft)]"
+        style={{ height: resolvedHeight }}
+      >
         Kaart laden...
       </div>
     )
@@ -96,12 +102,15 @@ export default function CustomerMapInner({
   }
 
   return (
-    <div className="project-map h-[260px] w-full">
+    <div
+      className="project-map w-full overflow-hidden rounded-[inherit]"
+      style={{ height: resolvedHeight }}
+    >
       <MapContainer
         center={position}
         zoom={15}
         scrollWheelZoom={true}
-        className="h-full w-full"
+        className="h-full w-full rounded-[inherit]"
       >
         <RecenterMap latitude={latitude} longitude={longitude} />
         <TileLayer
