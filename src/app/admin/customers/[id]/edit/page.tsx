@@ -294,12 +294,27 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const safeProjects = projects ?? []
   const recentProjects = safeProjects.slice(0, 4)
   const totalProjects = safeProjects.length
+  const submittedProjects = safeProjects.filter(
+    (project: any) => project.status === 'ingediend'
+  ).length
+  const inProgressProjects = safeProjects.filter(
+    (project: any) => project.status === 'in_behandeling'
+  ).length
+  const readyForPaymentProjects = safeProjects.filter(
+    (project: any) => project.status === 'klaar_voor_betaling'
+  ).length
+  const completedProjects = safeProjects.filter(
+    (project: any) => project.status === 'afgerond'
+  ).length
   const activeProjects = safeProjects.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
       project.status === 'klaar_voor_betaling'
   ).length
   const latestProject = safeProjects[0] ?? null
+  const latestProjectDate = latestProject?.created_at
+    ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
+    : '—'
 
   let logoPreviewUrl: string | null = null
 
@@ -427,18 +442,55 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
               </div>
 
               <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {totalProjects}
-                  </p>
-                </div>
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {totalProjects}
+                    </p>
+                  </div>
 
-                <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Actieve werven</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {activeProjects}
-                  </p>
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Ingediend</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {submittedProjects}
+                    </p>
+                  </div>
+
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">In behandeling</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {inProgressProjects}
+                    </p>
+                  </div>
+
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Klaar voor betaling</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {readyForPaymentProjects}
+                    </p>
+                  </div>
+
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Afgerond</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {completedProjects}
+                    </p>
+                  </div>
+
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Actieve werven</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {activeProjects}
+                    </p>
+                  </div>
+
+                  <div className="card-mini sm:col-span-2 xl:col-span-3">
+                    <p className="text-xs text-[var(--text-muted)]">Laatste werfdatum</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {latestProjectDate}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="border-t border-[var(--border-soft)] pt-2">
