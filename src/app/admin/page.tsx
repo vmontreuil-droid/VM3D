@@ -187,7 +187,11 @@ export default async function AdminPage() {
   }
 
   const hasLoadError = Boolean(projectsError || profilesError || customersError || filesError)
-  const ticketCount = 0
+  const { count: ticketCountRaw } = await adminSupabase
+    .from('tickets')
+    .select('*', { count: 'exact', head: true })
+
+  const ticketCount = ticketCountRaw ?? 0
   const subscriptionCount = 0
 
   return (
@@ -425,7 +429,7 @@ export default async function AdminPage() {
                 </Link>
 
                 <Link
-                  href="/dashboard/tickets"
+                  href="/admin/tickets"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />

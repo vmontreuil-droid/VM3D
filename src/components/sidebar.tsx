@@ -108,8 +108,8 @@ export default function Sidebar({
     },
     {
       label: 'Tickets',
-      href: '/dashboard/tickets',
-      match: (pathname) => pathname === '/dashboard/tickets',
+      href: '/admin/tickets',
+      match: (pathname) => pathname === '/admin/tickets' || pathname.startsWith('/admin/tickets/'),
       icon: <Ticket className="h-[17px] w-[17px]" />,
     },
     {

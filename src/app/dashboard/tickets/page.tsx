@@ -21,6 +21,10 @@ export default async function DashboardTicketsPage() {
     .single()
 
   const isAdmin = profile?.role === 'admin'
+  if (isAdmin) {
+    redirect('/admin/tickets')
+  }
+
   const displayName = profile?.company_name || profile?.full_name || 'klant'
 
   return (

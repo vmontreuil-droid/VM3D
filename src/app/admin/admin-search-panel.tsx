@@ -331,7 +331,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
                         </Link>
                         <Link
-                          href={`/dashboard/tickets?customer=${customer.id}`}
+                          href={`/admin/tickets?customer=${customer.id}`}
                           className={getActionButtonClass('green')}
                         >
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
