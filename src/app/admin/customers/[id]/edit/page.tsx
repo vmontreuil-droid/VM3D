@@ -421,11 +421,9 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
             <div className="relative flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href="/admin/customers" className="btn-secondary">
-                    ← Terug
-                  </Link>
-                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
 
                 <h1 className="mt-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   {customer.company_name || customer.full_name || 'Klant'}
@@ -447,7 +445,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                       </span>
                       <span className="min-w-0">
                         <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Klantenfiche
+                          Dashboard
                         </span>
                         <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
                           Terug naar klantenoverzicht
