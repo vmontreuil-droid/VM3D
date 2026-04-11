@@ -60,6 +60,8 @@ export default function AdminUploadPanel({ projects }: Props) {
 
   const [clientProjectId, setClientProjectId] = useState('')
   const [finalProjectId, setFinalProjectId] = useState('')
+  const [clientProjectQuery, setClientProjectQuery] = useState('')
+  const [finalProjectQuery, setFinalProjectQuery] = useState('')
   const [clientFile, setClientFile] = useState<File | null>(null)
   const [finalFile, setFinalFile] = useState<File | null>(null)
   const [clientLoading, setClientLoading] = useState(false)
@@ -93,6 +95,30 @@ export default function AdminUploadPanel({ projects }: Props) {
 
   const clientReady = Boolean(clientProjectId && clientFile && !clientLoading)
   const finalReady = Boolean(finalProjectId && finalFile && !finalLoading)
+
+  function handleProjectInput(kind: UploadKind, value: string) {
+    const normalized = value.trim().toLowerCase()
+    const exactMatch = projectOptions.find(
+      (project) => project.label.trim().toLowerCase() === normalized
+    )
+    const partialMatches = normalized
+      ? projectOptions.filter((project) =>
+          project.label.toLowerCase().includes(normalized)
+        )
+      : []
+    const resolvedProject = exactMatch || (partialMatches.length === 1 ? partialMatches[0] : null)
+
+    if (kind === 'client_upload') {
+      setClientProjectQuery(value)
+      setClientProjectId(resolvedProject?.id ?? '')
+      setClientMessage('')
+      return
+    }
+
+    setFinalProjectQuery(value)
+    setFinalProjectId(resolvedProject?.id ?? '')
+    setFinalMessage('')
+  }
 
   function setSelectedFile(kind: UploadKind, fileList: FileList | null) {
     const file = fileList?.[0] ?? null
@@ -212,24 +238,27 @@ export default function AdminUploadPanel({ projects }: Props) {
           <div className="space-y-2.5 px-3.5 py-3">
             <div className="space-y-1.5">
               <label className="text-[11px] font-medium text-[var(--text-soft)]">
-                Kies dossier
+                Zoek dossier
               </label>
-              <select
-                value={clientProjectId}
-                onChange={(e) => {
-                  setClientProjectId(e.target.value)
-                  setClientMessage('')
-                }}
+              <input
+                type="text"
+                value={clientProjectQuery}
+                onChange={(e) => handleProjectInput('client_upload', e.target.value)}
+                list="client-project-options"
+                placeholder="Typ klant, werf of adres..."
                 className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                 required
-              >
-                <option value="">Selecteer klant / werf</option>
+              />
+              <datalist id="client-project-options">
                 {projectOptions.map((project) => (
-                  <option key={project.id} value={project.id}>
-                    {project.label}
-                  </option>
+                  <option key={project.id} value={project.label} />
                 ))}
-              </select>
+              </datalist>
+              <p className={`text-[10px] ${clientProjectId ? 'text-emerald-300' : 'text-[var(--text-soft)]'}`}>
+                {clientProjectId
+                  ? 'Dossier geselecteerd.'
+                  : 'Begin te typen en kies daarna het juiste dossier uit de lijst.'}
+              </p>
             </div>
 
             <label
@@ -330,24 +359,27 @@ export default function AdminUploadPanel({ projects }: Props) {
           <div className="space-y-2.5 px-3.5 py-3">
             <div className="space-y-1.5">
               <label className="text-[11px] font-medium text-[var(--text-soft)]">
-                Kies dossier
+                Zoek dossier
               </label>
-              <select
-                value={finalProjectId}
-                onChange={(e) => {
-                  setFinalProjectId(e.target.value)
-                  setFinalMessage('')
-                }}
+              <input
+                type="text"
+                value={finalProjectQuery}
+                onChange={(e) => handleProjectInput('final_file', e.target.value)}
+                list="final-project-options"
+                placeholder="Typ klant, werf of adres..."
                 className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                 required
-              >
-                <option value="">Selecteer werf / dossier</option>
+              />
+              <datalist id="final-project-options">
                 {projectOptions.map((project) => (
-                  <option key={project.id} value={project.id}>
-                    {project.label}
-                  </option>
+                  <option key={project.id} value={project.label} />
                 ))}
-              </select>
+              </datalist>
+              <p className={`text-[10px] ${finalProjectId ? 'text-emerald-300' : 'text-[var(--text-soft)]'}`}>
+                {finalProjectId
+                  ? 'Dossier geselecteerd.'
+                  : 'Begin te typen en kies daarna het juiste dossier uit de lijst.'}
+              </p>
             </div>
 
             <label
