@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronDown, FolderOpen } from 'lucide-react'
 
@@ -32,11 +32,35 @@ function getProjectStatusLabel(status: string | null) {
 
 export default function ProjectsDropdown({ projects }: Props) {
   const router = useRouter()
+  const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState(projects[0]?.id ?? '')
 
+  const filteredProjects = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase()
+    if (!normalizedQuery) return projects
+
+    return projects.filter((project) => {
+      const title = (project.title || '').toLowerCase()
+      const statusLabel = getProjectStatusLabel(project.status).toLowerCase()
+      return title.includes(normalizedQuery) || statusLabel.includes(normalizedQuery)
+    })
+  }, [projects, query])
+
+  useEffect(() => {
+    if (!filteredProjects.length) {
+      setSelectedId('')
+      return
+    }
+
+    const stillExists = filteredProjects.some((project) => project.id === selectedId)
+    if (!stillExists) {
+      setSelectedId(filteredProjects[0].id)
+    }
+  }, [filteredProjects, selectedId])
+
   const selectedProject = useMemo(
-    () => projects.find((project) => project.id === selectedId) ?? null,
-    [projects, selectedId]
+    () => filteredProjects.find((project) => project.id === selectedId) ?? null,
+    [filteredProjects, selectedId]
   )
 
   if (projects.length === 0) {
@@ -53,14 +77,23 @@ export default function ProjectsDropdown({ projects }: Props) {
         Kies een werf
       </p>
 
+      <input
+        type="text"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Zoek op titel of status"
+        className="input-dark mt-2 w-full px-3 py-2 text-sm"
+      />
+
       <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-center">
         <div className="relative">
           <select
             value={selectedId}
             onChange={(event) => setSelectedId(event.target.value)}
             className="w-full appearance-none rounded-xl border border-[var(--accent)]/45 bg-[var(--bg-card)] px-3 py-2.5 pr-10 text-sm text-[var(--text-main)] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/15"
+            disabled={!filteredProjects.length}
           >
-            {projects.map((project) => {
+            {filteredProjects.map((project) => {
               const label = project.title || 'Zonder titel'
               const dateLabel = project.created_at
                 ? new Date(project.created_at).toLocaleDateString('nl-BE')
@@ -89,6 +122,12 @@ export default function ProjectsDropdown({ projects }: Props) {
           Open werf
         </button>
       </div>
+
+      {query && filteredProjects.length === 0 && (
+        <p className="mt-2 text-xs text-[var(--text-soft)]">
+          Geen resultaten voor deze zoekterm.
+        </p>
+      )}
 
       {selectedProject && (
         <p className="mt-2 text-xs text-[var(--text-soft)]">
