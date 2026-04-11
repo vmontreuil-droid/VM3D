@@ -10,6 +10,7 @@ import {
   getTicketStatusClass,
   getTicketStatusLabel,
 } from '@/lib/tickets'
+import { getTicketPublicUrl, sendTicketNotificationEmail } from '@/lib/ticket-notifications'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -65,6 +66,12 @@ async function updateTicket(formData: FormData) {
 
   const adminSupabase = createAdminClient()
 
+  const { data: existingTicket } = await adminSupabase
+    .from('tickets')
+    .select('id, title, status, customer_id')
+    .eq('id', id)
+    .maybeSingle()
+
   const { error } = await adminSupabase
     .from('tickets')
     .update({
@@ -81,10 +88,33 @@ async function updateTicket(formData: FormData) {
     redirect(`/admin/tickets/${id}?error=update`)
   }
 
+  const statusChanged = existingTicket?.status && existingTicket.status !== status
+  if (statusChanged && existingTicket?.customer_id) {
+    const { data: customerProfile } = await adminSupabase
+      .from('profiles')
+      .select('email, full_name, company_name')
+      .eq('id', existingTicket.customer_id)
+      .maybeSingle()
+
+    if (customerProfile?.email) {
+      const detailUrl = getTicketPublicUrl(`/dashboard/tickets/${id}`)
+      const customerLabel =
+        customerProfile.company_name || customerProfile.full_name || customerProfile.email
+      const newStatus = getTicketStatusLabel(status)
+
+      await sendTicketNotificationEmail({
+        to: [customerProfile.email],
+        subject: `Ticket #${id} statusupdate: ${newStatus}`,
+        text: `Beste ${customerLabel},\n\nDe status van ticket #${id} (${existingTicket.title || 'zonder titel'}) werd gewijzigd naar ${newStatus}.\n\nBekijk het ticket: ${detailUrl}`,
+        html: `<p>Beste ${customerLabel},</p><p>De status van ticket <strong>#${id}</strong> (${existingTicket.title || 'zonder titel'}) werd gewijzigd naar <strong>${newStatus}</strong>.</p><p><a href="${detailUrl}">Bekijk ticket</a></p>`,
+      })
+    }
+  }
+
   redirect(`/admin/tickets/${id}?updated=1`)
 }
 
-async function addInternalMessage(formData: FormData) {
+async function addTicketMessage(formData: FormData) {
   'use server'
 
   const supabase = await createClient()
@@ -109,6 +139,7 @@ async function addInternalMessage(formData: FormData) {
 
   const ticketId = Number(String(formData.get('ticket_id') || '0'))
   const message = String(formData.get('message') || '').trim()
+  const isInternal = String(formData.get('is_internal') || '1') === '1'
 
   if (!Number.isFinite(ticketId) || ticketId <= 0) {
     redirect('/admin/tickets?error=invalid_id')
@@ -120,15 +151,21 @@ async function addInternalMessage(formData: FormData) {
 
   const adminSupabase = createAdminClient()
 
+  const { data: ticket } = await adminSupabase
+    .from('tickets')
+    .select('id, title, customer_id')
+    .eq('id', ticketId)
+    .maybeSingle()
+
   const { error } = await adminSupabase.from('ticket_messages').insert({
     ticket_id: ticketId,
     author_id: user.id,
     message,
-    is_internal: true,
+    is_internal: isInternal,
   })
 
   if (error) {
-    console.error('addInternalMessage error:', error)
+    console.error('addTicketMessage error:', error)
     redirect(`/admin/tickets/${ticketId}?error=message`)
   }
 
@@ -139,6 +176,27 @@ async function addInternalMessage(formData: FormData) {
       updated_at: new Date().toISOString(),
     })
     .eq('id', ticketId)
+
+  if (!isInternal && ticket?.customer_id) {
+    const { data: customerProfile } = await adminSupabase
+      .from('profiles')
+      .select('email, full_name, company_name')
+      .eq('id', ticket.customer_id)
+      .maybeSingle()
+
+    if (customerProfile?.email) {
+      const detailUrl = getTicketPublicUrl(`/dashboard/tickets/${ticketId}`)
+      const customerLabel =
+        customerProfile.company_name || customerProfile.full_name || customerProfile.email
+
+      await sendTicketNotificationEmail({
+        to: [customerProfile.email],
+        subject: `Nieuw antwoord op ticket #${ticketId}`,
+        text: `Beste ${customerLabel},\n\nEr staat een nieuw antwoord klaar op ticket #${ticketId} (${ticket.title || 'zonder titel'}).\n\nBekijk het ticket: ${detailUrl}`,
+        html: `<p>Beste ${customerLabel},</p><p>Er staat een nieuw antwoord klaar op ticket <strong>#${ticketId}</strong> (${ticket.title || 'zonder titel'}).</p><p><a href="${detailUrl}">Bekijk ticket</a></p>`,
+      })
+    }
+  }
 
   redirect(`/admin/tickets/${ticketId}?message=1`)
 }
@@ -250,7 +308,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
             )}
             {showMessage && (
               <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                Interne notitie toegevoegd.
+                Bericht toegevoegd.
               </div>
             )}
             {hasError && (
@@ -403,21 +461,31 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                 </p>
               </div>
 
-              <form action={addInternalMessage} className="space-y-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+              <form action={addTicketMessage} className="space-y-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
                 <input type="hidden" name="ticket_id" value={ticket.id} />
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Interne notitie
+                  Nieuw bericht
                 </label>
                 <textarea
                   name="message"
                   required
                   className="input-dark min-h-[90px] w-full resize-none px-3 py-2 text-sm"
-                  placeholder="Plaats hier een interne opvolgnotitie"
+                  placeholder="Plaats hier een opvolgnotitie"
                 />
+                <label className="inline-flex items-center gap-2 text-xs text-[var(--text-soft)]">
+                  <input
+                    type="checkbox"
+                    name="is_internal"
+                    value="1"
+                    defaultChecked
+                    className="h-4 w-4 rounded border-[var(--border-soft)] bg-[var(--bg-card)]"
+                  />
+                  Interne notitie (niet zichtbaar voor klant)
+                </label>
                 <div className="flex justify-end">
                   <button type="submit" className="btn-secondary">
                     <MessageSquarePlus className="h-4 w-4" />
-                    Notitie toevoegen
+                    Bericht toevoegen
                   </button>
                 </div>
               </form>
@@ -444,6 +512,9 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                         <div key={item.id} className="px-3 py-2.5">
                           <p className="text-xs text-[var(--text-muted)]">
                             {new Date(item.created_at).toLocaleString('nl-BE')} · {authorLabel}
+                          </p>
+                          <p className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                            {item.is_internal ? 'Intern' : 'Zichtbaar voor klant'}
                           </p>
                           <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--text-main)]">
                             {item.message}
