@@ -153,8 +153,12 @@ export async function POST(request: Request) {
       )
     }
 
-    const redirectTo = process.env.NEXT_PUBLIC_SITE_URL
-      ? `${process.env.NEXT_PUBLIC_SITE_URL}/login`
+    const baseSiteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
+    const redirectTo = baseSiteUrl
+      ? `${baseSiteUrl.replace(/\/$/, '')}/login`
       : undefined
 
     const { error: resetError } = await supabaseAdmin.auth.resetPasswordForEmail(
