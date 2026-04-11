@@ -231,7 +231,7 @@ export default function EditProjectForm({
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex rounded-2xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-primary rounded-2xl px-4 py-2.5 text-sm"
           >
             {loading ? 'Project wordt opgeslagen...' : 'Project opslaan'}
           </button>
@@ -239,7 +239,7 @@ export default function EditProjectForm({
           <button
             type="button"
             onClick={() => router.push('/admin')}
-            className="inline-flex rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#2a3745]"
+            className="btn-secondary rounded-2xl px-4 py-2.5 text-sm"
           >
             Annuleren
           </button>

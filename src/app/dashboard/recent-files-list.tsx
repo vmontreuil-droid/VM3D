@@ -92,24 +92,16 @@ export default function RecentFilesList({ files }: Props) {
                 {sortedFiles.length}
               </p>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <button
                 onClick={() => setSortBy('newest')}
-                className={`text-xs font-medium px-3 py-1.5 rounded-md transition ${
-                  sortBy === 'newest'
-                    ? 'bg-[var(--accent)] text-white'
-                    : 'border border-[var(--border-soft)] text-[var(--text-soft)] hover:text-[var(--text-main)]'
-                }`}
+                className={sortBy === 'newest' ? 'btn-primary btn-sm' : 'btn-secondary btn-sm'}
               >
                 Nieuwst
               </button>
               <button
                 onClick={() => setSortBy('oldest')}
-                className={`text-xs font-medium px-3 py-1.5 rounded-md transition ${
-                  sortBy === 'oldest'
-                    ? 'bg-[var(--accent)] text-white'
-                    : 'border border-[var(--border-soft)] text-[var(--text-soft)] hover:text-[var(--text-main)]'
-                }`}
+                className={sortBy === 'oldest' ? 'btn-primary btn-sm' : 'btn-secondary btn-sm'}
               >
                 Oudst
               </button>
@@ -168,7 +160,7 @@ export default function RecentFilesList({ files }: Props) {
                 {file.project_id ? (
                   <Link
                     href={`/dashboard/projects/${file.project_id}`}
-                    className="text-center text-xs font-semibold text-blue-400 transition hover:text-blue-300 underline"
+                    className="btn-secondary btn-sm justify-self-center"
                   >
                     Open
                   </Link>

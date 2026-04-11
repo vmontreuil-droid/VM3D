@@ -42,7 +42,7 @@ export default function GeocodeMissingProjectsButton() {
         type="button"
         onClick={handleBulkGeocode}
         disabled={loading}
-        className="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary"
       >
         {loading ? (
           <Loader className="h-4 w-4 animate-spin" />

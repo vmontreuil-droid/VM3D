@@ -219,7 +219,7 @@ export default function NewProjectForm({
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex rounded-2xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-primary rounded-2xl px-4 py-2.5 text-sm"
           >
             {loading ? 'Project wordt aangemaakt...' : 'Project aanmaken'}
           </button>

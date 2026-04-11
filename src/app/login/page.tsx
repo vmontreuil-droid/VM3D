@@ -131,7 +131,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-medium text-white shadow-lg shadow-[var(--accent)]/20 transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="btn-primary w-full py-3"
               >
                 {loading ? (
                   <Loader className="h-4 w-4 animate-spin" />
@@ -145,7 +145,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleSignUp}
                 disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="btn-secondary w-full py-3"
               >
                 {loading ? (
                   <Loader className="h-4 w-4 animate-spin" />

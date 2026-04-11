@@ -481,7 +481,7 @@ export default function ProjectList({
                               ? `/admin/projects/${project.id}`
                               : `/dashboard/projects/${project.id}`
                           }
-                          className="inline-flex h-[30px] items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 text-xs font-semibold text-blue-300 transition hover:bg-blue-500/20"
+                          className="btn-secondary btn-sm"
                         >
                           Open
                         </Link>
@@ -489,7 +489,7 @@ export default function ProjectList({
                         {showAdminActions && (
                           <Link
                             href={`/admin/projects/${project.id}/edit`}
-                            className="btn-secondary inline-flex h-[30px] items-center px-3 text-xs"
+                            className="btn-secondary btn-sm"
                           >
                             Bewerk
                           </Link>
@@ -512,7 +512,7 @@ export default function ProjectList({
                 type="button"
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={safeCurrentPage === 1}
-                className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-page"
               >
                 Vorige
               </button>
@@ -522,11 +522,7 @@ export default function ProjectList({
                   key={page}
                   type="button"
                   onClick={() => setCurrentPage(page)}
-                  className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-                    page === safeCurrentPage
-                      ? 'bg-[var(--accent)] text-white'
-                      : 'border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] hover:bg-[#2a3745]'
-                  }`}
+                  className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
                 >
                   {page}
                 </button>
@@ -538,7 +534,7 @@ export default function ProjectList({
                   setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                 }
                 disabled={safeCurrentPage === totalPages}
-                className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-page"
               >
                 Volgende
               </button>
@@ -655,12 +651,12 @@ export default function ProjectList({
               P{safeCurrentPage}/{totalPages}
             </div>
 
-            <div className="flex flex-wrap items-center gap-1">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={safeCurrentPage === 1}
-                className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1.5 text-xs font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-page"
               >
                 Vorige
               </button>
@@ -670,11 +666,7 @@ export default function ProjectList({
                   key={page}
                   type="button"
                   onClick={() => setCurrentPage(page)}
-                  className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-                    page === safeCurrentPage
-                      ? 'bg-[var(--accent)] text-white'
-                      : 'border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-main)] hover:bg-[#2a3745]'
-                  }`}
+                  className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
                 >
                   {page}
                 </button>
@@ -686,7 +678,7 @@ export default function ProjectList({
                   setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                 }
                 disabled={safeCurrentPage === totalPages}
-                className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1.5 text-xs font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-page"
               >
                 Volgende
               </button>

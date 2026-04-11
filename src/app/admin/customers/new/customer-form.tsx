@@ -162,7 +162,7 @@ export default function CustomerForm({ action }: Props) {
           type="button"
           onClick={handleVatLookup}
           disabled={lookupLoading}
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] disabled:opacity-60"
+          className="btn-primary h-10 px-4 text-sm"
         >
           {lookupLoading ? 'Zoeken...' : 'Zoek via btw'}
         </button>
@@ -644,7 +644,7 @@ export default function CustomerForm({ action }: Props) {
             <div className="flex flex-wrap items-center gap-2 pt-2">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
+          className="btn-primary px-4 py-2 text-sm"
         >
           Klantaccount aanmaken
         </button>

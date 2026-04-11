@@ -355,7 +355,7 @@ export default function ProjectFilesTable({
               type="button"
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={safeCurrentPage === 1}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-page"
             >
               Vorige
             </button>
@@ -365,11 +365,7 @@ export default function ProjectFilesTable({
                 key={page}
                 type="button"
                 onClick={() => setCurrentPage(page)}
-                className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-                  page === safeCurrentPage
-                    ? 'bg-[var(--accent)] text-white'
-                    : 'border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] hover:bg-[#2a3745]'
-                }`}
+                className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
               >
                 {page}
               </button>
@@ -381,7 +377,7 @@ export default function ProjectFilesTable({
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={safeCurrentPage === totalPages}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[#2a3745] disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-page"
             >
               Volgende
             </button>

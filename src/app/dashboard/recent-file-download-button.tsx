@@ -52,7 +52,7 @@ export default function RecentFileDownloadButton({
         type="button"
         onClick={handleDownload}
         disabled={loading}
-        className="inline-flex h-[30px] items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn-secondary btn-sm"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@ export default function RecentFileDownloadButton({
       type="button"
       onClick={handleDownload}
       disabled={loading}
-      className="inline-flex rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm text-[var(--text-main)] transition hover:bg-[var(--bg-card)] disabled:cursor-not-allowed disabled:opacity-50"
+      className="btn-secondary px-3 py-2 text-sm"
     >
       {loading ? 'Download...' : 'Download'}
     </button>

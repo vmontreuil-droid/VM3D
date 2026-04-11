@@ -178,7 +178,7 @@ export default function ProjectFilesTableAdmin({
                   <button
                     type="button"
                     onClick={() => handleDownload(file)}
-                    className="inline-flex rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card)]"
+                    className="btn-secondary px-3 py-2 text-sm"
                   >
                     Open
                   </button>
@@ -188,7 +188,7 @@ export default function ProjectFilesTableAdmin({
                       type="button"
                       onClick={() => handleDelete(file)}
                       disabled={busyId === file.id}
-                      className="inline-flex rounded-xl bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="btn-primary px-3 py-2 text-sm"
                     >
                       {busyId === file.id ? 'Verwijderen...' : 'Verwijder'}
                     </button>

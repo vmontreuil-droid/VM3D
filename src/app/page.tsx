@@ -44,7 +44,7 @@ export default function HomePage() {
               <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
                 <Link
                   href="/login"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-7 py-4 text-sm font-bold text-white shadow-lg shadow-[var(--accent)]/30 transition hover:bg-opacity-90"
+                  className="btn-primary group px-7 py-4 text-sm"
                 >
                   Nu Inloggen
                   <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
@@ -52,7 +52,7 @@ export default function HomePage() {
 
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-soft)] px-7 py-4 text-sm font-bold text-[var(--text-main)] transition hover:bg-[var(--bg-card)]"
+                  className="btn-secondary px-7 py-4 text-sm"
                 >
                   Dashboard Verkennen
                 </Link>

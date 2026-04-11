@@ -294,24 +294,24 @@ export default function CustomerList({ customers }: Props) {
                     </td>
 
                     <td className="px-5 py-4 align-top">
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-2">
                         <Link
                           href={`/admin/customers/${customer.id}`}
-                          className="btn-secondary inline-flex px-2 py-0.5 text-xs"
+                          className="btn-secondary btn-sm"
                         >
                           Open
                         </Link>
 
                         <Link
                           href={`/admin/customers/${customer.id}/edit`}
-                          className="btn-secondary inline-flex px-2 py-0.5 text-xs"
+                          className="btn-secondary btn-sm"
                         >
                           Bewerk
                         </Link>
 
                         <Link
                           href={`/admin/projects/new?customer=${customer.id}`}
-                          className="btn-primary inline-flex px-2 py-0.5 text-xs"
+                          className="btn-primary btn-sm"
                         >
                           Nieuw project
                         </Link>
@@ -378,24 +378,24 @@ export default function CustomerList({ customers }: Props) {
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-1">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href={`/admin/customers/${customer.id}`}
-                  className="btn-secondary inline-flex px-2 py-0.5 text-xs"
+                  className="btn-secondary btn-sm"
                 >
                   Open
                 </Link>
 
                 <Link
                   href={`/admin/customers/${customer.id}/edit`}
-                  className="btn-secondary inline-flex px-2 py-0.5 text-xs"
+                  className="btn-secondary btn-sm"
                 >
                   Bewerk
                 </Link>
 
                 <Link
                   href={`/admin/projects/new?customer=${customer.id}`}
-                  className="btn-primary inline-flex px-2 py-0.5 text-xs"
+                  className="btn-primary btn-sm"
                 >
                   Nieuw project
                 </Link>
@@ -411,17 +411,17 @@ export default function CustomerList({ customers }: Props) {
             Pagina {safeCurrentPage} van {totalPages}
           </p>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={safeCurrentPage === 1}
-              className="inline-flex h-7 items-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 text-xs font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-page"
             >
               Vorige
             </button>
 
-            <div className="rounded-lg bg-[var(--accent)] px-2 py-1 text-xs font-semibold text-white">
+            <div className="btn-page-active">
               {safeCurrentPage}
             </div>
 
@@ -431,7 +431,7 @@ export default function CustomerList({ customers }: Props) {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={safeCurrentPage === totalPages}
-              className="inline-flex h-7 items-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 text-xs font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-page"
             >
               Volgende
             </button>

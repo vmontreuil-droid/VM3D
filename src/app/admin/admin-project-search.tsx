@@ -287,7 +287,7 @@ export default function AdminProjectSearch({
             <button
               type="button"
               onClick={resetFilters}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card)]"
+              className="btn-secondary px-4 py-2 text-sm"
             >
               Reset
             </button>
@@ -493,7 +493,7 @@ export default function AdminProjectSearch({
                 <div>
                   <Link
                     href={`/admin/projects/${project.id}`}
-                    className="inline-flex rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)]"
+                    className="btn-primary px-4 py-2 text-sm"
                   >
                     Open
                   </Link>
@@ -513,7 +513,7 @@ export default function AdminProjectSearch({
               type="button"
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={safeCurrentPage === 1}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-page"
             >
               Vorige
             </button>
@@ -523,11 +523,7 @@ export default function AdminProjectSearch({
                 key={page}
                 type="button"
                 onClick={() => setCurrentPage(page)}
-                className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-                  page === safeCurrentPage
-                    ? 'bg-[var(--accent)] text-white'
-                    : 'border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] hover:bg-[var(--bg-card-2)]'
-                }`}
+                className={page === safeCurrentPage ? 'btn-page-active' : 'btn-page'}
               >
                 {page}
               </button>
@@ -539,7 +535,7 @@ export default function AdminProjectSearch({
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={safeCurrentPage === totalPages}
-              className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-page"
             >
               Volgende
             </button>

@@ -22,7 +22,7 @@ export default function ProjectSummaryActions() {
       <button
         type="button"
         onClick={handleSavePdf}
-        className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--accent-hover)]"
+        className="btn-primary min-h-[44px] px-4 py-2 text-sm"
       >
         Opslaan als PDF
       </button>

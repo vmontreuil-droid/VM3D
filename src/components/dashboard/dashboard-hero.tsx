@@ -51,8 +51,8 @@ export default function DashboardHero({
                   href={action.href}
                   className={
                     action.variant === 'secondary'
-                      ? 'inline-flex min-h-[40px] items-center rounded-xl border border-[var(--border-soft)] bg-[rgba(255,255,255,0.04)] px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-[rgba(255,255,255,0.08)] sm:min-h-[42px] sm:px-4 sm:py-2.5'
-                      : 'inline-flex min-h-[40px] items-center rounded-xl bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] sm:min-h-[42px] sm:px-4 sm:py-2.5'
+                      ? 'btn-secondary sm:min-h-[42px] sm:px-4 sm:py-2.5'
+                      : 'btn-primary sm:min-h-[42px] sm:px-4 sm:py-2.5'
                   }
                 >
                   {action.label}
