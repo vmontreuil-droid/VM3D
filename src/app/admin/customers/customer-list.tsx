@@ -153,13 +153,8 @@ export default function CustomerList({
     return sorted
   }, [customers, search, sortKey, sortDirection])
 
-  const showDefaultPreview = hideResultsUntilSearch && search.trim() === ''
-  const shouldShowResults = !hideResultsUntilSearch || search.trim() !== '' || showDefaultPreview
-  const visibleCustomers = showDefaultPreview
-    ? filteredCustomers.slice(0, 5)
-    : shouldShowResults
-      ? filteredCustomers
-      : []
+  const shouldShowResults = !hideResultsUntilSearch || search.trim() !== ''
+  const visibleCustomers = shouldShowResults ? filteredCustomers : []
 
   return (
     <section
@@ -266,9 +261,7 @@ export default function CustomerList({
                 </h4>
               </div>
               <p className="text-[10px] text-[var(--text-soft)]">
-                {showDefaultPreview
-                  ? `${visibleCustomers.length} van ${filteredCustomers.length} getoond`
-                  : `${visibleCustomers.length} gevonden`}
+                {visibleCustomers.length} gevonden
               </p>
             </div>
 
