@@ -218,7 +218,16 @@ async function createCustomer(formData: FormData) {
 
     if (resetError) {
       console.error('resetError:', resetError)
-      redirect(`/admin/customers/${createdUser.id}?warning=invite_failed`)
+      const isRateLimited =
+        typeof resetError.message === 'string' &&
+        /rate limit|too many requests/i.test(resetError.message)
+      const inviteWarningParams = new URLSearchParams({
+        warning: isRateLimited ? 'invite_rate_limited' : 'invite_failed',
+      })
+      if (resetError.message) {
+        inviteWarningParams.set('warning_detail', resetError.message)
+      }
+      redirect(`/admin/customers/${createdUser.id}?${inviteWarningParams.toString()}`)
     }
 
     redirect(`/admin/customers/${createdUser.id}?created=1&invite=1`)

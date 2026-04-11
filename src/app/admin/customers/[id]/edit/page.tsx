@@ -271,9 +271,12 @@ async function updateCustomer(formData: FormData) {
 
     if (resetError) {
       console.error('resetError:', resetError)
+      const isRateLimited =
+        typeof resetError.message === 'string' &&
+        /rate limit|too many requests/i.test(resetError.message)
       const inviteFailureParams = new URLSearchParams({
         updated: '1',
-        warning: 'invite_failed',
+        warning: isRateLimited ? 'invite_rate_limited' : 'invite_failed',
       })
       if (resetError.message) {
         inviteFailureParams.set('warning_detail', resetError.message)
@@ -412,13 +415,14 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const updated = resolvedSearchParams?.updated === '1'
   const inviteSent = resolvedSearchParams?.invite === '1'
   const inviteFailed = resolvedSearchParams?.warning === 'invite_failed'
+  const inviteRateLimited = resolvedSearchParams?.warning === 'invite_rate_limited'
   const inviteFailedDetail = resolvedSearchParams?.warning_detail?.trim()
   const manualPasswordSet = resolvedSearchParams?.setup === 'manual'
 
   return (
     <AppShell isAdmin>
       <div className="space-y-1 sm:space-y-2">
-        {(updated || inviteSent || inviteFailed || manualPasswordSet) && (
+        {(updated || inviteSent || inviteFailed || inviteRateLimited || manualPasswordSet) && (
           <section className="space-y-1">
             {updated && (
               <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
@@ -435,6 +439,17 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             {inviteFailed && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
                 Klant werd opgeslagen, maar de uitnodigingsmail kon niet verzonden worden.
+                {inviteFailedDetail && (
+                  <p className="mt-1 text-xs text-amber-100/90">
+                    Admin detail: {inviteFailedDetail}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {inviteRateLimited && (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+                Te veel uitnodigingsmails op korte tijd. Wacht even en probeer opnieuw.
                 {inviteFailedDetail && (
                   <p className="mt-1 text-xs text-amber-100/90">
                     Admin detail: {inviteFailedDetail}
