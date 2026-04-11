@@ -91,32 +91,41 @@ function FitBounds({ projects }: { projects: Project[] }) {
   useEffect(() => {
     if (!projects.length) return
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       map.invalidateSize()
 
-      if (projects.length === 1) {
-        map.setView(
-          [Number(projects[0].latitude), Number(projects[0].longitude)],
-          14,
-          { animate: true }
+      const points = projects.map((project) => [
+        Number(project.latitude),
+        Number(project.longitude),
+      ] as [number, number])
+
+      if (points.length === 1) {
+        const [[lat, lng]] = points
+
+        map.fitBounds(
+          [
+            [lat - 0.01, lng - 0.01],
+            [lat + 0.01, lng + 0.01],
+          ],
+          {
+            padding: [24, 24],
+            maxZoom: 14,
+            animate: true,
+          }
         )
         return
       }
 
-      const bounds = L.latLngBounds(
-        projects.map((project) => [
-          Number(project.latitude),
-          Number(project.longitude),
-        ])
-      )
+      const bounds = L.latLngBounds(points).pad(0.08)
 
       map.fitBounds(bounds, {
-        padding: [40, 40],
+        padding: [24, 24],
+        maxZoom: 10,
         animate: true,
       })
     }, 120)
 
-    return () => clearTimeout(timer)
+    return () => window.clearTimeout(timer)
   }, [map, projects])
 
   return null

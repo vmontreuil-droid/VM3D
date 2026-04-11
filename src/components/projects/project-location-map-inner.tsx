@@ -1,6 +1,7 @@
 'use client'
 
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { useEffect } from 'react'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import L from 'leaflet'
 
 type Props = {
@@ -26,6 +27,37 @@ const markerIcon = L.divIcon({
   iconAnchor: [9, 9],
 })
 
+function FitProjectLocation({
+  latitude,
+  longitude,
+}: {
+  latitude: number
+  longitude: number
+}) {
+  const map = useMap()
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      map.invalidateSize()
+      map.fitBounds(
+        [
+          [latitude - 0.008, longitude - 0.008],
+          [latitude + 0.008, longitude + 0.008],
+        ],
+        {
+          padding: [24, 24],
+          maxZoom: 14,
+          animate: true,
+        }
+      )
+    }, 120)
+
+    return () => window.clearTimeout(timer)
+  }, [map, latitude, longitude])
+
+  return null
+}
+
 export default function ProjectLocationMapInner({
   latitude,
   longitude,
@@ -44,6 +76,8 @@ export default function ProjectLocationMapInner({
           attribution="&copy; OpenStreetMap-bijdragers"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        <FitProjectLocation latitude={latitude} longitude={longitude} />
 
         <Marker position={[latitude, longitude]} icon={markerIcon}>
           <Popup>

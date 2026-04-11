@@ -88,19 +88,43 @@ export default function CustomersMapInner({ locations, title }: Props) {
     const map = useMap()
 
     useEffect(() => {
-      if (locations.length > 1) {
-        const latRange = bounds.maxLat - bounds.minLat
-        const lngRange = bounds.maxLng - bounds.minLng
-        const padding = Math.max(latRange, lngRange) * 0.15
+      if (!locations.length) return
 
-        map.fitBounds([
-          [bounds.minLat - padding, bounds.minLng - padding],
-          [bounds.maxLat + padding, bounds.maxLng + padding],
-        ])
-      } else if (locations.length === 1) {
-        map.setView([centerLat, centerLng], 13)
-      }
-    }, [map])
+      const timer = window.setTimeout(() => {
+        map.invalidateSize()
+
+        if (locations.length === 1) {
+          const [location] = locations
+
+          map.fitBounds(
+            [
+              [location.latitude - 0.01, location.longitude - 0.01],
+              [location.latitude + 0.01, location.longitude + 0.01],
+            ],
+            {
+              padding: [24, 24],
+              maxZoom: 14,
+              animate: true,
+            }
+          )
+          return
+        }
+
+        map.fitBounds(
+          locations.map((location) => [
+            location.latitude,
+            location.longitude,
+          ] as [number, number]),
+          {
+            padding: [24, 24],
+            maxZoom: 10,
+            animate: true,
+          }
+        )
+      }, 120)
+
+      return () => window.clearTimeout(timer)
+    }, [map, locations])
 
     return null
   }

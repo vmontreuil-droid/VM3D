@@ -74,7 +74,22 @@ export default function CustomerMapInner({
     const map = useMap()
 
     useEffect(() => {
-      map.setView([latitude, longitude], 15)
+      const timer = window.setTimeout(() => {
+        map.invalidateSize()
+        map.fitBounds(
+          [
+            [latitude - 0.008, longitude - 0.008],
+            [latitude + 0.008, longitude + 0.008],
+          ],
+          {
+            padding: [24, 24],
+            maxZoom: 15,
+            animate: true,
+          }
+        )
+      }, 120)
+
+      return () => window.clearTimeout(timer)
     }, [latitude, longitude, map])
 
     return null
