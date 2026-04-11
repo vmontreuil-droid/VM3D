@@ -361,7 +361,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                 </div>
 
                 <h1 className="mt-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  {customer.company_name || customer.full_name || 'Klant'} — Bewerken
+                  {customer.company_name || customer.full_name || 'Klant'}
                 </h1>
 
                 <p className="mt-1.5 text-xs text-[var(--text-soft)]">
