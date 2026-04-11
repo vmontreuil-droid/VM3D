@@ -1,6 +1,16 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Building2, FolderOpen, Mail, PlusCircle } from 'lucide-react'
+import {
+  ArrowLeft,
+  Building2,
+  CheckCircle2,
+  CircleDollarSign,
+  FolderOpen,
+  Mail,
+  PhoneCall,
+  PlusCircle,
+  UserCheck,
+} from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -315,6 +325,37 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const latestProjectDate = latestProject?.created_at
     ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
     : '—'
+  const contactChannels = [
+    customer.email,
+    customer.phone,
+    customer.mobile,
+    customer.invoice_email,
+    customer.website,
+  ].filter((value) => Boolean(value)).length
+  const billingFieldsFilled = [
+    customer.payment_term_days,
+    customer.quote_validity_days,
+    customer.payment_method,
+    customer.currency,
+    customer.vat_rate,
+    customer.iban,
+    customer.bic,
+  ].filter((value) => Boolean(value)).length
+  const profileFields = [
+    customer.company_name,
+    customer.vat_number,
+    customer.email,
+    customer.director_first_name,
+    customer.director_last_name,
+    customer.mobile,
+    customer.street,
+    customer.postal_code,
+    customer.city,
+    customer.country,
+  ]
+  const profileCompleteness = Math.round(
+    (profileFields.filter((value) => Boolean(value)).length / profileFields.length) * 100
+  )
 
   let logoPreviewUrl: string | null = null
 
@@ -443,53 +484,117 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
               <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
                 <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                  <div className="card-mini border-[var(--accent)]/35 bg-[var(--accent)]/8">
-                    <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                      {totalProjects}
-                    </p>
+                  <div className="rounded-xl border border-[var(--accent)]/35 bg-[linear-gradient(135deg,rgba(245,140,55,0.10),rgba(245,140,55,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Werven</p>
+                        <p className="mt-1 text-2xl font-semibold text-[var(--accent)]">{totalProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-[var(--accent)]/14 p-2 text-[var(--accent)]">
+                        <FolderOpen className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini border-sky-500/30 bg-sky-500/10">
-                    <p className="text-xs text-[var(--text-muted)]">Ingediend</p>
-                    <p className="mt-1 text-sm font-semibold text-sky-200">
-                      {submittedProjects}
-                    </p>
+                  <div className="rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Actief</p>
+                        <p className="mt-1 text-2xl font-semibold text-violet-200">{activeProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-violet-500/14 p-2 text-violet-300">
+                        <UserCheck className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini border-amber-500/30 bg-amber-500/10">
-                    <p className="text-xs text-[var(--text-muted)]">In behandeling</p>
-                    <p className="mt-1 text-sm font-semibold text-amber-200">
-                      {inProgressProjects}
-                    </p>
+                  <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Afgerond</p>
+                        <p className="mt-1 text-2xl font-semibold text-emerald-200">{completedProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-emerald-500/14 p-2 text-emerald-300">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini border-orange-500/30 bg-orange-500/10">
-                    <p className="text-xs text-[var(--text-muted)]">Klaar voor betaling</p>
-                    <p className="mt-1 text-sm font-semibold text-orange-200">
-                      {readyForPaymentProjects}
-                    </p>
+                  <div className="rounded-xl border border-sky-500/30 bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Ingediend</p>
+                        <p className="mt-1 text-2xl font-semibold text-sky-200">{submittedProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-sky-500/14 p-2 text-sky-300">
+                        <Mail className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini border-emerald-500/30 bg-emerald-500/10">
-                    <p className="text-xs text-[var(--text-muted)]">Afgerond</p>
-                    <p className="mt-1 text-sm font-semibold text-emerald-200">
-                      {completedProjects}
-                    </p>
+                  <div className="rounded-xl border border-amber-500/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">In behandeling</p>
+                        <p className="mt-1 text-2xl font-semibold text-amber-200">{inProgressProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-amber-500/14 p-2 text-amber-300">
+                        <Building2 className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini border-violet-500/30 bg-violet-500/10">
-                    <p className="text-xs text-[var(--text-muted)]">Actieve werven</p>
-                    <p className="mt-1 text-sm font-semibold text-violet-200">
-                      {activeProjects}
-                    </p>
+                  <div className="rounded-xl border border-orange-500/30 bg-[linear-gradient(135deg,rgba(249,115,22,0.10),rgba(249,115,22,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Klaar voor betaling</p>
+                        <p className="mt-1 text-2xl font-semibold text-orange-200">{readyForPaymentProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-orange-500/14 p-2 text-orange-300">
+                        <CircleDollarSign className="h-4 w-4" />
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="card-mini sm:col-span-2 xl:col-span-3 border-[var(--border-soft)]/90 bg-[var(--bg-card)]/60">
-                    <p className="text-xs text-[var(--text-muted)]">Laatste werfdatum</p>
-                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                      {latestProjectDate}
-                    </p>
+                  <div className="rounded-xl border border-blue-500/30 bg-[linear-gradient(135deg,rgba(59,130,246,0.10),rgba(59,130,246,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Contactkanalen</p>
+                        <p className="mt-1 text-2xl font-semibold text-blue-200">{contactChannels}</p>
+                      </div>
+                      <span className="rounded-lg bg-blue-500/14 p-2 text-blue-300">
+                        <PhoneCall className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-fuchsia-500/30 bg-[linear-gradient(135deg,rgba(217,70,239,0.10),rgba(217,70,239,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Profiel compleet</p>
+                        <p className="mt-1 text-2xl font-semibold text-fuchsia-200">{profileCompleteness}%</p>
+                      </div>
+                      <span className="rounded-lg bg-fuchsia-500/14 p-2 text-fuchsia-300">
+                        <UserCheck className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-cyan-500/30 bg-[linear-gradient(135deg,rgba(6,182,212,0.10),rgba(6,182,212,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Facturatie ingevuld</p>
+                        <p className="mt-1 text-2xl font-semibold text-cyan-200">{billingFieldsFilled}/7</p>
+                      </div>
+                      <span className="rounded-lg bg-cyan-500/14 p-2 text-cyan-300">
+                        <CircleDollarSign className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-[var(--border-soft)]/90 bg-[var(--bg-card)]/60 px-3 py-2.5 sm:col-span-2 xl:col-span-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Laatste werfdatum</p>
+                    <p className="mt-1 text-base font-semibold text-[var(--text-main)]">{latestProjectDate}</p>
                   </div>
                 </div>
 
