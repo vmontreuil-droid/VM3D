@@ -483,7 +483,19 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
               </div>
 
               <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
-                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                  <div className="rounded-xl border border-fuchsia-500/30 bg-[linear-gradient(135deg,rgba(217,70,239,0.10),rgba(217,70,239,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Profiel compleet</p>
+                        <p className="mt-1 text-2xl font-semibold text-fuchsia-200">{profileCompleteness}%</p>
+                      </div>
+                      <span className="rounded-lg bg-fuchsia-500/14 p-2 text-fuchsia-300">
+                        <UserCheck className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="rounded-xl border border-[var(--accent)]/35 bg-[linear-gradient(135deg,rgba(245,140,55,0.10),rgba(245,140,55,0.03))] px-3 py-2.5">
                     <div className="flex items-start justify-between gap-2">
                       <div>
@@ -508,14 +520,14 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
+                  <div className="rounded-xl border border-cyan-500/30 bg-[linear-gradient(135deg,rgba(6,182,212,0.10),rgba(6,182,212,0.03))] px-3 py-2.5">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Afgerond</p>
-                        <p className="mt-1 text-2xl font-semibold text-emerald-200">{completedProjects}</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Facturatie ingevuld</p>
+                        <p className="mt-1 text-2xl font-semibold text-cyan-200">{billingFieldsFilled}/7</p>
                       </div>
-                      <span className="rounded-lg bg-emerald-500/14 p-2 text-emerald-300">
-                        <CheckCircle2 className="h-4 w-4" />
+                      <span className="rounded-lg bg-cyan-500/14 p-2 text-cyan-300">
+                        <CircleDollarSign className="h-4 w-4" />
                       </span>
                     </div>
                   </div>
@@ -556,6 +568,18 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                     </div>
                   </div>
 
+                  <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Afgerond</p>
+                        <p className="mt-1 text-2xl font-semibold text-emerald-200">{completedProjects}</p>
+                      </div>
+                      <span className="rounded-lg bg-emerald-500/14 p-2 text-emerald-300">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="rounded-xl border border-blue-500/30 bg-[linear-gradient(135deg,rgba(59,130,246,0.10),rgba(59,130,246,0.03))] px-3 py-2.5">
                     <div className="flex items-start justify-between gap-2">
                       <div>
@@ -564,30 +588,6 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                       </div>
                       <span className="rounded-lg bg-blue-500/14 p-2 text-blue-300">
                         <PhoneCall className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-fuchsia-500/30 bg-[linear-gradient(135deg,rgba(217,70,239,0.10),rgba(217,70,239,0.03))] px-3 py-2.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Profiel compleet</p>
-                        <p className="mt-1 text-2xl font-semibold text-fuchsia-200">{profileCompleteness}%</p>
-                      </div>
-                      <span className="rounded-lg bg-fuchsia-500/14 p-2 text-fuchsia-300">
-                        <UserCheck className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl border border-cyan-500/30 bg-[linear-gradient(135deg,rgba(6,182,212,0.10),rgba(6,182,212,0.03))] px-3 py-2.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">Facturatie ingevuld</p>
-                        <p className="mt-1 text-2xl font-semibold text-cyan-200">{billingFieldsFilled}/7</p>
-                      </div>
-                      <span className="rounded-lg bg-cyan-500/14 p-2 text-cyan-300">
-                        <CircleDollarSign className="h-4 w-4" />
                       </span>
                     </div>
                   </div>
