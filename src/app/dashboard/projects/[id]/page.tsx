@@ -6,6 +6,7 @@ import FileList from '@/components/files/file-list'
 import FileUploadDropzone from '@/components/files/file-upload-dropzone'
 import { createClient } from '@/lib/supabase/server'
 import FileSubmitButton from '@/components/files/file-submit-button'
+import { geocodeAddress } from '@/lib/geocode'
 const BUCKET_NAME = 'project-files'
 
 const PROJECT_STATUS_STEPS = [
@@ -233,15 +234,28 @@ export default async function DashboardProjectDetailPage({
     redirect('/login')
   }
 
-  const { data: project, error: projectError } = await supabase
+  const { data: projectData, error: projectError } = await supabase
     .from('projects')
     .select('*')
     .eq('id', projectId)
     .eq('user_id', user.id)
     .single()
 
-  if (projectError || !project) {
+  if (projectError || !projectData) {
     notFound()
+  }
+
+  let project = projectData
+
+  if (
+    (project.latitude == null || project.longitude == null) &&
+    project.address
+  ) {
+    const { latitude, longitude } = await geocodeAddress(project.address)
+
+    if (latitude != null && longitude != null) {
+      project = { ...project, latitude, longitude }
+    }
   }
 
   const { data: files, error: filesError } = await supabase

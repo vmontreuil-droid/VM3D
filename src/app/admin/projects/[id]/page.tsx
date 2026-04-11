@@ -7,6 +7,7 @@ import FileUploadDropzone from '@/components/files/file-upload-dropzone'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import FileSubmitButton from '@/components/files/file-submit-button'
+import { geocodeAddress } from '@/lib/geocode'
 const BUCKET_NAME = 'project-files'
 
 const PROJECT_STATUS_STEPS = [
@@ -425,14 +426,32 @@ export default async function AdminProjectDetailPage({
 
   const adminSupabase = createAdminClient()
 
-  const { data: project, error: projectError } = await adminSupabase
+  const { data: projectData, error: projectError } = await adminSupabase
     .from('projects')
     .select('*')
     .eq('id', projectId)
     .single()
 
-  if (projectError || !project) {
+  if (projectError || !projectData) {
     notFound()
+  }
+
+  let project = projectData
+
+  if (
+    (project.latitude == null || project.longitude == null) &&
+    project.address
+  ) {
+    const { latitude, longitude } = await geocodeAddress(project.address)
+
+    if (latitude != null && longitude != null) {
+      project = { ...project, latitude, longitude }
+
+      await adminSupabase
+        .from('projects')
+        .update({ latitude, longitude })
+        .eq('id', projectId)
+    }
   }
 
   let customerProfile: {
