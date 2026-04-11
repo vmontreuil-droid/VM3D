@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import { FolderOpen, Activity, UploadCloud, Download } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
+import ProjectsMap from '@/components/projects/projects-map'
 import ProjectList from './project-list'
 import RecentFilesList from './recent-files-list'
 
@@ -107,6 +109,20 @@ export default async function DashboardPage() {
   const latestProject = safeProjects[0] ?? null
   const latestFile = recentFiles[0] ?? null
 
+  const projectLocations = safeProjects
+    .filter(
+      (project: any) =>
+        project.latitude != null &&
+        project.longitude != null &&
+        !Number.isNaN(Number(project.latitude)) &&
+        !Number.isNaN(Number(project.longitude))
+    )
+    .map((project: any) => ({
+      name: project.address || project.title || 'Projectlocatie',
+      latitude: Number(project.latitude),
+      longitude: Number(project.longitude),
+    }))
+
   const customerDisplayName =
     profile?.company_name || profile?.full_name || 'klant'
 
@@ -120,32 +136,30 @@ export default async function DashboardPage() {
     <AppShell isAdmin={isAdmin}>
       <div className="space-y-3 sm:space-y-4 lg:space-y-4">
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-5 py-4">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Klantenportaal
-                </p>
+            <div className="relative space-y-3">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                    Klantenportaal
+                  </p>
 
-                <h1 className="mt-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Welkom, {customerDisplayName}
-                </h1>
+                  <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                    Welkom, {customerDisplayName}
+                  </h1>
 
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <Link href="/dashboard" className="btn-primary">
-                    Mijn projecten
-                  </Link>
+                  <p className="mt-1 max-w-2xl text-xs text-[var(--text-soft)] sm:text-sm">
+                    {introText}
+                  </p>
                 </div>
-              </div>
 
-              <div className="flex w-full flex-col gap-3 xl:w-auto">
                 <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
+                  <div className="flex items-center gap-3 px-3 py-2.5 sm:px-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-white shadow-sm">
                       {monogram}
                     </div>
 
@@ -153,73 +167,103 @@ export default async function DashboardPage() {
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                         Account
                       </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
+                      <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-main)]">
                         {customerDisplayName}
                       </p>
-                      <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      <p className="text-[11px] text-[var(--text-soft)]">
                         Beveiligd klantenportaal
                       </p>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="grid w-full grid-cols-3 gap-2 sm:grid-cols-3 xl:w-auto xl:grid-cols-4">
-                  <div className="card-mini text-center">
-                    <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">Projecten</p>
-                    <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
-                      {totalProjects}
-                    </p>
+              <div className="mx-auto grid w-full max-w-4xl grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Projecten</p>
+                      <p className="mt-1 text-lg font-semibold text-[var(--accent)]">
+                        {totalProjects}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                      <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                    </div>
                   </div>
+                </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">Actief</p>
-                    <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
-                      {activeProjects}
-                    </p>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                      <p className="mt-1 text-lg font-semibold text-green-500">
+                        {activeProjects}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                      <Activity className="h-4.5 w-4.5 text-green-500" />
+                    </div>
                   </div>
+                </div>
 
-                  <div className="card-mini text-center">
-                    <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">Uploads</p>
-                    <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
-                      {uploadsCount}
-                    </p>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                      <p className="mt-1 text-lg font-semibold text-blue-500">
+                        {uploadsCount}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                      <UploadCloud className="h-4.5 w-4.5 text-blue-500" />
+                    </div>
                   </div>
+                </div>
 
-                  <div className="card-mini text-center hidden sm:block">
-                    <p className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider">Oplevering</p>
-                    <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
-                      {finalFilesCount}
-                    </p>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                      <p className="mt-1 text-lg font-semibold text-purple-500">
+                        {finalFilesCount}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
+                      <Download className="h-4.5 w-4.5 text-purple-500" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid gap-2 px-5 py-3 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3.5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Laatste project
-              </p>
+          <div className="grid gap-2 px-4 py-2.5 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+            <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
+              <div className="border-b border-[var(--border-soft)] px-3 py-2.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Projectlocaties
+                </p>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Kaart van je projecten met gekende adressen.
+                </p>
+              </div>
 
-              <p className="mt-2 text-sm font-semibold text-[var(--text-main)]">
-                {latestProject?.title || 'Nog geen project'}
-              </p>
-              <p className="text-[10px] text-[var(--text-soft)]">
-                {latestProject?.status
-                  ? getStatusLabel(latestProject.status)
-                  : '—'}
-              </p>
+              <ProjectsMap
+                locations={projectLocations}
+                title="Projectlocaties"
+                height={240}
+              />
             </div>
 
-            <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3.5">
+            <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
                 Sneltoets
               </p>
               {latestProject ? (
                 <Link
                   href={`/dashboard/projects/${latestProject.id}`}
-                  className="mt-2 block text-xs font-medium text-blue-400 transition hover:text-blue-300"
+                  className="mt-1.5 inline-flex text-xs font-medium text-[var(--accent)] transition hover:text-[var(--accent-hover)]"
                 >
                   Ga naar recent project →
                 </Link>

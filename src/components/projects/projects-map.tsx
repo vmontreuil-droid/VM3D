@@ -11,6 +11,7 @@ type Location = {
 type Props = {
   locations: Location[]
   title?: string
+  height?: number | string
 }
 
 const ProjectsMapInner = dynamic(
@@ -25,18 +26,34 @@ const ProjectsMapInner = dynamic(
   }
 )
 
-export default function ProjectsMap({ locations, title }: Props) {
+export default function ProjectsMap({
+  locations,
+  title,
+  height = 400,
+}: Props) {
+  const resolvedHeight = typeof height === 'number' ? `${height}px` : height
+
   if (!locations || locations.length === 0) {
     return (
-      <div className="flex h-[400px] items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-sm text-[var(--text-soft)]">
+      <div
+        className="flex items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-sm text-[var(--text-soft)]"
+        style={{ height: resolvedHeight }}
+      >
         Geen locaties beschikbaar.
       </div>
     )
   }
 
   return (
-    <div className="map-wrapper rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] overflow-hidden">
-      <ProjectsMapInner locations={locations} title={title} />
+    <div
+      className="map-wrapper overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]"
+      style={{ height: resolvedHeight }}
+    >
+      <ProjectsMapInner
+        locations={locations}
+        title={title}
+        height={resolvedHeight}
+      />
     </div>
   )
 }
