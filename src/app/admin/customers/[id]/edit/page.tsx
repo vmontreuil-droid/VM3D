@@ -354,40 +354,19 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
             <div className="relative flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
-                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
-                </p>
-
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  {customer.company_name || customer.full_name || 'Klant'}
-                </h1>
-
-                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Werk klantgegevens, btw-info en facturatiegegevens bij vanuit
-                  dezelfde verfijnde adminomgeving.
-                </p>
-
-                <div className="mt-4 max-w-[280px]">
-                  <Link
-                    href={`/admin/customers/${customer.id}`}
-                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                  >
-                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Klantfiche
-                        </span>
-                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Terug naar dit klantoverzicht
-                        </span>
-                      </span>
-                    </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link href="/admin/customers" className="btn-secondary">
+                    ← Terug
                   </Link>
                 </div>
+
+                <h1 className="mt-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  {customer.company_name || customer.full_name || 'Klant'} — Bewerken
+                </h1>
+
+                <p className="mt-1.5 text-xs text-[var(--text-soft)]">
+                  Volledige klantenfiche met alle bewerkbare gegevens.
+                </p>
               </div>
 
               <div className="w-full xl:max-w-[420px]">
@@ -434,19 +413,19 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             </div>
           </div>
 
-          <div className="grid gap-2 px-4 py-2 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-2 px-4 py-2 sm:px-5 xl:grid-cols-[1.2fr_0.8fr]">
             <section className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm">
-              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 sm:px-5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Klantenfiche
+                  Statistieken
                 </p>
                 <h2 className="mt-1 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                   <Building2 className="h-4 w-4 text-[var(--accent)]" />
-                  Fiche bewerken
+                  Werven & Acties
                 </h2>
               </div>
 
-              <div className="flex-1 space-y-3 px-4 py-4 sm:px-5">
+              <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
@@ -461,14 +440,10 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                   </p>
                 </div>
 
-                <Link
-                  href={`/admin/customers/${customer.id}`}
-                  className="btn-secondary text-center"
-                >
-                  Open volledige klantenfiche
-                </Link>
-
-                <div className="pt-3 border-t border-[var(--border-soft)]">
+                <div className="border-t border-[var(--border-soft)] pt-2">
+                  <p className="mb-2 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+                    Beheeracties
+                  </p>
                   <AdminCustomerActions
                     customerId={customer.id}
                     customerName={customer.company_name || customer.full_name || 'Klant'}
