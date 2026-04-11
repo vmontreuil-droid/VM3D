@@ -36,6 +36,10 @@ type LookupResult = {
 }
 
 export default function CustomerForm({ action }: Props) {
+  const INVITE_COOLDOWN_SECONDS = 90
+  const INVITE_COOLDOWN_MS = INVITE_COOLDOWN_SECONDS * 1000
+  const inviteCooldownStorageKey = 'invite-cooldown:customer-new'
+
   const [vatNumber, setVatNumber] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [fullName] = useState('')
@@ -82,6 +86,38 @@ export default function CustomerForm({ action }: Props) {
   const [passwordMode, setPasswordMode] = useState<'invite' | 'manual'>('invite')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [inviteCooldownUntil, setInviteCooldownUntil] = useState(0)
+  const [nowTs, setNowTs] = useState(Date.now())
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const raw = window.localStorage.getItem(inviteCooldownStorageKey)
+    if (!raw) return
+
+    const parsed = Number(raw)
+    if (!Number.isFinite(parsed)) {
+      window.localStorage.removeItem(inviteCooldownStorageKey)
+      return
+    }
+
+    if (parsed > Date.now()) {
+      setInviteCooldownUntil(parsed)
+      return
+    }
+
+    window.localStorage.removeItem(inviteCooldownStorageKey)
+  }, [])
+
+  useEffect(() => {
+    if (!(passwordMode === 'invite' && inviteCooldownUntil > Date.now())) return
+
+    const intervalId = window.setInterval(() => {
+      setNowTs(Date.now())
+    }, 1000)
+
+    return () => window.clearInterval(intervalId)
+  }, [passwordMode, inviteCooldownUntil])
 
   const handleVatLookup = async () => {
     if (!vatNumber.trim()) {
@@ -312,11 +348,32 @@ export default function CustomerForm({ action }: Props) {
   const hasLookupDetails = Boolean(
     companyName || street || postalCode || city || country || latitude != null || longitude != null
   )
+  const inviteCooldownRemainingSec = Math.max(
+    0,
+    Math.ceil((inviteCooldownUntil - nowTs) / 1000)
+  )
+  const inviteCooldownActive =
+    passwordMode === 'invite' && inviteCooldownRemainingSec > 0
+  const handleInviteSubmitCapture = () => {
+    if (passwordMode !== 'invite') return
+
+    const nextCooldown = Date.now() + INVITE_COOLDOWN_MS
+    setInviteCooldownUntil(nextCooldown)
+    setNowTs(Date.now())
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(
+        inviteCooldownStorageKey,
+        String(nextCooldown)
+      )
+    }
+  }
 
   return (
     <form
       action={action}
       className="space-y-4"
+      onSubmitCapture={handleInviteSubmitCapture}
       onInvalidCapture={handleFormValidation}
       onInputCapture={clearFormValidationMessage}
     >
@@ -1091,7 +1148,8 @@ export default function CustomerForm({ action }: Props) {
 
         <button
           type="submit"
-          className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+          className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={inviteCooldownActive}
         >
           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
           <span className="flex items-start gap-2.5 pr-3">
@@ -1100,7 +1158,11 @@ export default function CustomerForm({ action }: Props) {
             </span>
             <span className="min-w-0">
               <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {passwordMode === 'manual' ? 'Klant aanmaken' : 'Klantaccount aanmaken'}
+                {inviteCooldownActive
+                  ? `Wacht ${inviteCooldownRemainingSec}s`
+                  : passwordMode === 'manual'
+                    ? 'Klant aanmaken'
+                    : 'Klantaccount aanmaken'}
               </span>
               <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
                 {passwordMode === 'manual'
@@ -1111,6 +1173,13 @@ export default function CustomerForm({ action }: Props) {
           </span>
         </button>
       </div>
+
+      {inviteCooldownActive && (
+        <p className="text-xs text-[var(--text-soft)]">
+          Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
+          {inviteCooldownRemainingSec}s.
+        </p>
+      )}
     </form>
   )
 }

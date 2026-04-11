@@ -78,6 +78,10 @@ type LookupResult = {
 }
 
 export default function CustomerEditForm({ action, customer, logoPreviewUrl }: Props) {
+  const INVITE_COOLDOWN_SECONDS = 90
+  const INVITE_COOLDOWN_MS = INVITE_COOLDOWN_SECONDS * 1000
+  const inviteCooldownStorageKey = `invite-cooldown:customer-edit:${customer.id}`
+
   const [vatNumber, setVatNumber] = useState(customer.vat_number || '')
   const [companyName, setCompanyName] = useState(customer.company_name || '')
   const [fullName] = useState(customer.full_name || '')
@@ -159,6 +163,38 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
   const [passwordMode, setPasswordMode] = useState<'keep' | 'invite' | 'manual'>('keep')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [inviteCooldownUntil, setInviteCooldownUntil] = useState(0)
+  const [nowTs, setNowTs] = useState(Date.now())
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const raw = window.localStorage.getItem(inviteCooldownStorageKey)
+    if (!raw) return
+
+    const parsed = Number(raw)
+    if (!Number.isFinite(parsed)) {
+      window.localStorage.removeItem(inviteCooldownStorageKey)
+      return
+    }
+
+    if (parsed > Date.now()) {
+      setInviteCooldownUntil(parsed)
+      return
+    }
+
+    window.localStorage.removeItem(inviteCooldownStorageKey)
+  }, [inviteCooldownStorageKey])
+
+  useEffect(() => {
+    if (!(passwordMode === 'invite' && inviteCooldownUntil > Date.now())) return
+
+    const intervalId = window.setInterval(() => {
+      setNowTs(Date.now())
+    }, 1000)
+
+    return () => window.clearInterval(intervalId)
+  }, [passwordMode, inviteCooldownUntil])
 
   const handleVatLookup = async () => {
     if (!vatNumber.trim()) {
@@ -390,11 +426,32 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
   const hasLookupDetails = Boolean(
     companyName || street || postalCode || city || country || latitude != null || longitude != null
   )
+  const inviteCooldownRemainingSec = Math.max(
+    0,
+    Math.ceil((inviteCooldownUntil - nowTs) / 1000)
+  )
+  const inviteCooldownActive =
+    passwordMode === 'invite' && inviteCooldownRemainingSec > 0
+  const handleInviteSubmitCapture = () => {
+    if (passwordMode !== 'invite') return
+
+    const nextCooldown = Date.now() + INVITE_COOLDOWN_MS
+    setInviteCooldownUntil(nextCooldown)
+    setNowTs(Date.now())
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(
+        inviteCooldownStorageKey,
+        String(nextCooldown)
+      )
+    }
+  }
 
   return (
     <form
       action={action}
       className="space-y-4"
+      onSubmitCapture={handleInviteSubmitCapture}
       onInvalidCapture={handleFormValidation}
       onInputCapture={clearFormValidationMessage}
     >
@@ -1236,7 +1293,11 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
           </span>
         </Link>
 
-        <button type="submit" className={actionCardClass}>
+        <button
+          type="submit"
+          className={`${actionCardClass} disabled:cursor-not-allowed disabled:opacity-60`}
+          disabled={inviteCooldownActive}
+        >
           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
           <span className="flex items-start gap-2.5 pr-3">
             <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
@@ -1244,7 +1305,9 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
             </span>
             <span className="min-w-0">
               <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {passwordMode === 'manual'
+                {inviteCooldownActive
+                  ? `Wacht ${inviteCooldownRemainingSec}s`
+                  : passwordMode === 'manual'
                   ? 'Opslaan met wachtwoord'
                   : passwordMode === 'invite'
                     ? 'Opslaan & uitnodigen'
@@ -1261,6 +1324,13 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
           </span>
         </button>
       </div>
+
+      {inviteCooldownActive && (
+        <p className="text-xs text-[var(--text-soft)]">
+          Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
+          {inviteCooldownRemainingSec}s.
+        </p>
+      )}
     </form>
   )
 }
