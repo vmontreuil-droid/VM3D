@@ -317,9 +317,9 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+      <div className="space-y-1 sm:space-y-2">
         {(saveError || passwordSetupError || authUpdateFailed || missingEmailError) && (
-          <section className="space-y-3">
+          <section className="space-y-1">
             {passwordSetupError && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
                 Het manuele wachtwoord moet minstens 8 tekens bevatten en beide velden moeten overeenkomen.
@@ -347,12 +347,12 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
         )}
 
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 sm:px-5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Adminportaal
@@ -434,7 +434,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             </div>
           </div>
 
-          <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-2 px-4 py-2 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
             <section className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm">
               <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
@@ -547,7 +547,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             </section>
           </div>
 
-          <div className="px-4 py-4 sm:px-5">
+          <div className="px-4 py-2 sm:px-5">
             <CustomerEditForm
               customer={customer}
               action={updateCustomer}
