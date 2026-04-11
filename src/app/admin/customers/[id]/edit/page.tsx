@@ -5,6 +5,7 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CustomerEditForm from './edit-customer-form'
+import ProjectsDropdown from './projects-dropdown'
 import AdminCustomerActions from '../../admin-customer-actions'
 
 type Props = {
@@ -466,7 +467,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                 </h2>
               </div>
 
-              <div className="flex-1 space-y-3 px-4 py-4 sm:px-5">
+              <div className="flex-1 space-y-2 px-4 py-2 sm:px-5">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <Link
                     href={`/admin/projects/new?customer=${customer.id}`}
@@ -492,32 +493,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                   )}
                 </div>
 
-                <div className="grid gap-2">
-                  {recentProjects.length === 0 ? (
-                    <p className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 text-sm text-[var(--text-soft)]">
-                      Geen recente werven gevonden voor deze klant.
-                    </p>
-                  ) : (
-                    recentProjects.map((project: any) => (
-                      <Link
-                        key={project.id}
-                        href={`/admin/projects/${project.id}`}
-                        className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
-                      >
-                        <p className="truncate text-sm font-semibold text-[var(--text-main)]">
-                          {project.title || 'Zonder titel'}
-                        </p>
-                        <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          {getProjectStatusLabel(project.status)}
-                          {' • '}
-                          {project.created_at
-                            ? new Date(project.created_at).toLocaleDateString('nl-BE')
-                            : '—'}
-                        </p>
-                      </Link>
-                    ))
-                  )}
-                </div>
+                <ProjectsDropdown projects={safeProjects} />
               </div>
             </section>
           </div>
