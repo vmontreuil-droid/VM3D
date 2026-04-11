@@ -5,7 +5,7 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CustomerEditForm from './edit-customer-form'
-import AdminCustomerActions from '../admin-customer-actions'
+import AdminCustomerActions from '../../admin-customer-actions'
 
 type Props = {
   params: Promise<{
