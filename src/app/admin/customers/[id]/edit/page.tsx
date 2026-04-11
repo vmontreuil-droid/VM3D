@@ -5,6 +5,7 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CustomerEditForm from './edit-customer-form'
+import AdminCustomerActions from '../admin-customer-actions'
 
 type Props = {
   params: Promise<{
@@ -466,6 +467,16 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                 >
                   Open volledige klantenfiche
                 </Link>
+
+                <div className="pt-3 border-t border-[var(--border-soft)]">
+                  <AdminCustomerActions
+                    customerId={customer.id}
+                    customerName={customer.company_name || customer.full_name || 'Klant'}
+                    currentActive={customer.is_active}
+                    redirectTo={`/admin/customers/${customer.id}/edit`}
+                    compact
+                  />
+                </div>
               </div>
             </section>
 
