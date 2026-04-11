@@ -174,7 +174,7 @@ export default async function AdminCustomerDetailPage({
     'flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm'
   const sectionClass =
     'flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm'
-  const sectionBodyClass = 'flex-1 space-y-4 px-4 py-4 sm:px-5'
+  const sectionBodyClass = 'flex-1 space-y-2 px-4 py-3 sm:px-5'
   const sectionHeadingClass =
     'text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]'
   const sectionTitleClass =
@@ -346,7 +346,7 @@ export default async function AdminCustomerDetailPage({
             </div>
           </div>
 
-          <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-2 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
             <section className={sectionClass}>
               <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
                 <p className={sectionHeadingClass}>Overzicht</p>
@@ -476,8 +476,8 @@ export default async function AdminCustomerDetailPage({
           </div>
         </section>
 
-        <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-4">
+        <section className="grid gap-2 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="space-y-2">
             <section className={shellClass}>
               <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
                 <p className={sectionHeadingClass}>Bedrijfsfiche</p>
@@ -570,7 +570,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div className="grid gap-2 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">E-mail</p>
                   <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
@@ -675,7 +675,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div className="grid gap-2 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">
                     Betalingstermijn
@@ -743,7 +743,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div className="grid gap-2 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Straat</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
@@ -799,7 +799,7 @@ export default async function AdminCustomerDetailPage({
             </section>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <section className={shellClass}>
               <div className="border-b border-[var(--border-soft)] px-4 py-4">
                 <p className={sectionHeadingClass}>Kaart</p>
@@ -822,7 +822,7 @@ export default async function AdminCustomerDetailPage({
             </section>
 
             <section className={shellClass}>
-              <div className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] px-4 py-4">
+              <div className="flex items-center justify-between gap-2 border-b border-[var(--border-soft)] px-4 py-4">
                 <div>
                   <p className={sectionHeadingClass}>Projecten</p>
                   <h2 className={sectionTitleClass}>
@@ -842,7 +842,7 @@ export default async function AdminCustomerDetailPage({
                 </Link>
               </div>
 
-              <div className="grid gap-3 px-4 py-4">
+              <div className="grid gap-2 px-4 py-4">
                 {recentProjects.length === 0 ? (
                   <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4 text-sm text-[var(--text-soft)]">
                     Nog geen werven gevonden.
