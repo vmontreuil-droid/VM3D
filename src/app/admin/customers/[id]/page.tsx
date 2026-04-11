@@ -135,6 +135,16 @@ export default async function AdminCustomerDetailPage({
   const title =
     customer.company_name || customer.full_name || 'Onbekende klant'
 
+  let customerLogoUrl: string | null = null
+
+  if (customer.logo_path) {
+    const { data: logoData } = await adminSupabase.storage
+      .from('project-files')
+      .createSignedUrl(customer.logo_path, 60 * 60)
+
+    customerLogoUrl = logoData?.signedUrl ?? null
+  }
+
   const managerName = [
     customer.director_first_name,
     customer.director_last_name,
@@ -258,8 +268,16 @@ export default async function AdminCustomerDetailPage({
               <div className="flex w-full flex-col gap-4 xl:w-auto">
                 <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
                   <div className="flex items-center gap-4 px-4 py-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
-                      KL
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
+                      {customerLogoUrl ? (
+                        <img
+                          src={customerLogoUrl}
+                          alt={`Logo van ${title}`}
+                          className="h-full w-full object-contain bg-white/95 p-2"
+                        />
+                      ) : (
+                        <span>{title.slice(0, 2).toUpperCase()}</span>
+                      )}
                     </div>
 
                     <div className="min-w-0">
@@ -360,7 +378,7 @@ export default async function AdminCustomerDetailPage({
 
             <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Quick actions
+                Snelle acties
               </p>
 
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -645,6 +663,20 @@ export default async function AdminCustomerDetailPage({
                   <p className="text-xs text-[var(--text-muted)]">Munteenheid</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                     {display(customer.currency)}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">IBAN</p>
+                  <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
+                    {display(customer.iban)}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">BIC</p>
+                  <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
+                    {display(customer.bic)}
                   </p>
                 </div>
 

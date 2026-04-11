@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import CustomerMap from '@/components/customers/customer-map'
+import CustomerLogoUpload from '@/components/customers/customer-logo-upload'
 
 type Props = {
   action: (formData: FormData) => void
@@ -37,7 +38,7 @@ type LookupResult = {
 export default function CustomerForm({ action }: Props) {
   const [vatNumber, setVatNumber] = useState('')
   const [companyName, setCompanyName] = useState('')
-  const [fullName, setFullName] = useState('')
+  const [fullName] = useState('')
   const [email, setEmail] = useState('')
   const [enterpriseNumber, setEnterpriseNumber] = useState('')
   const [reference, setReference] = useState('')
@@ -51,6 +52,8 @@ export default function CustomerForm({ action }: Props) {
   const [mobile, setMobile] = useState('')
   const [fax, setFax] = useState('')
   const [language, setLanguage] = useState('')
+  const [iban, setIban] = useState('')
+  const [bic, setBic] = useState('')
   const [paymentTermDays, setPaymentTermDays] = useState('')
   const [quoteValidityDays, setQuoteValidityDays] = useState('')
   const [paymentMethod, setPaymentMethod] = useState('')
@@ -223,6 +226,12 @@ export default function CustomerForm({ action }: Props) {
     return () => window.clearTimeout(timeoutId)
   }, [street, houseNumber, bus, postalCode, city, country])
 
+  useEffect(() => {
+    if (!invoiceEmail.trim() && email.trim()) {
+      setInvoiceEmail(email.trim())
+    }
+  }, [email])
+
   const shellClass =
     'overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm'
   const sectionClass =
@@ -239,6 +248,65 @@ export default function CustomerForm({ action }: Props) {
   const fieldLabelClass =
     'text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]'
   const nativeSelectStyle = { colorScheme: 'dark' as const }
+  const validationLabels: Record<string, string> = {
+    vat_number: 'het btw-nummer',
+    company_name: 'de bedrijfsnaam',
+    email: 'het e-mailadres',
+    invoice_email: 'het facturatie e-mailadres',
+    salutation: 'de aanspreektitel',
+    director_first_name: 'de voornaam',
+    director_last_name: 'de familienaam',
+    mobile: 'het mobiele nummer',
+    language: 'de taal',
+    iban: 'de IBAN',
+    bic: 'de BIC',
+    payment_term_days: 'de betalingstermijn',
+    quote_validity_days: 'de geldigheid van de offerte',
+    payment_method: 'de betaalwijze',
+    currency: 'de munteenheid',
+    vat_rate: 'het btw-tarief',
+  }
+  const handleFormValidation = (event: FormEvent<HTMLFormElement>) => {
+    const target = event.target
+
+    if (
+      !(target instanceof HTMLInputElement) &&
+      !(target instanceof HTMLSelectElement) &&
+      !(target instanceof HTMLTextAreaElement)
+    ) {
+      return
+    }
+
+    const fieldLabel = validationLabels[target.name] || 'dit veld'
+
+    if (target.validity.valueMissing) {
+      target.setCustomValidity(`Gelieve ${fieldLabel} in te vullen.`)
+      return
+    }
+
+    if (target.validity.typeMismatch && target instanceof HTMLInputElement && target.type === 'email') {
+      target.setCustomValidity('Gelieve een geldig e-mailadres in te vullen.')
+      return
+    }
+
+    target.setCustomValidity('Controleer dit veld.')
+  }
+  const clearFormValidationMessage = (event: FormEvent<HTMLFormElement>) => {
+    const target = event.target
+
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLSelectElement ||
+      target instanceof HTMLTextAreaElement
+    ) {
+      target.setCustomValidity('')
+    }
+  }
+  const resolvedFullName =
+    [directorFirstName, directorLastName]
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .join(' ') || fullName.trim()
   const resolvedInvoiceEmail = invoiceEmail.trim() || email.trim()
   const addressPreview = buildAddressLabel()
   const hasLookupDetails = Boolean(
@@ -246,7 +314,12 @@ export default function CustomerForm({ action }: Props) {
   )
 
   return (
-    <form action={action} className="space-y-4">
+    <form
+      action={action}
+      className="space-y-4"
+      onInvalidCapture={handleFormValidation}
+      onInputCapture={clearFormValidationMessage}
+    >
       <input type="hidden" name="latitude" value={latitude ?? ''} />
       <input type="hidden" name="longitude" value={longitude ?? ''} />
       <input
@@ -254,6 +327,7 @@ export default function CustomerForm({ action }: Props) {
         name="send_invite"
         value={passwordMode === 'invite' ? 'yes' : 'no'}
       />
+      <input type="hidden" name="full_name" value={resolvedFullName} />
       <input type="hidden" name="send_xml" value={sendXml ? 'yes' : 'no'} />
       <input type="hidden" name="send_pdf" value={sendPdf ? 'yes' : 'no'} />
       <input
@@ -299,6 +373,7 @@ export default function CustomerForm({ action }: Props) {
                       onChange={(e) => setVatNumber(e.target.value)}
                       placeholder="Bijv. BE0123456789 of DE123456789"
                       className="input-dark min-w-0 flex-1 px-3 py-2.5 text-sm"
+                      required
                     />
 
                     <button
@@ -437,89 +512,182 @@ export default function CustomerForm({ action }: Props) {
           </div>
 
           <div className={sectionBodyClass}>
-            <div className="grid gap-5 xl:grid-cols-2">
-              <div className="space-y-4">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    Bedrijfsgegevens
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Basisinfo voor de klantfiche en administratieve opvolging.
-                  </p>
-                </div>
+            <div className="flex items-start gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                <Mail className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Contact & verzending
+                </p>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Alle kerngegevens netjes uitgelijnd in één gelijkmatig overzicht.
+                </p>
+              </div>
+            </div>
 
-                <div className="grid gap-3">
-                  <div className="grid gap-2">
-                    <label className={fieldLabelClass}>
-                      Bedrijf
-                    </label>
-                    <input
-                      name="company_name"
-                      type="text"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      className="input-dark w-full px-3 py-2.5 text-sm"
-                    />
-                  </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Bedrijf
+                </label>
+                <input
+                  name="company_name"
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. Atelier Nova BV"
+                  required
+                />
+              </div>
 
-                  <div className="grid gap-2">
-                    <label className={fieldLabelClass}>
-                      Contactpersoon
-                    </label>
-                    <input
-                      name="full_name"
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className="input-dark w-full px-3 py-2.5 text-sm"
-                    />
-                  </div>
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  E-mail
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="bijv. info@bedrijf.be"
+                  required
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Aanspreektitel
+                </label>
+                <div className="relative">
+                  <select
+                    name="salutation"
+                    value={salutation}
+                    onChange={(e) => setSalutation(e.target.value)}
+                    className={softSelectClass}
+                    style={nativeSelectStyle}
+                    required
+                  >
+                    <option value="">Selecteer aanspreking</option>
+                    <option value="Dhr.">Dhr.</option>
+                    <option value="Mevr.">Mevr.</option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="Familie">Familie</option>
+                    <option value="Team">Team</option>
+                  </select>
+                  <ChevronDown className={softSelectIconClass} size={16} />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                      Contact & verzending
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Contactkanalen en voorkeuren voor facturen en documenten.
-                    </p>
-                  </div>
-                </div>
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Facturatie e-mail
+                </label>
+                <input
+                  type="email"
+                  value={invoiceEmail}
+                  onChange={(e) => setInvoiceEmail(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
+                  required
+                />
+                <input type="hidden" name="invoice_email" value={resolvedInvoiceEmail} />
+              </div>
 
-                <div className="grid gap-3">
-                  <div className="grid gap-2">
-                    <label className={fieldLabelClass}>
-                      E-mail
-                    </label>
-                    <input
-                      name="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="input-dark w-full px-3 py-2.5 text-sm"
-                      required
-                    />
-                  </div>
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Voornaam
+                </label>
+                <input
+                  name="director_first_name"
+                  type="text"
+                  value={directorFirstName}
+                  onChange={(e) => setDirectorFirstName(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. Sophie"
+                  required
+                />
+              </div>
 
-                  <div className="grid gap-2">
-                    <label className={fieldLabelClass}>
-                      Facturatie e-mail
-                    </label>
-                    <input
-                      type="text"
-                      value={invoiceEmail}
-                      onChange={(e) => setInvoiceEmail(e.target.value)}
-                      className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder={email ? `Zelfde als ${email}` : 'Zelfde als e-mail hierboven'}
-                    />
-                    <input type="hidden" name="invoice_email" value={resolvedInvoiceEmail} />
-                  </div>
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Vast nummer
+                </label>
+                <input
+                  name="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. 02 123 45 67"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Familienaam
+                </label>
+                <input
+                  name="director_last_name"
+                  type="text"
+                  value={directorLastName}
+                  onChange={(e) => setDirectorLastName(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. Peeters"
+                  required
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Mobiel nummer
+                </label>
+                <input
+                  name="mobile"
+                  type="tel"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. 0470 12 34 56"
+                  required
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Faxnummer
+                </label>
+                <input
+                  name="fax"
+                  type="tel"
+                  value={fax}
+                  onChange={(e) => setFax(e.target.value)}
+                  className="input-dark w-full px-3 py-2.5 text-sm"
+                  placeholder="Bijv. 02 123 45 68"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <label className={fieldLabelClass}>
+                  Taal
+                </label>
+                <div className="relative">
+                  <select
+                    name="language"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className={softSelectClass}
+                    style={nativeSelectStyle}
+                    required
+                  >
+                    <option value="">Selecteer taal</option>
+                    <option value="NL">NL</option>
+                    <option value="FR">FR</option>
+                    <option value="ENG">ENG</option>
+                  </select>
+                  <ChevronDown className={softSelectIconClass} size={16} />
                 </div>
               </div>
             </div>
@@ -596,6 +764,7 @@ export default function CustomerForm({ action }: Props) {
                     onChange={(e) => setPaymentTermDays(e.target.value)}
                     className={softSelectClass}
                     style={nativeSelectStyle}
+                    required
                   >
                     <option value="">Selecteer betalingstermijn</option>
                     <option value="0">Contant / onmiddellijk</option>
@@ -622,6 +791,7 @@ export default function CustomerForm({ action }: Props) {
                     onChange={(e) => setQuoteValidityDays(e.target.value)}
                     className={softSelectClass}
                     style={nativeSelectStyle}
+                    required
                   >
                     <option value="">Selecteer geldigheid</option>
                     <option value="7">7 dagen</option>
@@ -647,6 +817,7 @@ export default function CustomerForm({ action }: Props) {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className={softSelectClass}
                     style={nativeSelectStyle}
+                    required
                   >
                     <option value="">Selecteer betaalwijze</option>
                     <option value="overschrijving">Overschrijving</option>
@@ -671,6 +842,7 @@ export default function CustomerForm({ action }: Props) {
                     onChange={(e) => setCurrency(e.target.value)}
                     className={softSelectClass}
                     style={nativeSelectStyle}
+                    required
                   >
                     <option value="EUR">EUR — Euro</option>
                     <option value="USD">USD — US Dollar</option>
@@ -704,6 +876,7 @@ export default function CustomerForm({ action }: Props) {
                     onChange={(e) => setVatRate(e.target.value)}
                     className={softSelectClass}
                     style={nativeSelectStyle}
+                    required
                   >
                     <option value="">Selecteer btw-tarief</option>
                     <option value="21%">21%</option>
@@ -718,6 +891,56 @@ export default function CustomerForm({ action }: Props) {
                 </div>
               </div>
             </div>
+
+            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4">
+              <div className="flex items-start gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                  <CreditCard className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                    Bankgegevens
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--text-soft)]">
+                    Voor facturen en betalingen. Vul hier de IBAN en BIC van de klant in.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <label className={fieldLabelClass}>
+                    IBAN
+                  </label>
+                  <input
+                    name="iban"
+                    type="text"
+                    value={iban}
+                    onChange={(e) => setIban(e.target.value)}
+                    className="input-dark w-full px-3 py-2.5 text-sm"
+                    placeholder="Bijv. BE68 5390 0754 7034"
+                    required
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <label className={fieldLabelClass}>
+                    BIC
+                  </label>
+                  <input
+                    name="bic"
+                    type="text"
+                    value={bic}
+                    onChange={(e) => setBic(e.target.value)}
+                    className="input-dark w-full px-3 py-2.5 text-sm"
+                    placeholder="Bijv. GKCCBEBB"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <CustomerLogoUpload />
           </div>
         </section>
       </div>

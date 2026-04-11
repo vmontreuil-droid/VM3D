@@ -47,6 +47,9 @@ async function createCustomer(formData: FormData) {
   const mobile = String(formData.get('mobile') || '').trim()
   const fax = String(formData.get('fax') || '').trim()
   const language = String(formData.get('language') || '').trim()
+  const iban = String(formData.get('iban') || '').trim().toUpperCase()
+  const bic = String(formData.get('bic') || '').trim().toUpperCase()
+  const logoPath = String(formData.get('logo_path') || '').trim()
 
   const paymentTermDaysRaw = String(formData.get('payment_term_days') || '').trim()
   const quoteValidityDaysRaw = String(formData.get('quote_validity_days') || '').trim()
@@ -118,56 +121,81 @@ async function createCustomer(formData: FormData) {
 
   const createdUser = createdUserData.user
 
-  const { error: profileError } = await adminSupabase.from('profiles').upsert(
-    {
-      id: createdUser.id,
-      role: 'customer',
-      full_name: fullName || null,
-      company_name: companyName || null,
-      email: email || null,
-      vat_number: vatNumber || null,
-      enterprise_number: enterpriseNumber || null,
-      reference: reference || null,
-      salutation: salutation || null,
-      director_first_name: directorFirstName || null,
-      director_last_name: directorLastName || null,
-      rpr: rpr || null,
-      invoice_email: invoiceEmail || null,
-      website: website || null,
-      phone: phone || null,
-      mobile: mobile || null,
-      fax: fax || null,
-      language: language || null,
-      payment_term_days:
-        paymentTermDays === null || Number.isNaN(paymentTermDays)
-          ? null
-          : paymentTermDays,
-      quote_validity_days:
-        quoteValidityDays === null || Number.isNaN(quoteValidityDays)
-          ? null
-          : quoteValidityDays,
-      payment_method: paymentMethod || null,
-      currency: currency || null,
-      vat_rate: vatRate || null,
-      invoice_send_method: invoiceSendMethod || null,
-      send_xml: sendXml,
-      xml_format: xmlFormat || null,
-      send_pdf: sendPdf,
-      auto_reminders: autoReminders,
-      street: street || null,
-      house_number: houseNumber || null,
-      bus: bus || null,
-      postal_code: postalCode || null,
-      city: city || null,
-      country: country || null,
-      comments: comments || null,
-      latitude:
-        latitude === null || Number.isNaN(latitude) ? null : latitude,
-      longitude:
-        longitude === null || Number.isNaN(longitude) ? null : longitude,
-    },
-    { onConflict: 'id' }
-  )
+  const profilePayload = {
+    id: createdUser.id,
+    role: 'customer',
+    full_name: fullName || null,
+    company_name: companyName || null,
+    email: email || null,
+    vat_number: vatNumber || null,
+    enterprise_number: enterpriseNumber || null,
+    reference: reference || null,
+    salutation: salutation || null,
+    director_first_name: directorFirstName || null,
+    director_last_name: directorLastName || null,
+    rpr: rpr || null,
+    invoice_email: invoiceEmail || null,
+    website: website || null,
+    phone: phone || null,
+    mobile: mobile || null,
+    fax: fax || null,
+    language: language || null,
+    iban: iban || null,
+    bic: bic || null,
+    logo_path: logoPath || null,
+    payment_term_days:
+      paymentTermDays === null || Number.isNaN(paymentTermDays)
+        ? null
+        : paymentTermDays,
+    quote_validity_days:
+      quoteValidityDays === null || Number.isNaN(quoteValidityDays)
+        ? null
+        : quoteValidityDays,
+    payment_method: paymentMethod || null,
+    currency: currency || null,
+    vat_rate: vatRate || null,
+    invoice_send_method: invoiceSendMethod || null,
+    send_xml: sendXml,
+    xml_format: xmlFormat || null,
+    send_pdf: sendPdf,
+    auto_reminders: autoReminders,
+    street: street || null,
+    house_number: houseNumber || null,
+    bus: bus || null,
+    postal_code: postalCode || null,
+    city: city || null,
+    country: country || null,
+    comments: comments || null,
+    latitude:
+      latitude === null || Number.isNaN(latitude) ? null : latitude,
+    longitude:
+      longitude === null || Number.isNaN(longitude) ? null : longitude,
+  }
+
+  let { error: profileError } = await adminSupabase
+    .from('profiles')
+    .upsert(profilePayload, { onConflict: 'id' })
+
+  if (
+    profileError &&
+    typeof profileError.message === 'string' &&
+    /(column .*iban|column .*bic|column .*logo_path|iban|bic|logo_path)/i.test(
+      profileError.message
+    )
+  ) {
+    const {
+      iban: _iban,
+      bic: _bic,
+      logo_path: _logoPath,
+      ...profilePayloadWithoutBankFields
+    } = profilePayload
+
+    const retryResult = await adminSupabase
+      .from('profiles')
+      .upsert(profilePayloadWithoutBankFields, { onConflict: 'id' })
+
+    profileError = retryResult.error ?? null
+  }
 
   if (profileError) {
     console.error('profileError:', profileError)
