@@ -9,6 +9,9 @@ type Props = {
   params: Promise<{
     id: string
   }>
+  searchParams?: Promise<{
+    error?: string
+  }>
 }
 
 async function updateCustomer(formData: FormData) {
@@ -70,6 +73,13 @@ async function updateCustomer(formData: FormData) {
   const sendXml = String(formData.get('send_xml') || '') === 'yes'
   const sendPdf = String(formData.get('send_pdf') || '') === 'yes'
   const autoReminders = String(formData.get('auto_reminders') || '') === 'yes'
+  const passwordModeRaw = String(formData.get('password_mode') || 'keep').trim()
+  const passwordMode =
+    passwordModeRaw === 'invite' || passwordModeRaw === 'manual'
+      ? passwordModeRaw
+      : 'keep'
+  const password = String(formData.get('password') || '')
+  const passwordConfirm = String(formData.get('password_confirm') || '')
 
   const street = String(formData.get('street') || '').trim()
   const houseNumber = String(formData.get('house_number') || '').trim()
@@ -88,6 +98,46 @@ async function updateCustomer(formData: FormData) {
     quoteValidityDaysRaw === '' ? null : Number(quoteValidityDaysRaw)
   const latitude = latitudeRaw === '' ? null : Number(latitudeRaw)
   const longitude = longitudeRaw === '' ? null : Number(longitudeRaw)
+
+  if (passwordMode === 'manual') {
+    if (password.length < 8 || password !== passwordConfirm) {
+      redirect(`/admin/customers/${id}/edit?error=password_setup`)
+    }
+  }
+
+  const authPayload: {
+    email?: string
+    email_confirm?: boolean
+    password?: string
+    user_metadata: {
+      full_name: string | null
+      company_name: string | null
+    }
+  } = {
+    user_metadata: {
+      full_name: fullName || null,
+      company_name: companyName || null,
+    },
+  }
+
+  if (email) {
+    authPayload.email = email
+    authPayload.email_confirm = true
+  }
+
+  if (passwordMode === 'manual') {
+    authPayload.password = password
+  }
+
+  const { error: authUpdateError } = await adminSupabase.auth.admin.updateUserById(
+    id,
+    authPayload
+  )
+
+  if (authUpdateError) {
+    console.error('authUpdateError:', authUpdateError)
+    redirect(`/admin/customers/${id}/edit?error=auth_update`)
+  }
 
   const { error } = await adminSupabase
     .from('profiles')
@@ -143,11 +193,32 @@ async function updateCustomer(formData: FormData) {
     redirect(`/admin/customers/${id}/edit?error=save`)
   }
 
-  redirect(`/admin/customers/${id}?updated=1`)
+  if (passwordMode === 'invite') {
+    if (!email) {
+      redirect(`/admin/customers/${id}/edit?error=missing_email`)
+    }
+
+    const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/login`,
+      }
+    )
+
+    if (resetError) {
+      console.error('resetError:', resetError)
+      redirect(`/admin/customers/${id}?updated=1&warning=invite_failed`)
+    }
+
+    redirect(`/admin/customers/${id}?updated=1&invite=1`)
+  }
+
+  redirect(`/admin/customers/${id}?updated=1${passwordMode === 'manual' ? '&setup=manual' : ''}`)
 }
 
-export default async function EditCustomerPage({ params }: Props) {
+export default async function EditCustomerPage({ params, searchParams }: Props) {
   const { id } = await params
+  const resolvedSearchParams = searchParams ? await searchParams : {}
 
   const supabase = await createClient()
 
@@ -181,9 +252,42 @@ export default async function EditCustomerPage({ params }: Props) {
     notFound()
   }
 
+  const saveError = resolvedSearchParams?.error === 'save'
+  const passwordSetupError = resolvedSearchParams?.error === 'password_setup'
+  const authUpdateFailed = resolvedSearchParams?.error === 'auth_update'
+  const missingEmailError = resolvedSearchParams?.error === 'missing_email'
+
   return (
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        {(saveError || passwordSetupError || authUpdateFailed || missingEmailError) && (
+          <section className="space-y-3">
+            {passwordSetupError && (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+                Het manuele wachtwoord moet minstens 8 tekens bevatten en beide velden moeten overeenkomen.
+              </div>
+            )}
+
+            {authUpdateFailed && (
+              <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                De login-instellingen van deze klant konden niet bijgewerkt worden.
+              </div>
+            )}
+
+            {missingEmailError && (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+                Er is een geldig e-mailadres nodig om een uitnodigingsmail te versturen.
+              </div>
+            )}
+
+            {saveError && (
+              <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                De klantgegevens konden niet opgeslagen worden.
+              </div>
+            )}
+          </section>
+        )}
+
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">

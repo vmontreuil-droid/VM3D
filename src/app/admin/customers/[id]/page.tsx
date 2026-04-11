@@ -14,6 +14,7 @@ type Props = {
     created?: string
     invite?: string
     warning?: string
+    setup?: string
   }>
 }
 
@@ -144,11 +145,12 @@ export default async function AdminCustomerDetailPage({
   const created = resolvedSearchParams?.created === '1'
   const inviteSent = resolvedSearchParams?.invite === '1'
   const inviteFailed = resolvedSearchParams?.warning === 'invite_failed'
+  const manualPasswordSet = resolvedSearchParams?.setup === 'manual'
 
   return (
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
-        {(updated || created || inviteSent || inviteFailed) && (
+        {(updated || created || inviteSent || inviteFailed || manualPasswordSet) && (
           <section className="space-y-3">
             {updated && (
               <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
@@ -170,8 +172,14 @@ export default async function AdminCustomerDetailPage({
 
             {inviteFailed && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                Klant werd aangemaakt, maar de uitnodigingsmail kon niet verzonden
+                Klant werd aangemaakt of bijgewerkt, maar de uitnodigingsmail kon niet verzonden
                 worden.
+              </div>
+            )}
+
+            {manualPasswordSet && (
+              <div className="rounded-xl border border-blue-500/25 bg-blue-500/10 px-4 py-3 text-sm text-blue-200">
+                Voor deze klant werd een manueel wachtwoord ingesteld.
               </div>
             )}
           </section>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import CustomerMap from '@/components/customers/customer-map'
 
@@ -63,6 +63,11 @@ export default function CustomerForm({ action }: Props) {
   const [mapLabel, setMapLabel] = useState('')
   const [lookupMessage, setLookupMessage] = useState('')
   const [lookupLoading, setLookupLoading] = useState(false)
+  const [addressLookupMessage, setAddressLookupMessage] = useState('')
+  const [addressLookupLoading, setAddressLookupLoading] = useState(false)
+  const [passwordMode, setPasswordMode] = useState<'invite' | 'manual'>('invite')
+  const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
 
   const handleVatLookup = async () => {
     if (!vatNumber.trim()) {
@@ -131,10 +136,91 @@ export default function CustomerForm({ action }: Props) {
     }
   }
 
+  function buildAddressLabel() {
+    return [street, houseNumber, bus, postalCode, city, country]
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .join(', ')
+  }
+
+  const handleAddressLookup = async (silent = false) => {
+    const address = buildAddressLabel()
+
+    if (!street.trim() || (!postalCode.trim() && !city.trim()) || !country.trim()) {
+      setLatitude(null)
+      setLongitude(null)
+      setMapLabel(address)
+
+      if (!silent) {
+        setAddressLookupMessage(
+          'Vul minstens straat, postcode of gemeente, en land in voor de kaartpositie.'
+        )
+      }
+      return
+    }
+
+    try {
+      setAddressLookupLoading(true)
+      if (!silent) setAddressLookupMessage('Adres op kaart zoeken...')
+
+      const response = await fetch('/api/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Geen coördinaten gevonden.')
+      }
+
+      setLatitude(data.latitude ?? null)
+      setLongitude(data.longitude ?? null)
+      setMapLabel(data.display_name || address)
+      setAddressLookupMessage('Adres op kaart gevonden.')
+    } catch (error) {
+      setLatitude(null)
+      setLongitude(null)
+      setMapLabel(address)
+      setAddressLookupMessage(
+        error instanceof Error
+          ? error.message
+          : 'Er liep iets fout bij het zoeken van de kaartpositie.'
+      )
+    } finally {
+      setAddressLookupLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const address = buildAddressLabel()
+
+    if (!street.trim() || (!postalCode.trim() && !city.trim()) || !country.trim()) {
+      if (!address) {
+        setLatitude(null)
+        setLongitude(null)
+        setMapLabel('')
+      }
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      void handleAddressLookup(true)
+    }, 700)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [street, houseNumber, bus, postalCode, city, country])
+
   return (
     <form action={action} className="grid gap-3 lg:max-w-4xl">
       <input type="hidden" name="latitude" value={latitude ?? ''} />
       <input type="hidden" name="longitude" value={longitude ?? ''} />
+      <input
+        type="hidden"
+        name="send_invite"
+        value={passwordMode === 'invite' ? 'yes' : 'no'}
+      />
       <input type="hidden" name="send_xml" value={sendXml ? 'yes' : 'no'} />
       <input type="hidden" name="send_pdf" value={sendPdf ? 'yes' : 'no'} />
       <input
@@ -516,9 +602,20 @@ export default function CustomerForm({ action }: Props) {
         </div>
 
         <div className="space-y-3 rounded-xl border border-\[var\(--border-soft\)\] bg-\[var\(--bg-card\)] p-3">
-          <h2 className="text-sm font-semibold text-[var(--text-main)]">
-            Adres
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold text-[var(--text-main)]">
+              Adres
+            </h2>
+
+            <button
+              type="button"
+              onClick={() => void handleAddressLookup()}
+              disabled={addressLookupLoading}
+              className="btn-secondary px-3 py-2 text-xs"
+            >
+              {addressLookupLoading ? 'Zoeken...' : 'Zoek adres op kaart'}
+            </button>
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-[1.3fr_0.7fr_0.6fr]">
             <div className="grid gap-2">
@@ -601,6 +698,10 @@ export default function CustomerForm({ action }: Props) {
               />
             </div>
           </div>
+
+          {addressLookupMessage && (
+            <p className="text-xs text-[var(--text-soft)]">{addressLookupMessage}</p>
+          )}
         </div>
       </div>
 
@@ -617,15 +718,76 @@ export default function CustomerForm({ action }: Props) {
             className="input-dark min-h-[150px] w-full px-3 py-2.5 text-sm"
           />
 
-          <label className="flex items-center gap-2 text-sm text-[var(--text-soft)]">
-            <input
-              type="checkbox"
-              name="send_invite"
-              value="yes"
-              defaultChecked
-            />
-            Stuur meteen een uitnodigingsmail
-          </label>
+          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+            <p className="text-sm font-semibold text-[var(--text-main)]">
+              Toegang klantportaal
+            </p>
+            <p className="mt-1 text-xs text-[var(--text-soft)]">
+              Kies of jij meteen een wachtwoord instelt, of de klant dit zelf kiest via e-mail.
+            </p>
+
+            <div className="mt-3 space-y-2 text-sm text-[var(--text-soft)]">
+              <label className="flex items-start gap-2">
+                <input
+                  type="radio"
+                  name="password_mode"
+                  value="invite"
+                  checked={passwordMode === 'invite'}
+                  onChange={() => setPasswordMode('invite')}
+                />
+                <span>Klant kiest zelf een wachtwoord via uitnodigingsmail</span>
+              </label>
+
+              <label className="flex items-start gap-2">
+                <input
+                  type="radio"
+                  name="password_mode"
+                  value="manual"
+                  checked={passwordMode === 'manual'}
+                  onChange={() => setPasswordMode('manual')}
+                />
+                <span>Ik stel nu zelf een tijdelijk wachtwoord in</span>
+              </label>
+            </div>
+
+            {passwordMode === 'manual' ? (
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-[var(--text-main)]">
+                    Tijdelijk wachtwoord
+                  </label>
+                  <input
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={8}
+                    required={passwordMode === 'manual'}
+                    className="input-dark w-full px-3 py-2.5 text-sm"
+                  />
+                </div>
+
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-[var(--text-main)]">
+                    Bevestig wachtwoord
+                  </label>
+                  <input
+                    name="password_confirm"
+                    type="password"
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    minLength={8}
+                    required={passwordMode === 'manual'}
+                    className="input-dark w-full px-3 py-2.5 text-sm"
+                  />
+                </div>
+              </div>
+            ) : (
+              <p className="mt-3 text-xs text-[var(--text-soft)]">
+                Na opslaan ontvangt de klant een e-mail om zelf een wachtwoord te kiezen.
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="space-y-3 rounded-xl border border-\[var\(--border-soft\)\] bg-\[var\(--bg-card\)] p-3">
@@ -646,7 +808,9 @@ export default function CustomerForm({ action }: Props) {
           type="submit"
           className="btn-primary px-4 py-2 text-sm"
         >
-          Klantaccount aanmaken
+          {passwordMode === 'manual'
+            ? 'Klant aanmaken met wachtwoord'
+            : 'Klantaccount aanmaken'}
         </button>
 
         <Link href="/admin/customers" className="btn-secondary">

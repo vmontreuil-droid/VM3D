@@ -59,7 +59,14 @@ async function createCustomer(formData: FormData) {
   const sendXml = String(formData.get('send_xml') || '') === 'yes'
   const sendPdf = String(formData.get('send_pdf') || '') === 'yes'
   const autoReminders = String(formData.get('auto_reminders') || '') === 'yes'
-  const sendInvite = String(formData.get('send_invite') || '') === 'yes'
+  const passwordMode =
+    String(formData.get('password_mode') || 'invite') === 'manual'
+      ? 'manual'
+      : 'invite'
+  const sendInvite =
+    passwordMode === 'invite' || String(formData.get('send_invite') || '') === 'yes'
+  const password = String(formData.get('password') || '')
+  const passwordConfirm = String(formData.get('password_confirm') || '')
 
   const street = String(formData.get('street') || '').trim()
   const houseNumber = String(formData.get('house_number') || '').trim()
@@ -83,12 +90,19 @@ async function createCustomer(formData: FormData) {
   const latitude = latitudeRaw === '' ? null : Number(latitudeRaw)
   const longitude = longitudeRaw === '' ? null : Number(longitudeRaw)
 
+  if (passwordMode === 'manual') {
+    if (password.length < 8 || password !== passwordConfirm) {
+      redirect('/admin/customers/new?error=password_setup')
+    }
+  }
+
   const tempPassword = `Vm3d!${Math.random().toString(36).slice(-10)}A1`
+  const initialPassword = passwordMode === 'manual' ? password : tempPassword
 
   const { data: createdUserData, error: createUserError } =
     await adminSupabase.auth.admin.createUser({
       email,
-      password: tempPassword,
+      password: initialPassword,
       email_confirm: true,
       user_metadata: {
         full_name: fullName || null,
@@ -159,7 +173,7 @@ async function createCustomer(formData: FormData) {
     redirect('/admin/customers/new?error=profile')
   }
 
-  if (sendInvite) {
+  if (sendInvite && passwordMode !== 'manual') {
     const inviteResult = await adminSupabase.auth.admin.inviteUserByEmail(email, {
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/login`,
       data: {
@@ -176,7 +190,11 @@ async function createCustomer(formData: FormData) {
     redirect(`/admin/customers/${createdUser.id}?created=1&invite=1`)
   }
 
-  redirect(`/admin/customers/${createdUser.id}?created=1`)
+  redirect(
+    `/admin/customers/${createdUser.id}?created=1${
+      passwordMode === 'manual' ? '&setup=manual' : ''
+    }`
+  )
 }
 
 export default async function NewCustomerPage() {
