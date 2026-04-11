@@ -84,9 +84,13 @@ export default function LoginPage() {
       <div className="flex min-h-screen items-center justify-center px-5 py-10">
         <div className="w-full max-w-md">
           <div className="mb-6 text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">
-              VM3D Cloud
-            </p>
+            <div className="mb-5 flex justify-center">
+              <img
+                src="/vm3d-logo.svg"
+                alt="VM3D logo"
+                className="mx-auto block h-auto w-full max-w-[220px] sm:max-w-[240px]"
+              />
+            </div>
             <h1 className="text-2xl font-bold text-[var(--text-main)]">Welkom terug</h1>
             <p className="mt-3 text-sm text-[var(--text-soft)]">
               Log in om je projecten, bestanden en opleveringen te bekijken.

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Home, LayoutDashboard, Users, FileText, ChevronLeft, ChevronRight, X, Edit, PenTool, Plus, List, UploadCloud, Eye, BarChart3, Settings, Copy, Download, Trash2, Search } from 'lucide-react'
 
@@ -17,12 +17,12 @@ type NavItem = {
   label: string
   href: string
   icon: React.ReactNode
-  match: (pathname: string) => boolean
+  match: (pathname: string, view?: string | null) => boolean
   children?: {
     label: string
     href: string
     icon?: React.ReactNode
-    match: (pathname: string) => boolean
+    match: (pathname: string, view?: string | null) => boolean
   }[]
 }
 
@@ -38,6 +38,8 @@ export default function Sidebar({
   onCloseMobile,
 }: Props) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentView = searchParams.get('view')
   const supabase = createClient()
 
   const portalLabel = isAdmin ? 'Adminportaal' : 'Klantenportaal'
@@ -72,7 +74,8 @@ export default function Sidebar({
           label: 'Alle klanten',
           href: '/admin/customers',
           icon: <List className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/customers',
+          match: (pathname, view) =>
+            pathname === '/admin/customers' && view !== 'uploads',
         },
         {
           label: 'Nieuwe klant',
@@ -82,9 +85,10 @@ export default function Sidebar({
         },
         {
           label: 'Uploads',
-          href: '/admin/customers',
+          href: '/admin/customers?view=uploads',
           icon: <UploadCloud className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/customers',
+          match: (pathname, view) =>
+            pathname === '/admin/customers' && view === 'uploads',
         },
         {
           label: 'Statistiek',
@@ -115,7 +119,8 @@ export default function Sidebar({
           label: 'Alle projecten',
           href: '/admin',
           icon: <List className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin',
+          match: (pathname, view) =>
+            pathname === '/admin' && view !== 'uploads' && view !== 'settings',
         },
         {
           label: 'Nieuw project',
@@ -125,9 +130,9 @@ export default function Sidebar({
         },
         {
           label: 'Uploads',
-          href: '/admin',
+          href: '/admin?view=uploads',
           icon: <UploadCloud className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin',
+          match: (pathname, view) => pathname === '/admin' && view === 'uploads',
         },
         {
           label: 'Statistiek',
@@ -137,9 +142,9 @@ export default function Sidebar({
         },
         {
           label: 'Instellingen',
-          href: '/admin',
+          href: '/admin?view=settings',
           icon: <Settings className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin',
+          match: (pathname, view) => pathname === '/admin' && view === 'settings',
         },
         ...(pathname.includes('/admin/projects/') && pathname.includes('/edit')
           ? [
@@ -165,7 +170,7 @@ export default function Sidebar({
   }
 
   function renderNavItem(item: NavItem) {
-    const active = item.match(pathname)
+    const active = item.match(pathname, currentView)
 
     return (
       <div key={item.href + item.label} className="space-y-1.5">
@@ -207,7 +212,7 @@ export default function Sidebar({
         {!collapsed && item.children && item.children.length > 0 && (
           <div className="ml-8 space-y-1.5">
             {item.children.map((child) => {
-              const childActive = child.match(pathname)
+              const childActive = child.match(pathname, currentView)
 
               return (
                 <Link
