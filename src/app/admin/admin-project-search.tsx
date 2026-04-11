@@ -271,10 +271,10 @@ export default function AdminProjectSearch({
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-[var(--text-main)]">
-              Projectoverzicht
+              Wervenoverzicht
             </h2>
             <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Zoek, filter, sorteer en blader door alle projecten.
+              Zoek, filter, sorteer en blader door alle werven.
             </p>
           </div>
 
@@ -297,7 +297,7 @@ export default function AdminProjectSearch({
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-7">
           <input
             type="text"
-            placeholder="Zoek project"
+            placeholder="Zoek werf"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
@@ -382,7 +382,7 @@ export default function AdminProjectSearch({
             onClick={() => handleSort('title')}
             className={headerButtonClass}
           >
-            <span>Project</span>
+            <span>Werf</span>
             <span>{sortIndicator('title')}</span>
           </button>
 
@@ -433,7 +433,7 @@ export default function AdminProjectSearch({
 
         {paginatedProjects.length === 0 ? (
           <div className="px-5 py-6 text-sm text-[var(--text-soft)]">
-            Geen projecten gevonden voor deze filters.
+            Geen werven gevonden voor deze filters.
           </div>
         ) : (
           <div className="divide-y divide-[var(--border-soft)]">

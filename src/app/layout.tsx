@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'VM3D Cloud',
-  description: 'Platform voor projecten, bestanden en opleveringen',
+  description: 'Platform voor werven, bestanden en opleveringen',
 }
 
 export default function RootLayout({

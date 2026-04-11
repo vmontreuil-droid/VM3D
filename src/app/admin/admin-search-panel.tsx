@@ -327,7 +327,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
                             <PlusCircle className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Nieuw project</span>
+                          <span className="pr-1">Nieuwe werf</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
                         </Link>
                         <Link

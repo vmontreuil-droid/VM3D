@@ -198,16 +198,16 @@ export default async function NewAdminProjectPage({ searchParams }: Props) {
                 </div>
 
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Nieuw project
+                  Nieuwe werf
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  Project aanmaken
+                  Werf aanmaken
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Maak een nieuw project aan en koppel het meteen aan de juiste
-                  klant. De projecthistoriek start automatisch vanaf creatie.
+                  Maak een nieuwe werf aan en koppel die meteen aan de juiste
+                  klant. De werfhistoriek start automatisch vanaf creatie.
                 </p>
               </div>
 
@@ -223,7 +223,7 @@ export default async function NewAdminProjectPage({ searchParams }: Props) {
                         Module
                       </p>
                       <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-                        Nieuw project
+                        Nieuwe werf
                       </p>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
                         Koppeling, prijs en opstart

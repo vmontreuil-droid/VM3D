@@ -88,8 +88,8 @@ function getCustomerName(project: Project) {
 export default function ProjectList({
   projects,
   files = [],
-  title = 'Projecten',
-  description = 'Overzicht van je projecten.',
+  title = 'Werven',
+  description = 'Overzicht van je werven.',
   showCustomerColumn = false,
   showAdminActions = false,
   hideResultsUntilSearch = false,
@@ -288,8 +288,8 @@ export default function ProjectList({
                 type="text"
                 placeholder={
                   isAdminView
-                    ? 'Zoek project, klant of locatie...'
-                    : 'Zoek project of locatie...'
+                    ? 'Zoek werf, klant of locatie...'
+                    : 'Zoek werf of locatie...'
                 }
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -452,7 +452,7 @@ export default function ProjectList({
 
               {paginatedProjects.length === 0 ? (
                 <div className="px-5 py-8 text-sm text-[var(--text-soft)]">
-                  Geen projecten gevonden voor deze filters.
+                  Geen werven gevonden voor deze filters.
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--border-soft)]">
@@ -537,7 +537,7 @@ export default function ProjectList({
         </div>
       ) : paginatedProjects.length === 0 ? (
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-5 py-8 text-sm text-[var(--text-soft)] shadow-sm">
-          Geen projecten gevonden voor deze filters.
+          Geen werven gevonden voor deze filters.
         </div>
       ) : (
         <>

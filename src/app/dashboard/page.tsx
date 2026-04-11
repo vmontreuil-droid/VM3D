@@ -165,7 +165,7 @@ export default async function DashboardPage() {
         {
           href: '/admin/projects/new',
           label: 'Nieuwe werf',
-          description: 'Start een nieuw project.',
+          description: 'Start een nieuwe werf.',
           icon: PlusCircle,
         },
         {
@@ -196,7 +196,7 @@ export default async function DashboardPage() {
     : [
         {
           href: '/dashboard',
-          label: 'Mijn projecten',
+          label: 'Mijn werven',
           description: 'Overzicht van je werven.',
           icon: FolderOpen,
         },
@@ -226,10 +226,10 @@ export default async function DashboardPage() {
         },
         {
           href: latestProject ? `/dashboard/projects/${latestProject.id}` : '/dashboard',
-          label: 'Recent project',
+          label: 'Recente werf',
           description: latestProject
             ? latestProject.title || 'Ga verder in je laatste dossier.'
-            : 'Nog geen recent project beschikbaar.',
+            : 'Nog geen recente werf beschikbaar.',
           icon: Activity,
         },
       ]
@@ -284,7 +284,7 @@ export default async function DashboardPage() {
                 <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <div>
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Projecten</p>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
                       <p className="mt-1 text-lg font-semibold text-[var(--accent)]">
                         {totalProjects}
                       </p>
@@ -344,16 +344,16 @@ export default async function DashboardPage() {
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-3 py-2.5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Projectlocaties
+                  Werflocaties
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Kaart van je projecten met gekende adressen.
+                  Kaart van je werven met gekende adressen.
                 </p>
               </div>
 
               <ProjectsMap
                 locations={projectLocations}
-                title="Projectlocaties"
+                title="Werflocaties"
                 height={240}
               />
             </div>
@@ -397,15 +397,15 @@ export default async function DashboardPage() {
 
         {projectsError && (
           <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            Projecten konden niet volledig geladen worden.
+            Werven konden niet volledig geladen worden.
           </div>
         )}
 
         <ProjectList
           projects={safeProjects}
           files={recentFiles}
-          title="Mijn projecten"
-          description="Sneller overzicht in kaartvorm met status, prijs en bestandsaantallen."
+          title="Mijn werven"
+          description="Sneller overzicht van je werven met status, prijs en bestandsaantallen."
         />
 
         {recentFilesError && (

@@ -166,9 +166,9 @@ export default function ProjectStatisticsPage() {
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text-main)]">Projecten Statistieken</h1>
+          <h1 className="text-3xl font-bold text-[var(--text-main)]">Wervenstatistieken</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">
-            Gedetailleerd overzicht van alle projecten en hun prestaties
+            Gedetailleerd overzicht van alle werven en hun prestaties
           </p>
         </div>
 
@@ -178,7 +178,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] p-6 transition hover:border-[var(--accent)]/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Totale Projecten</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">Totale Werven</p>
                 <p className="mt-2 text-4xl font-bold text-[var(--accent)]">{stats.totalProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[var(--accent)]/10">
@@ -194,7 +194,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] p-6 transition hover:border-green-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Actieve Projecten</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">Actieve Werven</p>
                 <p className="mt-2 text-4xl font-bold text-green-500">{stats.activeProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-green-500/10">
@@ -210,7 +210,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] p-6 transition hover:border-blue-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Afgeronde Projecten</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">Afgeronde Werven</p>
                 <p className="mt-2 text-4xl font-bold text-blue-500">{stats.completedProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-blue-500/10">
@@ -243,7 +243,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <Clock className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Projecten per Status</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">Werven per Status</h3>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats.projectsByStatus.map((status) => (
@@ -270,7 +270,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <Calendar className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Nieuwste Projecten</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">Nieuwste Werven</h3>
           </div>
           <div className="space-y-3">
             {stats.recentProjects.map((project, idx) => (
@@ -309,7 +309,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <MapPin className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Projectlocaties</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">Werflocaties</h3>
           </div>
           <ProjectsMap locations={stats.projectLocations} />
         </div>
@@ -323,7 +323,7 @@ export default function ProjectStatisticsPage() {
             <p className="text-3xl font-bold text-[var(--text-main)]">
               €{(stats.averagePrice * stats.totalProjects).toLocaleString('nl-BE')}
             </p>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">van alle projecten</p>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">van alle werven</p>
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-[var(--accent)]/30 bg-[linear-gradient(135deg,rgba(245,140,55,0.1),rgba(245,140,55,0.02))] p-8">

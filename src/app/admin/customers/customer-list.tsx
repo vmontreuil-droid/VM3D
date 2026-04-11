@@ -250,7 +250,7 @@ export default function CustomerList({
                 </th>
                 <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                   <button onClick={() => handleSort('project_count')} className="inline-flex items-center gap-1">
-                    Projecten
+                    Werven
                     <span>↕</span>
                   </button>
                 </th>
@@ -339,7 +339,7 @@ export default function CustomerList({
                           href={`/admin/projects/new?customer=${customer.id}`}
                           className="btn-primary btn-sm"
                         >
-                          Nieuw project
+                          Nieuwe werf
                         </Link>
                       </div>
                     </td>
@@ -370,7 +370,7 @@ export default function CustomerList({
                 </div>
 
                 <span className="badge-neutral px-3 py-1 text-xs font-semibold">
-                  {customer.project_count || 0} proj.
+                  {customer.project_count || 0} werven
                 </span>
               </div>
 
@@ -423,7 +423,7 @@ export default function CustomerList({
                   href={`/admin/projects/new?customer=${customer.id}`}
                   className="btn-primary btn-sm"
                 >
-                  Nieuw project
+                  Nieuwe werf
                 </Link>
               </div>
             </div>

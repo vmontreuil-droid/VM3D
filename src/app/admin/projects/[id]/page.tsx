@@ -614,7 +614,7 @@ export default async function AdminProjectDetailPage({
                     href={`/admin/projects/${project.id}/edit`}
                     className="btn-primary"
                   >
-                    ✏️ Project bewerken
+                    ✏️ Werf bewerken
                   </Link>
                   {project.user_id ? (
                     <Link
@@ -625,12 +625,12 @@ export default async function AdminProjectDetailPage({
                     </Link>
                   ) : null}
                   <Link href="/admin/projects/new" className="btn-secondary">
-                    + Nieuw project
+                    + Nieuwe werf
                   </Link>
                 </div>
 
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Premium projectfiche
+                  Premium werffiche
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">

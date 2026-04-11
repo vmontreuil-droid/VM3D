@@ -181,7 +181,7 @@ export default function CustomerStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] p-6 transition hover:border-blue-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Totale Projecten</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">Totale Werven</p>
                 <p className="mt-2 text-4xl font-bold text-blue-500">{stats.totalProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-blue-500/10">
@@ -260,7 +260,7 @@ export default function CustomerStatisticsPage() {
                   </div>
                   <div className="ml-4 text-right">
                     <p className="text-xs font-bold text-[var(--accent)]">{customer.projects}</p>
-                    <p className="text-[10px] text-[var(--text-muted)]">projecten</p>
+                    <p className="text-[10px] text-[var(--text-muted)]">werven</p>
                   </div>
                 </div>
               ))}

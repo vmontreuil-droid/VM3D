@@ -214,7 +214,7 @@ export default function AdminUploadPanel({ projects }: Props) {
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+    <section id="uploads" className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
       <div className="grid gap-3 px-4 py-3.5 sm:px-5 lg:grid-cols-2">
         <form
           onSubmit={(event) => {

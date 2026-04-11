@@ -178,7 +178,7 @@ function ProjectMarker({ project }: { project: Project }) {
               href={`/admin/projects/${project.id}`}
               className="project-popup-button"
             >
-              Open project
+              Open werf
             </Link>
           </div>
         </div>

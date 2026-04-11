@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Home, LayoutDashboard, Users, FileText, ChevronLeft, ChevronRight, X, Edit, PenTool, Plus, List, UploadCloud, Eye, BarChart3, Settings, Copy, Download, Trash2, Search, Ticket, CreditCard } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -45,45 +45,31 @@ export default function Sidebar({
   const portalLabel = isAdmin ? 'Adminportaal' : 'Klantenportaal'
   const portalInitials = getPortalInitials(isAdmin)
 
-  const generalItems: NavItem[] = [
-    {
-      label: 'Home',
-      href: '/',
-      match: (pathname) => pathname === '/',
-      icon: <Home className="h-[17px] w-[17px]" />,
-    },
-    {
-      label: 'Dashboard',
-      href: isAdmin ? '/admin' : '/dashboard',
-      match: (pathname) =>
-        pathname === '/dashboard' ||
-        pathname.startsWith('/dashboard/') ||
-        pathname === '/admin',
-      icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
-      children: isAdmin
-        ? [
+  const generalItems: NavItem[] = isAdmin
+    ? [
+        {
+          label: 'Dashboard',
+          href: '/admin',
+          match: (pathname) => pathname === '/admin',
+          icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
+        },
+      ]
+    : [
+        {
+          label: 'Home',
+          href: '/',
+          match: (pathname) => pathname === '/',
+          icon: <Home className="h-[17px] w-[17px]" />,
+        },
+        {
+          label: 'Dashboard',
+          href: '/dashboard',
+          match: (pathname) =>
+            pathname === '/dashboard' || pathname.startsWith('/dashboard/'),
+          icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
+          children: [
             {
-              label: 'Overzicht',
-              href: '/admin',
-              icon: <List className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/admin',
-            },
-            {
-              label: 'Tickets',
-              href: '/dashboard/tickets',
-              icon: <Ticket className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/tickets',
-            },
-            {
-              label: 'Abonnement',
-              href: '/dashboard/abonnement',
-              icon: <CreditCard className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/abonnement',
-            },
-          ]
-        : [
-            {
-              label: 'Mijn projecten',
+              label: 'Mijn werven',
               href: '/dashboard',
               icon: <List className="h-[14px] w-[14px]" />,
               match: (pathname) =>
@@ -102,105 +88,47 @@ export default function Sidebar({
               match: (pathname) => pathname === '/dashboard/abonnement',
             },
           ],
-    },
-  ]
+        },
+      ]
 
   const adminItems: NavItem[] = [
     {
       label: 'Klanten',
       href: '/admin/customers',
       match: (pathname) =>
-        pathname === '/admin/customers' ||
-        pathname.startsWith('/admin/customers/'),
+        pathname === '/admin/customers' || pathname.startsWith('/admin/customers/'),
       icon: <Users className="h-[17px] w-[17px]" />,
-      children: [
-        {
-          label: 'Alle klanten',
-          href: '/admin/customers',
-          icon: <List className="h-[14px] w-[14px]" />,
-          match: (pathname, view) =>
-            pathname === '/admin/customers' && view !== 'uploads',
-        },
-        {
-          label: 'Nieuwe klant',
-          href: '/admin/customers/new',
-          icon: <Plus className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/customers/new',
-        },
-        {
-          label: 'Uploads',
-          href: '/admin/customers?view=uploads',
-          icon: <UploadCloud className="h-[14px] w-[14px]" />,
-          match: (pathname, view) =>
-            pathname === '/admin/customers' && view === 'uploads',
-        },
-        {
-          label: 'Statistiek',
-          href: '/admin/customers/statistics',
-          icon: <BarChart3 className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/customers/statistics',
-        },
-        ...(pathname.includes('/admin/customers/') && pathname.includes('/edit')
-          ? [
-              {
-                label: 'Bewerken',
-                href: pathname,
-                icon: <Edit className="h-[14px] w-[14px]" />,
-                match: () => true,
-              },
-            ]
-          : []),
-      ],
     },
     {
-      label: 'Projecten',
+      label: 'Werven',
       href: '/admin',
+      match: (pathname) => pathname.startsWith('/admin/projects'),
+      icon: <FolderOpen className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Tickets',
+      href: '/dashboard/tickets',
+      match: (pathname) => pathname === '/dashboard/tickets',
+      icon: <Ticket className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Abonnement',
+      href: '/dashboard/abonnement',
+      match: (pathname) => pathname === '/dashboard/abonnement',
+      icon: <CreditCard className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Statistieken',
+      href: '/admin/projects/statistics',
       match: (pathname) =>
-        pathname === '/admin' || pathname.startsWith('/admin/projects'),
-      icon: <FileText className="h-[17px] w-[17px]" />,
-      children: [
-        {
-          label: 'Alle projecten',
-          href: '/admin',
-          icon: <List className="h-[14px] w-[14px]" />,
-          match: (pathname, view) =>
-            pathname === '/admin' && view !== 'uploads' && view !== 'settings',
-        },
-        {
-          label: 'Nieuw project',
-          href: '/admin/projects/new',
-          icon: <Plus className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/projects/new',
-        },
-        {
-          label: 'Uploads',
-          href: '/admin?view=uploads',
-          icon: <UploadCloud className="h-[14px] w-[14px]" />,
-          match: (pathname, view) => pathname === '/admin' && view === 'uploads',
-        },
-        {
-          label: 'Statistiek',
-          href: '/admin/projects/statistics',
-          icon: <BarChart3 className="h-[14px] w-[14px]" />,
-          match: (pathname) => pathname === '/admin/projects/statistics',
-        },
-        {
-          label: 'Instellingen',
-          href: '/admin?view=settings',
-          icon: <Settings className="h-[14px] w-[14px]" />,
-          match: (pathname, view) => pathname === '/admin' && view === 'settings',
-        },
-        ...(pathname.includes('/admin/projects/') && pathname.includes('/edit')
-          ? [
-              {
-                label: 'Bewerken',
-                href: pathname,
-                icon: <Edit className="h-[14px] w-[14px]" />,
-                match: () => true,
-              },
-            ]
-          : []),
-      ],
+        pathname === '/admin/projects/statistics' || pathname === '/admin/customers/statistics',
+      icon: <BarChart3 className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Uploads',
+      href: '/admin#uploads',
+      match: () => false,
+      icon: <UploadCloud className="h-[17px] w-[17px]" />,
     },
   ]
 
@@ -385,7 +313,7 @@ export default function Sidebar({
             <div>
               {!collapsed && (
                 <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                  Admin Dashboard
+                  Sneltoetsen
                 </p>
               )}
               <div className="space-y-1.5">{adminItems.map(renderNavItem)}</div>

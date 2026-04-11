@@ -140,7 +140,7 @@ export default async function AdminCustomersPage() {
                   </Link>
 
                   <Link href="/admin/projects/new" className="btn-secondary">
-                    + Nieuw project
+                    + Nieuwe werf
                   </Link>
 
                   {latestCustomer ? (
@@ -163,7 +163,7 @@ export default async function AdminCustomersPage() {
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
                   Overzicht van alle klanten met snelle toegang tot fiche,
-                  bewerking en projectopvolging.
+                  bewerking en werfopvolging.
                 </p>
               </div>
 
@@ -211,7 +211,7 @@ export default async function AdminCustomersPage() {
                   </div>
 
                   <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Met projecten</p>
+                    <p className="text-xs text-[var(--text-muted)]">Met werven</p>
                     <p className="text-lg font-semibold text-[var(--text-main)]">
                       {customersWithProjects}
                     </p>
@@ -239,7 +239,7 @@ export default async function AdminCustomersPage() {
                 </div>
 
                 <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">Meeste projecten</p>
+                  <p className="text-xs text-[var(--text-muted)]">Meeste werven</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                     {mostActiveCustomerLabel}
                   </p>
@@ -250,7 +250,7 @@ export default async function AdminCustomersPage() {
 
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">
-                    Recentste projectactiviteit
+                    Recentste werfactiviteit
                   </p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                     {latestCustomer?.last_project_at
@@ -272,7 +272,7 @@ export default async function AdminCustomersPage() {
                     {averageProjectsPerCustomer}
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Projecten per klant
+                    Werven per klant
                   </p>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default async function AdminCustomersPage() {
                   className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
                 >
                   <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuw project
+                    Nieuwe werf
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
                     Start snel een dossier voor een klant.
@@ -313,10 +313,10 @@ export default async function AdminCustomersPage() {
                   className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
                 >
                   <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Naar projecten
+                    Naar werven
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Open het centrale projectenoverzicht.
+                    Open het centrale wervenoverzicht.
                   </p>
                 </Link>
 

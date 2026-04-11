@@ -65,7 +65,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-[var(--accent)]">10K+</p>
-                  <p className="mt-1 text-sm text-[var(--text-muted)]">Projecten Verwerkt</p>
+                  <p className="mt-1 text-sm text-[var(--text-muted)]">Werven Verwerkt</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-[var(--accent)]">99.9%</p>
@@ -161,7 +161,7 @@ export default function HomePage() {
                   Plannen Uploaden
                 </h3>
                 <p className="mt-3 text-[var(--text-soft)]">
-                  Upload bestanden, plannen en documenten veilig per project in een duidelijke, georganiseerde omgeving.
+                  Upload bestanden, plannen en documenten veilig per werf in een duidelijke, georganiseerde omgeving.
                 </p>
               </div>
             </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
                   Live Status Volgen
                 </h3>
                 <p className="mt-3 text-[var(--text-soft)]">
-                  Zie in real-time of een project ingediend, in behandeling, klaar voor betaling of volledig afgerond is.
+                  Zie in real-time of een werf ingediend, in behandeling, klaar voor betaling of volledig afgerond is.
                 </p>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function HomePage() {
                   3D-Bestanden Downloaden
                 </h3>
                 <p className="mt-3 text-[var(--text-soft)]">
-                  Ontvang afgewerkte 3D-bestanden en projectdocumenten direct zodra het project klaar is.
+                  Ontvang afgewerkte 3D-bestanden en werfdocumenten direct zodra de werf klaar is.
                 </p>
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function HomePage() {
                 Een aansluitpunt voor alle oplossingen
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-700">
-                Synchroniseer projecten, bestanden en instellingen automatisch op al je machines zonder je bureau te verlaten. Ontvang gegevens rechtstreeks van de bouwplaats.
+                Synchroniseer werven, bestanden en instellingen automatisch op al je machines zonder je bureau te verlaten. Ontvang gegevens rechtstreeks van de bouwplaats.
               </p>
 
               <div className="mt-10 space-y-6">
@@ -345,7 +345,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-black">Upload op afstand</h3>
-                    <p className="mt-1 text-gray-600">Projectbestanden rechtstreeks naar machines met GPS-meetstokken</p>
+                    <p className="mt-1 text-gray-600">Werfbestanden rechtstreeks naar machines met GPS-meetstokken</p>
                   </div>
                 </div>
 
@@ -441,7 +441,7 @@ export default function HomePage() {
             DIEN ALLES IN VOOR 3D-PRODUCTIE
           </h3>
           <p className="mt-6 mx-auto max-w-2xl text-xl text-gray-300 leading-8">
-            Beheer al je machines, projecten en bestanden vanaf een centraal platform. Dien projecten in, volg de status op en ontvang eindbestanden rechtstreeks in je portal.
+            Beheer al je machines, werven en bestanden vanaf een centraal platform. Dien werven in, volg de status op en ontvang eindbestanden rechtstreeks in je portal.
           </p>
 
           <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
@@ -474,7 +474,7 @@ export default function HomePage() {
               Verslaan over heel België
             </h2>
             <p className="mt-6 mx-auto max-w-2xl text-lg text-[var(--text-soft)]">
-              Meer dan 500 bedrijven in Vlaanderen, Wallonië en Brussel vertrouwen op VM3D Cloud voor hun 3D-projecten.
+              Meer dan 500 bedrijven in Vlaanderen, Wallonië en Brussel vertrouwen op VM3D Cloud voor hun 3D-werven.
             </p>
           </div>
 

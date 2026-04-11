@@ -93,7 +93,7 @@ export default function LoginPage() {
             </div>
             <h1 className="text-2xl font-bold text-[var(--text-main)]">Welkom terug</h1>
             <p className="mt-3 text-sm text-[var(--text-soft)]">
-              Log in om je projecten, bestanden en opleveringen te bekijken.
+              Log in om je werven, bestanden en opleveringen te bekijken.
             </p>
           </div>
 

@@ -155,7 +155,7 @@ export default function AdminDashboardClient({
                 Locaties van de werven
               </h2>
               <p className="mt-1 text-sm text-[var(--text-soft)]">
-                Overzicht van alle projecten op kaart.
+                Overzicht van alle werven op kaart.
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -186,7 +186,7 @@ export default function AdminDashboardClient({
 
       {filteredProjects.length === 0 ? (
         <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-6 text-sm text-[var(--text-soft)] shadow-sm">
-          Geen projecten gevonden voor deze status.
+          Geen werven gevonden voor deze status.
         </div>
       ) : (
         <AdminProjectSearch

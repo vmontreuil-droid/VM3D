@@ -210,7 +210,7 @@ export default async function AdminPage() {
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Centraal overzicht van klanten, projecten, bestanden en opvolgingen
+                  Centraal overzicht van klanten, werven, bestanden en opvolgingen
                   binnen het platform.
                 </p>
               </div>
@@ -232,7 +232,7 @@ export default async function AdminPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Projecten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -321,10 +321,10 @@ export default async function AdminPage() {
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Projectkaart
+                  Wervenkaart
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Visueel overzicht van alle projecten en locaties.
+                  Visueel overzicht van alle werven en locaties.
                 </p>
               </div>
 
@@ -458,7 +458,7 @@ export default async function AdminPage() {
                         Statistieken
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk cijfers en voortgang van projecten.
+                        Bekijk cijfers en voortgang van werven.
                       </span>
                     </span>
                   </div>
@@ -511,7 +511,7 @@ export default async function AdminPage() {
 
         {hasLoadError && (
           <section className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-4 text-sm text-red-200 shadow-sm">
-            Projecten, klantgegevens of bestanden konden niet volledig geladen
+            Werven, klantgegevens of bestanden konden niet volledig geladen
             worden.
           </section>
         )}

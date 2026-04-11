@@ -209,7 +209,7 @@ export default async function AdminCustomerDetailPage({
                     href={`/admin/projects/new?customer=${customer.id}`}
                     className="btn-primary"
                   >
-                    + Nieuw project
+                    + Nieuwe werf
                   </Link>
                 </div>
 
@@ -261,7 +261,7 @@ export default async function AdminCustomerDetailPage({
 
                 <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 xl:w-auto">
                   <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">Projecten</p>
+                    <p className="text-xs text-[var(--text-muted)]">Werven</p>
                     <p className="text-lg font-semibold text-[var(--text-main)]">
                       {totalProjects}
                     </p>
@@ -364,7 +364,7 @@ export default async function AdminCustomerDetailPage({
                   className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
                 >
                   <p className="text-sm font-semibold text-[var(--text-main)]">
-                    Nieuw project
+                    Nieuwe werf
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
                     Start direct een nieuw dossier voor deze klant.
@@ -392,7 +392,7 @@ export default async function AdminCustomerDetailPage({
                       Open laatste project
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      {latestProject.title || 'Recent project openen'}
+                      {latestProject.title || 'Recente werf openen'}
                     </p>
                   </Link>
                 ) : (
@@ -736,7 +736,7 @@ export default async function AdminCustomerDetailPage({
               <div className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] px-4 py-3">
                 <div>
                   <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                    Projecten
+                    Werven
                   </h2>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
                     Laatste gekoppelde dossiers van deze klant.
@@ -754,7 +754,7 @@ export default async function AdminCustomerDetailPage({
               <div className="grid gap-3 px-4 py-4">
                 {recentProjects.length === 0 ? (
                   <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4 text-sm text-[var(--text-soft)]">
-                    Nog geen projecten gevonden.
+                    Nog geen werven gevonden.
                   </div>
                 ) : (
                   recentProjects.map((project: any) => (

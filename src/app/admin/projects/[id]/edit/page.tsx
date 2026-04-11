@@ -174,11 +174,11 @@ export default async function EditAdminProjectPage({ params }: Props) {
                     href={`/admin/projects/${project.id}`}
                     className="btn-secondary"
                   >
-                    ← Terug naar project
+                    ← Terug naar werf
                   </Link>
 
                   <Link href="/admin" className="btn-secondary">
-                    Projecten
+                    Werven
                   </Link>
 
                   {project.user_id ? (
@@ -192,15 +192,15 @@ export default async function EditAdminProjectPage({ params }: Props) {
                 </div>
 
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Project bewerken
+                  Werf bewerken
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  {project.title || 'Project'}
+                  {project.title || 'Werf'}
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Pas projectgegevens aan en wijzig indien nodig de gekoppelde
+                  Pas werfgegevens aan en wijzig indien nodig de gekoppelde
                   klant, status of prijs.
                 </p>
               </div>
@@ -217,7 +217,7 @@ export default async function EditAdminProjectPage({ params }: Props) {
                         Module
                       </p>
                       <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-                        Project bewerken
+                        Werf bewerken
                       </p>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
                         Inhoud, koppeling en status
