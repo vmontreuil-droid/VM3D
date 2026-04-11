@@ -435,9 +435,25 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                   Volledige klantenfiche met alle bewerkbare gegevens.
                 </p>
 
-                <div className="mt-2">
-                  <Link href="/admin" className="btn-secondary">
-                    Terug naar dashboard
+                <div className="mt-3 max-w-[280px]">
+                  <Link
+                    href="/admin/customers"
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Klantenfiche
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar klantenoverzicht
+                        </span>
+                      </span>
+                    </div>
                   </Link>
                 </div>
               </div>
