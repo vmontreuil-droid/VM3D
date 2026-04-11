@@ -17,6 +17,63 @@ import AdminSearchPanel from '@/app/admin/admin-search-panel'
 import AdminUploadPanel from '@/app/admin/admin-upload-panel'
 import ProjectMap from '@/components/projects/project-map'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
+
+async function sendTicketTestEmail() {
+  'use server'
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/login')
+  }
+
+  const { data: adminProfile } = await supabase
+    .from('profiles')
+    .select('role, email, full_name, company_name')
+    .eq('id', user.id)
+    .single()
+
+  if (adminProfile?.role !== 'admin') {
+    redirect('/dashboard')
+  }
+
+  const hasResendApiKey = Boolean(process.env.RESEND_API_KEY)
+  const hasMailFrom = Boolean(
+    process.env.TICKET_NOTIFICATIONS_FROM || process.env.RESEND_FROM_EMAIL
+  )
+  const hasPublicSiteUrl = Boolean(
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || process.env.VERCEL_URL
+  )
+
+  if (!hasResendApiKey || !hasMailFrom || !hasPublicSiteUrl) {
+    redirect('/admin?mail_test=config_missing')
+  }
+
+  const recipient = adminProfile?.email || user.email || ''
+  if (!recipient) {
+    redirect('/admin?mail_test=no_email')
+  }
+
+  const displayName =
+    adminProfile?.full_name || adminProfile?.company_name || recipient
+
+  const result = await sendTicketNotificationEmail({
+    to: [recipient],
+    subject: 'Testmail ticketnotificaties',
+    text: `Hallo ${displayName},\n\nDit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.`,
+    html: `<p>Hallo ${displayName},</p><p>Dit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.</p>`,
+  })
+
+  if (!result.sent) {
+    redirect('/admin?mail_test=failed')
+  }
+
+  redirect('/admin?mail_test=sent')
+}
 
 function getStatusLabel(status: string | null) {
   switch (status) {
@@ -33,7 +90,14 @@ function getStatusLabel(status: string | null) {
   }
 }
 
-export default async function AdminPage() {
+type Props = {
+  searchParams?: Promise<{
+    mail_test?: string
+  }>
+}
+
+export default async function AdminPage({ searchParams }: Props) {
+  const resolvedSearchParams = searchParams ? await searchParams : {}
   const supabase = await createClient()
 
   const {
@@ -208,9 +272,32 @@ export default async function AdminPage() {
     hasPublicSiteUrl ? null : 'NEXT_PUBLIC_SITE_URL of SITE_URL of VERCEL_URL',
   ].filter(Boolean)
 
+  const mailTestState = resolvedSearchParams.mail_test
+
   return (
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        {mailTestState === 'sent' && (
+          <section className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            Testmail succesvol verzonden.
+          </section>
+        )}
+        {mailTestState === 'config_missing' && (
+          <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+            Testmail niet verzonden: ticketmail-config is niet volledig.
+          </section>
+        )}
+        {mailTestState === 'no_email' && (
+          <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+            Testmail niet verzonden: geen e-mailadres gevonden voor jouw profiel.
+          </section>
+        )}
+        {mailTestState === 'failed' && (
+          <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            Testmail verzenden is mislukt.
+          </section>
+        )}
+
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
             <div className="absolute inset-0 opacity-30">
@@ -376,6 +463,13 @@ export default async function AdminPage() {
                   <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
                     Ontbreekt: {missingTicketMailConfig.join(' · ')}
                   </p>
+                )}
+                {ticketMailEnabled && (
+                  <form action={sendTicketTestEmail} className="mt-2">
+                    <button type="submit" className="btn-secondary">
+                      Verstuur testmail
+                    </button>
+                  </form>
                 )}
               </div>
 
