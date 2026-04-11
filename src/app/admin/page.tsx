@@ -441,28 +441,51 @@ export default async function AdminPage({ searchParams }: Props) {
                 </p>
                 <p
                   className={`mt-1.5 text-xs font-semibold ${
-                    ticketMailEnabled ? 'text-emerald-300' : 'text-amber-300'
+                    ticketMailEnabled ? 'text-emerald-300' : 'text-slate-400'
                   }`}
                 >
-                  {ticketMailEnabled ? 'Actief' : 'Niet volledig geconfigureerd'}
+                  {ticketMailEnabled ? 'Actief' : 'Niet ingeschakeld (optioneel)'}
                 </p>
                 {!ticketMailEnabled && (
-                  <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
-                    Ontbreekt: {missingTicketMailConfig.join(' · ')}
-                  </p>
+                  <>
+                    <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
+                      Mail-notificaties zijn optioneel. Tickets werken zonder e-mails.
+                    </p>
+                    <p className="mt-2 text-[11px] leading-4 text-[var(--text-soft)]">
+                      <strong>Inschakelen:</strong>
+                    </p>
+                    <ol className="mt-1 list-inside list-decimal space-y-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+                      <li>
+                        Maak account op{' '}
+                        <a
+                          href="https://resend.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sky-300 underline hover:text-sky-200"
+                        >
+                          resend.com
+                        </a>
+                      </li>
+                      <li>
+                        Kopieer je API key en e-mailadres
+                      </li>
+                      <li>
+                        Ga naar Vercel → Project → Settings → Environment Variables
+                      </li>
+                      <li>
+                        Voeg toe:<br />
+                        <code className="bg-[var(--bg-card-2)] px-1 py-0.5 text-[10px]">RESEND_API_KEY</code> en{' '}
+                        <code className="bg-[var(--bg-card-2)] px-1 py-0.5 text-[10px]">TICKET_NOTIFICATIONS_FROM</code>
+                      </li>
+                      <li>Herstart je app</li>
+                    </ol>
+                  </>
                 )}
                 {ticketMailEnabled && warningTicketMailConfig.length > 0 && (
                   <p className="mt-1 text-[11px] leading-4 text-amber-300">
                     Let op: {warningTicketMailConfig.join(' · ')}
                   </p>
                 )}
-                <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
-                  Na wijziging van env-vars: herstart de dev-server.
-                </p>
-                <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
-                  Detectie: API sleutel = {ticketMailConfig.apiKeyKey || 'niet gevonden'} · From ={' '}
-                  {ticketMailConfig.fromAddressKey || 'niet gevonden'}
-                </p>
                 {ticketMailEnabled && (
                   <form action={sendTicketTestEmail} className="mt-2">
                     <button type="submit" className="btn-secondary">
