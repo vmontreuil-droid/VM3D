@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowUpDown, Edit, Eye, PlusCircle, Ticket } from 'lucide-react'
+import { ArrowUpDown, Edit, Eye } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import AdminCustomerActions from './admin-customer-actions'
 
@@ -330,28 +330,6 @@ export default function CustomerList({
                         </span>
                         <span className="pr-1">Bewerk</span>
                         <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
-                      </Link>
-
-                      <Link
-                        href={`/admin/projects/new?customer=${customer.id}`}
-                        className={getActionButtonClass('orange')}
-                      >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
-                          <PlusCircle className="h-3 w-3" />
-                        </span>
-                        <span className="pr-1">Nieuwe werf</span>
-                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
-                      </Link>
-
-                      <Link
-                        href={`/dashboard/tickets?customer=${customer.id}`}
-                        className={getActionButtonClass('green')}
-                      >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
-                          <Ticket className="h-3 w-3" />
-                        </span>
-                        <span className="pr-1">Ticket</span>
-                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
                       </Link>
 
                       <AdminCustomerActions

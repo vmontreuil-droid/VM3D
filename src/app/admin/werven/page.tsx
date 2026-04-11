@@ -13,9 +13,7 @@ import {
   Download,
   FolderOpen,
   PlusCircle,
-  Ticket,
   UploadCloud,
-  Users,
   Wallet,
 } from 'lucide-react'
 
@@ -135,7 +133,6 @@ export default async function AdminWervenPage() {
   }
 
   const totalProjects = projectsWithProfiles.length
-  const linkedCustomers = uniqueUserIds.length
   const activeProjects = projectsWithProfiles.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
@@ -219,11 +216,9 @@ export default async function AdminWervenPage() {
   const latestProject = projectsWithProfiles[0] ?? null
   const latestProjectLabel =
     latestProject?.title || latestProject?.address || '—'
-  const latestCustomerLabel =
-    latestProject?.profiles?.company_name ||
-    latestProject?.profiles?.full_name ||
-    latestProject?.profiles?.email ||
-    '—'
+  const latestProjectDateLabel = latestProject?.created_at
+    ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
+    : '—'
 
   const highestValueProject =
     [...projectsWithProfiles].sort(
@@ -320,14 +315,14 @@ export default async function AdminWervenPage() {
                     </div>
                   </div>
 
-                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
-                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{linkedCustomers}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Ingediend</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
                       </div>
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
-                        <Users className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <BarChart3 className="h-4.5 w-4.5 text-amber-400" />
                       </div>
                     </div>
                   </div>
@@ -456,26 +451,6 @@ export default async function AdminWervenPage() {
                 </Link>
 
                 <Link
-                  href="/admin/customers"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Users className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Klanten
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Open alle gekoppelde klantfiches.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
                   href="/admin/projects/statistics"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
@@ -490,26 +465,6 @@ export default async function AdminWervenPage() {
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
                         Bekijk cijfers, voortgang en omzet.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/tickets"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Ticket className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Tickets
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Volg supportvragen en meldingen op.
                       </span>
                     </span>
                   </div>
@@ -589,7 +544,7 @@ export default async function AdminWervenPage() {
                       {latestProjectLabel}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      {latestCustomerLabel}
+                      Aangemaakt op {latestProjectDateLabel}
                     </p>
                   </div>
 

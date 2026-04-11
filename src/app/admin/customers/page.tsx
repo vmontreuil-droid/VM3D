@@ -13,7 +13,6 @@ import {
   FolderOpen,
   MapPin,
   PlusCircle,
-  Ticket,
   UserCheck,
   Users,
   Wallet,
@@ -417,26 +416,6 @@ export default async function AdminCustomersPage() {
                 </Link>
 
                 <Link
-                  href="/admin/projects/new"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <FolderOpen className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Nieuwe werf
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Start snel een nieuw dossier voor een klant.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
                   href="/admin/customers/statistics"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
@@ -451,26 +430,6 @@ export default async function AdminCustomersPage() {
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
                         Bekijk groei, spreiding en activiteit.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/tickets"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Ticket className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Tickets
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Volg supportvragen en meldingen op.
                       </span>
                     </span>
                   </div>

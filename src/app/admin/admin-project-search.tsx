@@ -12,7 +12,6 @@ import {
   Eye,
   FileText,
   UploadCloud,
-  Users,
   Wallet,
 } from 'lucide-react'
 
@@ -341,7 +340,7 @@ export default function AdminProjectSearch({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Zoek werf, klant, locatie..."
+              placeholder="Zoek werf, locatie, status..."
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
@@ -352,7 +351,6 @@ export default function AdminProjectSearch({
             >
               <option value="title">Sorteer op naam</option>
               <option value="address">Sorteer op locatie</option>
-              <option value="klantEmail">Sorteer op klant</option>
               <option value="status">Sorteer op status</option>
               <option value="price">Sorteer op prijs</option>
               <option value="created_at">Sorteer op datum</option>
@@ -444,7 +442,7 @@ export default function AdminProjectSearch({
 
                     <div className="mt-1.5 flex flex-wrap gap-1.5 text-[10px] text-[var(--text-soft)]">
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                        Klant: {project.klantEmail || 'Onbekend'}
+                        Bestanden: {fileCountByProject.get(project.id) || 0}
                       </span>
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
                         Prijs: {formatPrice(project.price, project.currency)}
@@ -500,18 +498,6 @@ export default function AdminProjectSearch({
                       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-fuchsia-400/80" />
                     </Link>
 
-                    {project.userId ? (
-                      <Link
-                        href={`/admin/customers/${project.userId}`}
-                        className={getActionButtonClass('green')}
-                      >
-                        <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
-                          <Users className="h-3 w-3" />
-                        </span>
-                        <span className="pr-1">Klant</span>
-                        <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
-                      </Link>
-                    ) : null}
                   </div>
                 </div>
               ))}
