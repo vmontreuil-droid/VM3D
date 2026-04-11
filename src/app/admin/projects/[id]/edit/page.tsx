@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { redirect, notFound } from 'next/navigation'
+import { ArrowLeft, FolderOpen, Users } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -169,30 +170,8 @@ export default async function EditAdminProjectPage({ params }: Props) {
 
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={`/admin/projects/${project.id}`}
-                    className="btn-secondary"
-                  >
-                    ← Terug naar werf
-                  </Link>
-
-                  <Link href="/admin" className="btn-secondary">
-                    Werven
-                  </Link>
-
-                  {project.user_id ? (
-                    <Link
-                      href={`/admin/customers/${project.user_id}`}
-                      className="btn-secondary"
-                    >
-                      Klant openen
-                    </Link>
-                  ) : null}
-                </div>
-
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Werf bewerken
+                  Adminportaal
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
@@ -200,49 +179,68 @@ export default async function EditAdminProjectPage({ params }: Props) {
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Pas werfgegevens aan en wijzig indien nodig de gekoppelde
-                  klant, status of prijs.
+                  Pas status, prijs, locatie en klantkoppeling van deze werf aan
+                  vanuit hetzelfde premium adminoverzicht.
                 </p>
+
+                <div className="mt-4 max-w-[280px]">
+                  <Link
+                    href={`/admin/projects/${project.id}`}
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Werffiche
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar dit werfoverzicht
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
-              <div className="flex w-full flex-col gap-4 xl:w-auto">
-                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
-                  <div className="flex items-center gap-4 px-4 py-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-xl font-bold text-white shadow-sm">
-                      EP
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Module
-                      </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-                        Werf bewerken
-                      </p>
-                      <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Inhoud, koppeling en status
-                      </p>
+              <div className="w-full xl:max-w-[420px]">
+                <div className="grid w-full grid-cols-2 gap-2">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          Status
+                        </p>
+                        <p className="mt-1 truncate text-sm font-semibold text-[var(--accent)]">
+                          {getStatusLabel(project.status)}
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="grid w-full grid-cols-2 gap-3 xl:w-auto">
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">
-                      Huidige status
-                    </p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {getStatusLabel(project.status)}
-                    </p>
-                  </div>
-
-                  <div className="card-mini text-center">
-                    <p className="text-xs text-[var(--text-muted)]">
-                      Munteenheid
-                    </p>
-                    <p className="text-lg font-semibold text-[var(--text-main)]">
-                      {project.currency || 'EUR'}
-                    </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          Koppeling
+                        </p>
+                        <p
+                          className="mt-1 truncate text-sm font-semibold text-green-500"
+                          title={currentCustomerLabel}
+                        >
+                          {currentCustomerLabel}
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
+                        <Users className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

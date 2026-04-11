@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { ArrowLeft, PlusCircle, Users } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -220,30 +221,91 @@ export default async function NewCustomerPage() {
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-        <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="flex flex-col gap-3 border-b border-[var(--border-soft)] px-4 py-3 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <Link href="/admin/customers" className="btn-secondary">
-                  ← Terug naar klanten
-                </Link>
+      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
 
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-                  Admin
+            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
                 </p>
+
+                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
+                  Nieuwe klant
+                </h1>
+
+                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
+                  Maak een nieuwe klantfiche aan en vul contact-, btw- en
+                  facturatiegegevens centraal in vanuit hetzelfde premium
+                  adminoverzicht.
+                </p>
+
+                <div className="mt-4 max-w-[260px]">
+                  <Link
+                    href="/admin/customers"
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Klanten
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar klantenoverzicht
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
-              <h1 className="mt-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                Nieuwe klant
-              </h1>
-              <p className="mt-1.5 text-sm text-[var(--text-soft)]">
-                Maak een nieuwe klant aan en vul gegevens automatisch in via EU-btw-nummer.
-              </p>
+              <div className="w-full xl:max-w-[400px]">
+                <div className="grid w-full grid-cols-2 gap-2">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          Nieuwe fiche
+                        </p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">
+                          Start
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <PlusCircle className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          Klanttype
+                        </p>
+                        <p className="mt-1 text-lg font-semibold text-green-500">
+                          Zakelijk
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                        <Users className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="px-4 py-4">
+          <div className="px-4 py-4 sm:px-5">
             <CustomerForm action={createCustomer} />
           </div>
         </section>

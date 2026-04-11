@@ -1,5 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
+import { ArrowLeft, Building2, Mail } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -288,54 +289,89 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
           </section>
         )}
 
-        <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={`/admin/customers/${customer.id}`}
-                    className="btn-secondary"
-                  >
-                    ← Terug naar klant
-                  </Link>
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
 
-                  <Link href="/admin/customers" className="btn-secondary">
-                    Klantenlijst
-                  </Link>
-                </div>
-
-                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-                  Klant bewerken
+            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
                   {customer.company_name || customer.full_name || 'Klant'}
                 </h1>
 
-                <p className="mt-2.5 max-w-3xl text-sm text-[var(--text-soft)]">
-                  Pas klantgegevens aan, haal btw-gegevens opnieuw op en werk de
-                  locatie op kaart direct bij.
+                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
+                  Werk klantgegevens, btw-info en facturatiegegevens bij vanuit
+                  dezelfde verfijnde adminomgeving.
                 </p>
+
+                <div className="mt-4 max-w-[280px]">
+                  <Link
+                    href={`/admin/customers/${customer.id}`}
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          Klantfiche
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          Terug naar dit klantoverzicht
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 xl:w-[320px] xl:grid-cols-1">
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    BTW-nummer
-                  </p>
-                  <p className="mt-1.5 text-sm font-semibold text-[var(--text-main)]">
-                    {customer.vat_number || '—'}
-                  </p>
-                </div>
+              <div className="w-full xl:max-w-[420px]">
+                <div className="grid w-full grid-cols-2 gap-2">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          BTW-nummer
+                        </p>
+                        <p
+                          className="mt-1 truncate text-sm font-semibold text-[var(--accent)]"
+                          title={customer.vat_number || 'Niet ingevuld'}
+                        >
+                          {customer.vat_number || 'Niet ingevuld'}
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <Building2 className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    E-mail
-                  </p>
-                  <p className="mt-1.5 break-all text-sm font-semibold text-[var(--text-main)]">
-                    {customer.email || '—'}
-                  </p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          E-mail
+                        </p>
+                        <p
+                          className="mt-1 truncate text-sm font-semibold text-green-500"
+                          title={customer.email || 'Niet ingevuld'}
+                        >
+                          {customer.email || 'Niet ingevuld'}
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
+                        <Mail className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
