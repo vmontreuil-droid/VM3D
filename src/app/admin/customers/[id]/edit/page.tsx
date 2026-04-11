@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Building2,
   CheckCircle2,
+  Clock3,
   CircleDollarSign,
   FolderOpen,
   Mail,
@@ -301,6 +302,9 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
     .eq('user_id', id)
     .order('created_at', { ascending: false })
 
+  const { data: authUserData } = await adminSupabase.auth.admin.getUserById(id)
+  const authUser = authUserData?.user ?? null
+
   const safeProjects = projects ?? []
   const recentProjects = safeProjects.slice(0, 4)
   const totalProjects = safeProjects.length
@@ -325,6 +329,12 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const latestProjectDate = latestProject?.created_at
     ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
     : '—'
+  const lastOnlineLabel = authUser?.last_sign_in_at
+    ? new Date(authUser.last_sign_in_at).toLocaleString('nl-BE', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      })
+    : 'Nog niet ingelogd'
   const contactChannels = [
     customer.email,
     customer.phone,
@@ -426,23 +436,23 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                 </p>
               </div>
 
-              <div className="w-full xl:max-w-[420px]">
-                <div className="grid w-full grid-cols-2 gap-2">
-                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+              <div className="w-full xl:max-w-[640px]">
+                <div className="grid w-full gap-2 sm:grid-cols-3">
+                  <div className="overflow-hidden rounded-xl border border-blue-500/30 bg-[linear-gradient(135deg,rgba(59,130,246,0.10),rgba(59,130,246,0.03))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div className="min-w-0">
                         <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
-                          BTW-nummer
+                          Mobiel
                         </p>
                         <p
-                          className="mt-1 truncate text-sm font-semibold text-[var(--accent)]"
-                          title={customer.vat_number || 'Niet ingevuld'}
+                          className="mt-1 truncate text-sm font-semibold text-blue-300"
+                          title={customer.mobile || 'Niet ingevuld'}
                         >
-                          {customer.vat_number || 'Niet ingevuld'}
+                          {customer.mobile || 'Niet ingevuld'}
                         </p>
                       </div>
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/10">
-                        <Building2 className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
+                        <PhoneCall className="h-4.5 w-4.5 text-blue-300" />
                       </div>
                     </div>
                   </div>
@@ -462,6 +472,25 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
                       </div>
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
                         <Mail className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(139,92,246,0.10),rgba(139,92,246,0.03))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">
+                          Laatst online
+                        </p>
+                        <p
+                          className="mt-1 truncate text-sm font-semibold text-violet-200"
+                          title={lastOnlineLabel}
+                        >
+                          {lastOnlineLabel}
+                        </p>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10">
+                        <Clock3 className="h-4.5 w-4.5 text-violet-300" />
                       </div>
                     </div>
                   </div>
