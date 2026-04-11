@@ -17,7 +17,10 @@ import AdminSearchPanel from '@/app/admin/admin-search-panel'
 import AdminUploadPanel from '@/app/admin/admin-upload-panel'
 import ProjectMap from '@/components/projects/project-map'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
+import {
+  getTicketNotificationConfig,
+  sendTicketNotificationEmail,
+} from '@/lib/ticket-notifications'
 
 async function sendTicketTestEmail() {
   'use server'
@@ -41,15 +44,9 @@ async function sendTicketTestEmail() {
     redirect('/dashboard')
   }
 
-  const hasResendApiKey = Boolean(process.env.RESEND_API_KEY)
-  const hasMailFrom = Boolean(
-    process.env.TICKET_NOTIFICATIONS_FROM || process.env.RESEND_FROM_EMAIL
-  )
-  const hasPublicSiteUrl = Boolean(
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || process.env.VERCEL_URL
-  )
+  const config = getTicketNotificationConfig()
 
-  if (!hasResendApiKey || !hasMailFrom || !hasPublicSiteUrl) {
+  if (!config.enabled) {
     redirect('/admin?mail_test=config_missing')
   }
 
@@ -257,20 +254,10 @@ export default async function AdminPage({ searchParams }: Props) {
 
   const ticketCount = ticketCountRaw ?? 0
   const subscriptionCount = 0
-  const hasResendApiKey = Boolean(process.env.RESEND_API_KEY)
-  const hasMailFrom = Boolean(
-    process.env.TICKET_NOTIFICATIONS_FROM || process.env.RESEND_FROM_EMAIL
-  )
-  const hasPublicSiteUrl = Boolean(
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || process.env.VERCEL_URL
-  )
-  const ticketMailEnabled = hasResendApiKey && hasMailFrom && hasPublicSiteUrl
-
-  const missingTicketMailConfig = [
-    hasResendApiKey ? null : 'RESEND_API_KEY',
-    hasMailFrom ? null : 'TICKET_NOTIFICATIONS_FROM of RESEND_FROM_EMAIL',
-    hasPublicSiteUrl ? null : 'NEXT_PUBLIC_SITE_URL of SITE_URL of VERCEL_URL',
-  ].filter(Boolean)
+  const ticketMailConfig = getTicketNotificationConfig()
+  const ticketMailEnabled = ticketMailConfig.enabled
+  const missingTicketMailConfig = ticketMailConfig.missing
+  const warningTicketMailConfig = ticketMailConfig.warnings
 
   const mailTestState = resolvedSearchParams.mail_test
 
@@ -464,6 +451,14 @@ export default async function AdminPage({ searchParams }: Props) {
                     Ontbreekt: {missingTicketMailConfig.join(' · ')}
                   </p>
                 )}
+                {ticketMailEnabled && warningTicketMailConfig.length > 0 && (
+                  <p className="mt-1 text-[11px] leading-4 text-amber-300">
+                    Let op: {warningTicketMailConfig.join(' · ')}
+                  </p>
+                )}
+                <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
+                  Na wijziging van env-vars: herstart de dev-server.
+                </p>
                 {ticketMailEnabled && (
                   <form action={sendTicketTestEmail} className="mt-2">
                     <button type="submit" className="btn-secondary">
