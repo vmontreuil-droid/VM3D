@@ -1,5 +1,14 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import {
+  Building2,
+  CreditCard,
+  KeyRound,
+  Mail,
+  MapPinned,
+  MessageSquare,
+  ShieldCheck,
+} from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import CustomerMap from '@/components/customers/customer-map'
 import { createClient } from '@/lib/supabase/server'
@@ -99,6 +108,9 @@ export default async function AdminCustomerDetailPage({
     .eq('user_id', id)
     .order('created_at', { ascending: false })
 
+  const { data: authUserData } = await adminSupabase.auth.admin.getUserById(id)
+  const authUser = authUserData?.user ?? null
+
   const safeProjects = projects ?? []
 
   const totalProjects = safeProjects.length
@@ -119,6 +131,11 @@ export default async function AdminCustomerDetailPage({
   const latestProjectDate = latestProject?.created_at
     ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
     : '—'
+  const lastSignInDate = authUser?.last_sign_in_at
+    ? new Date(authUser.last_sign_in_at).toLocaleDateString('nl-BE')
+    : null
+  const invitedNotSignedIn = !lastSignInDate
+  const emailConfirmed = Boolean(authUser?.email_confirmed_at)
 
   const fullAddress =
     [
@@ -151,6 +168,18 @@ export default async function AdminCustomerDetailPage({
   ]
     .filter(Boolean)
     .join(' ')
+  const contactName = managerName || customer.full_name || '—'
+  const contactTitle = display(customer.salutation)
+  const invoiceEmailDisplay = customer.invoice_email || customer.email
+  const shellClass =
+    'flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm'
+  const sectionClass =
+    'flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm'
+  const sectionBodyClass = 'flex-1 space-y-4 px-4 py-4 sm:px-5'
+  const sectionHeadingClass =
+    'text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]'
+  const sectionTitleClass =
+    'mt-1 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]'
 
   const updated = resolvedSearchParams?.updated === '1'
   const created = resolvedSearchParams?.created === '1'
@@ -328,16 +357,21 @@ export default async function AdminCustomerDetailPage({
           </div>
 
           <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Snelle info
-              </p>
+            <section className={sectionClass}>
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className={sectionHeadingClass}>Overzicht</p>
+                <h2 className={sectionTitleClass}>
+                  <Building2 className="h-4 w-4 text-[var(--accent)]" />
+                  Snelle info
+                </h2>
+              </div>
 
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className={`${sectionBodyClass} !space-y-0`}>
+                <div className="grid gap-3 sm:grid-cols-2">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Contact</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {display(customer.full_name)}
+                    {contactName}
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
                     {display(customer.email)}
@@ -367,21 +401,27 @@ export default async function AdminCustomerDetailPage({
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Facturatie</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)] break-all">
-                    {display(customer.invoice_email)}
+                    {display(invoiceEmailDisplay)}
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    {display(customer.invoice_send_method)}
+                    {getInvoiceSendMethodLabel(customer.invoice_send_method)}
                   </p>
                 </div>
               </div>
-            </div>
+              </div>
+            </section>
 
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Snelle acties
-              </p>
+            <section className={sectionClass}>
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className={sectionHeadingClass}>Acties</p>
+                <h2 className={sectionTitleClass}>
+                  <ShieldCheck className="h-4 w-4 text-[var(--accent)]" />
+                  Snelle acties
+                </h2>
+              </div>
 
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className={`${sectionBodyClass} !space-y-0`}>
+                <div className="grid gap-3 sm:grid-cols-2">
                 <Link
                   href={`/admin/customers/${customer.id}/edit`}
                   className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-4 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
@@ -441,23 +481,26 @@ export default async function AdminCustomerDetailPage({
                   </div>
                 )}
               </div>
-            </div>
+              </div>
+            </section>
           </div>
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-4">
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Bedrijf
+            <section className={shellClass}>
+              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+                <p className={sectionHeadingClass}>Bedrijfsfiche</p>
+                <h2 className={sectionTitleClass}>
+                  <Building2 className="h-4 w-4 text-[var(--accent)]" />
+                  Bedrijf & aanspreekpunt
                 </h2>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Hoofdgegevens van de onderneming en verantwoordelijke.
+                  Kerngegevens van de onderneming en contactpersoon.
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
+              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Bedrijf</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
@@ -466,11 +509,16 @@ export default async function AdminCustomerDetailPage({
                 </div>
 
                 <div className="card-mini">
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Contactpersoon
-                  </p>
+                  <p className="text-xs text-[var(--text-muted)]">Aanspreektitel</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {display(customer.full_name)}
+                    {contactTitle}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Contactpersoon</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {contactName}
                   </p>
                 </div>
 
@@ -520,9 +568,11 @@ export default async function AdminCustomerDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
+            <section className={shellClass}>
+              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+                <p className={sectionHeadingClass}>Communicatie</p>
+                <h2 className={sectionTitleClass}>
+                  <Mail className="h-4 w-4 text-[var(--accent)]" />
                   Contact & verzending
                 </h2>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
@@ -530,7 +580,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
+              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">E-mail</p>
                   <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
@@ -543,7 +593,7 @@ export default async function AdminCustomerDetailPage({
                     Facturatie e-mail
                   </p>
                   <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
-                    {display(customer.invoice_email)}
+                    {display(invoiceEmailDisplay)}
                   </p>
                 </div>
 
@@ -557,7 +607,7 @@ export default async function AdminCustomerDetailPage({
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Taal</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {display(customer.language)}
+                    {getLanguageLabel(customer.language)}
                   </p>
                 </div>
 
@@ -587,7 +637,7 @@ export default async function AdminCustomerDetailPage({
                     Verstuurmethode
                   </p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {display(customer.invoice_send_method)}
+                    {getInvoiceSendMethodLabel(customer.invoice_send_method)}
                   </p>
                 </div>
 
@@ -623,9 +673,11 @@ export default async function AdminCustomerDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
+            <section className={shellClass}>
+              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+                <p className={sectionHeadingClass}>Financieel</p>
+                <h2 className={sectionTitleClass}>
+                  <CreditCard className="h-4 w-4 text-[var(--accent)]" />
                   Facturatie
                 </h2>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
@@ -633,7 +685,7 @@ export default async function AdminCustomerDetailPage({
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
+              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">
                     Betalingstermijn
@@ -689,17 +741,19 @@ export default async function AdminCustomerDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Adres & opmerkingen
+            <section className={shellClass}>
+              <div className="border-b border-[var(--border-soft)] px-4 py-4 sm:px-5">
+                <p className={sectionHeadingClass}>Locatie</p>
+                <h2 className={sectionTitleClass}>
+                  <MapPinned className="h-4 w-4 text-[var(--accent)]" />
+                  Adresgegevens
                 </h2>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Volledig adres en interne notities.
+                  Volledig adres van de klant.
                 </p>
               </div>
 
-              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
+              <div className="grid gap-3 px-4 py-4 sm:grid-cols-2 sm:px-5">
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Straat</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
@@ -751,20 +805,16 @@ export default async function AdminCustomerDetailPage({
                   </p>
                 </div>
 
-                <div className="sm:col-span-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4">
-                  <p className="text-xs text-[var(--text-muted)]">Commentaar</p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--text-main)]">
-                    {display(customer.comments)}
-                  </p>
-                </div>
               </div>
             </section>
           </div>
 
           <div className="space-y-4">
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
+            <section className={shellClass}>
+              <div className="border-b border-[var(--border-soft)] px-4 py-4">
+                <p className={sectionHeadingClass}>Kaart</p>
+                <h2 className={sectionTitleClass}>
+                  <MapPinned className="h-4 w-4 text-[var(--accent)]" />
                   Locatie
                 </h2>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
@@ -781,10 +831,12 @@ export default async function AdminCustomerDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] px-4 py-3">
+            <section className={shellClass}>
+              <div className="flex items-center justify-between gap-3 border-b border-[var(--border-soft)] px-4 py-4">
                 <div>
-                  <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                  <p className={sectionHeadingClass}>Projecten</p>
+                  <h2 className={sectionTitleClass}>
+                    <ShieldCheck className="h-4 w-4 text-[var(--accent)]" />
                     Werven
                   </h2>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
@@ -854,9 +906,109 @@ export default async function AdminCustomerDetailPage({
                 )}
               </div>
             </section>
+
+            <section className={sectionClass}>
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className={sectionHeadingClass}>Notities</p>
+                <h2 className={sectionTitleClass}>
+                  <MessageSquare className="h-4 w-4 text-[var(--accent)]" />
+                  Interne opmerkingen
+                </h2>
+              </div>
+              <div className={sectionBodyClass}>
+                <p className="whitespace-pre-wrap rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-main)]">
+                  {display(customer.comments)}
+                </p>
+              </div>
+            </section>
+
+            <section className={sectionClass}>
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className={sectionHeadingClass}>Toegang</p>
+                <h2 className={sectionTitleClass}>
+                  <KeyRound className="h-4 w-4 text-[var(--accent)]" />
+                  Login & wachtwoord
+                </h2>
+              </div>
+
+              <div className={`${sectionBodyClass} !space-y-3`}>
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Login e-mail</p>
+                  <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
+                    {display(customer.email)}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Accountstatus</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {invitedNotSignedIn
+                      ? 'Klant kiest zelf een wachtwoord via uitnodigingsmail'
+                      : 'Reeds aangemeld'}
+                  </p>
+                  {invitedNotSignedIn && (
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Verstuur opnieuw via bewerken als de klant nog geen login deed.
+                    </p>
+                  )}
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Laatste login</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {lastSignInDate || 'Nog geen login geregistreerd'}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">E-mail bevestigd</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {emailConfirmed ? 'Ja' : 'Nee'}
+                  </p>
+                </div>
+
+                <Link
+                  href={`/admin/customers/${customer.id}/edit`}
+                  className="btn-secondary text-center"
+                >
+                  Login-instellingen aanpassen
+                </Link>
+              </div>
+            </section>
           </div>
         </section>
       </div>
     </AppShell>
   )
+}
+
+function getLanguageLabel(language: string | null) {
+  const normalized = language?.toLowerCase()
+
+  switch (normalized) {
+    case 'nl':
+      return 'Nederlands'
+    case 'fr':
+      return 'Frans'
+    case 'en':
+    case 'eng':
+      return 'Engels'
+    case 'de':
+      return 'Duits'
+    default:
+      return display(language)
+  }
+}
+
+function getInvoiceSendMethodLabel(method: string | null) {
+  switch (method) {
+    case 'email':
+      return 'E-mail'
+    case 'peppol':
+      return 'PEPPOL'
+    case 'post':
+      return 'Post'
+    default:
+      return display(method)
+  }
 }

@@ -1,6 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Building2, Mail } from 'lucide-react'
+import { ArrowLeft, Building2, FolderOpen, Mail, PlusCircle } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -283,6 +283,22 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
     notFound()
   }
 
+  const { data: projects } = await adminSupabase
+    .from('projects')
+    .select('id, title, status, created_at')
+    .eq('user_id', id)
+    .order('created_at', { ascending: false })
+
+  const safeProjects = projects ?? []
+  const recentProjects = safeProjects.slice(0, 4)
+  const totalProjects = safeProjects.length
+  const activeProjects = safeProjects.filter(
+    (project: any) =>
+      project.status === 'in_behandeling' ||
+      project.status === 'klaar_voor_betaling'
+  ).length
+  const latestProject = safeProjects[0] ?? null
+
   let logoPreviewUrl: string | null = null
 
   if (customer.logo_path) {
@@ -417,6 +433,109 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
             </div>
           </div>
 
+          <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+            <section className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm">
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Klantenfiche
+                </p>
+                <h2 className="mt-1 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
+                  <Building2 className="h-4 w-4 text-[var(--accent)]" />
+                  Fiche bewerken
+                </h2>
+              </div>
+
+              <div className="flex-1 space-y-3 px-4 py-4 sm:px-5">
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Aantal werven</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {totalProjects}
+                  </p>
+                </div>
+
+                <div className="card-mini">
+                  <p className="text-xs text-[var(--text-muted)]">Actieve werven</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                    {activeProjects}
+                  </p>
+                </div>
+
+                <Link
+                  href={`/admin/customers/${customer.id}`}
+                  className="btn-secondary text-center"
+                >
+                  Open volledige klantenfiche
+                </Link>
+              </div>
+            </section>
+
+            <section className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm">
+              <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Werven
+                </p>
+                <h2 className="mt-1 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
+                  <FolderOpen className="h-4 w-4 text-[var(--accent)]" />
+                  Sneltoetsen
+                </h2>
+              </div>
+
+              <div className="flex-1 space-y-3 px-4 py-4 sm:px-5">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Link
+                    href={`/admin/projects/new?customer=${customer.id}`}
+                    className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="flex items-center gap-2">
+                      <PlusCircle className="h-4 w-4 text-[var(--accent)]" />
+                      Nieuwe werf
+                    </span>
+                  </Link>
+
+                  {latestProject ? (
+                    <Link
+                      href={`/admin/projects/${latestProject.id}`}
+                      className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                    >
+                      Laatste werf openen
+                    </Link>
+                  ) : (
+                    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 text-sm text-[var(--text-soft)]">
+                      Nog geen werven beschikbaar
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  {recentProjects.length === 0 ? (
+                    <p className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 text-sm text-[var(--text-soft)]">
+                      Geen recente werven gevonden voor deze klant.
+                    </p>
+                  ) : (
+                    recentProjects.map((project: any) => (
+                      <Link
+                        key={project.id}
+                        href={`/admin/projects/${project.id}`}
+                        className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80"
+                      >
+                        <p className="truncate text-sm font-semibold text-[var(--text-main)]">
+                          {project.title || 'Zonder titel'}
+                        </p>
+                        <p className="mt-1 text-xs text-[var(--text-soft)]">
+                          {getProjectStatusLabel(project.status)}
+                          {' • '}
+                          {project.created_at
+                            ? new Date(project.created_at).toLocaleDateString('nl-BE')
+                            : '—'}
+                        </p>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              </div>
+            </section>
+          </div>
+
           <div className="px-4 py-4 sm:px-5">
             <CustomerEditForm
               customer={customer}
@@ -428,4 +547,19 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
       </div>
     </AppShell>
   )
+}
+
+function getProjectStatusLabel(status: string | null) {
+  switch (status) {
+    case 'ingediend':
+      return 'Ingediend'
+    case 'in_behandeling':
+      return 'In behandeling'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
+    case 'afgerond':
+      return 'Afgerond'
+    default:
+      return 'Onbekend'
+  }
 }
