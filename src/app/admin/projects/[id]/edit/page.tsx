@@ -96,6 +96,11 @@ function getStatusLabel(status: string | null) {
 
 export default async function EditAdminProjectPage({ params }: Props) {
   const { id } = await params
+  const projectId = Number(id)
+
+  if (Number.isNaN(projectId)) {
+    notFound()
+  }
 
   const supabase = await createClient()
 
@@ -121,18 +126,8 @@ export default async function EditAdminProjectPage({ params }: Props) {
 
   const { data: project, error: projectError } = await adminSupabase
     .from('projects')
-    .select(
-      `
-        *,
-        profiles (
-          id,
-          full_name,
-          company_name,
-          email
-        )
-      `
-    )
-    .eq('id', id)
+    .select('*')
+    .eq('id', projectId)
     .single()
 
   if (projectError || !project) {
