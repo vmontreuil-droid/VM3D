@@ -56,21 +56,49 @@ async function sendTicketTestEmail() {
   }
 
   const usesResendSandboxSender = config.fromAddress.endsWith('@resend.dev')
-  const recipient = usesResendSandboxSender ? 'delivered@resend.dev' : inboxRecipient
+  const recipientCandidates = usesResendSandboxSender
+    ? ['delivered@resend.dev', inboxRecipient]
+    : [inboxRecipient]
 
   const displayName =
     adminProfile?.full_name || adminProfile?.company_name || inboxRecipient
 
-  const result = await sendTicketNotificationEmail({
-    to: [recipient],
-    subject: 'Testmail ticketnotificaties',
-    text: `Hallo ${displayName},\n\nDit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.`,
-    html: `<p>Hallo ${displayName},</p><p>Dit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.</p>`,
-  })
+  let result:
+    | Awaited<ReturnType<typeof sendTicketNotificationEmail>>
+    | null = null
 
-  if (!result.sent) {
-    const errorDetail = encodeURIComponent(result.detail || 'Onbekende fout')
-    redirect(`/admin?mail_test=failed&mail_test_detail=${errorDetail}`)
+  for (const candidate of recipientCandidates) {
+    const attempt = await sendTicketNotificationEmail({
+      to: [candidate],
+      subject: 'Testmail ticketnotificaties',
+      text: `Hallo ${displayName},\n\nDit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.`,
+      html: `<p>Hallo ${displayName},</p><p>Dit is een testmail om te bevestigen dat ticketnotificaties correct geconfigureerd zijn.</p>`,
+    })
+
+    result = attempt
+    if (attempt.sent) {
+      break
+    }
+  }
+
+  if (!result || !result.sent) {
+    const detail = result?.detail || 'Onbekende fout'
+    const detailLower = detail.toLowerCase()
+
+    if (detailLower.includes('own email address')) {
+      redirect('/admin?mail_test=failed_own_email')
+    }
+
+    if (detailLower.includes('domain is not verified') || detailLower.includes('domain mismatch')) {
+      redirect('/admin?mail_test=failed_domain')
+    }
+
+    if (detailLower.includes('api key is invalid')) {
+      redirect('/admin?mail_test=failed_api_key')
+    }
+
+    const shortDetail = encodeURIComponent(detail.slice(0, 260))
+    redirect(`/admin?mail_test=failed&mail_test_detail=${shortDetail}`)
   }
 
   if (usesResendSandboxSender) {
@@ -298,6 +326,21 @@ export default async function AdminPage({ searchParams }: Props) {
           <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             Testmail verzenden is mislukt.
             {mailTestDetail ? ` Detail: ${mailTestDetail}` : ''}
+          </section>
+        )}
+        {mailTestState === 'failed_own_email' && (
+          <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+            Resend sandbox-beperking: met een `@resend.dev` afzender mag je enkel naar je eigen Resend-account e-mailadres sturen.
+          </section>
+        )}
+        {mailTestState === 'failed_domain' && (
+          <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+            Afzenderdomein is niet geverifieerd in Resend. Koppel eerst een eigen domein en gebruik daarna dat e-mailadres als `TICKET_NOTIFICATIONS_FROM`.
+          </section>
+        )}
+        {mailTestState === 'failed_api_key' && (
+          <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            API key ongeldig. Maak een nieuwe key in Resend en update `RESEND_API_KEY` in Vercel.
           </section>
         )}
 
