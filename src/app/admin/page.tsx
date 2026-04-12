@@ -685,12 +685,12 @@ export default async function AdminPage({ searchParams }: Props) {
           </section>
         )}
 
-        <AdminUploadPanel projects={projectsWithProfiles} />
-
         <AdminSearchPanel
           customers={customersWithMeta}
           projects={projectsWithProfiles}
         />
+
+        <AdminUploadPanel projects={projectsWithProfiles} />
       </div>
     </AppShell>
   )
