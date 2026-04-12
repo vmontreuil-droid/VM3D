@@ -38,11 +38,34 @@ async function createPublicSupportTicket(formData: FormData) {
     last_reply_at: new Date().toISOString(),
   }
 
-  const { data, error } = await adminSupabase
+  let { data, error } = await adminSupabase
     .from('tickets')
     .insert(insertPayload)
     .select('id, title')
     .single()
+
+  // Backward compatibility if the visitor columns are not migrated yet.
+  if (error && /visitor_(name|email)/i.test(String(error.message || ''))) {
+    const fallbackPayload = {
+      title,
+      description: description || null,
+      customer_id: null,
+      created_by: null,
+      project_id: null,
+      priority,
+      status: 'nieuw',
+      last_reply_at: new Date().toISOString(),
+    }
+
+    const retryResult = await adminSupabase
+      .from('tickets')
+      .insert(fallbackPayload)
+      .select('id, title')
+      .single()
+
+    data = retryResult.data
+    error = retryResult.error
+  }
 
   if (error || !data) {
     console.error('createPublicSupportTicket error:', error)
