@@ -29,6 +29,10 @@ function getCustomerLabel(customer: {
   return customer.company_name || customer.full_name || customer.email || 'Ongekende klant'
 }
 
+function formatDayLabel(value: Date) {
+  return value.toLocaleDateString('nl-BE', { day: '2-digit', month: '2-digit' })
+}
+
 export default async function AdminTicketsPage({ searchParams }: Props) {
   const resolvedSearchParams = searchParams ? await searchParams : {}
   const supabase = await createClient()
@@ -107,6 +111,143 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     (ticket: any) => ticket.status === 'afgerond' || ticket.status === 'gesloten'
   ).length
 
+  const urgentOpenCount = safeTickets.filter(
+    (ticket: any) =>
+      (ticket.status === 'nieuw' || ticket.status === 'in_behandeling') && ticket.priority === 'urgent'
+  ).length
+
+  const now = new Date()
+  const overdueCount = safeTickets.filter((ticket: any) => {
+    if (!ticket.due_date) return false
+    if (ticket.status === 'afgerond' || ticket.status === 'gesloten') return false
+    return new Date(String(ticket.due_date)) < now
+  }).length
+
+  const closedTicketsWithDurations = safeTickets.filter((ticket: any) => {
+    if (!(ticket.status === 'afgerond' || ticket.status === 'gesloten')) return false
+    if (!ticket.created_at || !ticket.updated_at) return false
+    return true
+  })
+
+  const avgResolutionHours =
+    closedTicketsWithDurations.length > 0
+      ? Math.round(
+          closedTicketsWithDurations.reduce((sum: number, ticket: any) => {
+            const created = new Date(ticket.created_at).getTime()
+            const updated = new Date(ticket.updated_at).getTime()
+            const hours = Math.max((updated - created) / (1000 * 60 * 60), 0)
+            return sum + hours
+          }, 0) / closedTicketsWithDurations.length
+        )
+      : 0
+
+  const oldestOpenAgeDays = safeTickets
+    .filter((ticket: any) => ticket.status === 'nieuw' || ticket.status === 'in_behandeling')
+    .reduce((maxAge: number, ticket: any) => {
+      if (!ticket.created_at) return maxAge
+      const age = Math.floor((now.getTime() - new Date(ticket.created_at).getTime()) / (1000 * 60 * 60 * 24))
+      return Math.max(maxAge, age)
+    }, 0)
+
+  const statusCounts = {
+    nieuw: safeTickets.filter((ticket: any) => ticket.status === 'nieuw').length,
+    in_behandeling: safeTickets.filter((ticket: any) => ticket.status === 'in_behandeling').length,
+    wacht_op_klant: safeTickets.filter((ticket: any) => ticket.status === 'wacht_op_klant').length,
+    afgerond: safeTickets.filter((ticket: any) => ticket.status === 'afgerond').length,
+    gesloten: safeTickets.filter((ticket: any) => ticket.status === 'gesloten').length,
+  }
+
+  const priorityCounts = {
+    laag: safeTickets.filter((ticket: any) => ticket.priority === 'laag').length,
+    normaal: safeTickets.filter((ticket: any) => ticket.priority === 'normaal').length,
+    hoog: safeTickets.filter((ticket: any) => ticket.priority === 'hoog').length,
+    urgent: safeTickets.filter((ticket: any) => ticket.priority === 'urgent').length,
+  }
+
+  const trendStart = new Date(now)
+  trendStart.setDate(trendStart.getDate() - 13)
+  trendStart.setHours(0, 0, 0, 0)
+
+  const createdPerDay = new Map<string, number>()
+  for (const ticket of safeTickets) {
+    if (!ticket.created_at) continue
+    const createdAt = new Date(ticket.created_at)
+    if (createdAt < trendStart) continue
+    const key = createdAt.toISOString().slice(0, 10)
+    createdPerDay.set(key, (createdPerDay.get(key) ?? 0) + 1)
+  }
+
+  const trendDays = Array.from({ length: 14 }).map((_, index) => {
+    const day = new Date(trendStart)
+    day.setDate(trendStart.getDate() + index)
+    const key = day.toISOString().slice(0, 10)
+    const count = createdPerDay.get(key) ?? 0
+    return {
+      key,
+      label: formatDayLabel(day),
+      count,
+    }
+  })
+
+  const maxTrendCount = Math.max(...trendDays.map((item) => item.count), 1)
+
+  const ticketIds = safeTickets.map((ticket: any) => ticket.id)
+  let recentMessages: any[] = []
+
+  if (ticketIds.length > 0) {
+    const { data: messageRows } = await adminSupabase
+      .from('ticket_messages')
+      .select('id, ticket_id, created_at, is_internal, author_id, message')
+      .in('ticket_id', ticketIds)
+      .order('created_at', { ascending: false })
+      .limit(120)
+
+    recentMessages = messageRows ?? []
+  }
+
+  const authorIds = Array.from(new Set(recentMessages.map((msg: any) => msg.author_id).filter(Boolean)))
+  let authorMap = new Map<string, any>()
+
+  if (authorIds.length > 0) {
+    const { data: authors } = await adminSupabase
+      .from('profiles')
+      .select('id, full_name, company_name, email')
+      .in('id', authorIds)
+
+    authorMap = new Map((authors ?? []).map((item: any) => [item.id, item]))
+  }
+
+  const ticketById = new Map(safeTickets.map((ticket: any) => [ticket.id, ticket]))
+
+  const recentActivity = [
+    ...safeTickets
+      .filter((ticket: any) => ticket.created_at)
+      .map((ticket: any) => ({
+        id: `create-${ticket.id}`,
+        type: 'created' as const,
+        date: ticket.created_at,
+        ticketId: ticket.id,
+        title: ticket.title || 'Zonder titel',
+        detail: 'Ticket aangemaakt',
+      })),
+    ...recentMessages.map((message: any) => {
+      const author = message.author_id ? authorMap.get(message.author_id) : null
+      const authorLabel =
+        author?.full_name || author?.company_name || author?.email || (message.is_internal ? 'Admin' : 'Klant')
+
+      return {
+        id: `msg-${message.id}`,
+        type: 'message' as const,
+        date: message.created_at,
+        ticketId: message.ticket_id,
+        title: ticketById.get(message.ticket_id)?.title || 'Zonder titel',
+        detail: `${message.is_internal ? 'Interne notitie' : 'Reactie'} door ${authorLabel}`,
+      }
+    }),
+  ]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 12)
+
   return (
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
@@ -183,6 +324,117 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 <span className="pr-1">Nieuw ticket</span>
                 <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
               </Link>
+            </div>
+
+            <div className="grid gap-3 xl:grid-cols-[1.1fr_0.9fr]">
+              <div className="space-y-3">
+                <div className="grid gap-2 sm:grid-cols-5">
+                  <div className="rounded-xl border border-amber-500/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Urgent open</p>
+                    <p className="mt-1 text-lg font-semibold text-amber-300">{urgentOpenCount}</p>
+                  </div>
+                  <div className="rounded-xl border border-red-500/30 bg-[linear-gradient(135deg,rgba(239,68,68,0.10),rgba(239,68,68,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Over tijd</p>
+                    <p className="mt-1 text-lg font-semibold text-red-300">{overdueCount}</p>
+                  </div>
+                  <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Gem. oplostijd</p>
+                    <p className="mt-1 text-lg font-semibold text-emerald-300">{avgResolutionHours}u</p>
+                  </div>
+                  <div className="rounded-xl border border-sky-500/30 bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oudste open</p>
+                    <p className="mt-1 text-lg font-semibold text-sky-300">{oldestOpenAgeDays}d</p>
+                  </div>
+                  <div className="rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Afwerkingsgraad</p>
+                    <p className="mt-1 text-lg font-semibold text-violet-300">
+                      {safeTickets.length > 0 ? Math.round((doneCount / safeTickets.length) * 100) : 0}%
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      Trend laatste 14 dagen
+                    </p>
+                    <p className="text-[10px] text-[var(--text-soft)]">Nieuwe tickets per dag</p>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-7 gap-1.5 sm:grid-cols-14">
+                    {trendDays.map((day) => (
+                      <div key={day.key} className="space-y-1">
+                        <div className="h-16 rounded-md border border-[var(--border-soft)] bg-[var(--bg-card)] p-1">
+                          <div
+                            className="w-full rounded-sm bg-[var(--accent)]/75"
+                            style={{
+                              height: `${Math.max((day.count / maxTrendCount) * 100, day.count > 0 ? 12 : 2)}%`,
+                              marginTop: 'auto',
+                            }}
+                          />
+                        </div>
+                        <p className="text-center text-[9px] text-[var(--text-muted)]">{day.label}</p>
+                        <p className="text-center text-[10px] font-semibold text-[var(--text-main)]">{day.count}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Statusverdeling</p>
+                    <div className="mt-2 space-y-1.5 text-xs text-[var(--text-soft)]">
+                      <p>Nieuw: <span className="font-semibold text-[var(--text-main)]">{statusCounts.nieuw}</span></p>
+                      <p>In behandeling: <span className="font-semibold text-[var(--text-main)]">{statusCounts.in_behandeling}</span></p>
+                      <p>Wacht op klant: <span className="font-semibold text-[var(--text-main)]">{statusCounts.wacht_op_klant}</span></p>
+                      <p>Afgerond: <span className="font-semibold text-[var(--text-main)]">{statusCounts.afgerond}</span></p>
+                      <p>Gesloten: <span className="font-semibold text-[var(--text-main)]">{statusCounts.gesloten}</span></p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Prioriteitsverdeling</p>
+                    <div className="mt-2 space-y-1.5 text-xs text-[var(--text-soft)]">
+                      <p>Laag: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.laag}</span></p>
+                      <p>Normaal: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.normaal}</span></p>
+                      <p>Hoog: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.hoog}</span></p>
+                      <p>Urgent: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.urgent}</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Tijdlijn</p>
+                <p className="mt-1 text-[11px] text-[var(--text-soft)]">Recentste ticketactiviteit</p>
+
+                {recentActivity.length === 0 ? (
+                  <p className="mt-3 text-sm text-[var(--text-soft)]">Nog geen activiteit.</p>
+                ) : (
+                  <div className="mt-3 space-y-2">
+                    {recentActivity.map((activity) => (
+                      <div key={activity.id} className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="truncate text-xs font-semibold text-[var(--text-main)]">
+                              #{activity.ticketId} · {activity.title}
+                            </p>
+                            <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">{activity.detail}</p>
+                          </div>
+                          <span className="shrink-0 text-[10px] text-[var(--text-muted)]">
+                            {new Date(activity.date).toLocaleString('nl-BE', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
