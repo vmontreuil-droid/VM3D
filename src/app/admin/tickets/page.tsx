@@ -115,6 +115,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
   const doneCount = safeTickets.filter(
     (ticket: any) => ticket.status === 'afgerond' || ticket.status === 'gesloten'
   ).length
+  const now = new Date()
 
   const slaStates = safeTickets.map((ticket: any) =>
     getTicketSlaState({
@@ -130,7 +131,6 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
       (ticket.status === 'nieuw' || ticket.status === 'in_behandeling') && ticket.priority === 'urgent'
   ).length
 
-  const now = new Date()
   const overdueCount = slaStates.filter((state) => state === 'overdue').length
   const slaRiskCount = slaStates.filter((state) => state === 'at_risk').length
   const pausedCount = slaStates.filter((state) => state === 'paused').length
