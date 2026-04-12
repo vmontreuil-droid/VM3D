@@ -5,6 +5,8 @@ type TicketMailInput = {
   text: string
 }
 
+const MAIL_BRAND = 'MV3D Cloud'
+
 function pickFirstEnv(keys: string[]) {
   for (const key of keys) {
     const value = process.env[key]
@@ -74,6 +76,13 @@ export async function sendTicketNotificationEmail(input: TicketMailInput) {
   const from = config.fromAddress
   const uniqueRecipients = Array.from(new Set(input.to.map((item) => item.trim()).filter(Boolean)))
 
+  const normalizedSubject = input.subject.startsWith(`${MAIL_BRAND} |`)
+    ? input.subject
+    : `${MAIL_BRAND} | ${input.subject}`
+  const brandUrl = getBaseUrl().replace(/\/$/, '')
+  const decoratedText = `${input.text}\n\n---\n${MAIL_BRAND}\n${brandUrl}`
+  const decoratedHtml = `${input.html}<hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb"/><p style="margin:0;font-size:12px;color:#6b7280">${MAIL_BRAND}<br/><a href="${brandUrl}">${brandUrl}</a></p>`
+
   if (!apiKey || !from || uniqueRecipients.length === 0) {
     return {
       sent: false,
@@ -91,9 +100,9 @@ export async function sendTicketNotificationEmail(input: TicketMailInput) {
     body: JSON.stringify({
       from,
       to: uniqueRecipients,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
+      subject: normalizedSubject,
+      html: decoratedHtml,
+      text: decoratedText,
     }),
   })
 
