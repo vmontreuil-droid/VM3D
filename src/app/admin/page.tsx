@@ -97,8 +97,12 @@ async function sendTicketTestEmail() {
       redirect('/admin?mail_test=failed_api_key')
     }
 
-    const shortDetail = encodeURIComponent(detail.slice(0, 260))
-    redirect(`/admin?mail_test=failed&mail_test_detail=${shortDetail}`)
+    const shortDetail = encodeURIComponent(detail.slice(0, 200))
+    const reason = encodeURIComponent(result?.reason || 'unknown')
+    const status = encodeURIComponent(String(result?.status || ''))
+    redirect(
+      `/admin?mail_test=failed&mail_test_reason=${reason}&mail_test_status=${status}&mail_test_detail=${shortDetail}`
+    )
   }
 
   if (usesResendSandboxSender) {
@@ -127,6 +131,8 @@ type Props = {
   searchParams?: Promise<{
     mail_test?: string
     mail_test_detail?: string
+    mail_test_reason?: string
+    mail_test_status?: string
   }>
 }
 
@@ -298,6 +304,8 @@ export default async function AdminPage({ searchParams }: Props) {
 
   const mailTestState = resolvedSearchParams.mail_test
   const mailTestDetail = resolvedSearchParams.mail_test_detail
+  const mailTestReason = resolvedSearchParams.mail_test_reason
+  const mailTestStatus = resolvedSearchParams.mail_test_status
 
   return (
     <AppShell isAdmin>
@@ -325,6 +333,8 @@ export default async function AdminPage({ searchParams }: Props) {
         {mailTestState === 'failed' && (
           <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             Testmail verzenden is mislukt.
+            {mailTestReason ? ` Reden: ${mailTestReason}.` : ''}
+            {mailTestStatus ? ` Status: ${mailTestStatus}.` : ''}
             {mailTestDetail ? ` Detail: ${mailTestDetail}` : ''}
           </section>
         )}
