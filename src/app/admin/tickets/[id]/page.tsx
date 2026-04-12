@@ -63,6 +63,8 @@ async function updateTicket(formData: FormData) {
 
   const status = String(formData.get('status') || 'nieuw')
   const priority = String(formData.get('priority') || 'normaal')
+  const customerIdRaw = String(formData.get('customer_id') || '').trim()
+  const projectIdRaw = String(formData.get('project_id') || '').trim()
   const assignedToRaw = String(formData.get('assigned_to') || '').trim()
   const dueDateRaw = String(formData.get('due_date') || '').trim()
 
@@ -79,6 +81,8 @@ async function updateTicket(formData: FormData) {
     .update({
       status,
       priority,
+      customer_id: customerIdRaw || null,
+      project_id: projectIdRaw ? Number(projectIdRaw) : null,
       assigned_to: assignedToRaw || null,
       due_date: dueDateRaw || null,
       updated_at: new Date().toISOString(),
@@ -244,7 +248,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
     redirect('/admin/tickets?error=not_found')
   }
 
-  const [customerRes, projectRes, assigneesRes, messagesRes] = await Promise.all([
+  const [customerRes, projectRes, assigneesRes, messagesRes, customersRes, projectsRes] = await Promise.all([
     ticket.customer_id
       ? adminSupabase
           .from('profiles')
@@ -269,12 +273,24 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
       .select('id, message, is_internal, created_at, author_id')
       .eq('ticket_id', ticket.id)
       .order('created_at', { ascending: true }),
+    adminSupabase
+      .from('profiles')
+      .select('id, full_name, company_name, email')
+      .neq('role', 'admin')
+      .order('company_name', { ascending: true }),
+    adminSupabase
+      .from('projects')
+      .select('id, title, address, user_id')
+      .order('created_at', { ascending: false })
+      .limit(500),
   ])
 
   const customer = customerRes.data
   const project = projectRes.data
   const assignees = assigneesRes.data ?? []
   const messages = messagesRes.data ?? []
+  const customers = customersRes.data ?? []
+  const projects = projectsRes.data ?? []
 
   const authorIds = Array.from(new Set(messages.map((item: any) => item.author_id).filter(Boolean)))
   let authorMap = new Map<string, any>()
@@ -393,6 +409,49 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
 
               <form action={updateTicket} className="space-y-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
                 <input type="hidden" name="id" value={ticket.id} />
+
+                <div className="grid gap-2">
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                    Klant
+                  </label>
+                  <select
+                    name="customer_id"
+                    defaultValue={ticket.customer_id || ''}
+                    className="input-dark w-full px-3 py-2 text-sm"
+                  >
+                    <option value="">Niet gekoppeld</option>
+                    {customers.map((item: any) => (
+                      <option key={item.id} value={item.id}>
+                        {item.company_name || item.full_name || item.email || item.id}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="grid gap-2">
+                  <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                    Werf
+                  </label>
+                  <select
+                    name="project_id"
+                    defaultValue={ticket.project_id ? String(ticket.project_id) : ''}
+                    className="input-dark w-full px-3 py-2 text-sm"
+                  >
+                    <option value="">Niet gekoppeld</option>
+                    {projects.map((item: any) => {
+                      const owner = customers.find((customerItem: any) => customerItem.id === item.user_id)
+                      const ownerLabel =
+                        owner?.company_name || owner?.full_name || owner?.email || null
+
+                      return (
+                        <option key={item.id} value={item.id}>
+                          #{item.id} · {item.title || item.address || 'Zonder titel'}
+                          {ownerLabel ? ` (${ownerLabel})` : ''}
+                        </option>
+                      )
+                    })}
+                  </select>
+                </div>
 
                 <div className="grid gap-2">
                   <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
