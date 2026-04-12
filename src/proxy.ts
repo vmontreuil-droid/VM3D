@@ -2,6 +2,16 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
+  const headerHost = request.headers.get('host')?.split(':')[0].toLowerCase().replace(/\.$/, '') || ''
+  const urlHost = request.nextUrl.hostname.toLowerCase().replace(/\.$/, '')
+  const host = urlHost || headerHost
+
+  if (host === 'support.mv3d.be' && request.nextUrl.pathname === '/') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/support'
+    return NextResponse.rewrite(url)
+  }
+
   let response = NextResponse.next({
     request,
   })
