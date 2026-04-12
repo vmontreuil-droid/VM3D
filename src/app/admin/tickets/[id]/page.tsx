@@ -509,9 +509,15 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                 </div>
 
                 <div className="flex justify-end">
-                  <button type="submit" className="btn-primary">
-                    <Save className="h-4 w-4" />
-                    Opslaan
+                  <button
+                    type="submit"
+                    className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Save className="h-3 w-3" />
+                    </span>
+                    <span className="pr-1">Opslaan</span>
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                   </button>
                 </div>
               </form>
