@@ -5,8 +5,13 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
+  getTicketAgeHours,
   getTicketPriorityClass,
   getTicketPriorityLabel,
+  getTicketSlaClass,
+  getTicketSlaLabel,
+  getTicketSlaState,
+  getTicketSlaTargetHours,
   getTicketStatusClass,
   getTicketStatusLabel,
 } from '@/lib/tickets'
@@ -111,17 +116,24 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     (ticket: any) => ticket.status === 'afgerond' || ticket.status === 'gesloten'
   ).length
 
+  const slaStates = safeTickets.map((ticket: any) =>
+    getTicketSlaState({
+      status: ticket.status,
+      priority: ticket.priority,
+      createdAt: ticket.created_at,
+      now,
+    })
+  )
+
   const urgentOpenCount = safeTickets.filter(
     (ticket: any) =>
       (ticket.status === 'nieuw' || ticket.status === 'in_behandeling') && ticket.priority === 'urgent'
   ).length
 
   const now = new Date()
-  const overdueCount = safeTickets.filter((ticket: any) => {
-    if (!ticket.due_date) return false
-    if (ticket.status === 'afgerond' || ticket.status === 'gesloten') return false
-    return new Date(String(ticket.due_date)) < now
-  }).length
+  const overdueCount = slaStates.filter((state) => state === 'overdue').length
+  const slaRiskCount = slaStates.filter((state) => state === 'at_risk').length
+  const pausedCount = slaStates.filter((state) => state === 'paused').length
 
   const closedTicketsWithDurations = safeTickets.filter((ticket: any) => {
     if (!(ticket.status === 'afgerond' || ticket.status === 'gesloten')) return false
@@ -144,9 +156,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
   const oldestOpenAgeDays = safeTickets
     .filter((ticket: any) => ticket.status === 'nieuw' || ticket.status === 'in_behandeling')
     .reduce((maxAge: number, ticket: any) => {
-      if (!ticket.created_at) return maxAge
-      const age = Math.floor((now.getTime() - new Date(ticket.created_at).getTime()) / (1000 * 60 * 60 * 24))
-      return Math.max(maxAge, age)
+      const ageHours = getTicketAgeHours(ticket.created_at, now)
+      const ageDays = Math.floor(ageHours / 24)
+      return Math.max(maxAge, ageDays)
     }, 0)
 
   const statusCounts = {
@@ -337,6 +349,10 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                     <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Over tijd</p>
                     <p className="mt-1 text-lg font-semibold text-red-300">{overdueCount}</p>
                   </div>
+                  <div className="rounded-xl border border-orange-500/30 bg-[linear-gradient(135deg,rgba(249,115,22,0.10),rgba(249,115,22,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">SLA risico</p>
+                    <p className="mt-1 text-lg font-semibold text-orange-300">{slaRiskCount}</p>
+                  </div>
                   <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
                     <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Gem. oplostijd</p>
                     <p className="mt-1 text-lg font-semibold text-emerald-300">{avgResolutionHours}u</p>
@@ -350,6 +366,10 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                     <p className="mt-1 text-lg font-semibold text-violet-300">
                       {safeTickets.length > 0 ? Math.round((doneCount / safeTickets.length) * 100) : 0}%
                     </p>
+                  </div>
+                  <div className="rounded-xl border border-zinc-500/30 bg-[linear-gradient(135deg,rgba(113,113,122,0.10),rgba(113,113,122,0.03))] px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Gepauzeerd</p>
+                    <p className="mt-1 text-lg font-semibold text-zinc-300">{pausedCount}</p>
                   </div>
                 </div>
 
@@ -451,6 +471,13 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                     const project = ticket.project_id
                       ? projectMap.get(ticket.project_id) ?? null
                       : null
+                    const slaState = getTicketSlaState({
+                      status: ticket.status,
+                      priority: ticket.priority,
+                      createdAt: ticket.created_at,
+                      now,
+                    })
+                    const slaTargetHours = getTicketSlaTargetHours(ticket.priority)
 
                     return (
                       <div
@@ -468,6 +495,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                             <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketPriorityClass(ticket.priority)}`}>
                               {getTicketPriorityLabel(ticket.priority)}
                             </span>
+                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketSlaClass(slaState)}`}>
+                              {getTicketSlaLabel(slaState)}
+                            </span>
                           </div>
 
                           <p className="mt-1 text-xs text-[var(--text-soft)]">
@@ -475,6 +505,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                             {project
                               ? ` · Werf: ${project.title || project.address || `#${project.id}`}`
                               : ''}
+                            {` · SLA target: ${slaTargetHours}u`}
                           </p>
                         </div>
 

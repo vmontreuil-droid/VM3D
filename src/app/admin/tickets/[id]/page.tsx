@@ -5,8 +5,13 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
+  getTicketAgeHours,
   getTicketPriorityClass,
   getTicketPriorityLabel,
+  getTicketSlaClass,
+  getTicketSlaLabel,
+  getTicketSlaState,
+  getTicketSlaTargetHours,
   getTicketStatusClass,
   getTicketStatusLabel,
 } from '@/lib/tickets'
@@ -295,6 +300,14 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
   const authorIds = Array.from(new Set(messages.map((item: any) => item.author_id).filter(Boolean)))
   let authorMap = new Map<string, any>()
 
+  const slaState = getTicketSlaState({
+    status: ticket.status,
+    priority: ticket.priority,
+    createdAt: ticket.created_at,
+  })
+  const slaTargetHours = getTicketSlaTargetHours(ticket.priority)
+  const ticketAgeHours = Math.round(getTicketAgeHours(ticket.created_at))
+
   if (authorIds.length > 0) {
     const { data: authors } = await adminSupabase
       .from('profiles')
@@ -376,6 +389,9 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
               <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketPriorityClass(ticket.priority)}`}>
                 {getTicketPriorityLabel(ticket.priority)}
               </span>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketSlaClass(slaState)}`}>
+                {getTicketSlaLabel(slaState)}
+              </span>
             </div>
           </div>
 
@@ -404,6 +420,10 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                 </p>
                 <p className="mt-1 text-sm text-[var(--text-soft)]">
                   Laatste update: {new Date(ticket.updated_at).toLocaleString('nl-BE')}
+                </p>
+                <p className="mt-1 text-sm text-[var(--text-soft)]">
+                  SLA target: <span className="text-[var(--text-main)]">{slaTargetHours}u</span> · Leeftijd:{' '}
+                  <span className="text-[var(--text-main)]">{ticketAgeHours}u</span>
                 </p>
               </div>
 
