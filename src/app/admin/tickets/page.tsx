@@ -133,22 +133,13 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 <div className="mt-4 max-w-[260px]">
                   <Link
                     href="/admin"
-                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                    className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
                   >
                     <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Dashboard
-                        </span>
-                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Terug naar adminoverzicht
-                        </span>
-                      </span>
-                    </div>
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <ArrowLeft className="h-3 w-3" />
+                    </span>
+                    <span className="pr-1">Dashboard</span>
                   </Link>
                 </div>
               </div>
@@ -182,9 +173,15 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 {error ? 'Kon tickets niet laden.' : `${safeTickets.length} ticket(s) gevonden`}
               </p>
 
-              <Link href="/admin/tickets/new" className="btn-primary">
-                <PlusCircle className="h-4 w-4" />
-                Nieuw ticket
+              <Link
+                href="/admin/tickets/new"
+                className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                  <PlusCircle className="h-3 w-3" />
+                </span>
+                <span className="pr-1">Nieuw ticket</span>
+                <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
               </Link>
             </div>
 
