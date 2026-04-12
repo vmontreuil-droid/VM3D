@@ -112,7 +112,7 @@ async function geocodeAddress(address: string) {
 
   const response = await fetch(url.toString(), {
     headers: {
-      'User-Agent': 'VM3D-Cloud/1.0',
+      'User-Agent': 'MV3D-Cloud/1.0',
       Accept: 'application/json',
     },
     cache: 'no-store',

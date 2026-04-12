@@ -474,7 +474,7 @@ export default function HomePage() {
               Verslaan over heel België
             </h2>
             <p className="mt-6 mx-auto max-w-2xl text-lg text-[var(--text-soft)]">
-              Meer dan 500 bedrijven in Vlaanderen, Wallonië en Brussel vertrouwen op VM3D Cloud voor hun 3D-werven.
+              Meer dan 500 bedrijven in Vlaanderen, Wallonië en Brussel vertrouwen op MV3D Cloud voor hun 3D-werven.
             </p>
           </div>
 
@@ -510,11 +510,11 @@ export default function HomePage() {
                 <rect x="40" y="40" width="20" height="20" rx="5" fill="#f28c3a" />
               </svg>
               <span className="text-sm font-bold text-[var(--text-main)]">
-                <span className="text-[var(--accent)]">VM3D</span>
+                <span className="text-[var(--accent)]">MV3D</span>
               </span>
             </div>
             <p className="text-sm text-[var(--text-muted)]">
-              © 2026 VM3D Cloud. Alle rechten voorbehouden.
+              © 2026 MV3D Cloud. Alle rechten voorbehouden.
             </p>
           </div>
         </div>

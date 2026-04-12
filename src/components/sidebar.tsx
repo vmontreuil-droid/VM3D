@@ -301,7 +301,7 @@ export default function Sidebar({
             {!collapsed && (
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold tracking-wide text-[var(--text-main)]">
-                  VM3D
+                  MV3D
                 </p>
                 <p className="truncate text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
                   {isAdmin ? 'ADMIN PORTAL' : 'CLIENT PORTAL'}

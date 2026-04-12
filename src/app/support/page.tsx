@@ -131,6 +131,11 @@ export default async function SupportPage({ searchParams }: Props) {
             </div>
 
             <div className="relative">
+              <img
+                src="/mv3d-logo.svg"
+                alt="MV3D logo"
+                className="mb-3 h-auto w-full max-w-[170px]"
+              />
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                 Supportportaal
               </p>

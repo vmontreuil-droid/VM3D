@@ -100,7 +100,7 @@ async function createCustomer(formData: FormData) {
     }
   }
 
-  const tempPassword = `Vm3d!${Math.random().toString(36).slice(-10)}A1`
+  const tempPassword = `Mv3d!${Math.random().toString(36).slice(-10)}A1`
   const initialPassword = passwordMode === 'manual' ? password : tempPassword
 
   const { data: createdUserData, error: createUserError } =

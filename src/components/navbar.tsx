@@ -46,8 +46,8 @@ export default function Navbar({ isAdmin = false }: Props) {
               <rect x="10" y="35" width="18" height="18" rx="4" fill="#f28c3a" />
               <rect x="35" y="35" width="18" height="18" rx="4" fill="#f28c3a" />
               
-              {/* VM3D text */}
-              <text x="70" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="900" fill="white">VM</text>
+              {/* MV3D text */}
+              <text x="70" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="900" fill="white">MV</text>
               <text x="185" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="900" fill="#f28c3a">3</text>
               <text x="220" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="700" fill="white">D</text>
             </svg>

@@ -86,8 +86,8 @@ export default function LoginPage() {
           <div className="mb-6 text-center">
             <div className="mb-5 flex justify-center">
               <img
-                src="/vm3d-logo.svg"
-                alt="VM3D logo"
+                src="/mv3d-logo.svg"
+                alt="MV3D logo"
                 className="mx-auto block h-auto w-full max-w-[220px] sm:max-w-[240px]"
               />
             </div>

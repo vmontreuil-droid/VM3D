@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'VM3D Cloud',
+  title: 'MV3D Cloud',
   description: 'Platform voor werven, bestanden en opleveringen',
 }
 

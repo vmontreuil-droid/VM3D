@@ -96,7 +96,7 @@ export default function AppShell({ children, isAdmin = false }: Props) {
 
                 <div className="min-w-0 flex-1 text-center">
                   <p className="truncate text-sm font-semibold tracking-wide text-[var(--text-main)]">
-                    VM3D
+                    MV3D
                   </p>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)]">
                     {isAdmin ? 'ADMIN CLOUD' : 'CLIENT CLOUD'}
