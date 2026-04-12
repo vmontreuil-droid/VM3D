@@ -50,13 +50,16 @@ async function sendTicketTestEmail() {
     redirect('/admin?mail_test=config_missing')
   }
 
-  const recipient = adminProfile?.email || user.email || ''
-  if (!recipient) {
+  const inboxRecipient = adminProfile?.email || user.email || ''
+  if (!inboxRecipient) {
     redirect('/admin?mail_test=no_email')
   }
 
+  const usesResendSandboxSender = config.fromAddress.endsWith('@resend.dev')
+  const recipient = usesResendSandboxSender ? 'delivered@resend.dev' : inboxRecipient
+
   const displayName =
-    adminProfile?.full_name || adminProfile?.company_name || recipient
+    adminProfile?.full_name || adminProfile?.company_name || inboxRecipient
 
   const result = await sendTicketNotificationEmail({
     to: [recipient],
@@ -66,7 +69,12 @@ async function sendTicketTestEmail() {
   })
 
   if (!result.sent) {
-    redirect('/admin?mail_test=failed')
+    const errorDetail = encodeURIComponent(result.detail || 'Onbekende fout')
+    redirect(`/admin?mail_test=failed&mail_test_detail=${errorDetail}`)
+  }
+
+  if (usesResendSandboxSender) {
+    redirect('/admin?mail_test=sent_sandbox')
   }
 
   redirect('/admin?mail_test=sent')
@@ -90,6 +98,7 @@ function getStatusLabel(status: string | null) {
 type Props = {
   searchParams?: Promise<{
     mail_test?: string
+    mail_test_detail?: string
   }>
 }
 
@@ -260,6 +269,7 @@ export default async function AdminPage({ searchParams }: Props) {
   const warningTicketMailConfig = ticketMailConfig.warnings
 
   const mailTestState = resolvedSearchParams.mail_test
+  const mailTestDetail = resolvedSearchParams.mail_test_detail
 
   return (
     <AppShell isAdmin>
@@ -267,6 +277,11 @@ export default async function AdminPage({ searchParams }: Props) {
         {mailTestState === 'sent' && (
           <section className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
             Testmail succesvol verzonden.
+          </section>
+        )}
+        {mailTestState === 'sent_sandbox' && (
+          <section className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            Testmail succesvol verstuurd via Resend sandbox (`delivered@resend.dev`). Voor echte inboxbezorging moet je later een eigen domein koppelen in Resend.
           </section>
         )}
         {mailTestState === 'config_missing' && (
@@ -282,6 +297,7 @@ export default async function AdminPage({ searchParams }: Props) {
         {mailTestState === 'failed' && (
           <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             Testmail verzenden is mislukt.
+            {mailTestDetail ? ` Detail: ${mailTestDetail}` : ''}
           </section>
         )}
 

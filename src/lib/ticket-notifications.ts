@@ -75,7 +75,11 @@ export async function sendTicketNotificationEmail(input: TicketMailInput) {
   const uniqueRecipients = Array.from(new Set(input.to.map((item) => item.trim()).filter(Boolean)))
 
   if (!apiKey || !from || uniqueRecipients.length === 0) {
-    return { sent: false, reason: 'not_configured' as const }
+    return {
+      sent: false,
+      reason: 'not_configured' as const,
+      detail: 'Mailconfig onvolledig of geen ontvanger opgegeven.',
+    }
   }
 
   const response = await fetch('https://api.resend.com/emails', {
@@ -96,8 +100,13 @@ export async function sendTicketNotificationEmail(input: TicketMailInput) {
   if (!response.ok) {
     const payload = await response.text()
     console.error('sendTicketNotificationEmail error:', payload)
-    return { sent: false, reason: 'provider_error' as const }
+    return {
+      sent: false,
+      reason: 'provider_error' as const,
+      status: response.status,
+      detail: payload,
+    }
   }
 
-  return { sent: true as const }
+  return { sent: true as const, detail: '' }
 }
