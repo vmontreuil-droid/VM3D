@@ -294,8 +294,13 @@ export default async function AdminPage({ searchParams }: Props) {
   const { count: ticketCountRaw } = await adminSupabase
     .from('tickets')
     .select('*', { count: 'exact', head: true })
+  const { count: openTicketCountRaw } = await adminSupabase
+    .from('tickets')
+    .select('id', { count: 'exact', head: true })
+    .in('status', ['nieuw', 'in_behandeling'])
 
   const ticketCount = ticketCountRaw ?? 0
+  const openTicketCount = openTicketCountRaw ?? 0
   const subscriptionCount = 0
   const ticketMailConfig = getTicketNotificationConfig()
   const ticketMailEnabled = ticketMailConfig.enabled
@@ -504,36 +509,6 @@ export default async function AdminPage({ searchParams }: Props) {
                 </p>
               </div>
 
-              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Ticket notificaties
-                </p>
-                <p
-                  className={`mt-1.5 text-xs font-semibold ${
-                    ticketMailEnabled ? 'text-emerald-300' : 'text-slate-400'
-                  }`}
-                >
-                  {ticketMailEnabled ? 'Actief' : 'Niet ingeschakeld (optioneel)'}
-                </p>
-                {!ticketMailEnabled && (
-                  <p className="mt-1 text-[11px] leading-4 text-[var(--text-soft)]">
-                    Mail-notificaties staan uit. Ticketwerking blijft actief.
-                  </p>
-                )}
-                {ticketMailEnabled && warningTicketMailConfig.length > 0 && (
-                  <p className="mt-1 text-[11px] leading-4 text-amber-300">
-                    Let op: {warningTicketMailConfig.join(' · ')}
-                  </p>
-                )}
-                {ticketMailEnabled && (
-                  <form action={sendTicketTestEmail} className="mt-2">
-                    <button type="submit" className="btn-secondary">
-                      Verstuur testmail
-                    </button>
-                  </form>
-                )}
-              </div>
-
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <Link
                   href="/admin/customers"
@@ -620,6 +595,9 @@ export default async function AdminPage({ searchParams }: Props) {
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <span className="absolute right-3 top-2 rounded-full border border-amber-500/35 bg-amber-500/12 px-2 py-0.5 text-[10px] font-semibold text-amber-300">
+                    Open {openTicketCount}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
                       <Ticket className="h-4 w-4" />
