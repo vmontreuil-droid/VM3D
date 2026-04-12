@@ -122,154 +122,159 @@ export default async function SupportPage({ searchParams }: Props) {
   const ticketId = resolvedSearchParams.ticket
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      {/* Header */}
-      <div className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
-        <div className="mx-auto max-w-2xl px-6 py-8">
-          <h1 className="text-3xl font-bold text-white">Support</h1>
-          <p className="mt-2 text-slate-400">
-            Heb je vragen of problemen? We helpen je graag verder.
-          </p>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="mx-auto max-w-2xl px-6 py-12">
-        {submitted && ticketId ? (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-6">
-              <div className="flex items-start gap-4">
-                <CheckCircle className="mt-1 flex-shrink-0 text-emerald-400" size={24} />
-                <div>
-                  <h2 className="text-lg font-semibold text-emerald-400">Ticket ontvangen!</h2>
-                  <p className="mt-1 text-emerald-300/80">
-                    Uw ondersteuningsverzoek is succesvol ingediend.
-                  </p>
-                  <p className="mt-3 text-sm text-emerald-300/60">
-                    Ticket nummer: <strong className="text-emerald-300">#{ticketId}</strong>
-                  </p>
-                  <p className="mt-2 text-sm text-emerald-300/60">
-                    We zullen binnenkort contact met u opnemen.
-                  </p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
+      <div className="mx-auto max-w-4xl px-4 py-5 sm:px-6 lg:py-8">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
-            <form action="" method="GET">
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-slate-700 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-600"
-              >
-                Nieuw ticket indienen
-              </button>
-            </form>
+
+            <div className="relative">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                Supportportaal
+              </p>
+              <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">Support</h1>
+              <p className="mt-2.5 max-w-2xl text-sm leading-6 text-[var(--text-soft)]">
+                Heb je vragen of problemen? Stuur je verzoek door en we nemen snel contact op.
+              </p>
+            </div>
           </div>
-        ) : (
-          <form action={createPublicSupportTicket} method="POST" className="space-y-6">
-            {/* Error Messages */}
-            {resolvedSearchParams.error && (
-              <div className="rounded-xl border border-red-500/25 bg-red-500/10 p-4">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="mt-0.5 flex-shrink-0 text-red-400" size={20} />
-                  <p className="text-sm text-red-300">
-                    {resolvedSearchParams.error === 'name' && 'Vul alstublieft je naam in.'}
-                    {resolvedSearchParams.error === 'email' && 'Voer een geldig e-mailadres in.'}
-                    {resolvedSearchParams.error === 'title' && 'Vul alstublieft een onderwerp in.'}
-                    {resolvedSearchParams.error === 'save' && 'Je verzoek kon niet worden opgeslagen. Probeer het later opnieuw.'}
-                  </p>
+
+          <div className="space-y-4 px-4 py-4 sm:px-5">
+            {submitted && ticketId ? (
+              <div className="space-y-3">
+                <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-200">Ticket ontvangen</p>
+                      <p className="mt-1 text-sm text-emerald-200/90">
+                        Je supportverzoek is succesvol ingediend met ticket #{ticketId}.
+                      </p>
+                    </div>
+                  </div>
                 </div>
+
+                <form action="" method="GET" className="flex justify-end">
+                  <button
+                    type="submit"
+                    className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="pr-1">Nieuw ticket indienen</span>
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  </button>
+                </form>
               </div>
+            ) : (
+              <form action={createPublicSupportTicket} method="POST" className="space-y-4">
+                {resolvedSearchParams.error && (
+                  <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-300" />
+                      <p className="text-sm text-red-200">
+                        {resolvedSearchParams.error === 'name' && 'Vul alstublieft je naam in.'}
+                        {resolvedSearchParams.error === 'email' && 'Voer een geldig e-mailadres in.'}
+                        {resolvedSearchParams.error === 'title' && 'Vul alstublieft een onderwerp in.'}
+                        {resolvedSearchParams.error === 'save' &&
+                          'Je verzoek kon niet worden opgeslagen. Probeer het later opnieuw.'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid gap-1.5">
+                    <label htmlFor="name" className="text-[11px] font-medium text-[var(--text-soft)]">
+                      Volledige naam *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      placeholder="Jan Jansen"
+                      className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+                    />
+                  </div>
+
+                  <div className="grid gap-1.5">
+                    <label htmlFor="email" className="text-[11px] font-medium text-[var(--text-soft)]">
+                      E-mailadres *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      placeholder="jan@voorbeeld.nl"
+                      className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-1.5">
+                  <label htmlFor="title" className="text-[11px] font-medium text-[var(--text-soft)]">
+                    Onderwerp *
+                  </label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                    placeholder="Beschrijf je probleem in het kort"
+                    className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+                  />
+                </div>
+
+                <div className="grid gap-1.5">
+                  <label htmlFor="description" className="text-[11px] font-medium text-[var(--text-soft)]">
+                    Beschrijving
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={5}
+                    placeholder="Geef alstublieft meer details over je probleem..."
+                    className="input-dark min-h-[120px] w-full resize-none px-3 py-2 text-[12px]"
+                  />
+                </div>
+
+                <div className="grid gap-1.5 sm:max-w-[280px]">
+                  <label htmlFor="priority" className="text-[11px] font-medium text-[var(--text-soft)]">
+                    Urgentie
+                  </label>
+                  <select
+                    id="priority"
+                    name="priority"
+                    defaultValue="normaal"
+                    className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+                  >
+                    <option value="laag">Laag</option>
+                    <option value="normaal">Normaal</option>
+                    <option value="hoog">Hoog</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center justify-between gap-3 pt-1">
+                  <p className="text-[11px] text-[var(--text-muted)]">* Verplichte velden</p>
+
+                  <button
+                    type="submit"
+                    className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Mail className="h-3 w-3" />
+                    </span>
+                    <span className="pr-1">Ticket indienen</span>
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  </button>
+                </div>
+              </form>
             )}
-
-            {/* Form Fields */}
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-300">
-                  Volledig naam *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Jan Jansen"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                  E-mailadres *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="jan@voorbeeld.nl"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="title" className="block text-sm font-medium text-slate-300">
-                  Onderwerp *
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  required
-                  className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Beschrijf je probleem in het kort"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="description" className="block text-sm font-medium text-slate-300">
-                  Beschrijving
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={5}
-                  className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Geef alstublieft meer details over je probleem..."
-                />
-              </div>
-
-              <div>
-                <label htmlFor="priority" className="block text-sm font-medium text-slate-300">
-                  Urgentie
-                </label>
-                <select
-                  id="priority"
-                  name="priority"
-                  className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-white transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                >
-                  <option value="laag">Laag</option>
-                  <option value="normaal" selected>
-                    Normaal
-                  </option>
-                  <option value="hoog">Hoog</option>
-                  <option value="urgent">Urgent</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-            >
-              <Mail className="mr-2 inline" size={20} />
-              Ticket indienen
-            </button>
-
-            <p className="text-center text-xs text-slate-500">
-              * Verplichte velden
-            </p>
-          </form>
-        )}
+          </div>
+        </section>
       </div>
     </div>
   )
