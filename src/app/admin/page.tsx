@@ -595,8 +595,8 @@ export default async function AdminPage({ searchParams }: Props) {
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <span className="absolute right-3 top-2 rounded-full border border-amber-500/35 bg-amber-500/12 px-2 py-0.5 text-[10px] font-semibold text-amber-300">
-                    Open {openTicketCount}
+                  <span className="absolute right-3 top-2 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/14 px-2 py-0.5 text-[10px] font-semibold text-[var(--accent)]">
+                    {openTicketCount}
                   </span>
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
