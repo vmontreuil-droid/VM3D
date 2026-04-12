@@ -28,6 +28,8 @@ async function createPublicSupportTicket(formData: FormData) {
   const insertPayload = {
     title,
     description: description || null,
+    visitor_name: visitorName,
+    visitor_email: visitorEmail,
     customer_id: null, // Guest ticket
     created_by: null,
     project_id: null,

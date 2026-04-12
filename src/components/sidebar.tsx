@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard } from 'lucide-react'
@@ -17,6 +18,7 @@ type NavItem = {
   label: string
   href: string
   icon: React.ReactNode
+  badge?: number
   match: (pathname: string, view?: string | null) => boolean
   children?: {
     label: string
@@ -41,6 +43,39 @@ export default function Sidebar({
   const searchParams = useSearchParams()
   const currentView = searchParams.get('view')
   const supabase = createClient()
+  const [openTicketsCount, setOpenTicketsCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!isAdmin) return
+
+    let active = true
+
+    async function loadOpenTicketsCount() {
+      try {
+        const response = await fetch('/api/admin/tickets/open-count', {
+          method: 'GET',
+          cache: 'no-store',
+        })
+
+        if (!response.ok) return
+
+        const payload = await response.json()
+        const count = Number(payload?.openCount)
+
+        if (active && Number.isFinite(count)) {
+          setOpenTicketsCount(count)
+        }
+      } catch (error) {
+        console.error('open tickets count fetch error:', error)
+      }
+    }
+
+    loadOpenTicketsCount()
+
+    return () => {
+      active = false
+    }
+  }, [isAdmin])
 
   const portalLabel = isAdmin ? 'Adminportaal' : 'Klantenportaal'
   const portalInitials = getPortalInitials(isAdmin)
@@ -111,6 +146,7 @@ export default function Sidebar({
       href: '/admin/tickets',
       match: (pathname) => pathname === '/admin/tickets' || pathname.startsWith('/admin/tickets/'),
       icon: <Ticket className="h-[17px] w-[17px]" />,
+      badge: openTicketsCount ?? undefined,
     },
     {
       label: 'Abonnement',
@@ -178,7 +214,14 @@ export default function Sidebar({
           </span>
 
           {!collapsed && (
-            <span className="truncate text-sm font-medium">{item.label}</span>
+            <>
+              <span className="truncate text-sm font-medium">{item.label}</span>
+              {typeof item.badge === 'number' ? (
+                <span className="ml-auto rounded-full border border-[var(--accent)]/35 bg-[var(--accent)]/14 px-2 py-0.5 text-[10px] font-semibold text-[var(--accent)]">
+                  {item.badge}
+                </span>
+              ) : null}
+            </>
           )}
         </Link>
 

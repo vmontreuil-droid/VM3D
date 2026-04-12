@@ -26,8 +26,10 @@ function getCustomerLabel(customer: {
   company_name?: string | null
   full_name?: string | null
   email?: string | null
-} | null) {
-  if (!customer) return 'Ongekende klant'
+} | null, ticket?: { visitor_name?: string | null; visitor_email?: string | null } | null) {
+  if (!customer) {
+    return ticket?.visitor_name || ticket?.visitor_email || 'Ongekende klant'
+  }
   return customer.company_name || customer.full_name || customer.email || 'Ongekende klant'
 }
 
@@ -368,8 +370,13 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                   Koppelingen
                 </p>
                 <p className="mt-2 text-sm text-[var(--text-soft)]">
-                  Klant: <span className="text-[var(--text-main)]">{getCustomerLabel(customer)}</span>
+                  Klant: <span className="text-[var(--text-main)]">{getCustomerLabel(customer, ticket)}</span>
                 </p>
+                {ticket?.visitor_email && !ticket?.customer_id ? (
+                  <p className="mt-1 text-sm text-[var(--text-soft)]">
+                    Contact: <span className="text-[var(--text-main)]">{ticket.visitor_email}</span>
+                  </p>
+                ) : null}
                 <p className="mt-1 text-sm text-[var(--text-soft)]">
                   Werf:{' '}
                   <span className="text-[var(--text-main)]">

@@ -22,8 +22,10 @@ function getCustomerLabel(customer: {
   company_name?: string | null
   full_name?: string | null
   email?: string | null
-} | null) {
-  if (!customer) return 'Ongekende klant'
+} | null, ticket?: { visitor_name?: string | null; visitor_email?: string | null } | null) {
+  if (!customer) {
+    return ticket?.visitor_name || ticket?.visitor_email || 'Ongekende klant'
+  }
   return customer.company_name || customer.full_name || customer.email || 'Ongekende klant'
 }
 
@@ -220,7 +222,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                           </div>
 
                           <p className="mt-1 text-xs text-[var(--text-soft)]">
-                            Klant: {getCustomerLabel(customer)}
+                            Klant: {getCustomerLabel(customer, ticket)}
                             {project
                               ? ` · Werf: ${project.title || project.address || `#${project.id}`}`
                               : ''}
