@@ -81,8 +81,9 @@ export function buildBrandedTicketEmailContent(input: TicketMailContentInput) {
     ? input.subject
     : `${MAIL_BRAND} | ${input.subject}`
   const brandUrl = getBaseUrl().replace(/\/$/, '')
+  const logoUrl = `${brandUrl}/mv3d-logo.svg`
   const decoratedText = `${input.text}\n\n---\n${MAIL_BRAND}\n${brandUrl}`
-  const decoratedHtml = `${input.html}<hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb"/><p style="margin:0;font-size:12px;color:#6b7280">${MAIL_BRAND}<br/><a href="${brandUrl}">${brandUrl}</a></p>`
+  const decoratedHtml = `${input.html}<hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb"/><div style="display:flex;align-items:center;gap:10px;margin:0"><img src="${logoUrl}" alt="MV3D logo" style="height:24px;width:auto;display:block"/><p style="margin:0;font-size:12px;color:#6b7280">${MAIL_BRAND}<br/><a href="${brandUrl}">${brandUrl}</a></p></div>`
 
   return {
     subject: normalizedSubject,
