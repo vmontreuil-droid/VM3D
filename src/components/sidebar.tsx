@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -44,38 +44,45 @@ export default function Sidebar({
   const currentView = searchParams.get('view')
   const supabase = createClient()
   const [openTicketsCount, setOpenTicketsCount] = useState<number | null>(null)
+  const [customerCount, setCustomerCount] = useState<number | null>(null)
+  const [projectCount, setProjectCount] = useState<number | null>(null)
+
 
   useEffect(() => {
-    if (!isAdmin) return
+    if (!isAdmin) return;
+    let active = true;
 
-    let active = true
-
-    async function loadOpenTicketsCount() {
+    async function fetchCounts() {
       try {
-        const response = await fetch('/api/admin/tickets/open-count', {
-          method: 'GET',
-          cache: 'no-store',
-        })
-
-        if (!response.ok) return
-
-        const payload = await response.json()
-        const count = Number(payload?.openCount)
-
-        if (active && Number.isFinite(count)) {
-          setOpenTicketsCount(count)
+        // Tickets
+        const ticketsRes = await fetch('/api/admin/tickets/open-count', { method: 'GET', cache: 'no-store' });
+        if (ticketsRes.ok) {
+          const payload = await ticketsRes.json();
+          const count = Number(payload?.openCount);
+          if (active && Number.isFinite(count)) setOpenTicketsCount(count);
+        }
+        // Customers
+        const customersRes = await fetch('/api/admin/customers', { method: 'GET', cache: 'no-store' });
+        if (customersRes.ok) {
+          const payload = await customersRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setCustomerCount(count);
+        }
+        // Projects
+        const projectsRes = await fetch('/api/admin/projects', { method: 'GET', cache: 'no-store' });
+        if (projectsRes.ok) {
+          const payload = await projectsRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setProjectCount(count);
         }
       } catch (error) {
-        console.error('open tickets count fetch error:', error)
+        console.error('sidebar count fetch error:', error);
       }
     }
 
-    loadOpenTicketsCount()
-
-    return () => {
-      active = false
-    }
-  }, [isAdmin])
+    fetchCounts();
+    return () => { active = false; };
+  }, [isAdmin]);
 
   const portalLabel = isAdmin ? 'Adminportaal' : 'Klantenportaal'
   const portalInitials = getPortalInitials(isAdmin)
@@ -99,28 +106,38 @@ export default function Sidebar({
         {
           label: 'Dashboard',
           href: '/dashboard',
-          match: (pathname) =>
-            pathname === '/dashboard' || pathname.startsWith('/dashboard/'),
+          match: (pathname) => pathname === '/dashboard',
           icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
           children: [
             {
-              label: 'Mijn werven',
-              href: '/dashboard',
-              icon: <List className="h-[14px] w-[14px]" />,
-              match: (pathname) =>
-                pathname === '/dashboard' || pathname.startsWith('/dashboard/projects/'),
-            },
-            {
               label: 'Tickets',
               href: '/dashboard/tickets',
-              icon: <Ticket className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/tickets',
+              icon: <List className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/tickets' || pathname.startsWith('/dashboard/tickets/'),
             },
             {
-              label: 'Abonnement',
-              href: '/dashboard/abonnement',
-              icon: <CreditCard className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/abonnement',
+              label: 'Klantfiche',
+              href: '/dashboard/klantfiche',
+              icon: <UserRound className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/klantfiche',
+            },
+            {
+              label: 'Offerte aanvragen',
+              href: '/dashboard/offerte',
+              icon: <FilePlus className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/offerte',
+            },
+            {
+              label: 'Facturatie',
+              href: '/dashboard/facturatie',
+              icon: <FileText className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname === '/dashboard/facturatie',
+            },
+            {
+              label: 'Uploads',
+              href: '/dashboard',
+              icon: <UploadCloud className="h-[14px] w-[14px]" />,
+              match: (pathname) => pathname.startsWith('/dashboard/projects/'),
             },
           ],
         },
@@ -133,6 +150,7 @@ export default function Sidebar({
       match: (pathname) =>
         pathname === '/admin/customers' || pathname.startsWith('/admin/customers/'),
       icon: <Users className="h-[17px] w-[17px]" />,
+      badge: customerCount ?? undefined,
     },
     {
       label: 'Werven',
@@ -140,6 +158,7 @@ export default function Sidebar({
       match: (pathname) =>
         pathname === '/admin/werven' || pathname.startsWith('/admin/projects'),
       icon: <FolderOpen className="h-[17px] w-[17px]" />,
+      badge: projectCount ?? undefined,
     },
     {
       label: 'Tickets',
@@ -147,6 +166,12 @@ export default function Sidebar({
       match: (pathname) => pathname === '/admin/tickets' || pathname.startsWith('/admin/tickets/'),
       icon: <Ticket className="h-[17px] w-[17px]" />,
       badge: openTicketsCount ?? undefined,
+    },
+    {
+      label: 'Klantweergave',
+      href: '/admin/customer-preview',
+      match: (pathname) => pathname === '/admin/customer-preview',
+      icon: <Eye className="h-[17px] w-[17px]" />,
     },
     {
       label: 'Abonnement',
@@ -217,7 +242,7 @@ export default function Sidebar({
             <>
               <span className="truncate text-sm font-medium">{item.label}</span>
               {typeof item.badge === 'number' ? (
-                <span className="ml-auto rounded-full border border-[var(--accent)]/35 bg-[var(--accent)]/14 px-2 py-0.5 text-[10px] font-semibold text-[var(--accent)]">
+                <span className="ml-auto flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
                   {item.badge}
                 </span>
               ) : null}
@@ -226,7 +251,7 @@ export default function Sidebar({
         </Link>
 
         {!collapsed && item.children && item.children.length > 0 && (
-          <div className="ml-8 space-y-1.5">
+          <div className="space-y-1.5">
             {item.children.map((child) => {
               const childActive = child.match(pathname, currentView)
 
@@ -235,12 +260,15 @@ export default function Sidebar({
                   key={child.href + child.label}
                   href={child.href}
                   onClick={handleNavClick}
-                  className={`flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium transition ${
+                  className={`group relative flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition ${
                     childActive
-                      ? 'bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30'
-                      : 'border border-transparent text-[var(--text-muted)] hover:bg-[var(--bg-card)] hover:text-white'
+                      ? 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
+                      : 'text-[var(--text-muted)] hover:bg-[var(--bg-card)] hover:text-white'
                   }`}
                 >
+                  {childActive && (
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]" />
+                  )}
                   {child.icon ? (
                     <span className={`flex h-4 w-4 items-center justify-center ${
                       childActive ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'
@@ -322,13 +350,12 @@ export default function Sidebar({
           )}
         </div>
 
-        {!collapsed && (
+        {!collapsed && isAdmin && (
           <div className="mt-3.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 p-3">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-white shadow-sm">
                 {portalInitials}
               </div>
-
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-[var(--text-main)]">
                   {portalLabel}
@@ -369,26 +396,28 @@ export default function Sidebar({
       <div className="border-t border-[var(--border-soft)] p-3.5">
         {!collapsed ? (
           <div className="space-y-2.5">
-            <Link
-              href={isAdmin ? '/admin' : '/dashboard'}
-              onClick={handleNavClick}
-              className="block rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3 transition hover:border-[var(--accent)]/30 hover:bg-[var(--bg-card)]"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/15 text-sm font-bold text-[var(--accent)]">
-                  {portalInitials}
-                </div>
+            {isAdmin && (
+              <Link
+                href={isAdmin ? '/admin' : '/dashboard'}
+                onClick={handleNavClick}
+                className="block rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3 transition hover:border-[var(--accent)]/30 hover:bg-[var(--bg-card)]"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/15 text-sm font-bold text-[var(--accent)]">
+                    {portalInitials}
+                  </div>
 
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--text-main)]">
-                    {portalLabel}
-                  </p>
-                  <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                    Startpagina
-                  </p>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-[var(--text-main)]">
+                      {portalLabel}
+                    </p>
+                    <p className="mt-0.5 text-xs text-[var(--text-soft)]">
+                      Startpagina
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            )}
 
             <button
               type="button"
