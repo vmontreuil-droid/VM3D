@@ -61,6 +61,17 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
+  // Ophalen en tellen van klanten (admin ziet alle klanten, gebruiker alleen zichzelf)
+  let totalCustomers = 0;
+  if (isAdmin) {
+    const { count } = await supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true });
+    totalCustomers = count || 0;
+  } else {
+    totalCustomers = 1;
+  }
+
   const safeProjects = projects ?? []
   const projectIds = safeProjects.map((project: any) => project.id)
 
