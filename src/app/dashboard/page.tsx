@@ -1,3 +1,4 @@
+import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import Link from 'next/link'
 import {
   FolderOpen,
@@ -9,6 +10,9 @@ import {
   BarChart3,
   Ticket,
   CreditCard,
+  Building2,
+  FileText,
+  FilePlus,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -32,18 +36,6 @@ function getStatusLabel(status: string | null) {
   }
 }
 
-function getInitials(value: string) {
-  const clean = value.trim()
-  if (!clean) return 'KP'
-
-  const parts = clean.split(/\s+/).filter(Boolean)
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase()
-  }
-
-  return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase()
-}
-
 export default async function DashboardPage() {
   const supabase = await createClient()
 
@@ -57,7 +49,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, company_name')
+    .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
@@ -133,14 +125,11 @@ export default async function DashboardPage() {
       longitude: Number(project.longitude),
     }))
 
-  const customerDisplayName =
-    profile?.company_name || profile?.full_name || 'klant'
+  const customerDisplayName = profile?.company_name || ''
 
   const introText = profile?.company_name
     ? `Welkom in het klantenportaal van ${profile.company_name}. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
     : `Welkom in je klantenportaal. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
-
-  const monogram = getInitials(customerDisplayName)
 
   const quickLinks = isAdmin
     ? [
@@ -149,12 +138,14 @@ export default async function DashboardPage() {
           label: 'Klanten',
           description: 'Open alle klantfiches.',
           icon: Users,
+          badge: totalCustomers, // badge met aantal klanten
         },
         {
           href: '/admin',
           label: 'Werven',
           description: 'Ga naar het werfoverzicht.',
           icon: FolderOpen,
+          badge: totalProjects, // badge met aantal werven
         },
         {
           href: '/admin/customers/new',
@@ -213,6 +204,18 @@ export default async function DashboardPage() {
           icon: CreditCard,
         },
         {
+          href: '/dashboard/offerte',
+          label: 'Offerte aanvragen',
+          description: 'Vraag een nieuwe offerte aan.',
+          icon: FilePlus,
+        },
+        {
+          href: '/dashboard/facturatie',
+          label: 'Facturatie',
+          description: 'Bekijk je facturen en betalingen.',
+          icon: FileText,
+        },
+        {
           href: '/dashboard',
           label: 'Uploads',
           description: 'Bekijk je aangeleverde bestanden.',
@@ -243,96 +246,66 @@ export default async function DashboardPage() {
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative space-y-3">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div className="min-w-0">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div className="flex min-w-0 md:max-w-2xl">
+                {/* Logo of fallback: volledige headerhoogte */}
+                <div className="flex items-stretch pr-6">
+                  <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+                </div>
+                <div className="min-w-0 flex flex-col justify-center">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                     Klantenportaal
                   </p>
-
                   <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                    Welkom, {customerDisplayName}
+                    Welkom{customerDisplayName ? `, ${customerDisplayName}` : ''}
                   </h1>
-
                   <p className="mt-1 max-w-2xl text-xs text-[var(--text-soft)] sm:text-sm">
                     {introText}
                   </p>
                 </div>
-
-                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 shadow-sm backdrop-blur">
-                  <div className="flex items-center gap-3 px-3 py-2.5 sm:px-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-white shadow-sm">
-                      {monogram}
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Account
-                      </p>
-                      <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-main)]">
-                        {customerDisplayName}
-                      </p>
-                      <p className="text-[11px] text-[var(--text-soft)]">
-                        Beveiligd klantenportaal
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
-
-              <div className="mx-auto grid w-full max-w-4xl grid-cols-2 gap-2 sm:grid-cols-4">
-                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
-                  <div className="flex items-center justify-between gap-2">
+              <div className="flex gap-3 md:mt-0">
+                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.13),rgba(245,140,55,0.04))] px-5 py-4 min-w-[140px]">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
-                      <p className="mt-1 text-lg font-semibold text-[var(--accent)]">
-                        {totalProjects}
-                      </p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                      <p className="mt-1 text-2xl font-bold text-[var(--accent)]">{totalProjects}</p>
                     </div>
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
-                      <FolderOpen className="h-4.5 w-4.5 text-[var(--accent)]" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent)]/15">
+                      <FolderOpen className="h-7 w-7 text-[var(--accent)]" />
                     </div>
                   </div>
                 </div>
-
-                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
-                  <div className="flex items-center justify-between gap-2">
+                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.13),rgba(76,175,80,0.04))] px-5 py-4 min-w-[140px]">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
-                      <p className="mt-1 text-lg font-semibold text-green-500">
-                        {activeProjects}
-                      </p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                      <p className="mt-1 text-2xl font-bold text-green-500">{activeProjects}</p>
                     </div>
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
-                      <Activity className="h-4.5 w-4.5 text-green-500" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15">
+                      <Activity className="h-7 w-7 text-green-500" />
                     </div>
                   </div>
                 </div>
-
-                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
-                  <div className="flex items-center justify-between gap-2">
+                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.13),rgba(33,150,243,0.04))] px-5 py-4 min-w-[140px]">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
-                      <p className="mt-1 text-lg font-semibold text-blue-500">
-                        {uploadsCount}
-                      </p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                      <p className="mt-1 text-2xl font-bold text-blue-500">{uploadsCount}</p>
                     </div>
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
-                      <UploadCloud className="h-4.5 w-4.5 text-blue-500" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15">
+                      <UploadCloud className="h-7 w-7 text-blue-500" />
                     </div>
                   </div>
                 </div>
-
-                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
-                  <div className="flex items-center justify-between gap-2">
+                <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.13),rgba(156,39,176,0.04))] px-5 py-4 min-w-[140px]">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
-                      <p className="mt-1 text-lg font-semibold text-purple-500">
-                        {finalFilesCount}
-                      </p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                      <p className="mt-1 text-2xl font-bold text-purple-500">{finalFilesCount}</p>
                     </div>
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
-                      <Download className="h-4.5 w-4.5 text-purple-500" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                      <Download className="h-7 w-7 text-purple-500" />
                     </div>
                   </div>
                 </div>
@@ -366,18 +339,22 @@ export default async function DashboardPage() {
               <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
                 {quickLinks.map((item) => {
                   const Icon = item.icon
-
                   return (
                     <Link
                       key={item.href + item.label}
                       href={item.href}
-                      className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                      className="relative rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                     >
+                      {/* Badge alleen tonen voor admin en alleen bij Klanten/Werven */}
+                      {isAdmin && typeof item.badge === 'number' && (
+                        <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
+                          {item.badge}
+                        </span>
+                      )}
                       <div className="flex items-start gap-2.5">
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
                           <Icon className="h-4 w-4" />
                         </span>
-
                         <span className="min-w-0">
                           <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
                             {item.label}
