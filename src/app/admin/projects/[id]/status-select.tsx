@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
@@ -23,8 +23,45 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
   const [status, setStatus] = useState(currentStatus || 'ingediend')
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const [canEdit, setCanEdit] = useState(false)
+
+  useEffect(() => {
+    let active = true
+
+    async function loadRole() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        if (active) setCanEdit(false)
+        return
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (active) {
+        setCanEdit(profile?.role === 'admin')
+      }
+    }
+
+    loadRole()
+
+    return () => {
+      active = false
+    }
+  }, [supabase])
 
   const handleSave = async () => {
+    if (!canEdit) {
+      setMessage('Alleen admins kunnen de status wijzigen.')
+      return
+    }
+
     setSaving(true)
     setMessage('')
 
@@ -54,6 +91,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
+          disabled={!canEdit || saving}
           className="input-dark w-full px-4 py-3 text-sm"
         >
           {STATUS_OPTIONS.map((option) => (
@@ -66,7 +104,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
         <button
           type="button"
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || !canEdit}
           className="inline-flex h-[40px] items-center justify-center rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
         >
           {saving ? 'Opslaan...' : 'Status opslaan'}
@@ -74,6 +112,12 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
 
         {message ? (
           <p className="text-sm text-[var(--text-soft)]">{message}</p>
+        ) : null}
+
+        {!canEdit ? (
+          <p className="text-xs text-[var(--text-muted)]">
+            Alleen admins kunnen de projectstatus aanpassen.
+          </p>
         ) : null}
       </div>
     </div>

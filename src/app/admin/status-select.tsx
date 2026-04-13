@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { getStatusLabel } from '@/lib/status'
@@ -30,9 +30,47 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
   const [status, setStatus] = useState(currentStatus)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [canEdit, setCanEdit] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    let active = true
+
+    async function loadRole() {
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        if (active) setCanEdit(false)
+        return
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (active) {
+        setCanEdit(profile?.role === 'admin')
+      }
+    }
+
+    loadRole()
+
+    return () => {
+      active = false
+    }
+  }, [])
+
   const handleChange = async (newStatus: string) => {
+    if (!canEdit) {
+      setMessage('Alleen admins kunnen de status wijzigen.')
+      return
+    }
+
     setStatus(newStatus)
     setLoading(true)
     setMessage('')
@@ -81,7 +119,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
       <select
         value={status}
         onChange={(e) => handleChange(e.target.value)}
-        disabled={loading}
+        disabled={loading || !canEdit}
         className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <option value="ingediend">{getStatusLabel('ingediend')}</option>
@@ -101,6 +139,12 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
 
       {message ? (
         <p className="text-sm text-[var(--text-soft)]">{message}</p>
+      ) : null}
+
+      {!canEdit ? (
+        <p className="text-xs text-[var(--text-muted)]">
+          Alleen admins kunnen de projectstatus aanpassen.
+        </p>
       ) : null}
     </div>
   )

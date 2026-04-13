@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { FolderOpen, HardHat } from 'lucide-react'
 
 type Project = {
   id: string | number
@@ -465,13 +466,18 @@ export default function ProjectList({
                           : 'grid-cols-[1.6fr_1.4fr_1fr_1fr_1fr_220px]'
                       }`}
                     >
-                      <div className="min-w-0">
-                        <p className="truncate font-semibold text-[var(--text-main)]">
-                          {project.title || '—'}
-                        </p>
-                        <p className="mt-1 text-xs text-[var(--text-muted)] line-clamp-1">
-                          {project.description || 'Geen beschrijving'}
-                        </p>
+                      <div className="min-w-0 flex items-center gap-2">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                          <HardHat className="h-4.5 w-4.5 text-[var(--accent)]" />
+                        </span>
+                        <div>
+                          <p className="truncate font-semibold text-[var(--text-main)]">
+                            {project.title || '—'}
+                          </p>
+                          <p className="mt-1 text-xs text-[var(--text-muted)] line-clamp-1">
+                            {project.description || 'Geen beschrijving'}
+                          </p>
+                        </div>
                       </div>
 
                       {showCustomerColumn && (
@@ -595,9 +601,12 @@ export default function ProjectList({
                     >
                       <Link
                         href={`/dashboard/projects/${project.id}`}
-                        className="min-w-0 text-sm font-semibold text-blue-400 transition hover:text-blue-300 underline"
+                        className="min-w-0 flex items-center gap-2 text-sm font-semibold text-white transition hover:text-[var(--accent)]"
                       >
-                        <p className="truncate">{project.title || '—'}</p>
+                        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--accent)]/10">
+                          <HardHat className="h-4 w-4 text-[var(--accent)]" />
+                        </span>
+                        <span className="truncate">{project.title || '—'}</span>
                       </Link>
 
                       <div className="min-w-0 text-xs text-[var(--text-soft)]">

@@ -229,20 +229,18 @@ export default function CustomerList({
                 setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
                 setCurrentPage(1)
               }}
-              className="group relative flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+              className="btn-secondary btn-sm w-full"
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
               <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
             </button>
 
             <button
               type="button"
               onClick={resetFilters}
-              className="group relative flex h-9 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+              className="btn-secondary btn-sm w-full"
             >
-              <span className="pr-2">Reset</span>
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+              Reset
             </button>
           </div>
         </div>

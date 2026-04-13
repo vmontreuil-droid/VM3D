@@ -1,3 +1,4 @@
+import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
@@ -16,7 +17,7 @@ export default async function DashboardSubscriptionPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, company_name')
+    .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
@@ -32,6 +33,9 @@ export default async function DashboardSubscriptionPage() {
               <Link href="/dashboard" className="btn-secondary">
                 ← Terug naar dashboard
               </Link>
+              <div className="ml-auto">
+                <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+              </div>
             </div>
 
             <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">

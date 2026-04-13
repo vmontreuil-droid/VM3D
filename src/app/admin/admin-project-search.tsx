@@ -80,24 +80,11 @@ function formatPrice(value: number | null, currency?: string | null) {
   return `${value} ${currency || 'EUR'}`
 }
 
-function getActionButtonClass(
-  tone: 'neutral' | 'blue' | 'green' | 'orange' | 'purple'
-) {
+function getActionButtonClass() {
   const shared =
     'group relative inline-flex h-8 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 text-[10px] font-semibold text-[var(--text-main)] transition hover:-translate-y-px'
 
-  switch (tone) {
-    case 'blue':
-      return `${shared} hover:border-sky-400/45 hover:bg-[var(--bg-card)]/80`
-    case 'green':
-      return `${shared} hover:border-emerald-400/45 hover:bg-[var(--bg-card)]/80`
-    case 'orange':
-      return `${shared} hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80`
-    case 'purple':
-      return `${shared} hover:border-fuchsia-400/45 hover:bg-[var(--bg-card)]/80`
-    default:
-      return `${shared} hover:border-white/15 hover:bg-[var(--bg-card)]/80`
-  }
+  return `${shared} hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80`
 }
 
 export default function AdminProjectSearch({
@@ -361,20 +348,18 @@ export default function AdminProjectSearch({
               onClick={() =>
                 setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
               }
-              className="group relative flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+              className="btn-secondary btn-sm w-full"
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
               <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
             </button>
 
             <button
               type="button"
               onClick={resetFilters}
-              className="group relative flex h-9 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+              className="btn-secondary btn-sm w-full"
             >
-              <span className="pr-2">Reset</span>
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+              Reset
             </button>
           </div>
 
@@ -456,31 +441,31 @@ export default function AdminProjectSearch({
                   <div className="flex flex-wrap gap-1.5 sm:justify-end">
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className={getActionButtonClass('blue')}
+                      className={getActionButtonClass()}
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Eye className="h-3 w-3" />
                       </span>
                       <span className="pr-1">Open</span>
-                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 
                     <Link
                       href={`/admin/projects/${project.id}/edit`}
-                      className={getActionButtonClass('neutral')}
+                      className={getActionButtonClass()}
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Edit className="h-3 w-3" />
                       </span>
                       <span className="pr-1">Bewerk</span>
-                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className={getActionButtonClass('orange')}
+                      className={getActionButtonClass()}
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <UploadCloud className="h-3 w-3" />
                       </span>
                       <span className="pr-1">Bestanden</span>
@@ -489,13 +474,13 @@ export default function AdminProjectSearch({
 
                     <Link
                       href={`/admin/projects/${project.id}`}
-                      className={getActionButtonClass('purple')}
+                      className={getActionButtonClass()}
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-fuchsia-500/12 text-fuchsia-200">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Wallet className="h-3 w-3" />
                       </span>
                       <span className="pr-1">Facturatie</span>
-                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-fuchsia-400/80" />
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 
                   </div>

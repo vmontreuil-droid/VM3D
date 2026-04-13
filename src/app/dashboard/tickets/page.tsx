@@ -1,6 +1,7 @@
+import CustomerPortalHeader from "@/components/dashboard/customer-portal-header"
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { FolderOpen, PlusCircle } from 'lucide-react'
+import { FolderOpen, PlusCircle, Activity, UploadCloud, Download } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -86,9 +87,7 @@ type Props = {
 }
 
 export default async function DashboardTicketsPage({ searchParams }: Props) {
-  const resolvedSearchParams = searchParams ? await searchParams : {}
   const supabase = await createClient()
-
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -97,9 +96,35 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
     redirect('/login')
   }
 
+  // Statcard data ophalen zoals op dashboard
+  const { data: projectsRaw } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+
+  const safeProjects = projectsRaw ?? []
+  const totalProjects = safeProjects.length
+  const activeProjects = safeProjects.filter(
+    (project: any) =>
+      project.status === 'in_behandeling' ||
+      project.status === 'klaar_voor_betaling'
+  ).length
+  // Uploads en opleveringen tellen uit project_files
+  const { data: projectFilesRaw } = safeProjects.length > 0
+    ? await supabase
+        .from('project_files')
+        .select('*')
+        .in('project_id', safeProjects.map((p: any) => p.id))
+    : { data: [] }
+  const projectFiles = projectFilesRaw ?? []
+  const uploadsCount = projectFiles.filter((file: any) => file.file_type === 'client_upload').length
+  const finalFilesCount = projectFiles.filter((file: any) => file.file_type === 'final_file').length
+  const resolvedSearchParams = searchParams ? await searchParams : {}
+
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, company_name')
+    .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
@@ -147,25 +172,57 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
           </section>
         )}
 
-        <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
-            <div className="flex flex-wrap items-center gap-2">
-              <Link href="/dashboard" className="btn-secondary">
-                ← Terug naar dashboard
-              </Link>
+        <CustomerPortalHeader logoUrl={profile?.logo_url} companyName={profile?.company_name || undefined} />
+
+        {/* Statcards identiek aan dashboard, rechts uitgelijnd */}
+        <div className="flex gap-3 md:mt-0 mb-2 flex-wrap justify-end">
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.13),rgba(245,140,55,0.04))] px-5 py-4 min-w-[140px]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--accent)]">{totalProjects}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent)]/15">
+                <FolderOpen className="h-7 w-7 text-[var(--accent)]" />
+              </div>
             </div>
-
-            <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-              Support
-            </p>
-            <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">
-              Tickets
-            </h1>
-            <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Dien nieuwe supportvragen in en volg alle antwoorden op per ticket.
-            </p>
           </div>
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.13),rgba(76,175,80,0.04))] px-5 py-4 min-w-[140px]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                <p className="mt-1 text-2xl font-bold text-green-500">{activeProjects}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15">
+                <Activity className="h-7 w-7 text-green-500" />
+              </div>
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.13),rgba(33,150,243,0.04))] px-5 py-4 min-w-[140px]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                <p className="mt-1 text-2xl font-bold text-blue-500">{uploadsCount}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15">
+                <UploadCloud className="h-7 w-7 text-blue-500" />
+              </div>
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.13),rgba(156,39,176,0.04))] px-5 py-4 min-w-[140px]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                <p className="mt-1 text-2xl font-bold text-purple-500">{finalFilesCount}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                <Download className="h-7 w-7 text-purple-500" />
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="grid gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[0.92fr_1.08fr]">
             <form action={createCustomerTicket} className="space-y-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">

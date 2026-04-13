@@ -1,3 +1,25 @@
+export async function GET() {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      return NextResponse.json({ error: 'Supabase admin configuratie ontbreekt.' }, { status: 500 })
+    }
+    const supabaseAdmin = createAdminClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+    const { count, error } = await supabaseAdmin
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('role', 'client')
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+    return NextResponse.json({ count })
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Onbekende serverfout.' }, { status: 500 })
+  }
+}
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdminClient } from '@supabase/supabase-js'

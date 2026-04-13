@@ -1,3 +1,4 @@
+import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import Link from 'next/link'
 import { redirect, notFound } from 'next/navigation'
 import AppShell from '@/components/app-shell'
@@ -234,6 +235,12 @@ export default async function DashboardProjectDetailPage({
     redirect('/login')
   }
 
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role, full_name, company_name, logo_url')
+    .eq('id', user.id)
+    .single()
+
   const { data: projectData, error: projectError } = await supabase
     .from('projects')
     .select('*')
@@ -294,6 +301,9 @@ export default async function DashboardProjectDetailPage({
   return (
     <AppShell>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        <div className="flex justify-end mb-2">
+          <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+        </div>
         {(uploaded || deleted || errorCode) && (
           <section className="space-y-3">
             {uploaded && (

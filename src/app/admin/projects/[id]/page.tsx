@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import FileSubmitButton from '@/components/files/file-submit-button'
 import { geocodeAddress } from '@/lib/geocode'
+import { UserRound, Save, UploadCloud, FileText, MapPin, StickyNote, Users, Zap, History, Files, BadgeCheck, CircleDollarSign } from 'lucide-react'
 const BUCKET_NAME = 'project-files'
 
 const PROJECT_STATUS_STEPS = [
@@ -459,6 +460,8 @@ export default async function AdminProjectDetailPage({
     full_name?: string | null
     company_name?: string | null
     email?: string | null
+    phone?: string | null
+    mobile?: string | null
     vat_number?: string | null
     city?: string | null
     street?: string | null
@@ -470,7 +473,7 @@ export default async function AdminProjectDetailPage({
     const { data: profileRow } = await adminSupabase
       .from('profiles')
       .select(
-        'id, full_name, company_name, email, vat_number, city, street, postal_code, country'
+        'id, full_name, company_name, email, phone, mobile, vat_number, city, street, postal_code, country'
       )
       .eq('id', project.user_id)
       .single()
@@ -541,6 +544,8 @@ export default async function AdminProjectDetailPage({
   )
 
   const currentIndex = getStatusStepIndex(project.status)
+  const projectActionButtonClass =
+    'group relative inline-flex h-9 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80'
 
   return (
     <AppShell isAdmin>
@@ -606,28 +611,30 @@ export default async function AdminProjectDetailPage({
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
               <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href="/admin" className="btn-secondary">
-                    ← Terug
-                  </Link>
-                  <Link
-                    href={`/admin/projects/${project.id}/edit`}
-                    className="btn-primary"
-                  >
-                    ✏️ Werf bewerken
-                  </Link>
-                  {project.user_id ? (
+                {project.user_id ? (
+                  <div className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/admin/customers/${project.user_id}`}
-                      className="btn-secondary"
+                      className={projectActionButtonClass}
                     >
-                      Open klant
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <UserRound className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Open klant</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
-                  ) : null}
-                  <Link href="/admin/projects/new" className="btn-secondary">
-                    + Nieuwe werf
-                  </Link>
-                </div>
+                    <Link
+                      href={`/admin/customers/${project.user_id}/edit`}
+                      className={projectActionButtonClass}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <UserRound className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Bewerk klant</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    </Link>
+                  </div>
+                ) : null}
 
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Premium werffiche
@@ -642,150 +649,212 @@ export default async function AdminProjectDetailPage({
                 </p>
 
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span
-                    className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusClass(
-                      project.status
-                    )}`}
-                  >
-                    {getStatusLabel(project.status)}
-                  </span>
                   <span className="badge-neutral px-3 py-1 text-xs font-semibold">
-                    Klant: {customerName}
+                    Klantdossier actief
                   </span>
-                  <span className="badge-neutral px-3 py-1 text-xs font-semibold">
-                    Prijs:{' '}
-                    {project.price != null
-                      ? `${project.price} ${project.currency || 'EUR'}`
-                      : 'Nog niet bepaald'}
-                  </span>
-                </div>
-
-                <div className="mt-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]/70 px-4 py-4">
-                  <div className="flex flex-col gap-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Voortgang
-                        </p>
-                        <p className="text-xs font-semibold text-[var(--text-main)]">
-                          {getProjectProgressPercent(project.status)}%
-                        </p>
-                      </div>
-
-                      <div className="h-2.5 overflow-hidden rounded-full bg-[var(--bg-card-2)]">
-                        <div
-                          className="h-full rounded-full bg-[var(--accent)] transition-all duration-300"
-                          style={{
-                            width: `${getProjectProgressPercent(project.status)}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Workflow
-                      </p>
-                      <p className="text-xs text-[var(--text-soft)]">
-                        Huidige stap: {getStatusLabel(project.status)}
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-                      {PROJECT_STATUS_STEPS.map((step, index) => {
-                        const isDone = currentIndex >= index
-                        const isCurrent = project.status === step.key
-
-                        return (
-                          <div key={step.key} className="relative">
-                            <div
-                              className={`rounded-xl border px-4 py-3 transition ${
-                                isCurrent
-                                  ? 'border-[var(--accent)] bg-[var(--accent)]/10'
-                                  : isDone
-                                  ? 'border-emerald-500/25 bg-emerald-500/10'
-                                  : 'border-[var(--border-soft)] bg-[var(--bg-card-2)]'
-                              }`}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-                                    isCurrent
-                                      ? 'bg-[var(--accent)] text-white'
-                                      : isDone
-                                      ? 'bg-emerald-500/80 text-white'
-                                      : 'bg-[var(--bg-card)] text-[var(--text-soft)]'
-                                  }`}
-                                >
-                                  {isDone ? '✓' : index + 1}
-                                </div>
-
-                                <div className="min-w-0">
-                                  <p
-                                    className={`text-sm font-semibold ${
-                                      isCurrent || isDone
-                                        ? 'text-[var(--text-main)]'
-                                        : 'text-[var(--text-soft)]'
-                                    }`}
-                                  >
-                                    {step.label}
-                                  </p>
-
-                                  <p className="mt-0.5 text-xs text-[var(--text-muted)]">
-                                    {isCurrent
-                                      ? 'Actieve fase'
-                                      : isDone
-                                      ? 'Voltooid'
-                                      : 'Volgende stap'}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
                 </div>
               </div>
 
-              <div className="grid w-full grid-cols-4 gap-3 xl:w-auto">
-                <div className="card-mini text-center">
-                  <p className="text-xs text-[var(--text-muted)]">Uploads</p>
-                  <p className="text-lg font-semibold text-[var(--text-main)]">
-                    {clientFiles.length}
-                  </p>
+              <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 xl:ml-auto xl:w-[620px] xl:self-center">
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Status</p>
+                      <p className="mt-1 text-sm font-semibold text-amber-300">{getStatusLabel(project.status)}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                      <BadgeCheck className="h-4.5 w-4.5 text-amber-300" />
+                    </div>
+                  </div>
                 </div>
-                <div className="card-mini text-center">
-                  <p className="text-xs text-[var(--text-muted)]">Oplevering</p>
-                  <p className="text-lg font-semibold text-[var(--text-main)]">
-                    {finalFiles.length}
-                  </p>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Prijs</p>
+                      <p className="mt-1 text-sm font-semibold text-[var(--accent)]">
+                        {project.price != null
+                          ? `${project.price} ${project.currency || 'EUR'}`
+                          : 'Nog niet bepaald'}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                      <CircleDollarSign className="h-4.5 w-4.5 text-[var(--accent)]" />
+                    </div>
+                  </div>
                 </div>
-                <div className="card-mini text-center">
-                  <p className="text-xs text-[var(--text-muted)]">Bestanden</p>
-                  <p className="text-lg font-semibold text-[var(--text-main)]">
-                    {filesWithUrls.length}
-                  </p>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                      <p className="mt-1 text-lg font-semibold text-blue-400">{clientFiles.length}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                      <UploadCloud className="h-4.5 w-4.5 text-blue-400" />
+                    </div>
+                  </div>
                 </div>
-                <div className="card-mini text-center">
-                  <p className="text-xs text-[var(--text-muted)]">Timeline</p>
-                  <p className="text-lg font-semibold text-[var(--text-main)]">
-                    {safeTimeline.length}
-                  </p>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                      <p className="mt-1 text-lg font-semibold text-purple-400">{finalFiles.length}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
+                      <FileText className="h-4.5 w-4.5 text-purple-400" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Bestanden</p>
+                      <p className="mt-1 text-lg font-semibold text-cyan-300">{filesWithUrls.length}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-400/10">
+                      <Files className="h-4.5 w-4.5 text-cyan-300" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Timeline</p>
+                      <p className="mt-1 text-lg font-semibold text-emerald-400">{safeTimeline.length}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
+                      <History className="h-4.5 w-4.5 text-emerald-400" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-4">
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <div className="border-b border-[var(--border-soft)] px-4 py-3">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--border-soft)] px-4 py-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
                 <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Projectgegevens
+                  Voortgang & workflow
                 </h2>
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
+                  Overzicht van de huidige fase en de afwerking van deze werf.
+                </p>
+              </div>
+              <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                <Zap className="h-4 w-4" />
+              </span>
+            </div>
+          </div>
+
+          <div className="px-4 py-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                  Voortgang
+                </p>
+                <p className="text-xs font-semibold text-[var(--text-main)]">
+                  {getProjectProgressPercent(project.status)}%
+                </p>
+              </div>
+
+              <div className="h-2.5 overflow-hidden rounded-full bg-[var(--bg-card-2)]">
+                <div
+                  className="h-full rounded-full bg-[var(--accent)] transition-all duration-300"
+                  style={{ width: `${getProjectProgressPercent(project.status)}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                Workflow
+              </p>
+              <p className="text-xs text-[var(--text-soft)]">
+                Huidige stap: {getStatusLabel(project.status)}
+              </p>
+            </div>
+
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-4">
+              {PROJECT_STATUS_STEPS.map((step, index) => {
+                const isDone = currentIndex >= index
+                const isCurrent = project.status === step.key
+
+                return (
+                  <div key={step.key} className="relative">
+                    <div
+                      className={`rounded-xl border px-4 py-3 transition ${
+                        isCurrent
+                          ? 'border-[var(--accent)] bg-[var(--accent)]/10'
+                          : isDone
+                          ? 'border-emerald-500/25 bg-emerald-500/10'
+                          : 'border-[var(--border-soft)] bg-[var(--bg-card-2)]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                            isCurrent
+                              ? 'bg-[var(--accent)] text-white'
+                              : isDone
+                              ? 'bg-emerald-500/80 text-white'
+                              : 'bg-[var(--bg-card)] text-[var(--text-soft)]'
+                          }`}
+                        >
+                          {isDone ? '✓' : index + 1}
+                        </div>
+
+                        <div className="min-w-0">
+                          <p
+                            className={`text-sm font-semibold ${
+                              isCurrent || isDone
+                                ? 'text-[var(--text-main)]'
+                                : 'text-[var(--text-soft)]'
+                            }`}
+                          >
+                            {step.label}
+                          </p>
+
+                          <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                            {isCurrent
+                              ? 'Actieve fase'
+                              : isDone
+                              ? 'Voltooid'
+                              : 'Volgende stap'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="flex flex-col gap-4">
+            <section className="order-3 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+              <div className="border-b border-[var(--border-soft)] px-4 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Projectgegevens
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Overzicht van status, prijs, locatie en beschrijving van deze werf.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <FileText className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <div className="grid gap-3 px-4 py-4 sm:grid-cols-2">
@@ -839,11 +908,21 @@ export default async function AdminProjectDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <section className="order-1 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Locatie & kaart
-                </h2>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Locatie & kaart
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Controleer adresgegevens en positie van de werf op de kaart.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <MapPin className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <div className="grid gap-3 px-4 py-4">
@@ -870,14 +949,21 @@ export default async function AdminProjectDetailPage({
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <section className="order-2 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Interne admin-notities
-                </h2>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Enkel zichtbaar voor admins.
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Interne admin-notities
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Enkel zichtbaar voor admins.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <StickyNote className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <div className="px-4 py-4">
@@ -892,9 +978,13 @@ export default async function AdminProjectDetailPage({
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
+                      className={projectActionButtonClass}
                     >
-                      Notities opslaan
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Save className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Notities opslaan</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </button>
                   </div>
                 </form>
@@ -902,12 +992,22 @@ export default async function AdminProjectDetailPage({
             </section>
           </div>
 
-          <div className="space-y-4">
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="flex flex-col gap-4">
+            <section className="order-4 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Klantkaart
-                </h2>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Klantkaart
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Contactgegevens en klantinformatie gekoppeld aan deze werf.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <Users className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <div className="grid gap-3 px-4 py-4">
@@ -918,7 +1018,7 @@ export default async function AdminProjectDetailPage({
                   </p>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 sm:grid-cols-3">
                   <div className="card-mini">
                     <p className="text-xs text-[var(--text-muted)]">E-mail</p>
                     <p className="mt-1 break-all text-sm font-semibold text-[var(--text-main)]">
@@ -929,6 +1029,12 @@ export default async function AdminProjectDetailPage({
                     <p className="text-xs text-[var(--text-muted)]">BTW</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {display(customerProfile?.vat_number)}
+                    </p>
+                  </div>
+                  <div className="card-mini">
+                    <p className="text-xs text-[var(--text-muted)]">Mobiel</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+                      {display(customerProfile?.mobile || customerProfile?.phone)}
                     </p>
                   </div>
                 </div>
@@ -943,19 +1049,33 @@ export default async function AdminProjectDetailPage({
                 {project.user_id ? (
                   <Link
                     href={`/admin/customers/${project.user_id}`}
-                    className="btn-secondary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
+                    className={projectActionButtonClass}
                   >
-                    Open volledige klantfiche
+                    <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <UserRound className="h-3 w-3" />
+                    </span>
+                    <span className="pr-1">Open volledige klantfiche</span>
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                   </Link>
                 ) : null}
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <section className="order-1 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Snelle acties
-                </h2>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Snelle acties
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Pas status, prijs en bestanden aan vanuit een centraal actieblok.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <Zap className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-4 px-4 py-4">
@@ -982,9 +1102,13 @@ export default async function AdminProjectDetailPage({
                     </select>
                     <button
                       type="submit"
-                      className="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
+                      className={projectActionButtonClass}
                     >
-                      Opslaan
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Save className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Opslaan</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </button>
                   </div>
                 </form>
@@ -1014,9 +1138,13 @@ export default async function AdminProjectDetailPage({
                     />
                     <button
                       type="submit"
-                      className="btn-primary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
+                      className={projectActionButtonClass}
                     >
-                      Opslaan
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Save className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Opslaan</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </button>
                   </div>
                 </form>
@@ -1036,13 +1164,17 @@ export default async function AdminProjectDetailPage({
                   />
 
                   <div className="mt-3">
-  <button
-    type="submit"
-    className="btn-secondary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
-  >
-    Upload opleverbestand
-  </button>
-</div>
+                    <button
+                      type="submit"
+                      className={projectActionButtonClass}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <UploadCloud className="h-3 w-3" />
+                      </span>
+                      <span className="pr-1">Upload opleverbestand</span>
+                      <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    </button>
+                  </div>
                 </form>
 
                 <form
@@ -1060,24 +1192,31 @@ export default async function AdminProjectDetailPage({
                   />
 
                   <div className="mt-3">
-  <FileSubmitButton
-    idleText="Upload opleverbestand"
-    loadingText="Opleverbestand wordt geüpload..."
-    className="btn-secondary inline-flex items-center justify-center px-4 py-2 text-sm font-semibold"
-  />
-</div>
+                    <FileSubmitButton
+                      idleText="Upload opleverbestand"
+                      loadingText="Opleverbestand wordt geüpload..."
+                      className={projectActionButtonClass}
+                    />
+                  </div>
                 </form>
               </div>
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <section className="order-2 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Project timeline
-                </h2>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Historiek van wijzigingen en acties.
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Project timeline
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Historiek van wijzigingen en acties.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <History className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               {safeTimeline.length === 0 ? (
@@ -1121,11 +1260,21 @@ export default async function AdminProjectDetailPage({
               )}
             </section>
 
-            <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <section className="order-3 overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Bestanden
-                </h2>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                      Bestanden
+                    </h2>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Overzicht van uploads en opleverbestanden gekoppeld aan deze werf.
+                    </p>
+                  </div>
+                  <span className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <Files className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
               <FileList files={filesWithUrls} />
