@@ -10,6 +10,7 @@ import {
   Activity,
   Download,
   Mail,
+  Eye,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -516,6 +517,10 @@ export default async function AdminPage({ searchParams }: Props) {
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  {/* Badge rechtsboven */}
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
+                    {customerCount}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
                       <Users className="h-4 w-4" />
@@ -536,6 +541,10 @@ export default async function AdminPage({ searchParams }: Props) {
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  {/* Badge rechtsboven */}
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
+                    {totalProjects}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
                       <FolderOpen className="h-4 w-4" />
@@ -609,6 +618,26 @@ export default async function AdminPage({ searchParams }: Props) {
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
                         Volg supportvragen en meldingen op.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/customer-preview"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Eye className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Klantweergave
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk het portaal zoals de klant het ziet.
                       </span>
                     </span>
                   </div>
