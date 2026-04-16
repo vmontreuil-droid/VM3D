@@ -3,7 +3,6 @@ import { AlertCircle, CheckCircle, Upload, Calendar, PartyPopper } from 'lucide-
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
 import Logo from '@/components/logo'
-import TopoBackground from '@/components/topo-background'
 import SubmitButton from './submit-button'
 
 async function createOfferteRequest(formData: FormData) {
@@ -130,7 +129,6 @@ export default async function OffertePage({ searchParams }: Props) {
 
   return (
     <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
-      <TopoBackground />
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-5 sm:px-6 lg:py-8">
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           {/* Header */}
