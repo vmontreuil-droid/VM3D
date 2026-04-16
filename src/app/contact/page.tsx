@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation'
-import { AlertCircle, CheckCircle, Upload } from 'lucide-react'
+import { AlertCircle, CheckCircle } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
+import { uploadTicketFiles } from '@/lib/ticket-uploads'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
+import FileUploadZone from '@/components/file-upload-zone'
 import SubmitButton from './submit-button'
 
 async function createContactRequest(formData: FormData) {
@@ -76,6 +78,9 @@ async function createContactRequest(formData: FormData) {
     redirect('/contact?error=save')
   }
 
+  // Upload attached files
+  const { uploaded: uploadedFiles } = await uploadTicketFiles(formData, data.id)
+
   // Notify admins
   const { data: admins } = await adminSupabase
     .from('profiles')
@@ -96,8 +101,8 @@ async function createContactRequest(formData: FormData) {
     await sendTicketNotificationEmail({
       to: adminEmails,
       subject: `Nieuwe contactaanvraag #${data.id} van ${visitorName}`,
-      text: `Er werd een nieuwe contactaanvraag ingediend door ${visitorName} (${visitorEmail}).\n\nTel: ${phone}\n${vatNumber ? `BTW: ${vatNumber}\n` : ''}Dienst: ${service || 'n.v.t.'}\n\nTicket #${data.id}: ${title}\nBekijk: ${detailUrl}`,
-      html: `<p>Er werd een nieuwe contactaanvraag ingediend door <strong>${visitorName}</strong> (${visitorEmail}).</p><p>Tel: ${phone}<br/>${vatNumber ? `BTW: ${vatNumber}<br/>` : ''}Dienst: ${service || 'n.v.t.'}</p><p>Ticket <strong>#${data.id}</strong>: ${title}</p><p><a href="${detailUrl}">Open ticket</a></p>`,
+      text: `Er werd een nieuwe contactaanvraag ingediend door ${visitorName} (${visitorEmail}).\n\nTel: ${phone}\n${vatNumber ? `BTW: ${vatNumber}\n` : ''}Dienst: ${service || 'n.v.t.'}${uploadedFiles.length > 0 ? `\nBijlagen: ${uploadedFiles.join(', ')}` : ''}\n\nTicket #${data.id}: ${title}\nBekijk: ${detailUrl}`,
+      html: `<p>Er werd een nieuwe contactaanvraag ingediend door <strong>${visitorName}</strong> (${visitorEmail}).</p><p>Tel: ${phone}<br/>${vatNumber ? `BTW: ${vatNumber}<br/>` : ''}Dienst: ${service || 'n.v.t.'}${uploadedFiles.length > 0 ? `<br/>📎 Bijlagen: ${uploadedFiles.join(', ')}` : ''}</p><p>Ticket <strong>#${data.id}</strong>: ${title}</p><p><a href="${detailUrl}">Open ticket</a></p>`,
     })
   }
 
@@ -307,35 +312,7 @@ export default async function ContactPage({ searchParams }: Props) {
                 </div>
 
                 {/* File upload zone */}
-                <div className="grid gap-1.5">
-                  <label className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Bijlagen (optioneel)
-                  </label>
-                  <label
-                    htmlFor="files"
-                    className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-6 text-center transition hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/[0.03]"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
-                      <Upload className="h-5 w-5 text-[var(--accent)]" />
-                    </div>
-                    <div>
-                      <p className="text-[12px] font-medium text-[var(--text-main)]">
-                        Klik om bestanden te selecteren
-                      </p>
-                      <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-                        DXF, DWG, XML, PDF, ZIP — max 50MB per bestand
-                      </p>
-                    </div>
-                    <input
-                      type="file"
-                      id="files"
-                      name="files"
-                      multiple
-                      accept=".dxf,.dwg,.xml,.pdf,.zip,.rar,.csv,.xlsx,.jpg,.png"
-                      className="sr-only"
-                    />
-                  </label>
-                </div>
+                <FileUploadZone />
 
                 {/* Submit */}
                 <div className="flex items-center justify-between gap-3 pt-1">
