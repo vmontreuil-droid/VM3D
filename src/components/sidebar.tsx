@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
+import TopoBackground from '@/components/topo-background'
 import { createClient } from '@/lib/supabase/client'
 import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction } from 'lucide-react'
 
@@ -362,10 +363,32 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`relative flex h-dvh flex-col border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
+      className={`relative flex h-dvh flex-col overflow-hidden border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
         mobile ? 'w-[280px]' : collapsed ? 'w-[82px]' : 'w-[280px]'
       }`}
     >
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <svg
+          className="h-full w-full opacity-[0.12]"
+          viewBox="0 0 400 900"
+          fill="none"
+          preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M-20,200 C40,120 120,80 200,130 C280,180 320,60 400,100" stroke="#f7941d" strokeWidth="1" opacity="0.7"/>
+          <path d="M-20,260 C50,180 110,140 190,180 C270,220 310,110 400,160" stroke="#f7941d" strokeWidth="1" opacity="0.6"/>
+          <path d="M-20,320 C60,250 100,200 180,230 C260,260 300,160 400,220" stroke="#f7941d" strokeWidth="0.8" opacity="0.5"/>
+          <path d="M80,450 C100,380 150,340 210,350 C270,360 290,310 280,270 C270,230 230,210 190,225 C150,240 110,290 100,370 C90,410 85,440 80,450Z" stroke="#f7941d" strokeWidth="1.2" opacity="0.8"/>
+          <path d="M110,420 C125,370 160,345 205,352 C250,359 268,320 260,290 C252,260 222,245 195,255 C168,265 140,300 135,365 C130,400 115,415 110,420Z" stroke="#f7941d" strokeWidth="1" opacity="0.6"/>
+          <path d="M140,395 C150,360 175,345 205,350 C235,355 248,330 243,310 C238,290 218,280 200,286 C182,292 165,315 163,355 C161,380 145,392 140,395Z" stroke="#f7941d" strokeWidth="0.8" opacity="0.5"/>
+          <path d="M-20,600 C40,560 120,580 200,555 C280,530 350,570 420,545" stroke="#f7941d" strokeWidth="0.8" opacity="0.4"/>
+          <path d="M-20,660 C50,630 100,640 180,620 C260,600 330,630 420,610" stroke="#f7941d" strokeWidth="0.8" opacity="0.35"/>
+          <path d="M-20,80 C60,50 140,70 220,45 C300,20 380,60 420,40" stroke="#f7941d" strokeWidth="0.8" opacity="0.35"/>
+          <circle cx="300" cy="700" r="18" stroke="#f7941d" strokeWidth="0.7" opacity="0.3"/>
+          <circle cx="300" cy="700" r="10" stroke="#f7941d" strokeWidth="0.5" opacity="0.25"/>
+          <circle cx="80" cy="780" r="14" stroke="#f7941d" strokeWidth="0.6" opacity="0.25"/>
+        </svg>
+      </div>
       {!mobile && (
         <button
           type="button"
@@ -382,7 +405,7 @@ export default function Sidebar({
       )}
 
       <div
-        className={`border-b border-[var(--border-soft)] ${
+        className={`relative z-10 border-b border-[var(--border-soft)] ${
           collapsed && !mobile ? 'px-3 py-4' : 'px-5 py-4'
         }`}
       >
@@ -434,7 +457,7 @@ export default function Sidebar({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3.5 py-4">
+      <div className="relative z-10 flex-1 overflow-y-auto px-3.5 py-4">
         <nav className="space-y-5">
           <div>
             {!collapsed && (
@@ -453,7 +476,7 @@ export default function Sidebar({
         </nav>
       </div>
 
-      <div className="border-t border-[var(--border-soft)] p-3.5">
+      <div className="relative z-10 border-t border-[var(--border-soft)] p-3.5">
         {!collapsed ? (
           <div className="space-y-2.5">
             {isAdmin && (

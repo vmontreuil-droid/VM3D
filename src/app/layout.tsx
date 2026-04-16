@@ -1,6 +1,5 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import TopoBackground from '@/components/topo-background'
 
 export const metadata: Metadata = {
   title: 'MV3D.CLOUD',
@@ -19,10 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl">
-      <body>
-        <TopoBackground />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

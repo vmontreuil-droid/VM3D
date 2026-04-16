@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/logo'
+import TopoBackground from '@/components/topo-background'
 import { Lock, CheckCircle, Eye, EyeOff } from 'lucide-react'
 
 export default function ResetPasswordPage() {
@@ -57,6 +58,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[var(--bg-main)] px-4">
+      <TopoBackground />
       <div className="relative z-10 w-full max-w-md">
         <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-6 py-5">
