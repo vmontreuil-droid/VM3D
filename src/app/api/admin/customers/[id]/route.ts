@@ -1,3 +1,27 @@
+import { NextRequest } from 'next/server'
+
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await context.params
+    if (!id) {
+      return NextResponse.json({ error: 'Klant-ID ontbreekt.' }, { status: 400 })
+    }
+    const adminCheck = await requireAdmin()
+    if (adminCheck.error) return adminCheck.error
+    const adminSupabase = adminCheck.adminSupabase
+    const { data: customer, error } = await adminSupabase
+      .from('profiles')
+      .select('id, company_name, full_name, email, phone, address, city, postal_code, country')
+      .eq('id', id)
+      .single()
+    if (error || !customer) {
+      return NextResponse.json({ error: error?.message || 'Klant niet gevonden.' }, { status: 404 })
+    }
+    return NextResponse.json({ customer })
+  } catch (error) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Onbekende serverfout.' }, { status: 500 })
+  }
+}
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'

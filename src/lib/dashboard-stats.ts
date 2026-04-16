@@ -5,9 +5,11 @@ export function countByStatus(projects: any[], status: string) {
 export function buildProjectStats(projects: any[]) {
   return {
     total: projects.length,
-    ingediend: countByStatus(projects, 'ingediend'),
+    offerteAangevraagd: countByStatus(projects, 'offerte_aangevraagd') + countByStatus(projects, 'ingediend'),
+    offerteVerstuurd: countByStatus(projects, 'offerte_verstuurd'),
     inBehandeling: countByStatus(projects, 'in_behandeling'),
-    klaarVoorBetaling: countByStatus(projects, 'klaar_voor_betaling'),
+    facturatie: countByStatus(projects, 'facturatie') + countByStatus(projects, 'klaar_voor_betaling'),
+    factuurVerstuurd: countByStatus(projects, 'factuur_verstuurd'),
     afgerond: countByStatus(projects, 'afgerond'),
   }
 }

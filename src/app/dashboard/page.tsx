@@ -1,5 +1,15 @@
 import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
+import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 import Link from 'next/link'
+
+type QuickLink = {
+  href: string;
+  label: string;
+  description: any;
+  icon: any;
+  badge?: number;
+  color?: string;
+};
 import {
   FolderOpen,
   Activity,
@@ -13,6 +23,7 @@ import {
   Building2,
   FileText,
   FilePlus,
+  Construction,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -23,14 +34,22 @@ import RecentFilesList from './recent-files-list'
 
 function getStatusLabel(status: string | null) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -47,15 +66,18 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const adminSupabase = createAdminClient()
+
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
   const isAdmin = profile?.role === 'admin'
+  const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
 
-  const { data: projects, error: projectsError } = await supabase
+  const { data: projects, error: projectsError } = await adminSupabase
     .from('projects')
     .select('*')
     .eq('user_id', user.id)
@@ -64,7 +86,7 @@ export default async function DashboardPage() {
   // Ophalen en tellen van klanten (admin ziet alle klanten, gebruiker alleen zichzelf)
   let totalCustomers = 0;
   if (isAdmin) {
-    const { count } = await supabase
+    const { count } = await adminSupabase
       .from('profiles')
       .select('*', { count: 'exact', head: true });
     totalCustomers = count || 0;
@@ -79,17 +101,9 @@ export default async function DashboardPage() {
   let recentFilesError: any = null
 
   if (projectIds.length > 0) {
-    const filesResponse = await supabase
+    const filesResponse = await adminSupabase
       .from('project_files')
-      .select(
-        `
-          *,
-          projects (
-            title,
-            status
-          )
-        `
-      )
+      .select('*')
       .in('project_id', projectIds)
       .order('created_at', { ascending: false })
       .limit(12)
@@ -100,12 +114,13 @@ export default async function DashboardPage() {
 
   const totalProjects = safeProjects.length
   const submittedProjects = safeProjects.filter(
-    (project: any) => project.status === 'ingediend'
+    (project: any) => project.status === 'offerte_aangevraagd' || project.status === 'offerte_verstuurd'
   ).length
   const activeProjects = safeProjects.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd'
   ).length
   const completedProjects = safeProjects.filter(
     (project: any) => project.status === 'afgerond'
@@ -122,19 +137,30 @@ export default async function DashboardPage() {
   const latestProject = safeProjects[0] ?? null
   const latestFile = recentFiles[0] ?? null
 
-  const projectLocations = safeProjects
-    .filter(
-      (project: any) =>
-        project.latitude != null &&
-        project.longitude != null &&
-        !Number.isNaN(Number(project.latitude)) &&
-        !Number.isNaN(Number(project.longitude))
-    )
-    .map((project: any) => ({
-      name: project.address || project.title || 'Projectlocatie',
-      latitude: Number(project.latitude),
-      longitude: Number(project.longitude),
-    }))
+  // Ticket count (open = nieuw + in_behandeling + wacht_op_klant)
+  const { count: openTicketCount } = await adminSupabase
+    .from('tickets')
+    .select('*', { count: 'exact', head: true })
+    .eq('customer_id', user.id)
+    .in('status', ['nieuw', 'in_behandeling', 'wacht_op_klant'])
+
+  const projectLocations = (totalCustomers === 0)
+    ? []
+    : (safeProjects && safeProjects.length > 0)
+      ? safeProjects
+          .filter(
+            (project: any) =>
+              project.latitude != null &&
+              project.longitude != null &&
+              !Number.isNaN(Number(project.latitude)) &&
+              !Number.isNaN(Number(project.longitude))
+          )
+          .map((project: any) => ({
+            name: project.address || project.name || 'Projectlocatie',
+            latitude: Number(project.latitude),
+            longitude: Number(project.longitude),
+          }))
+      : []
 
   const customerDisplayName = profile?.company_name || ''
 
@@ -142,21 +168,21 @@ export default async function DashboardPage() {
     ? `Welkom in het klantenportaal van ${profile.company_name}. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
     : `Welkom in je klantenportaal. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
 
-  const quickLinks = isAdmin
+  const quickLinks: QuickLink[] = isAdmin
     ? [
         {
           href: '/admin/customers',
           label: 'Klanten',
           description: 'Open alle klantfiches.',
           icon: Users,
-          badge: totalCustomers, // badge met aantal klanten
+          badge: totalCustomers,
         },
         {
           href: '/admin',
           label: 'Werven',
           description: 'Ga naar het werfoverzicht.',
           icon: FolderOpen,
-          badge: totalProjects, // badge met aantal werven
+          badge: totalProjects,
         },
         {
           href: '/admin/customers/new',
@@ -175,6 +201,13 @@ export default async function DashboardPage() {
           label: 'Tickets',
           description: 'Beheer vragen en opvolgingen.',
           icon: Ticket,
+          badge: openTicketCount ?? 0,
+        },
+        {
+          href: '/dashboard/offerte',
+          label: 'Offerte',
+          description: 'Maak of bekijk offertes.',
+          icon: FilePlus,
         },
         {
           href: '/dashboard/abonnement',
@@ -201,18 +234,21 @@ export default async function DashboardPage() {
           label: 'Mijn werven',
           description: 'Overzicht van je werven.',
           icon: FolderOpen,
+          badge: totalProjects,
         },
         {
           href: '/dashboard/tickets',
           label: 'Tickets',
           description: 'Meld een vraag of opvolging.',
           icon: Ticket,
+          badge: openTicketCount ?? 0,
         },
         {
           href: '/dashboard/abonnement',
           label: 'Abonnement',
           description: 'Bekijk je formule en opties.',
           icon: CreditCard,
+          badge: 0,
         },
         {
           href: '/dashboard/offerte',
@@ -225,26 +261,28 @@ export default async function DashboardPage() {
           label: 'Facturatie',
           description: 'Bekijk je facturen en betalingen.',
           icon: FileText,
+          badge: 0,
         },
         {
           href: '/dashboard',
           label: 'Uploads',
           description: 'Bekijk je aangeleverde bestanden.',
           icon: UploadCloud,
+          badge: uploadsCount,
         },
         {
           href: '/dashboard',
           label: 'Oplevering',
           description: 'Open je finale bestanden.',
           icon: Download,
+          badge: finalFilesCount,
         },
         {
-          href: latestProject ? `/dashboard/projects/${latestProject.id}` : '/dashboard',
-          label: 'Recente werf',
-          description: latestProject
-            ? latestProject.title || 'Ga verder in je laatste dossier.'
-            : 'Nog geen recente werf beschikbaar.',
-          icon: Activity,
+          href: '/dashboard/machinetools',
+          label: 'Machinetools',
+          description: 'Beheer en volg je machinetools.',
+          icon: Construction,
+          color: 'green',
         },
       ]
 
@@ -261,7 +299,7 @@ export default async function DashboardPage() {
               <div className="flex min-w-0 md:max-w-2xl">
                 {/* Logo of fallback: volledige headerhoogte */}
                 <div className="flex items-stretch pr-6">
-                  <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+                  <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
                 </div>
                 <div className="min-w-0 flex flex-col justify-center">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
@@ -354,16 +392,27 @@ export default async function DashboardPage() {
                     <Link
                       key={item.href + item.label}
                       href={item.href}
-                      className="relative rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2.5 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                      className={`relative rounded-lg border px-2.5 py-2.5 transition ${
+                        item.color === 'green'
+                          ? 'border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] hover:border-emerald-500/60'
+                          : 'border-[var(--border-soft)] bg-[var(--bg-card)] hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80'
+                      }`}
                     >
-                      {/* Badge alleen tonen voor admin en alleen bij Klanten/Werven */}
-                      {isAdmin && typeof item.badge === 'number' && (
-                        <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
-                          {item.badge}
+                      {'badge' in item ? (
+                        <span className={`absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-semibold min-w-[1.8em] h-[1.6em] leading-none ${
+                          item.color === 'green'
+                            ? 'border-emerald-500/60 bg-[var(--bg-card)] text-emerald-400'
+                            : 'border-[var(--accent)]/60 bg-[var(--bg-card)] text-[var(--accent)]'
+                        }`}>
+                          {typeof item.badge === 'number' ? item.badge : 0}
                         </span>
-                      )}
+                      ) : null}
                       <div className="flex items-start gap-2.5">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+                          item.color === 'green'
+                            ? 'bg-emerald-500/12 text-emerald-400'
+                            : 'bg-[var(--accent)]/12 text-[var(--accent)]'
+                        }`}>
                           <Icon className="h-4 w-4" />
                         </span>
                         <span className="min-w-0">

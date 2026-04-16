@@ -16,98 +16,122 @@ import {
 import CustomerMap from '@/components/customers/customer-map'
 import CustomerLogoUpload from '@/components/customers/customer-logo-upload'
 
-type Props = {
-  action: (formData: FormData) => void
-}
+type CustomerFormData = {
+  vatNumber?: string;
+  companyName?: string;
+  fullName?: string;
+  email?: string;
+  enterpriseNumber?: string;
+  reference?: string;
+  salutation?: string;
+  directorFirstName?: string;
+  directorLastName?: string;
+  rpr?: string;
+  invoiceEmail?: string;
+  website?: string;
+  phone?: string;
+  mobile?: string;
+  fax?: string;
+  language?: string;
+  iban?: string;
+  bic?: string;
+  paymentTermDays?: string;
+  currency?: string;
+  vatRate?: string;
+  invoiceSendMethod?: string;
+  sendXml?: boolean;
+  xmlFormat?: string;
+  sendPdf?: boolean;
+  autoReminders?: boolean;
+  street?: string;
+  houseNumber?: string;
+  bus?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  comments?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  mapLabel?: string;
+  quoteValidityDays?: string;
+  paymentMethod?: string;
+};
 
 type LookupResult = {
-  valid: boolean
-  countryCode: string
-  vatNumber: string
-  companyName: string
-  addressRaw: string
-  street: string
-  postalCode: string
-  city: string
-  country: string
-  latitude: number | null
-  longitude: number | null
-  mapLabel?: string
-}
+  valid: boolean;
+  countryCode?: string;
+  vatNumber?: string;
+  companyName?: string;
+  street?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  mapLabel?: string;
+};
 
-export default function CustomerForm({ action }: Props) {
-  const INVITE_COOLDOWN_SECONDS = 90
-  const INVITE_COOLDOWN_MS = INVITE_COOLDOWN_SECONDS * 1000
-  const inviteCooldownStorageKey = 'invite-cooldown:customer-new'
+const INVITE_COOLDOWN_MS = 60_000;
+const inviteCooldownStorageKey = 'customer-form:invite-cooldown-until';
 
-  const [vatNumber, setVatNumber] = useState('')
-  const [companyName, setCompanyName] = useState('')
-  const [fullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [enterpriseNumber, setEnterpriseNumber] = useState('')
-  const [reference, setReference] = useState('')
-  const [salutation, setSalutation] = useState('')
-  const [directorFirstName, setDirectorFirstName] = useState('')
-  const [directorLastName, setDirectorLastName] = useState('')
-  const [rpr, setRpr] = useState('')
-  const [invoiceEmail, setInvoiceEmail] = useState('')
-  const [website, setWebsite] = useState('')
-  const [phone, setPhone] = useState('')
-  const [mobile, setMobile] = useState('')
-  const [fax, setFax] = useState('')
-  const [language, setLanguage] = useState('')
-  const [iban, setIban] = useState('')
-  const [bic, setBic] = useState('')
-  const [paymentTermDays, setPaymentTermDays] = useState('')
-  const [quoteValidityDays, setQuoteValidityDays] = useState('')
-  const [paymentMethod, setPaymentMethod] = useState('')
-  const [currency, setCurrency] = useState('EUR')
-  const [vatRate, setVatRate] = useState('')
-  const [invoiceSendMethod, setInvoiceSendMethod] = useState('')
-  const [sendXml, setSendXml] = useState(false)
-  const [xmlFormat, setXmlFormat] = useState('')
-  const [sendPdf, setSendPdf] = useState(false)
-  const [autoReminders, setAutoReminders] = useState(false)
+type CustomerFormProps = {
+  initialData?: Partial<CustomerFormData>;
+  action?: (formData: FormData) => void;
+  showCommentsAndPortal?: boolean;
+  showSubmitAndBackButton?: boolean;
+};
 
-  const [street, setStreet] = useState('')
-  const [houseNumber, setHouseNumber] = useState('')
-  const [bus, setBus] = useState('')
-  const [postalCode, setPostalCode] = useState('')
-  const [city, setCity] = useState('')
-  const [country, setCountry] = useState('')
-  const [comments, setComments] = useState('')
-  const [latitude, setLatitude] = useState<number | null>(null)
-  const [longitude, setLongitude] = useState<number | null>(null)
-  const [mapLabel, setMapLabel] = useState('')
-  const [lookupMessage, setLookupMessage] = useState('')
-  const [lookupLoading, setLookupLoading] = useState(false)
-  const [addressLookupMessage, setAddressLookupMessage] = useState('')
-  const [addressLookupLoading, setAddressLookupLoading] = useState(false)
-  const [passwordMode, setPasswordMode] = useState<'invite' | 'manual'>('invite')
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [inviteCooldownUntil, setInviteCooldownUntil] = useState(0)
-  const [nowTs, setNowTs] = useState(Date.now())
+export default function CustomerForm({
+  initialData = {},
+  action,
+  showCommentsAndPortal = true,
+  showSubmitAndBackButton = true,
+}: CustomerFormProps) {
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const raw = window.localStorage.getItem(inviteCooldownStorageKey)
-    if (!raw) return
-
-    const parsed = Number(raw)
-    if (!Number.isFinite(parsed)) {
-      window.localStorage.removeItem(inviteCooldownStorageKey)
-      return
-    }
-
-    if (parsed > Date.now()) {
-      setInviteCooldownUntil(parsed)
-      return
-    }
-
-    window.localStorage.removeItem(inviteCooldownStorageKey)
-  }, [])
+  // --- STATE ---
+  const [vatNumber, setVatNumber] = useState(initialData.vatNumber || "");
+  const [companyName, setCompanyName] = useState(initialData.companyName || "");
+  const [fullName, setFullName] = useState(initialData.fullName || "");
+  const [email, setEmail] = useState(initialData.email || "");
+  const [salutation, setSalutation] = useState(initialData.salutation || "");
+  const [directorFirstName, setDirectorFirstName] = useState(initialData.directorFirstName || "");
+  const [directorLastName, setDirectorLastName] = useState(initialData.directorLastName || "");
+  const [invoiceEmail, setInvoiceEmail] = useState(initialData.invoiceEmail || "");
+  const [phone, setPhone] = useState(initialData.phone || "");
+  const [mobile, setMobile] = useState(initialData.mobile || "");
+  const [fax, setFax] = useState(initialData.fax || "");
+  const [language, setLanguage] = useState(initialData.language || "");
+  const [iban, setIban] = useState(initialData.iban || "");
+  const [bic, setBic] = useState(initialData.bic || "");
+  const [paymentTermDays, setPaymentTermDays] = useState(initialData.paymentTermDays || "");
+  const [currency, setCurrency] = useState(initialData.currency || 'EUR');
+  const [vatRate, setVatRate] = useState(initialData.vatRate || '');
+  const [invoiceSendMethod, setInvoiceSendMethod] = useState(initialData.invoiceSendMethod || '');
+  const [sendXml, setSendXml] = useState(initialData.sendXml || false);
+  const [xmlFormat, setXmlFormat] = useState(initialData.xmlFormat || '');
+  const [sendPdf, setSendPdf] = useState(initialData.sendPdf || false);
+  const [autoReminders, setAutoReminders] = useState(initialData.autoReminders || false);
+  const [street, setStreet] = useState(initialData.street || '');
+  const [houseNumber, setHouseNumber] = useState(initialData.houseNumber || '');
+  const [bus, setBus] = useState(initialData.bus || '');
+  const [postalCode, setPostalCode] = useState(initialData.postalCode || '');
+  const [city, setCity] = useState(initialData.city || '');
+  const [country, setCountry] = useState(initialData.country || '');
+  const [comments, setComments] = useState(initialData.comments || '');
+  const [latitude, setLatitude] = useState(initialData.latitude ?? null);
+  const [longitude, setLongitude] = useState(initialData.longitude ?? null);
+  const [mapLabel, setMapLabel] = useState(initialData.mapLabel || '');
+  const [lookupMessage, setLookupMessage] = useState('');
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [addressLookupMessage, setAddressLookupMessage] = useState('');
+  const [addressLookupLoading, setAddressLookupLoading] = useState(false);
+  const [passwordMode, setPasswordMode] = useState<'invite' | 'manual'>('invite');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [inviteCooldownUntil, setInviteCooldownUntil] = useState(0);
+  const [nowTs, setNowTs] = useState(Date.now());
+  const [quoteValidityDays, setQuoteValidityDays] = useState(initialData.quoteValidityDays || '');
+  const [paymentMethod, setPaymentMethod] = useState(initialData.paymentMethod || '');
 
   useEffect(() => {
     if (!(passwordMode === 'invite' && inviteCooldownUntil > Date.now())) return
@@ -428,7 +452,6 @@ export default function CustomerForm({ action }: Props) {
                       type="text"
                       value={vatNumber}
                       onChange={(e) => setVatNumber(e.target.value)}
-                      placeholder="Bijv. BE0123456789 of DE123456789"
                       className="input-dark min-w-0 flex-1 px-3 py-2.5 text-sm"
                       required
                     />
@@ -550,636 +573,511 @@ export default function CustomerForm({ action }: Props) {
             </section>
           </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <section className={sectionClass}>
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
-                <Building2 className="h-4 w-4" />
-              </span>
-              <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Klant & contact
-                </h2>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Alle basis-, contact- en verzendgegevens samen in één overzichtelijk blok.
-                </p>
-              </div>
+          {showCommentsAndPortal && (
+            <div className="grid gap-4 xl:grid-cols-2">
+              <section className={sectionClass}>
+                <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Building2 className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                        Klant & contact
+                      </h2>
+                      <p className="mt-1 text-xs text-[var(--text-soft)]">
+                        Alle basis-, contact- en verzendgegevens samen in één overzichtelijk blok.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={sectionBodyClass}>
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                      <Mail className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                        Contact & verzending
+                      </p>
+                      <p className="mt-1 text-xs text-[var(--text-soft)]">
+                        Alle kerngegevens netjes uitgelijnd in één gelijkmatig overzicht.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Bedrijf
+                      </label>
+                      <input
+                        name="company_name"
+                        type="text"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. Atelier Nova BV"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        E-mail
+                      </label>
+                      <input
+                        name="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="bijv. info@bedrijf.be"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Aanspreektitel
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="salutation"
+                          value={salutation}
+                          onChange={(e) => setSalutation(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                          required
+                        >
+                          <option value="">Selecteer aanspreking</option>
+                          <option value="Dhr.">Dhr.</option>
+                          <option value="Mevr.">Mevr.</option>
+                          <option value="Dr.">Dr.</option>
+                          <option value="Familie">Familie</option>
+                          <option value="Team">Team</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Facturatie e-mail
+                      </label>
+                      <input
+                        type="email"
+                        value={invoiceEmail}
+                        onChange={(e) => setInvoiceEmail(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
+                      />
+                      <input type="hidden" name="invoice_email" value={resolvedInvoiceEmail} />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Voornaam
+                      </label>
+                      <input
+                        name="director_first_name"
+                        type="text"
+                        value={directorFirstName}
+                        onChange={(e) => setDirectorFirstName(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. Sophie"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Vast nummer
+                      </label>
+                      <input
+                        name="phone"
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. 02 123 45 67"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Familienaam
+                      </label>
+                      <input
+                        name="director_last_name"
+                        type="text"
+                        value={directorLastName}
+                        onChange={(e) => setDirectorLastName(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. Peeters"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Mobiel nummer
+                      </label>
+                      <input
+                        name="mobile"
+                        type="tel"
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. 0470 12 34 56"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Faxnummer
+                      </label>
+                      <input
+                        name="fax"
+                        type="tel"
+                        value={fax}
+                        onChange={(e) => setFax(e.target.value)}
+                        className="input-dark w-full px-3 py-2.5 text-sm"
+                        placeholder="Bijv. 02 123 45 68"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Taal
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="language"
+                          value={language}
+                          onChange={(e) => setLanguage(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                          required
+                        >
+                          <option value="">Selecteer taal</option>
+                          <option value="NL">NL</option>
+                          <option value="FR">FR</option>
+                          <option value="ENG">ENG</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <MapPinned className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          Adres
+                        </p>
+                        <p className="mt-1 text-xs text-[var(--text-soft)]">
+                          Automatisch overgenomen vanuit de btw-opzoeking.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-3">
+                      <p className="text-sm font-semibold text-[var(--text-main)]">
+                        {addressPreview || 'Nog geen adres beschikbaar'}
+                      </p>
+
+                      {addressLookupMessage && (
+                        <p className="mt-2 text-xs text-[var(--text-soft)]">
+                          {addressLookupMessage}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className={sectionClass}>
+                <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <CreditCard className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                          Facturatie
+                        </h2>
+                        <p className="mt-1 text-xs text-[var(--text-soft)]">
+                          Betaalinstellingen en voorwaarden in één praktisch blok.
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className={sectionBodyClass}>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      Facturatie & voorwaarden
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-soft)]">
+                      Standaard betaal- en offerte-instellingen voor deze klant.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Betalingstermijn (dagen)
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="payment_term_days"
+                          value={paymentTermDays}
+                          onChange={(e) => setPaymentTermDays(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                        >
+                          <option value="">Selecteer betalingstermijn</option>
+                          <option value="0">Contant / onmiddellijk</option>
+                          <option value="7">7 dagen</option>
+                          <option value="14">14 dagen</option>
+                          <option value="21">21 dagen</option>
+                          <option value="30">30 dagen</option>
+                          <option value="45">45 dagen</option>
+                          <option value="60">60 dagen</option>
+                          <option value="90">90 dagen</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Geldigheid offerte (dagen)
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="quote_validity_days"
+                          value={quoteValidityDays}
+                          onChange={(e) => setQuoteValidityDays(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                        >
+                          <option value="">Selecteer geldigheid</option>
+                          <option value="7">7 dagen</option>
+                          <option value="14">14 dagen</option>
+                          <option value="15">15 dagen</option>
+                          <option value="30">30 dagen</option>
+                          <option value="45">45 dagen</option>
+                          <option value="60">60 dagen</option>
+                          <option value="90">90 dagen</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Betaalwijze
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="payment_method"
+                          value={paymentMethod}
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                        >
+                          <option value="">Selecteer betaalwijze</option>
+                          <option value="overschrijving">Overschrijving</option>
+                          <option value="bancontact">Bancontact</option>
+                          <option value="kredietkaart">Kredietkaart</option>
+                          <option value="domiciliëring">Domiciliëring</option>
+                          <option value="contant">Contant</option>
+                          <option value="paypal">PayPal</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        Munteenheid
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="currency"
+                          value={currency}
+                          onChange={(e) => setCurrency(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                        >
+                          <option value="EUR">EUR — Euro</option>
+                          <option value="USD">USD — US Dollar</option>
+                          <option value="GBP">GBP — Britse pond</option>
+                          <option value="CHF">CHF — Zwitserse frank</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        BTW-nummer
+                      </label>
+                      <input
+                        type="text"
+                        value={vatNumber}
+                        readOnly
+                        className="input-dark w-full px-3 py-2.5 text-sm opacity-90"
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <label className={fieldLabelClass}>
+                        BTW-tarief
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="vat_rate"
+                          value={vatRate}
+                          onChange={(e) => setVatRate(e.target.value)}
+                          className={softSelectClass}
+                          style={nativeSelectStyle}
+                        >
+                          <option value="">Selecteer btw-tarief</option>
+                          <option value="21%">21%</option>
+                          <option value="12%">12%</option>
+                          <option value="6%">6%</option>
+                          <option value="0%">0%</option>
+                          <option value="vrijgesteld">Vrijgesteld</option>
+                          <option value="btw verlegd">Btw verlegd</option>
+                          <option value="intracommunautair">Intracommunautair</option>
+                        </select>
+                        <ChevronDown className={softSelectIconClass} size={16} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <CreditCard className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          Bankgegevens
+                        </p>
+                        <p className="mt-1 text-xs text-[var(--text-soft)]">
+                          Voor facturen en betalingen. Vul hier de IBAN en BIC van de klant in.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      <div className="grid gap-2">
+                        <label className={fieldLabelClass}>
+                          IBAN
+                        </label>
+                        <input
+                          name="iban"
+                          type="text"
+                          value={iban}
+                          onChange={(e) => setIban(e.target.value)}
+                          className="input-dark w-full px-3 py-2.5 text-sm"
+                          placeholder="Bijv. BE68 5390 0754 7034"
+                        />
+                      </div>
+
+                      <div className="grid gap-2">
+                        <label className={fieldLabelClass}>
+                          BIC
+                        </label>
+                        <input
+                          name="bic"
+                          type="text"
+                          value={bic}
+                          onChange={(e) => setBic(e.target.value)}
+                          className="input-dark w-full px-3 py-2.5 text-sm"
+                          placeholder="Bijv. GKCCBEBB"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <CustomerLogoUpload />
+                </div>
+              </section>
             </div>
+          )}
           </div>
+        </div>
 
-          <div className={sectionBodyClass}>
-            <div className="flex items-start gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                <Mail className="h-4 w-4" />
-              </span>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Contact & verzending
-                </p>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Alle kerngegevens netjes uitgelijnd in één gelijkmatig overzicht.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Bedrijf
-                </label>
-                <input
-                  name="company_name"
-                  type="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. Atelier Nova BV"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  E-mail
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="bijv. info@bedrijf.be"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Aanspreektitel
-                </label>
-                <div className="relative">
-                  <select
-                    name="salutation"
-                    value={salutation}
-                    onChange={(e) => setSalutation(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                    required
-                  >
-                    <option value="">Selecteer aanspreking</option>
-                    <option value="Dhr.">Dhr.</option>
-                    <option value="Mevr.">Mevr.</option>
-                    <option value="Dr.">Dr.</option>
-                    <option value="Familie">Familie</option>
-                    <option value="Team">Team</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Facturatie e-mail
-                </label>
-                <input
-                  type="email"
-                  value={invoiceEmail}
-                  onChange={(e) => setInvoiceEmail(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
-                />
-                <input type="hidden" name="invoice_email" value={resolvedInvoiceEmail} />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Voornaam
-                </label>
-                <input
-                  name="director_first_name"
-                  type="text"
-                  value={directorFirstName}
-                  onChange={(e) => setDirectorFirstName(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. Sophie"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Vast nummer
-                </label>
-                <input
-                  name="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. 02 123 45 67"
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Familienaam
-                </label>
-                <input
-                  name="director_last_name"
-                  type="text"
-                  value={directorLastName}
-                  onChange={(e) => setDirectorLastName(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. Peeters"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Mobiel nummer
-                </label>
-                <input
-                  name="mobile"
-                  type="tel"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. 0470 12 34 56"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Faxnummer
-                </label>
-                <input
-                  name="fax"
-                  type="tel"
-                  value={fax}
-                  onChange={(e) => setFax(e.target.value)}
-                  className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. 02 123 45 68"
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Taal
-                </label>
-                <div className="relative">
-                  <select
-                    name="language"
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                    required
-                  >
-                    <option value="">Selecteer taal</option>
-                    <option value="NL">NL</option>
-                    <option value="FR">FR</option>
-                    <option value="ENG">ENG</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4">
-              <div className="flex items-start gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                  <MapPinned className="h-4 w-4" />
+        {showSubmitAndBackButton && (
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <Link
+              href="/admin/customers"
+              className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+            >
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+              <span className="flex items-start gap-2.5 pr-3">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                  <ArrowLeft className="h-3.5 w-3.5" />
                 </span>
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    Adres
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Automatisch overgenomen vanuit de btw-opzoeking.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-3">
-                <p className="text-sm font-semibold text-[var(--text-main)]">
-                  {addressPreview || 'Nog geen adres beschikbaar'}
-                </p>
-
-                {addressLookupMessage && (
-                  <p className="mt-2 text-xs text-[var(--text-soft)]">
-                    {addressLookupMessage}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className={sectionClass}>
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
-                  <CreditCard className="h-4 w-4" />
+                <span className="min-w-0">
+                  <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                    Klanten
+                  </span>
+                  <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                    Terug naar overzicht
+                  </span>
                 </span>
-                <div>
-                  <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                    Facturatie
-                  </h2>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Betaalinstellingen en voorwaarden in één praktisch blok.
-                  </p>
-                </div>
-              </div>
+              </span>
+            </Link>
 
-            </div>
-          </div>
-
-          <div className={sectionBodyClass}>
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Facturatie & voorwaarden
-              </p>
-              <p className="mt-1 text-xs text-[var(--text-soft)]">
-                Standaard betaal- en offerte-instellingen voor deze klant.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Betalingstermijn (dagen)
-                </label>
-                <div className="relative">
-                  <select
-                    name="payment_term_days"
-                    value={paymentTermDays}
-                    onChange={(e) => setPaymentTermDays(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                  >
-                    <option value="">Selecteer betalingstermijn</option>
-                    <option value="0">Contant / onmiddellijk</option>
-                    <option value="7">7 dagen</option>
-                    <option value="14">14 dagen</option>
-                    <option value="21">21 dagen</option>
-                    <option value="30">30 dagen</option>
-                    <option value="45">45 dagen</option>
-                    <option value="60">60 dagen</option>
-                    <option value="90">90 dagen</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Geldigheid offerte (dagen)
-                </label>
-                <div className="relative">
-                  <select
-                    name="quote_validity_days"
-                    value={quoteValidityDays}
-                    onChange={(e) => setQuoteValidityDays(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                  >
-                    <option value="">Selecteer geldigheid</option>
-                    <option value="7">7 dagen</option>
-                    <option value="14">14 dagen</option>
-                    <option value="15">15 dagen</option>
-                    <option value="30">30 dagen</option>
-                    <option value="45">45 dagen</option>
-                    <option value="60">60 dagen</option>
-                    <option value="90">90 dagen</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Betaalwijze
-                </label>
-                <div className="relative">
-                  <select
-                    name="payment_method"
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                  >
-                    <option value="">Selecteer betaalwijze</option>
-                    <option value="overschrijving">Overschrijving</option>
-                    <option value="bancontact">Bancontact</option>
-                    <option value="kredietkaart">Kredietkaart</option>
-                    <option value="domiciliëring">Domiciliëring</option>
-                    <option value="contant">Contant</option>
-                    <option value="paypal">PayPal</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  Munteenheid
-                </label>
-                <div className="relative">
-                  <select
-                    name="currency"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                  >
-                    <option value="EUR">EUR — Euro</option>
-                    <option value="USD">USD — US Dollar</option>
-                    <option value="GBP">GBP — Britse pond</option>
-                    <option value="CHF">CHF — Zwitserse frank</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  BTW-nummer
-                </label>
-                <input
-                  type="text"
-                  value={vatNumber}
-                  readOnly
-                  className="input-dark w-full px-3 py-2.5 text-sm opacity-90"
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <label className={fieldLabelClass}>
-                  BTW-tarief
-                </label>
-                <div className="relative">
-                  <select
-                    name="vat_rate"
-                    value={vatRate}
-                    onChange={(e) => setVatRate(e.target.value)}
-                    className={softSelectClass}
-                    style={nativeSelectStyle}
-                  >
-                    <option value="">Selecteer btw-tarief</option>
-                    <option value="21%">21%</option>
-                    <option value="12%">12%</option>
-                    <option value="6%">6%</option>
-                    <option value="0%">0%</option>
-                    <option value="vrijgesteld">Vrijgesteld</option>
-                    <option value="btw verlegd">Btw verlegd</option>
-                    <option value="intracommunautair">Intracommunautair</option>
-                  </select>
-                  <ChevronDown className={softSelectIconClass} size={16} />
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4">
-              <div className="flex items-start gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                  <CreditCard className="h-4 w-4" />
+            <button
+              type="submit"
+              className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={inviteCooldownActive}
+            >
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+              <span className="flex items-start gap-2.5 pr-3">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                  <ShieldCheck className="h-3.5 w-3.5" />
                 </span>
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    Bankgegevens
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Voor facturen en betalingen. Vul hier de IBAN en BIC van de klant in.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <div className="grid gap-2">
-                  <label className={fieldLabelClass}>
-                    IBAN
-                  </label>
-                  <input
-                    name="iban"
-                    type="text"
-                    value={iban}
-                    onChange={(e) => setIban(e.target.value)}
-                    className="input-dark w-full px-3 py-2.5 text-sm"
-                    placeholder="Bijv. BE68 5390 0754 7034"
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <label className={fieldLabelClass}>
-                    BIC
-                  </label>
-                  <input
-                    name="bic"
-                    type="text"
-                    value={bic}
-                    onChange={(e) => setBic(e.target.value)}
-                    className="input-dark w-full px-3 py-2.5 text-sm"
-                    placeholder="Bijv. GKCCBEBB"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <CustomerLogoUpload />
-          </div>
-        </section>
-      </div>
-
-      <div className="grid gap-4 xl:grid-cols-2">
-        <section className={sectionClass}>
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
-                <MessageSquare className="h-4 w-4" />
+                <span className="min-w-0">
+                  <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                    {inviteCooldownActive
+                      ? `Wacht ${inviteCooldownRemainingSec}s`
+                      : passwordMode === 'manual'
+                        ? 'Klant aanmaken'
+                        : 'Klantaccount aanmaken'}
+                  </span>
+                  <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                    {passwordMode === 'manual'
+                      ? 'Account opslaan met tijdelijk wachtwoord'
+                      : 'Verstuur uitnodiging voor toegang'}
+                  </span>
+                </span>
               </span>
-              <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Commentaar
-                </h2>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Interne notities of extra opmerkingen voor dit klantdossier.
-                </p>
-              </div>
-            </div>
+            </button>
           </div>
+        )}
 
-          <div className={sectionBodyClass}>
-            <textarea
-              name="comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              className="input-dark min-h-[320px] w-full flex-1 resize-none px-3 py-2.5 text-sm"
-              placeholder="Extra opmerkingen of interne notities"
-            />
-          </div>
-        </section>
-
-        <section className={sectionClass}>
-          <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
-            <div className="flex items-start gap-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
-                <ShieldCheck className="h-4 w-4" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                  Toegang klantportaal
-                </h2>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Kies of jij meteen een tijdelijk wachtwoord instelt, of de
-                  klant dit zelf aanmaakt via e-mail.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className={sectionBodyClass}>
-            <div className="space-y-2 text-sm text-[var(--text-soft)]">
-              <label
-                className={`flex items-start gap-3 rounded-xl border px-3 py-3 transition ${
-                  passwordMode === 'invite'
-                    ? 'border-[var(--accent)]/50 bg-[var(--accent)]/8 text-[var(--text-main)]'
-                    : 'border-[var(--border-soft)] bg-[var(--bg-card)]'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="password_mode"
-                  value="invite"
-                  checked={passwordMode === 'invite'}
-                  onChange={() => setPasswordMode('invite')}
-                  className="mt-1 accent-[var(--accent)]"
-                />
-                <span>Klant kiest zelf een wachtwoord via uitnodigingsmail</span>
-              </label>
-
-              <label
-                className={`flex items-start gap-3 rounded-xl border px-3 py-3 transition ${
-                  passwordMode === 'manual'
-                    ? 'border-[var(--accent)]/50 bg-[var(--accent)]/8 text-[var(--text-main)]'
-                    : 'border-[var(--border-soft)] bg-[var(--bg-card)]'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="password_mode"
-                  value="manual"
-                  checked={passwordMode === 'manual'}
-                  onChange={() => setPasswordMode('manual')}
-                  className="mt-1 accent-[var(--accent)]"
-                />
-                <span>Ik stel nu zelf een tijdelijk wachtwoord in</span>
-              </label>
-            </div>
-
-            {passwordMode === 'manual' ? (
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <div className="grid gap-2">
-                  <label className={fieldLabelClass}>
-                    Tijdelijk wachtwoord
-                  </label>
-                  <input
-                    name="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    minLength={8}
-                    required={passwordMode === 'manual'}
-                    className="input-dark w-full px-3 py-2.5 text-sm"
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <label className={fieldLabelClass}>
-                    Bevestig wachtwoord
-                  </label>
-                  <input
-                    name="password_confirm"
-                    type="password"
-                    value={passwordConfirm}
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
-                    minLength={8}
-                    required={passwordMode === 'manual'}
-                    className="input-dark w-full px-3 py-2.5 text-sm"
-                  />
-                </div>
-              </div>
-            ) : (
-              <p className="mt-3 text-xs text-[var(--text-soft)]">
-                Na opslaan ontvangt de klant een e-mail om zelf een wachtwoord
-                te kiezen.
-              </p>
-            )}
-          </div>
-        </section>
-      </div>
-
-          </div>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-        <Link
-          href="/admin/customers"
-          className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-        >
-          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-          <span className="flex items-start gap-2.5 pr-3">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-              <ArrowLeft className="h-3.5 w-3.5" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                Klanten
-              </span>
-              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                Terug naar overzicht
-              </span>
-            </span>
-          </span>
-        </Link>
-
-        <button
-          type="submit"
-          className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={inviteCooldownActive}
-        >
-          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-          <span className="flex items-start gap-2.5 pr-3">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-              <ShieldCheck className="h-3.5 w-3.5" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {inviteCooldownActive
-                  ? `Wacht ${inviteCooldownRemainingSec}s`
-                  : passwordMode === 'manual'
-                    ? 'Klant aanmaken'
-                    : 'Klantaccount aanmaken'}
-              </span>
-              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                {passwordMode === 'manual'
-                  ? 'Account opslaan met tijdelijk wachtwoord'
-                  : 'Verstuur uitnodiging voor toegang'}
-              </span>
-            </span>
-          </span>
-        </button>
-      </div>
-
-      {inviteCooldownActive && (
-        <p className="text-xs text-[var(--text-soft)]">
-          Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
-          {inviteCooldownRemainingSec}s.
-        </p>
-      )}
+        {inviteCooldownActive && (
+          <p className="text-xs text-[var(--text-soft)]">
+            Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
+            {inviteCooldownRemainingSec}s.
+          </p>
+        )}
     </form>
-  )
+  );
 }

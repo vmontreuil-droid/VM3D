@@ -75,7 +75,7 @@ export default function FileUploadDropzone({
         className={`flex min-h-[120px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-4 py-4 text-center transition ${
           isDragging
             ? 'border-[var(--accent)] bg-[var(--accent)]/10'
-            : 'border-[var(--border-soft)] bg-[var(--bg-card-2)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-3)]'
+            : 'border-[var(--accent)]/50 bg-[var(--bg-card-2)] hover:border-[var(--accent)] hover:bg-[var(--bg-card-3)]'
         }`}
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--accent)]/12 text-[var(--accent)]">

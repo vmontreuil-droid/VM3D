@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 type ProjectItem = {
   id: string | number
   user_id?: string | null
-  title?: string | null
+  name?: string | null
   address?: string | null
   profiles?: {
     full_name?: string | null
@@ -55,28 +55,22 @@ function getMessageTone(message: string) {
 
 export default function AdminUploadPanel({ projects }: Props) {
   const router = useRouter()
-  const clientInputRef = useRef<HTMLInputElement | null>(null)
-  const finalInputRef = useRef<HTMLInputElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const [clientProjectId, setClientProjectId] = useState('')
-  const [finalProjectId, setFinalProjectId] = useState('')
-  const [clientProjectQuery, setClientProjectQuery] = useState('')
-  const [finalProjectQuery, setFinalProjectQuery] = useState('')
-  const [clientFile, setClientFile] = useState<File | null>(null)
-  const [finalFile, setFinalFile] = useState<File | null>(null)
-  const [clientLoading, setClientLoading] = useState(false)
-  const [finalLoading, setFinalLoading] = useState(false)
-  const [clientMessage, setClientMessage] = useState('')
-  const [finalMessage, setFinalMessage] = useState('')
-  const [clientDragging, setClientDragging] = useState(false)
-  const [finalDragging, setFinalDragging] = useState(false)
+  const [uploadKind, setUploadKind] = useState<UploadKind>('client_upload')
+  const [projectId, setProjectId] = useState('')
+  const [projectQuery, setProjectQuery] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [dragging, setDragging] = useState(false)
 
   const projectOptions = useMemo<ProjectOption[]>(() => {
     return projects
       .filter((project) => project.user_id)
       .map((project) => {
         const customerName = getCustomerName(project)
-        const title = project.title || 'Onbenoemde werf'
+        const title = project.name || 'Onbenoemde werf'
         const address = project.address ? ` · ${project.address}` : ''
 
         return {
@@ -93,10 +87,9 @@ export default function AdminUploadPanel({ projects }: Props) {
     [projectOptions]
   )
 
-  const clientReady = Boolean(clientProjectId && clientFile && !clientLoading)
-  const finalReady = Boolean(finalProjectId && finalFile && !finalLoading)
+  const ready = Boolean(projectId && file && !loading)
 
-  function handleProjectInput(kind: UploadKind, value: string) {
+  function handleProjectInput(value: string) {
     const normalized = value.trim().toLowerCase()
     const exactMatch = projectOptions.find(
       (project) => project.label.trim().toLowerCase() === normalized
@@ -108,60 +101,33 @@ export default function AdminUploadPanel({ projects }: Props) {
       : []
     const resolvedProject = exactMatch || (partialMatches.length === 1 ? partialMatches[0] : null)
 
-    if (kind === 'client_upload') {
-      setClientProjectQuery(value)
-      setClientProjectId(resolvedProject?.id ?? '')
-      setClientMessage('')
-      return
-    }
-
-    setFinalProjectQuery(value)
-    setFinalProjectId(resolvedProject?.id ?? '')
-    setFinalMessage('')
+    setProjectQuery(value)
+    setProjectId(resolvedProject?.id ?? '')
+    setMessage('')
   }
 
-  function setSelectedFile(kind: UploadKind, fileList: FileList | null) {
-    const file = fileList?.[0] ?? null
-
-    if (kind === 'client_upload') {
-      setClientFile(file)
-      if (file) setClientMessage('')
-      return
-    }
-
-    setFinalFile(file)
-    if (file) setFinalMessage('')
+  function pickFile(fileList: FileList | null) {
+    const f = fileList?.[0] ?? null
+    setFile(f)
+    if (f) setMessage('')
   }
 
-  function handleDrop(kind: UploadKind, event: React.DragEvent<HTMLLabelElement>) {
+  function handleDrop(event: React.DragEvent<HTMLLabelElement>) {
     event.preventDefault()
-
-    if (kind === 'client_upload') {
-      setClientDragging(false)
-    } else {
-      setFinalDragging(false)
-    }
-
+    setDragging(false)
     const files = event.dataTransfer.files
-    if (!files?.length) return
-
-    setSelectedFile(kind, files)
+    if (files?.length) pickFile(files)
   }
 
-  async function uploadFile(kind: UploadKind) {
-    const selectedProjectId = kind === 'client_upload' ? clientProjectId : finalProjectId
-    const selectedFile = kind === 'client_upload' ? clientFile : finalFile
-    const setLoading = kind === 'client_upload' ? setClientLoading : setFinalLoading
-    const setMessage = kind === 'client_upload' ? setClientMessage : setFinalMessage
-
+  async function uploadFile() {
     setMessage('')
 
-    if (!selectedProjectId || !selectedFile) {
+    if (!projectId || !file) {
       setMessage('Kies eerst een dossier en een bestand.')
       return
     }
 
-    const project = projectMap.get(selectedProjectId)
+    const project = projectMap.get(projectId)
     if (!project?.userId) {
       setMessage('Ongeldig dossier gekozen.')
       return
@@ -171,9 +137,9 @@ export default function AdminUploadPanel({ projects }: Props) {
 
     try {
       const formData = new FormData()
-      formData.append('projectId', selectedProjectId)
-      formData.append('uploadType', kind)
-      formData.append('file', selectedFile)
+      formData.append('projectId', projectId)
+      formData.append('uploadType', uploadKind)
+      formData.append('file', file)
 
       const response = await fetch('/api/admin/uploads', {
         method: 'POST',
@@ -191,7 +157,7 @@ export default function AdminUploadPanel({ projects }: Props) {
 
       setMessage(
         result?.message ||
-          (kind === 'client_upload'
+          (uploadKind === 'client_upload'
             ? 'Upload geslaagd: klantbestand staat nu in het gekozen dossier.'
             : 'Upload geslaagd: opleverbestand staat nu in het gekozen dossier.')
       )
@@ -202,262 +168,141 @@ export default function AdminUploadPanel({ projects }: Props) {
       return
     }
 
-    if (kind === 'client_upload') {
-      setClientFile(null)
-      if (clientInputRef.current) clientInputRef.current.value = ''
-    } else {
-      setFinalFile(null)
-      if (finalInputRef.current) finalInputRef.current.value = ''
-    }
-
+    setFile(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
     router.refresh()
   }
 
+  const kindLabel = uploadKind === 'client_upload' ? 'klantbestand' : 'opleverbestand'
+
   return (
     <section id="uploads" className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-      <div className="grid gap-3 px-4 py-3.5 sm:px-5 lg:grid-cols-2">
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            void uploadFile('client_upload')
-          }}
-          className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]"
-        >
-          <div className="border-b border-[var(--border-soft)] px-3.5 py-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Uploads
-            </p>
-            <h3 className="mt-0.5 text-[13px] font-semibold text-[var(--text-main)]">
-              Klantbestand uploaden
-            </h3>
-            <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">
-              Voor plannen, PDF’s, foto’s en bronmateriaal.
-            </p>
-          </div>
-
-          <div className="space-y-2.5 px-3.5 py-3">
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">
-                Zoek dossier
-              </label>
-              <input
-                type="text"
-                value={clientProjectQuery}
-                onChange={(e) => handleProjectInput('client_upload', e.target.value)}
-                list="client-project-options"
-                placeholder="Typ klant, werf of adres..."
-                className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
-                required
-              />
-              <datalist id="client-project-options">
-                {projectOptions.map((project) => (
-                  <option key={project.id} value={project.label} />
-                ))}
-              </datalist>
-              <p className={`text-[10px] ${clientProjectId ? 'text-emerald-300' : 'text-[var(--text-soft)]'}`}>
-                {clientProjectId
-                  ? 'Dossier geselecteerd.'
-                  : 'Begin te typen en kies daarna het juiste dossier uit de lijst.'}
-              </p>
-            </div>
-
-            <label
-              onDragOver={(event) => {
-                event.preventDefault()
-                setClientDragging(true)
-              }}
-              onDragLeave={(event) => {
-                event.preventDefault()
-                setClientDragging(false)
-              }}
-              onDrop={(event) => handleDrop('client_upload', event)}
-              className={`flex min-h-[92px] cursor-pointer items-center gap-3 rounded-xl border border-dashed px-3 py-3 text-left transition ${
-                clientDragging
-                  ? 'border-[var(--accent)] bg-[var(--accent)]/8'
-                  : 'border-[var(--border-soft)] bg-[var(--bg-card)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80'
-              }`}
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
-                <UploadCloud className="h-4 w-4" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="truncate text-[12px] font-semibold text-[var(--text-main)]">
-                  {clientFile ? clientFile.name : 'Sleep je bestand hierheen'}
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
-                  of klik om een bestand te kiezen
-                </p>
-              </div>
-
-              <input
-                ref={clientInputRef}
-                type="file"
-                onChange={(e) => setSelectedFile('client_upload', e.target.files)}
-                className="hidden"
-              />
-            </label>
-
+      <form
+        onSubmit={(event) => {
+          event.preventDefault()
+          void uploadFile()
+        }}
+        className="px-3 py-2.5 sm:px-4"
+      >
+        <div className="space-y-2">
+          {/* Type toggle */}
+          <div className="flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-0.5">
             <button
-              type="submit"
-              disabled={clientLoading}
-              className={`group relative inline-flex h-9 items-center overflow-hidden rounded-lg border bg-[var(--bg-card)] px-3.5 text-[12px] font-semibold text-[var(--text-main)] transition hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-70 ${
-                clientReady
-                  ? 'animate-pulse border-[var(--accent)]/60 shadow-[0_0_0_1px_rgba(247,148,29,0.18)]'
-                  : 'border-[var(--border-soft)] hover:border-[var(--accent)]/50'
+              type="button"
+              onClick={() => { setUploadKind('client_upload'); setMessage('') }}
+              className={`flex-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition ${
+                uploadKind === 'client_upload'
+                  ? 'bg-[var(--accent)]/15 text-[var(--accent)] shadow-sm'
+                  : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
               }`}
             >
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-              <span className="mr-2 flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                {clientLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FolderOpen className="h-4 w-4" />}
-              </span>
-              Upload klantbestand
+              <FolderOpen className="mr-1 inline h-3 w-3" />
+              Klantbestand
             </button>
-
-            {clientMessage ? (
-              <div
-                className={`rounded-lg border px-3 py-2 text-[12px] ${
-                  getMessageTone(clientMessage) === 'success'
-                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
-                    : getMessageTone(clientMessage) === 'error'
-                      ? 'border-red-500/30 bg-red-500/10 text-red-200'
-                      : 'border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-soft)]'
-                }`}
-              >
-                <div className="flex items-start gap-2">
-                  {getMessageTone(clientMessage) === 'success' ? (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-                  ) : (
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  )}
-                  <span>{clientMessage}</span>
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </form>
-
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            void uploadFile('final_file')
-          }}
-          className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]"
-        >
-          <div className="border-b border-[var(--border-soft)] px-3.5 py-2.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Uploads
-            </p>
-            <h3 className="mt-0.5 text-[13px] font-semibold text-[var(--text-main)]">
-              Opleverbestand uploaden
-            </h3>
-            <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">
-              Voor finale bestanden, ZIP’s en oplevermappen.
-            </p>
-          </div>
-
-          <div className="space-y-2.5 px-3.5 py-3">
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">
-                Zoek dossier
-              </label>
-              <input
-                type="text"
-                value={finalProjectQuery}
-                onChange={(e) => handleProjectInput('final_file', e.target.value)}
-                list="final-project-options"
-                placeholder="Typ klant, werf of adres..."
-                className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
-                required
-              />
-              <datalist id="final-project-options">
-                {projectOptions.map((project) => (
-                  <option key={project.id} value={project.label} />
-                ))}
-              </datalist>
-              <p className={`text-[10px] ${finalProjectId ? 'text-emerald-300' : 'text-[var(--text-soft)]'}`}>
-                {finalProjectId
-                  ? 'Dossier geselecteerd.'
-                  : 'Begin te typen en kies daarna het juiste dossier uit de lijst.'}
-              </p>
-            </div>
-
-            <label
-              onDragOver={(event) => {
-                event.preventDefault()
-                setFinalDragging(true)
-              }}
-              onDragLeave={(event) => {
-                event.preventDefault()
-                setFinalDragging(false)
-              }}
-              onDrop={(event) => handleDrop('final_file', event)}
-              className={`flex min-h-[92px] cursor-pointer items-center gap-3 rounded-xl border border-dashed px-3 py-3 text-left transition ${
-                finalDragging
-                  ? 'border-sky-400/60 bg-sky-500/8'
-                  : 'border-[var(--border-soft)] bg-[var(--bg-card)] hover:border-sky-400/40 hover:bg-[var(--bg-card)]/80'
-              }`}
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/12 text-sky-300">
-                <FileArchive className="h-4 w-4" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="truncate text-[12px] font-semibold text-[var(--text-main)]">
-                  {finalFile ? finalFile.name : 'Sleep je bestand hierheen'}
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
-                  of klik om een bestand te kiezen
-                </p>
-              </div>
-
-              <input
-                ref={finalInputRef}
-                type="file"
-                onChange={(e) => setSelectedFile('final_file', e.target.files)}
-                className="hidden"
-              />
-            </label>
-
             <button
-              type="submit"
-              disabled={finalLoading}
-              className={`group relative inline-flex h-9 items-center overflow-hidden rounded-lg border bg-[var(--bg-card)] px-3.5 text-[12px] font-semibold text-[var(--text-main)] transition hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-70 ${
-                finalReady
-                  ? 'animate-pulse border-sky-400/60 shadow-[0_0_0_1px_rgba(56,189,248,0.18)]'
-                  : 'border-[var(--border-soft)] hover:border-sky-400/50'
+              type="button"
+              onClick={() => { setUploadKind('final_file'); setMessage('') }}
+              className={`flex-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition ${
+                uploadKind === 'final_file'
+                  ? 'bg-[var(--accent)]/15 text-[var(--accent)] shadow-sm'
+                  : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
               }`}
             >
-              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
-              <span className="mr-2 flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/12 text-sky-300">
-                {finalLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-              </span>
-              Upload opleverbestand
+              <FileArchive className="mr-1 inline h-3 w-3" />
+              Opleverbestand
             </button>
-
-            {finalMessage ? (
-              <div
-                className={`rounded-lg border px-3 py-2 text-[12px] ${
-                  getMessageTone(finalMessage) === 'success'
-                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
-                    : getMessageTone(finalMessage) === 'error'
-                      ? 'border-red-500/30 bg-red-500/10 text-red-200'
-                      : 'border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-soft)]'
-                }`}
-              >
-                <div className="flex items-start gap-2">
-                  {getMessageTone(finalMessage) === 'success' ? (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-                  ) : (
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  )}
-                  <span>{finalMessage}</span>
-                </div>
-              </div>
-            ) : null}
           </div>
-        </form>
-      </div>
+
+          {/* Project search */}
+          <div className="space-y-0.5">
+            <label className="text-[10px] font-medium text-[var(--text-soft)]">Zoek dossier</label>
+            <input
+              type="text"
+              value={projectQuery}
+              onChange={(e) => handleProjectInput(e.target.value)}
+              list="upload-project-options"
+              placeholder="Typ klant, werf of adres..."
+              className="input-dark h-7 w-full px-2 text-[11px]"
+              required
+            />
+            <datalist id="upload-project-options">
+              {projectOptions.map((project) => (
+                <option key={project.id} value={project.label} />
+              ))}
+            </datalist>
+            <p className={`text-[9px] ${projectId ? 'text-emerald-300' : 'text-[var(--text-muted)]'}`}>
+              {projectId ? 'Dossier geselecteerd.' : 'Typ en kies een dossier.'}
+            </p>
+          </div>
+
+          {/* Drop zone */}
+          <label
+            onDragOver={(event) => { event.preventDefault(); setDragging(true) }}
+            onDragLeave={(event) => { event.preventDefault(); setDragging(false) }}
+            onDrop={handleDrop}
+            className={`flex cursor-pointer items-center gap-2 rounded-lg border border-dashed px-2.5 py-2 text-left transition ${
+              dragging
+                ? 'border-[var(--accent)] bg-[var(--accent)]/8'
+                : 'border-[var(--border-soft)] bg-[var(--bg-card-2)] hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card-2)]/80'
+            }`}
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+              <UploadCloud className="h-3.5 w-3.5" />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-semibold text-[var(--text-main)]">
+                {file ? file.name : 'Sleep bestand hierheen'}
+              </p>
+              <p className="text-[9px] text-[var(--text-muted)]">of klik om te kiezen</p>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              onChange={(e) => pickFile(e.target.files)}
+              className="hidden"
+            />
+          </label>
+
+          {/* Upload button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={`group relative inline-flex h-7 items-center overflow-hidden rounded-md border bg-[var(--bg-card)] px-2.5 text-[11px] font-semibold text-[var(--text-main)] transition hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-70 ${
+              ready
+                ? 'animate-pulse border-[var(--accent)]/60 shadow-[0_0_0_1px_rgba(247,148,29,0.18)]'
+                : 'border-[var(--border-soft)] hover:border-[var(--accent)]/50'
+            }`}
+          >
+            <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+            <span className="mr-1.5 flex h-5 w-5 items-center justify-center rounded bg-[var(--accent)]/12 text-[var(--accent)]">
+              {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <UploadCloud className="h-3 w-3" />}
+            </span>
+            Upload {kindLabel}
+          </button>
+
+          {/* Message */}
+          {message ? (
+            <div
+              className={`rounded-lg border px-3 py-2 text-[12px] ${
+                getMessageTone(message) === 'success'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
+                  : getMessageTone(message) === 'error'
+                    ? 'border-red-500/30 bg-red-500/10 text-red-200'
+                    : 'border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-soft)]'
+              }`}
+            >
+              <div className="flex items-start gap-2">
+                {getMessageTone(message) === 'success' ? (
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                ) : (
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                )}
+                <span>{message}</span>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </form>
     </section>
   )
 }

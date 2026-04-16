@@ -18,7 +18,7 @@ type CustomerItem = {
 
 type ProjectItem = {
   id: string | number
-  title?: string | null
+  name?: string | null
   description?: string | null
   address?: string | null
   status?: string | null
@@ -67,14 +67,22 @@ function formatDate(value?: string | null) {
 
 function getStatusLabel(status?: string | null) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -82,12 +90,18 @@ function getStatusLabel(status?: string | null) {
 
 function getStatusClass(status?: string | null) {
   switch (status) {
+    case 'offerte_aangevraagd':
     case 'ingediend':
       return 'badge-info'
+    case 'offerte_verstuurd':
+      return 'badge-warning'
     case 'in_behandeling':
       return 'badge-warning'
+    case 'facturatie':
     case 'klaar_voor_betaling':
       return 'badge-warning'
+    case 'factuur_verstuurd':
+      return 'badge-info'
     case 'afgerond':
       return 'badge-success'
     default:
@@ -141,7 +155,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
 
     return projects.filter((project) => {
       const haystack = [
-        project.title,
+        project.name,
         project.description,
         project.address,
         project.status,
@@ -171,16 +185,21 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
     <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
       <div className="grid gap-4 px-4 py-3 sm:px-5 lg:grid-cols-2">
         <div className="space-y-2.5">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Snelle zoekopdracht
-            </p>
-            <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-              Klanten
-            </h3>
-            <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-              Zoek rechtstreeks op klantnaam, btw, stad of e-mail.
-            </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                Snelle zoekopdracht
+              </p>
+              <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                Klanten
+              </h3>
+              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+                Zoek rechtstreeks op klantnaam, btw, stad of e-mail.
+              </p>
+            </div>
+            <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
+              {customers.length} totaal
+            </span>
           </div>
 
           <div className="grid gap-2 md:grid-cols-[1fr_auto]">
@@ -208,16 +227,21 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
         </div>
 
         <div className="space-y-2.5">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Snelle zoekopdracht
-            </p>
-            <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-              Werven
-            </h3>
-            <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-              Zoek en filter op project, klant of locatie.
-            </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                Snelle zoekopdracht
+              </p>
+              <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                Werven
+              </h3>
+              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+                Zoek en filter op project, klant of locatie.
+              </p>
+            </div>
+            <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
+              {projects.length} totaal
+            </span>
           </div>
 
           <div className="grid gap-2 md:grid-cols-[1fr_auto]">
@@ -377,7 +401,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                     >
                       <div className="min-w-0">
                         <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
-                          {project.title || '—'}
+                          {project.name || '—'}
                         </p>
                         <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                           {[project.address, getProjectCustomerName(project), formatDate(project.created_at)]

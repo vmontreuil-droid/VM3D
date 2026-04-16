@@ -13,9 +13,11 @@ type Props = {
 
 type FilterStatus =
   | 'all'
-  | 'ingediend'
+  | 'offerte_aangevraagd'
+  | 'offerte_verstuurd'
   | 'in_behandeling'
-  | 'klaar_voor_betaling'
+  | 'facturatie'
+  | 'factuur_verstuurd'
   | 'afgerond'
 
 function LegendItem({
@@ -41,14 +43,17 @@ export default function AdminDashboardClient({
   const [activeStatus, setActiveStatus] = useState<FilterStatus>('all')
 
   const totalProjects = projects.length
-  const ingediendCount = projects.filter(
-    (project: any) => project.status === 'ingediend'
+  const offerteAangevraagdCount = projects.filter(
+    (project: any) => project.status === 'offerte_aangevraagd'
+  ).length
+  const offerteVerstuurdCount = projects.filter(
+    (project: any) => project.status === 'offerte_verstuurd'
   ).length
   const inBehandelingCount = projects.filter(
     (project: any) => project.status === 'in_behandeling'
   ).length
-  const klaarVoorBetalingCount = projects.filter(
-    (project: any) => project.status === 'klaar_voor_betaling'
+  const facturatieCount = projects.filter(
+    (project: any) => project.status === 'facturatie' || project.status === 'factuur_verstuurd'
   ).length
   const afgerondCount = projects.filter(
     (project: any) => project.status === 'afgerond'
@@ -56,6 +61,16 @@ export default function AdminDashboardClient({
 
   const filteredProjects = useMemo(() => {
     if (activeStatus === 'all') return projects
+    if (activeStatus === 'offerte_aangevraagd') {
+      return projects.filter((project: any) =>
+        project.status === 'offerte_aangevraagd' || project.status === 'offerte_verstuurd'
+      )
+    }
+    if (activeStatus === 'facturatie') {
+      return projects.filter((project: any) =>
+        project.status === 'facturatie' || project.status === 'factuur_verstuurd'
+      )
+    }
     return projects.filter((project: any) => project.status === activeStatus)
   }, [projects, activeStatus])
 
@@ -73,7 +88,7 @@ export default function AdminDashboardClient({
 
   return (
     <>
-      <div className="mb-5 grid gap-4 sm:grid-cols-2 2xl:grid-cols-5">
+      <div className="mb-5 grid gap-4 sm:grid-cols-2 2xl:grid-cols-6">
         <button
           type="button"
           onClick={() => setActiveStatus('all')}
@@ -87,14 +102,14 @@ export default function AdminDashboardClient({
 
         <button
           type="button"
-          onClick={() => setActiveStatus('ingediend')}
-          className={cardClass('ingediend')}
+          onClick={() => setActiveStatus('offerte_aangevraagd')}
+          className={cardClass('offerte_aangevraagd')}
         >
           <p className="text-sm font-medium text-[var(--text-soft)]">
-            Ingediend
+            Offerte
           </p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-main)]">
-            {ingediendCount}
+            {offerteAangevraagdCount + offerteVerstuurdCount}
           </p>
         </button>
 
@@ -116,17 +131,17 @@ export default function AdminDashboardClient({
 
         <button
           type="button"
-          onClick={() => setActiveStatus('klaar_voor_betaling')}
+          onClick={() => setActiveStatus('facturatie')}
           className={cardClass(
-            'klaar_voor_betaling',
-            'border-amber-900 bg-[var(--warning-bg)]'
+            'facturatie',
+            'border-purple-900 bg-purple-500/5'
           )}
         >
-          <p className="text-sm font-medium text-[var(--warning-text)]">
-            Klaar voor betaling
+          <p className="text-sm font-medium text-purple-400">
+            Facturatie
           </p>
-          <p className="mt-2 text-3xl font-bold text-[var(--warning-text)]">
-            {klaarVoorBetalingCount}
+          <p className="mt-2 text-3xl font-bold text-purple-400">
+            {facturatieCount}
           </p>
         </button>
 

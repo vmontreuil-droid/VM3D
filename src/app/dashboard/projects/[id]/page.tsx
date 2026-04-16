@@ -6,6 +6,7 @@ import ProjectMap from '@/components/projects/project-map'
 import FileList from '@/components/files/file-list'
 import FileUploadDropzone from '@/components/files/file-upload-dropzone'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 import FileSubmitButton from '@/components/files/file-submit-button'
 import { geocodeAddress } from '@/lib/geocode'
 const BUCKET_NAME = 'project-files'
@@ -99,7 +100,9 @@ async function requireCustomerProjectAccess(projectId: number) {
     redirect('/login')
   }
 
-  const { data: project, error } = await supabase
+  const adminSupabase = createAdminClient()
+
+  const { data: project, error } = await adminSupabase
     .from('projects')
     .select('*')
     .eq('id', projectId)
@@ -110,7 +113,7 @@ async function requireCustomerProjectAccess(projectId: number) {
     notFound()
   }
 
-  return { supabase, user, project }
+  return { supabase, user, project, adminSupabase }
 }
 
 async function uploadCustomerFileAction(formData: FormData) {
@@ -123,7 +126,7 @@ async function uploadCustomerFileAction(formData: FormData) {
     redirect('/dashboard')
   }
 
-  const { supabase } = await requireCustomerProjectAccess(projectId)
+  const { supabase, adminSupabase } = await requireCustomerProjectAccess(projectId)
 
   if (!(fileEntry instanceof File) || fileEntry.size === 0) {
     redirect(`/dashboard/projects/${projectId}?error=no_file`)
@@ -135,7 +138,7 @@ async function uploadCustomerFileAction(formData: FormData) {
   const arrayBuffer = await fileEntry.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await adminSupabase.storage
     .from(BUCKET_NAME)
     .upload(filePath, buffer, {
       contentType: fileEntry.type || 'application/octet-stream',
@@ -147,7 +150,7 @@ async function uploadCustomerFileAction(formData: FormData) {
     redirect(`/dashboard/projects/${projectId}?error=upload_failed`)
   }
 
-  const { error: dbError } = await supabase.from('project_files').insert({
+  const { error: dbError } = await adminSupabase.from('project_files').insert({
     project_id: projectId,
     file_name: fileName,
     file_path: filePath,
@@ -173,9 +176,9 @@ async function deleteCustomerFileAction(formData: FormData) {
     redirect('/dashboard?error=delete_missing')
   }
 
-  const { supabase } = await requireCustomerProjectAccess(projectId)
+  const { supabase, adminSupabase } = await requireCustomerProjectAccess(projectId)
 
-  const { data: fileRow, error: fileError } = await supabase
+  const { data: fileRow, error: fileError } = await adminSupabase
     .from('project_files')
     .select('id, project_id, file_type, file_path')
     .eq('id', fileId)
@@ -190,7 +193,7 @@ async function deleteCustomerFileAction(formData: FormData) {
     redirect(`/dashboard/projects/${projectId}?error=delete_forbidden`)
   }
 
-  const { error: storageError } = await supabase.storage
+  const { error: storageError } = await adminSupabase.storage
     .from(BUCKET_NAME)
     .remove([filePath])
 
@@ -199,7 +202,7 @@ async function deleteCustomerFileAction(formData: FormData) {
     redirect(`/dashboard/projects/${projectId}?error=delete_storage_failed`)
   }
 
-  const { error: dbError } = await supabase
+  const { error: dbError } = await adminSupabase
     .from('project_files')
     .delete()
     .eq('id', fileId)
@@ -235,13 +238,17 @@ export default async function DashboardProjectDetailPage({
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const adminSupabase = createAdminClient()
+
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
-  const { data: projectData, error: projectError } = await supabase
+  const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
+
+  const { data: projectData, error: projectError } = await adminSupabase
     .from('projects')
     .select('*')
     .eq('id', projectId)
@@ -265,7 +272,7 @@ export default async function DashboardProjectDetailPage({
     }
   }
 
-  const { data: files, error: filesError } = await supabase
+  const { data: files, error: filesError } = await adminSupabase
     .from('project_files')
     .select('*')
     .eq('project_id', projectId)
@@ -275,7 +282,7 @@ export default async function DashboardProjectDetailPage({
 
   const filesWithUrls = await Promise.all(
     safeFiles.map(async (file: any) => {
-      const { data, error } = await supabase.storage
+      const { data, error } = await adminSupabase.storage
         .from(BUCKET_NAME)
         .createSignedUrl(file.file_path, 3600)
 
@@ -302,7 +309,7 @@ export default async function DashboardProjectDetailPage({
     <AppShell>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
         <div className="flex justify-end mb-2">
-          <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+          <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
         </div>
         {(uploaded || deleted || errorCode) && (
           <section className="space-y-3">
@@ -365,7 +372,7 @@ export default async function DashboardProjectDetailPage({
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  {display(project.title)}
+                  {display(project.name)}
                 </h1>
 
                 <p className="mt-2 max-w-3xl text-sm text-[var(--text-soft)]">
@@ -515,7 +522,7 @@ export default async function DashboardProjectDetailPage({
                 <div className="card-mini">
                   <p className="text-xs text-[var(--text-muted)]">Titel</p>
                   <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                    {display(project.title)}
+                    {display(project.name)}
                   </p>
                 </div>
 

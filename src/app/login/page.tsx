@@ -1,11 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import Logo from '@/components/logo'
 import { LogIn, UserPlus, Loader } from 'lucide-react'
 
 export default function LoginPage() {
+  const [rememberMe, setRememberMe] = useState(false);
   const supabase = useMemo(() => createClient(), [])
 
   const [email, setEmail] = useState('')
@@ -23,6 +25,11 @@ export default function LoginPage() {
     }
 
     try {
+      if (rememberMe && window && window.localStorage) {
+        window.localStorage.setItem('rememberedEmail', email);
+      } else if (window && window.localStorage) {
+        window.localStorage.removeItem('rememberedEmail');
+      }
       setLoading(true)
 
       const { error } = await supabase.auth.signInWithPassword({
@@ -79,17 +86,21 @@ export default function LoginPage() {
     }
   }
 
+  // Vul e-mailveld automatisch in als onthouden
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const saved = window.localStorage.getItem('rememberedEmail');
+      if (saved) setEmail(saved);
+    }
+  }, []);
+
   return (
     <main className="min-h-screen bg-[var(--bg-main)] text-white">
       <div className="flex min-h-screen items-center justify-center px-5 py-10">
         <div className="w-full max-w-md">
           <div className="mb-6 text-center">
             <div className="mb-5 flex justify-center">
-              <img
-                src="/mv3d-logo.svg"
-                alt="MV3D logo"
-                className="mx-auto block h-auto w-full max-w-[220px] sm:max-w-[240px]"
-              />
+              <Logo size="xl" variant="dark" />
             </div>
             <h1 className="text-2xl font-bold text-[var(--text-main)]">Welkom terug</h1>
             <p className="mt-3 text-sm text-[var(--text-soft)]">
@@ -126,6 +137,19 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-[var(--text-main)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
                 />
+              </div>
+
+              <div className="flex items-center mb-2">
+                <input
+                  id="rememberMe"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={e => setRememberMe(e.target.checked)}
+                  className="mr-2 h-4 w-4 rounded border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-soft)] focus:ring-[var(--accent)]/20"
+                />
+                <label htmlFor="rememberMe" className="text-sm text-[var(--text-soft)] select-none cursor-pointer">
+                  Onthoud mij
+                </label>
               </div>
 
               <button

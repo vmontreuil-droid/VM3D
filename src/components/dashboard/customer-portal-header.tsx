@@ -21,7 +21,7 @@ export default function CustomerPortalHeader({ logoUrl, companyName, statcards }
       <div className="relative px-4 py-4 sm:px-8 flex flex-row items-center justify-between gap-6 w-full">
         <div className="flex min-w-0 md:max-w-2xl items-center">
           <div className="flex items-stretch pr-6">
-            <CustomerLogoHeaderBlock logoUrl={logoUrl} />
+            <CustomerLogoHeaderBlock logoUrl={logoUrl ?? undefined} />
           </div>
           <div className="min-w-0 flex flex-col justify-center">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">

@@ -21,8 +21,7 @@ export default function NewProjectForm({ userId }: { userId: string }) {
 
     const { error } = await supabase.from('projects').insert({
       user_id: userId,
-      title,
-      description,
+      name: title,
       address,
     })
 

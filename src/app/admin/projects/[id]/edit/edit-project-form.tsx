@@ -13,7 +13,7 @@ type Customer = {
 type Project = {
   id: number | string
   user_id: string | null
-  title: string | null
+  name: string | null
   description: string | null
   address: string | null
   price: number | null
@@ -31,8 +31,8 @@ export default function EditProjectForm({
   const router = useRouter()
 
   const [userId, setUserId] = useState(project.user_id ?? '')
-  const [title, setTitle] = useState(project.title ?? '')
-  const [description, setDescription] = useState(project.description ?? '')
+  const [title, setTitle] = useState(project.name ?? '')
+  const [description, setDescription] = useState('')
   const [address, setAddress] = useState(project.address ?? '')
   const [price, setPrice] = useState(
     project.price !== null && project.price !== undefined

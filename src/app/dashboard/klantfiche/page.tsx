@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 import { UserRound, Mail, Phone, Building2, MapPin, FileText } from 'lucide-react'
 
 function display(value: unknown) {
@@ -21,13 +22,17 @@ export default async function DashboardCustomerProfilePage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const adminSupabase = createAdminClient()
+
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select(
       'role, full_name, company_name, email, phone, mobile, vat_number, street, postal_code, city, country, logo_url'
     )
     .eq('id', user.id)
     .single()
+
+  const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
 
   if (profile?.role === 'admin') {
     redirect('/admin')
@@ -51,7 +56,7 @@ export default async function DashboardCustomerProfilePage() {
                 ← Terug naar dashboard
               </Link>
               <div className="ml-auto">
-                <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+                <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
               </div>
             </div>
 

@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 
     const { data: project, error: projectError } = await adminSupabase
       .from('projects')
-      .select('id, user_id, title')
+      .select('id, user_id, name')
       .eq('id', projectId)
       .single()
 

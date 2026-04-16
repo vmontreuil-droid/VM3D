@@ -107,7 +107,7 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
 
   const { data: projects } = await adminSupabase
     .from('projects')
-    .select('id, title, address, user_id')
+    .select('id, name, address, user_id')
     .order('created_at', { ascending: false })
     .limit(250)
 
@@ -146,7 +146,7 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
 
             <div className="mt-3 max-w-[280px]">
               <Link
-                href="/admin/tickets"
+                href="/admin"
                 className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
               >
                 <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
@@ -156,10 +156,10 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                      Tickets
+                      Dashboard
                     </span>
                     <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                      Terug naar ticketsoverzicht
+                      Terug naar adminoverzicht
                     </span>
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
                   <option value="">Geen werf koppelen</option>
                   {(projects ?? []).map((project: any) => (
                     <option key={project.id} value={project.id}>
-                      #{project.id} · {project.title || project.address || 'Zonder titel'}
+                      #{project.id} · {project.name || project.address || 'Zonder titel'}
                     </option>
                   ))}
                 </select>

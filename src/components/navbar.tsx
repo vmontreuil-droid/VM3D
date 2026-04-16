@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import Logo from '@/components/logo'
 
 type Props = {
   isAdmin?: boolean
@@ -39,18 +40,7 @@ export default function Navbar({ isAdmin = false }: Props) {
             href="/"
             className="flex items-center gap-2 hover:opacity-90 transition"
           >
-            <svg width="140" height="40" viewBox="0 0 280 100" className="h-10 w-auto">
-              {/* Orange squares */}
-              <rect x="10" y="10" width="18" height="18" rx="4" fill="#f28c3a" />
-              <rect x="35" y="10" width="18" height="18" rx="4" fill="#f28c3a" />
-              <rect x="10" y="35" width="18" height="18" rx="4" fill="#f28c3a" />
-              <rect x="35" y="35" width="18" height="18" rx="4" fill="#f28c3a" />
-              
-              {/* MV3D text */}
-              <text x="70" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="900" fill="white">MV</text>
-              <text x="185" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="900" fill="#f28c3a">3</text>
-              <text x="220" y="62" fontFamily="system-ui, -apple-system" fontSize="48" fontWeight="700" fill="white">D</text>
-            </svg>
+            <Logo size="md" variant="dark" />
           </Link>
 
           <nav className="hidden items-center gap-1.5 md:flex">

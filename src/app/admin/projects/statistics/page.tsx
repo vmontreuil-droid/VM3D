@@ -24,10 +24,12 @@ type ProjectStats = {
 }
 
 const statusColorMap: Record<string, string> = {
-  'Ingediend': 'bg-blue-500/20 text-blue-500 border-blue-500/30',
-  'In behandeling': 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30',
-  'Klaar voor betaling': 'bg-orange-500/20 text-orange-500 border-orange-500/30',
-  'Afgerond': 'bg-green-500/20 text-green-500 border-green-500/30',
+  'offerte_aangevraagd': 'bg-slate-500/20 text-slate-500 border-slate-500/30',
+  'offerte_verstuurd': 'bg-amber-500/20 text-amber-500 border-amber-500/30',
+  'in_behandeling': 'bg-blue-500/20 text-blue-500 border-blue-500/30',
+  'facturatie': 'bg-purple-500/20 text-purple-500 border-purple-500/30',
+  'factuur_verstuurd': 'bg-orange-500/20 text-orange-500 border-orange-500/30',
+  'afgerond': 'bg-green-500/20 text-green-500 border-green-500/30',
 }
 
 export default function ProjectStatisticsPage() {
@@ -43,25 +45,44 @@ export default function ProjectStatisticsPage() {
           .select('*', { count: 'exact' })
 
         const projects = projectsData || []
-        const completed = projects.filter((p: any) => p.status === 'Afgerond').length
+        const completed = projects.filter((p: any) => p.status === 'afgerond').length
         const active = projects.filter((p: any) => 
-          p.status !== 'Afgerond' && p.status !== null
+          p.status !== 'afgerond' && p.status !== null
         ).length
+
+        const statusLabelMap: Record<string, string> = {
+          offerte_aangevraagd: 'Offerte aangevraagd',
+          offerte_verstuurd: 'Offerte verstuurd',
+          in_behandeling: 'In behandeling',
+          facturatie: 'Facturatie',
+          factuur_verstuurd: 'Factuur verstuurd',
+          afgerond: 'Afgerond',
+        }
 
         const projectsByStatus = [
           {
-            status: 'Ingediend',
-            count: projects.filter((p: any) => p.status === 'Ingediend').length,
-            color: 'bg-blue-500',
+            status: 'Offerte aangevraagd',
+            count: projects.filter((p: any) => p.status === 'offerte_aangevraagd').length,
+            color: 'bg-slate-500',
+          },
+          {
+            status: 'Offerte verstuurd',
+            count: projects.filter((p: any) => p.status === 'offerte_verstuurd').length,
+            color: 'bg-amber-500',
           },
           {
             status: 'In behandeling',
-            count: projects.filter((p: any) => p.status === 'In behandeling').length,
-            color: 'bg-yellow-500',
+            count: projects.filter((p: any) => p.status === 'in_behandeling').length,
+            color: 'bg-blue-500',
           },
           {
-            status: 'Klaar voor betaling',
-            count: projects.filter((p: any) => p.status === 'Klaar voor betaling').length,
+            status: 'Facturatie',
+            count: projects.filter((p: any) => p.status === 'facturatie').length,
+            color: 'bg-purple-500',
+          },
+          {
+            status: 'Factuur verstuurd',
+            count: projects.filter((p: any) => p.status === 'factuur_verstuurd').length,
             color: 'bg-orange-500',
           },
           {

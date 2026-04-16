@@ -94,7 +94,7 @@ export default async function AdminCustomersPage() {
           priceValue > 0
         const isPaid = Boolean(project.is_paid ?? project.paid)
         const isBillingRelevant =
-          hasPrice || project.status === 'klaar_voor_betaling' || isPaid
+          hasPrice || project.status === 'facturatie' || project.status === 'factuur_verstuurd' || isPaid
 
         if (isBillingRelevant) {
           if (hasPrice) {
@@ -220,50 +220,30 @@ export default async function AdminCustomersPage() {
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+      <div className="space-y-2">
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
-                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Dashboard
+                </Link>
+
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Adminportaal
                 </p>
 
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   Klantenbeheer
                 </h1>
-
-                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Beheer klantfiches, btw-gegevens en facturatie vanuit één
-                  centraal overzicht met dezelfde ritmiek als het admin
-                  dashboard.
-                </p>
-
-                <div className="mt-4 max-w-[260px]">
-                  <Link
-                    href="/admin"
-                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                  >
-                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Dashboard
-                        </span>
-                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Terug naar adminoverzicht
-                        </span>
-                      </span>
-                    </div>
-                  </Link>
-                </div>
               </div>
 
               <div className="w-full xl:ml-auto xl:max-w-[820px]">
@@ -368,7 +348,7 @@ export default async function AdminCustomersPage() {
             </div>
           </div>
 
-          <div className="grid items-stretch gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid items-stretch gap-2 px-4 py-3 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
@@ -379,7 +359,7 @@ export default async function AdminCustomersPage() {
                 </p>
               </div>
 
-              <div id="klantenkaart" className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
+              <div id="klantenkaart" className="min-h-[180px] flex-1 sm:min-h-[220px] xl:min-h-0">
                 <CustomersMap locations={mapLocations} height="100%" />
               </div>
             </div>
@@ -498,11 +478,11 @@ export default async function AdminCustomersPage() {
                 )}
               </div>
 
-              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-3">
+              <div className="mt-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-2">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                   Snelle info
                 </p>
-                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
                   <div>
                     <p className="text-xs text-[var(--text-muted)]">Top klant</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">

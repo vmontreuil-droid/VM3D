@@ -1,4 +1,5 @@
-export async function GET() {
+import { NextRequest } from 'next/server'
+export async function GET(req: NextRequest) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -8,14 +9,26 @@ export async function GET() {
     const supabaseAdmin = createAdminClient(supabaseUrl, supabaseServiceRoleKey, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
-    const { count, error } = await supabaseAdmin
+
+    const { searchParams } = new URL(req.url)
+    const search = searchParams.get('search')?.trim() || ''
+
+    let query = supabaseAdmin
       .from('profiles')
-      .select('*', { count: 'exact', head: true })
+      .select('id, company_name, full_name, email')
       .eq('role', 'client')
+      .order('company_name', { ascending: true })
+      .limit(20)
+
+    if (search) {
+      query = query.or(`company_name.ilike.%${search}%,full_name.ilike.%${search}%,email.ilike.%${search}%`)
+    }
+
+    const { data: customers, error } = await query
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
-    return NextResponse.json({ count })
+    return NextResponse.json({ customers })
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Onbekende serverfout.' }, { status: 500 })
   }

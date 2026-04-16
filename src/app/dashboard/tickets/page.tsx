@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { FolderOpen, PlusCircle, Activity, UploadCloud, Download } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 import {
   getTicketPriorityClass,
   getTicketPriorityLabel,
@@ -96,8 +96,10 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
     redirect('/login')
   }
 
+  const adminSupabase = createAdminClient()
+
   // Statcard data ophalen zoals op dashboard
-  const { data: projectsRaw } = await supabase
+  const { data: projectsRaw } = await adminSupabase
     .from('projects')
     .select('*')
     .eq('user_id', user.id)
@@ -108,11 +110,12 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
   const activeProjects = safeProjects.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd'
   ).length
   // Uploads en opleveringen tellen uit project_files
   const { data: projectFilesRaw } = safeProjects.length > 0
-    ? await supabase
+    ? await adminSupabase
         .from('project_files')
         .select('*')
         .in('project_id', safeProjects.map((p: any) => p.id))
@@ -122,18 +125,17 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
   const finalFilesCount = projectFiles.filter((file: any) => file.file_type === 'final_file').length
   const resolvedSearchParams = searchParams ? await searchParams : {}
 
-  const { data: profile } = await supabase
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
   const isAdmin = profile?.role === 'admin'
+  const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
   if (isAdmin) {
     redirect('/admin/tickets')
   }
-
-  const adminSupabase = createAdminClient()
 
   const [{ data: tickets }, { data: projects }] = await Promise.all([
     adminSupabase
@@ -143,7 +145,7 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
       .order('updated_at', { ascending: false }),
     adminSupabase
       .from('projects')
-      .select('id, title, address')
+      .select('id, name, address')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(200),
@@ -172,7 +174,7 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
           </section>
         )}
 
-        <CustomerPortalHeader logoUrl={profile?.logo_url} companyName={profile?.company_name || undefined} />
+        <CustomerPortalHeader logoUrl={logoSignedUrl} companyName={profile?.company_name || undefined} />
 
         {/* Statcards identiek aan dashboard, rechts uitgelijnd */}
         <div className="flex gap-3 md:mt-0 mb-2 flex-wrap justify-end">
@@ -256,7 +258,7 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
                     <option value="">Geen werf koppelen</option>
                     {(projects ?? []).map((project: any) => (
                       <option key={project.id} value={project.id}>
-                        #{project.id} · {project.title || project.address || 'Zonder titel'}
+                        #{project.id} · {project.name || project.address || 'Zonder titel'}
                       </option>
                     ))}
                   </select>
@@ -311,7 +313,7 @@ export default async function DashboardTicketsPage({ searchParams }: Props) {
                           </div>
                           {linkedProject ? (
                             <p className="mt-1 text-xs text-[var(--text-soft)]">
-                              Werf: {linkedProject.title || linkedProject.address || `#${linkedProject.id}`}
+                              Werf: {linkedProject.name || linkedProject.address || `#${linkedProject.id}`}
                             </p>
                           ) : null}
                         </div>

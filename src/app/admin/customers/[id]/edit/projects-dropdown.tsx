@@ -6,7 +6,7 @@ import { ChevronDown, FolderOpen } from 'lucide-react'
 
 type ProjectOption = {
   id: string
-  title: string | null
+  name: string | null
   status: string | null
   created_at: string | null
 }
@@ -40,7 +40,7 @@ export default function ProjectsDropdown({ projects }: Props) {
     if (!normalizedQuery) return projects
 
     return projects.filter((project) => {
-      const title = (project.title || '').toLowerCase()
+      const title = (project.name || '').toLowerCase()
       const statusLabel = getProjectStatusLabel(project.status).toLowerCase()
       return title.includes(normalizedQuery) || statusLabel.includes(normalizedQuery)
     })
@@ -94,7 +94,7 @@ export default function ProjectsDropdown({ projects }: Props) {
             disabled={!filteredProjects.length}
           >
             {filteredProjects.map((project) => {
-              const label = project.title || 'Zonder titel'
+              const label = project.name || 'Zonder titel'
               const dateLabel = project.created_at
                 ? new Date(project.created_at).toLocaleDateString('nl-BE')
                 : 'Geen datum'

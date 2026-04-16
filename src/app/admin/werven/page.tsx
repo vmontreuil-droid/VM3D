@@ -19,14 +19,22 @@ import {
 
 function getStatusLabel(status: string | null) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -136,10 +144,13 @@ export default async function AdminWervenPage() {
   const activeProjects = projectsWithProfiles.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd'
   ).length
   const submittedProjects = projectsWithProfiles.filter(
-    (project: any) => project.status === 'ingediend'
+    (project: any) =>
+      project.status === 'offerte_aangevraagd' ||
+      project.status === 'offerte_verstuurd'
   ).length
 
   const billingRelevantProjects = projectsWithProfiles.filter((project: any) => {
@@ -152,7 +163,8 @@ export default async function AdminWervenPage() {
 
     return (
       hasPrice ||
-      project.status === 'klaar_voor_betaling' ||
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd' ||
       Boolean(project.is_paid ?? project.paid)
     )
   })
@@ -215,7 +227,7 @@ export default async function AdminWervenPage() {
 
   const latestProject = projectsWithProfiles[0] ?? null
   const latestProjectLabel =
-    latestProject?.title || latestProject?.address || '—'
+    latestProject?.name || latestProject?.address || '—'
   const latestProjectDateLabel = latestProject?.created_at
     ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
     : '—'
@@ -226,7 +238,7 @@ export default async function AdminWervenPage() {
     )[0] ?? null
 
   const highestValueProjectLabel =
-    highestValueProject?.title || highestValueProject?.address || '—'
+    highestValueProject?.name || highestValueProject?.address || '—'
 
   const hasLoadError = Boolean(projectsError || profilesError || filesError)
 
@@ -235,10 +247,10 @@ export default async function AdminWervenPage() {
 
     return {
       id: project.id,
-      title: project.title || 'Ongetitelde werf',
+      name: project.name || 'Ongetitelde werf',
       description: project.description ?? null,
       address: project.address ?? null,
-      status: project.status || 'ingediend',
+      status: project.status || 'offerte_aangevraagd',
       price:
         Number.isFinite(priceValue) && priceValue > 0 ? priceValue : null,
       currency: project.currency || 'EUR',
@@ -255,50 +267,30 @@ export default async function AdminWervenPage() {
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+      <div className="space-y-2">
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
-                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Dashboard
+                </Link>
+
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   Adminportaal
                 </p>
 
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   Wervenbeheer
                 </h1>
-
-                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Beheer alle werven, volg voortgang op en hou facturatie en
-                  opleveringen centraal bij in dezelfde ritmiek als het
-                  klantenoverzicht.
-                </p>
-
-                <div className="mt-4 max-w-[260px]">
-                  <Link
-                    href="/admin"
-                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                  >
-                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Dashboard
-                        </span>
-                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Terug naar adminoverzicht
-                        </span>
-                      </span>
-                    </div>
-                  </Link>
-                </div>
               </div>
 
               <div className="w-full xl:ml-auto xl:max-w-[820px]">
@@ -318,7 +310,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Ingediend</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Offerte</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -403,7 +395,7 @@ export default async function AdminWervenPage() {
             </div>
           </div>
 
-          <div className="grid items-stretch gap-3 px-4 py-4 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid items-stretch gap-2 px-4 py-3 sm:px-5 xl:grid-cols-[1.1fr_0.9fr]">
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
@@ -414,7 +406,7 @@ export default async function AdminWervenPage() {
                 </p>
               </div>
 
-              <div id="wervenkaart" className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
+              <div id="wervenkaart" className="min-h-[180px] flex-1 sm:min-h-[220px] xl:min-h-0">
                 <ProjectMap projects={projectsWithProfiles} height="100%" />
               </div>
             </div>
@@ -533,11 +525,11 @@ export default async function AdminWervenPage() {
                 )}
               </div>
 
-              <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-3">
+              <div className="mt-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-2">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
                   Snelle info
                 </p>
-                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
                   <div>
                     <p className="text-xs text-[var(--text-muted)]">Laatste werf</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">

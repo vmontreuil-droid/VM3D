@@ -3,8 +3,9 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
+import Logo from '@/components/logo'
 import { createClient } from '@/lib/supabase/client'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -19,11 +20,13 @@ type NavItem = {
   href: string
   icon: React.ReactNode
   badge?: number
+  color?: string
   match: (pathname: string, view?: string | null) => boolean
   children?: {
     label: string
     href: string
     icon?: React.ReactNode
+    badge?: number
     match: (pathname: string, view?: string | null) => boolean
   }[]
 }
@@ -44,8 +47,13 @@ export default function Sidebar({
   const currentView = searchParams.get('view')
   const supabase = createClient()
   const [openTicketsCount, setOpenTicketsCount] = useState<number | null>(null)
+  const [waitingTicketsCount, setWaitingTicketsCount] = useState<number | null>(null)
   const [customerCount, setCustomerCount] = useState<number | null>(null)
   const [projectCount, setProjectCount] = useState<number | null>(null)
+  const [offertesCount, setOffertesCount] = useState<number | null>(null)
+  const [facturenCount, setFacturenCount] = useState<number | null>(null)
+  const [customerTicketCount, setCustomerTicketCount] = useState<number | null>(null)
+  const [machineCount, setMachineCount] = useState<number | null>(null)
 
 
   useEffect(() => {
@@ -54,12 +62,19 @@ export default function Sidebar({
 
     async function fetchCounts() {
       try {
-        // Tickets
+        // Tickets open
         const ticketsRes = await fetch('/api/admin/tickets/open-count', { method: 'GET', cache: 'no-store' });
         if (ticketsRes.ok) {
           const payload = await ticketsRes.json();
           const count = Number(payload?.openCount);
           if (active && Number.isFinite(count)) setOpenTicketsCount(count);
+        }
+        // Tickets wacht op klant
+        const waitingRes = await fetch('/api/admin/tickets/waiting-count', { method: 'GET', cache: 'no-store' });
+        if (waitingRes.ok) {
+          const payload = await waitingRes.json();
+          const count = Number(payload?.waitingCount);
+          if (active && Number.isFinite(count)) setWaitingTicketsCount(count);
         }
         // Customers
         const customersRes = await fetch('/api/admin/customers', { method: 'GET', cache: 'no-store' });
@@ -75,12 +90,55 @@ export default function Sidebar({
           const count = Number(payload?.count);
           if (active && Number.isFinite(count)) setProjectCount(count);
         }
+        // Offertes
+        const offertesRes = await fetch('/api/admin/offertes/count', { method: 'GET', cache: 'no-store' });
+        if (offertesRes.ok) {
+          const payload = await offertesRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setOffertesCount(count);
+        }
+        // Facturen
+        const facturenRes = await fetch('/api/admin/facturen/count', { method: 'GET', cache: 'no-store' });
+        if (facturenRes.ok) {
+          const payload = await facturenRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setFacturenCount(count);
+        }
+        // Machines
+        const machinesRes = await fetch('/api/admin/machines/count', { method: 'GET', cache: 'no-store' });
+        if (machinesRes.ok) {
+          const payload = await machinesRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setMachineCount(count);
+        }
       } catch (error) {
         console.error('sidebar count fetch error:', error);
       }
     }
 
     fetchCounts();
+    return () => { active = false; };
+  }, [isAdmin]);
+
+  // Customer-side ticket count
+  useEffect(() => {
+    if (isAdmin) return;
+    let active = true;
+
+    async function fetchCustomerTickets() {
+      try {
+        const res = await fetch('/api/tickets/open-count', { method: 'GET', cache: 'no-store' });
+        if (res.ok) {
+          const payload = await res.json();
+          const count = Number(payload?.openCount);
+          if (active && Number.isFinite(count)) setCustomerTicketCount(count);
+        }
+      } catch (err) {
+        console.error('customer ticket count error:', err);
+      }
+    }
+
+    fetchCustomerTickets();
     return () => { active = false; };
   }, [isAdmin]);
 
@@ -113,33 +171,31 @@ export default function Sidebar({
               label: 'Tickets',
               href: '/dashboard/tickets',
               icon: <List className="h-[14px] w-[14px]" />,
+              badge: customerTicketCount ?? undefined,
               match: (pathname) => pathname === '/dashboard/tickets' || pathname.startsWith('/dashboard/tickets/'),
             },
-            {
-              label: 'Klantfiche',
-              href: '/dashboard/klantfiche',
-              icon: <UserRound className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/klantfiche',
-            },
-            {
-              label: 'Offerte aanvragen',
-              href: '/dashboard/offerte',
-              icon: <FilePlus className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname === '/dashboard/offerte',
-            },
+            // Offerte knoppen verwijderd
             {
               label: 'Facturatie',
               href: '/dashboard/facturatie',
               icon: <FileText className="h-[14px] w-[14px]" />,
               match: (pathname) => pathname === '/dashboard/facturatie',
             },
-            {
-              label: 'Uploads',
-              href: '/dashboard',
-              icon: <UploadCloud className="h-[14px] w-[14px]" />,
-              match: (pathname) => pathname.startsWith('/dashboard/projects/'),
-            },
           ],
+        },
+        {
+          label: 'Mijn Machines',
+          href: '/dashboard/machines',
+          match: (pathname) => pathname === '/dashboard/machines' || pathname.startsWith('/dashboard/machines/'),
+          icon: <Construction className="h-[17px] w-[17px]" />,
+          color: 'green',
+        },
+        {
+          label: 'Machinetools',
+          href: '/dashboard/machinetools',
+          match: (pathname) => pathname === '/dashboard/machinetools' || pathname.startsWith('/dashboard/machinetools/'),
+          icon: <MousePointerClick className="h-[17px] w-[17px]" />,
+          color: 'green',
         },
       ]
 
@@ -152,6 +208,7 @@ export default function Sidebar({
       icon: <Users className="h-[17px] w-[17px]" />,
       badge: customerCount ?? undefined,
     },
+        // Offerte knop verwijderd
     {
       label: 'Werven',
       href: '/admin/werven',
@@ -168,29 +225,31 @@ export default function Sidebar({
       badge: openTicketsCount ?? undefined,
     },
     {
-      label: 'Klantweergave',
-      href: '/admin/customer-preview',
-      match: (pathname) => pathname === '/admin/customer-preview',
-      icon: <Eye className="h-[17px] w-[17px]" />,
+      label: 'Offertes',
+      href: '/admin/offerte',
+      match: (pathname) => pathname === '/admin/offerte' || pathname.startsWith('/admin/offerte/'),
+      icon: <MousePointerClick className="h-[17px] w-[17px]" />,
+      badge: offertesCount ?? undefined,
     },
     {
-      label: 'Abonnement',
-      href: '/dashboard/abonnement',
-      match: (pathname) => pathname === '/dashboard/abonnement',
-      icon: <CreditCard className="h-[17px] w-[17px]" />,
+      label: 'Facturen',
+      href: '/admin/facturen',
+      match: (pathname) => pathname === '/admin/facturen' || pathname.startsWith('/admin/facturen/'),
+      icon: <Receipt className="h-[17px] w-[17px]" />,
+      badge: facturenCount ?? undefined,
+    },
+    {
+      label: 'Machines',
+      href: '/admin/machines',
+      match: (pathname) => pathname === '/admin/machines' || pathname.startsWith('/admin/machines/'),
+      icon: <Construction className="h-[17px] w-[17px]" />,
+      badge: machineCount ?? undefined,
     },
     {
       label: 'Statistieken',
-      href: '/admin/projects/statistics',
-      match: (pathname) =>
-        pathname === '/admin/projects/statistics' || pathname === '/admin/customers/statistics',
+      href: '/admin/statistieken',
+      match: (pathname) => pathname === '/admin/statistieken',
       icon: <BarChart3 className="h-[17px] w-[17px]" />,
-    },
-    {
-      label: 'Uploads',
-      href: '/admin#uploads',
-      match: () => false,
-      icon: <UploadCloud className="h-[17px] w-[17px]" />,
     },
   ]
 
@@ -218,21 +277,27 @@ export default function Sidebar({
               : 'gap-3 px-4 py-3'
           } ${
             active
-              ? item.label.includes('bewerken')
-                ? 'bg-[linear-gradient(135deg,rgba(245,140,55,0.18),rgba(245,140,55,0.04))] text-[var(--accent)] shadow-sm'
-                : 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
-              : 'text-[var(--text-soft)] hover:bg-[var(--bg-card)] hover:text-white'
+              ? item.color === 'green'
+                ? 'bg-[linear-gradient(90deg,rgba(16,185,129,0.16),rgba(16,185,129,0.03))] text-emerald-400 shadow-sm'
+                : item.label.includes('bewerken')
+                  ? 'bg-[linear-gradient(135deg,rgba(245,140,55,0.18),rgba(245,140,55,0.04))] text-[var(--accent)] shadow-sm'
+                  : 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
+              : item.color === 'green'
+                ? 'text-emerald-400/70 hover:bg-emerald-500/8 hover:text-emerald-400'
+                : 'text-[var(--text-soft)] hover:bg-[var(--bg-card)] hover:text-white'
           }`}
         >
           {active && (
-            <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]" />
+            <span className={`absolute right-0 top-0 h-full w-[2px] rounded-l-full ${
+              item.color === 'green' ? 'bg-emerald-400' : 'bg-[var(--accent)]'
+            }`} />
           )}
 
           <span
             className={`shrink-0 transition ${
               active
-                ? 'text-[var(--accent)]'
-                : 'text-[var(--text-muted)]'
+                ? item.color === 'green' ? 'text-emerald-400' : 'text-[var(--accent)]'
+                : item.color === 'green' ? 'text-emerald-400/70' : 'text-[var(--text-muted)]'
             }`}
           >
             {item.icon}
@@ -242,7 +307,11 @@ export default function Sidebar({
             <>
               <span className="truncate text-sm font-medium">{item.label}</span>
               {typeof item.badge === 'number' ? (
-                <span className="ml-auto flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
+                <span className={`ml-auto flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-semibold min-w-[1.8em] h-[1.6em] leading-none ${
+                  item.color === 'green'
+                    ? 'border-emerald-500/60 bg-[var(--bg-card)] text-emerald-400'
+                    : 'border-[var(--accent)]/60 bg-[var(--bg-card)] text-[var(--accent)]'
+                }`}>
                   {item.badge}
                 </span>
               ) : null}
@@ -277,6 +346,11 @@ export default function Sidebar({
                     </span>
                   ) : null}
                   <span>{child.label}</span>
+                  {typeof child.badge === 'number' ? (
+                    <span className="ml-auto flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
+                      {child.badge}
+                    </span>
+                  ) : null}
                 </Link>
               )
             })}
@@ -288,7 +362,7 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`relative flex h-screen flex-col border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
+      className={`relative flex h-dvh flex-col border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
         mobile ? 'w-[280px]' : collapsed ? 'w-[82px]' : 'w-[280px]'
       }`}
     >
@@ -318,19 +392,10 @@ export default function Sidebar({
           }`}
         >
           <div className="flex min-w-0 items-center gap-3 overflow-hidden">
-            <svg width="40" height="40" viewBox="0 0 100 100" className="h-10 w-10 shrink-0">
-              {/* Orange squares */}
-              <rect x="10" y="10" width="20" height="20" rx="5" fill="#f28c3a" />
-              <rect x="40" y="10" width="20" height="20" rx="5" fill="#f28c3a" />
-              <rect x="10" y="40" width="20" height="20" rx="5" fill="#f28c3a" />
-              <rect x="40" y="40" width="20" height="20" rx="5" fill="#f28c3a" />
-            </svg>
+            <Logo size={collapsed && !mobile ? 'sm' : 'md'} variant="dark" showText={!(collapsed && !mobile)} />
 
             {!collapsed && (
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold tracking-wide text-[var(--text-main)]">
-                  MV3D
-                </p>
                 <p className="truncate text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
                   {isAdmin ? 'ADMIN PORTAL' : 'CLIENT PORTAL'}
                 </p>
@@ -382,11 +447,6 @@ export default function Sidebar({
 
           {isAdmin && (
             <div>
-              {!collapsed && (
-                <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                  Sneltoetsen
-                </p>
-              )}
               <div className="space-y-1.5">{adminItems.map(renderNavItem)}</div>
             </div>
           )}

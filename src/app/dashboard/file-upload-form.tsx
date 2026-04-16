@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 type Project = {
   id: number
-  title: string
+  name: string
 }
 
 export default function FileUploadForm({
@@ -81,7 +81,7 @@ export default function FileUploadForm({
           <option value="">Kies een project</option>
           {projects.map((project) => (
             <option key={project.id} value={project.id}>
-              {project.title}
+              {project.name}
             </option>
           ))}
         </select>

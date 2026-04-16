@@ -162,7 +162,7 @@ export default async function DashboardTicketDetailPage({ params, searchParams }
     ticket.project_id
       ? adminSupabase
           .from('projects')
-          .select('id, title, address')
+          .select('id, name, address')
           .eq('id', ticket.project_id)
           .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
@@ -254,7 +254,7 @@ export default async function DashboardTicketDetailPage({ params, searchParams }
                   Werf:{' '}
                   <span className="text-[var(--text-main)]">
                     {projectRes.data
-                      ? projectRes.data.title || projectRes.data.address || `#${projectRes.data.id}`
+                      ? projectRes.data.name || projectRes.data.address || `#${projectRes.data.id}`
                       : 'Niet gekoppeld'}
                   </span>
                 </p>

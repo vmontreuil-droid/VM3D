@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { Mail, AlertCircle, CheckCircle } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
+import Logo from '@/components/logo'
 
 async function createPublicSupportTicket(formData: FormData) {
   'use server'
@@ -131,11 +132,7 @@ export default async function SupportPage({ searchParams }: Props) {
             </div>
 
             <div className="relative">
-              <img
-                src="/mv3d-logo.svg"
-                alt="MV3D logo"
-                className="mb-3 h-auto w-full max-w-[170px]"
-              />
+              <Logo size="lg" variant="dark" />
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                 Supportportaal
               </p>

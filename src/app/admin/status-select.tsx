@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { getStatusLabel } from '@/lib/status'
-import { FileText, Clock, CheckCircle, Check, Loader } from 'lucide-react'
+import { FileText, Clock, CheckCircle, Check, Loader, Send, Receipt, Mail } from 'lucide-react'
 
 type Props = {
   projectId: number
@@ -13,12 +13,16 @@ type Props = {
 
 function getStatusIcon(status: string) {
   switch (status) {
-    case 'ingediend':
+    case 'offerte_aangevraagd':
       return <FileText className="h-4 w-4" />
+    case 'offerte_verstuurd':
+      return <Send className="h-4 w-4" />
     case 'in_behandeling':
       return <Clock className="h-4 w-4" />
-    case 'klaar_voor_betaling':
-      return <CheckCircle className="h-4 w-4" />
+    case 'facturatie':
+      return <Receipt className="h-4 w-4" />
+    case 'factuur_verstuurd':
+      return <Mail className="h-4 w-4" />
     case 'afgerond':
       return <Check className="h-4 w-4" />
     default:
@@ -85,7 +89,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
       updatePayload.in_progress_at = new Date().toISOString()
     }
 
-    if (newStatus === 'klaar_voor_betaling') {
+    if (newStatus === 'facturatie') {
       updatePayload.ready_for_payment_at = new Date().toISOString()
     }
 
@@ -122,10 +126,12 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
         disabled={loading || !canEdit}
         className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        <option value="ingediend">{getStatusLabel('ingediend')}</option>
+        <option value="offerte_aangevraagd">{getStatusLabel('offerte_aangevraagd')}</option>
+        <option value="offerte_verstuurd">{getStatusLabel('offerte_verstuurd')}</option>
         <option value="in_behandeling">{getStatusLabel('in_behandeling')}</option>
-        <option value="klaar_voor_betaling">
-          {getStatusLabel('klaar_voor_betaling')}
+        <option value="facturatie">{getStatusLabel('facturatie')}</option>
+        <option value="factuur_verstuurd">
+          {getStatusLabel('factuur_verstuurd')}
         </option>
         <option value="afgerond">{getStatusLabel('afgerond')}</option>
       </select>

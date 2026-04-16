@@ -63,8 +63,7 @@ async function updateProject(formData: FormData) {
     .from('projects')
     .update({
       user_id: userId,
-      title,
-      description: description || null,
+      name: title,
       address: address || null,
       status: status || 'ingediend',
       price: price === null || Number.isNaN(price) ? null : price,
@@ -175,7 +174,7 @@ export default async function EditAdminProjectPage({ params }: Props) {
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  {project.title || 'Werf'}
+                  {project.name || 'Werf'}
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
@@ -474,7 +473,7 @@ export default async function EditAdminProjectPage({ params }: Props) {
                   <input
                     name="title"
                     type="text"
-                    defaultValue={project.title || ''}
+                    defaultValue={project.name || ''}
                     className="input-dark w-full px-3 py-2.5 text-sm"
                     required
                   />

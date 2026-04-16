@@ -10,7 +10,7 @@ type FileItem = {
   created_at?: string | null
   project_id?: number | string | null
   projects?: {
-    title?: string | null
+    name?: string | null
     status?: string | null
   } | null
 }
@@ -27,14 +27,22 @@ function getFileTypeLabel(fileType?: string | null) {
 
 function getStatusLabel(status?: string | null) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -42,11 +50,17 @@ function getStatusLabel(status?: string | null) {
 
 function getStatusClass(status?: string | null) {
   switch (status) {
+    case 'offerte_aangevraagd':
     case 'ingediend':
-      return 'bg-blue-500/15 text-blue-300'
+      return 'bg-slate-500/15 text-slate-300'
+    case 'offerte_verstuurd':
+      return 'bg-amber-500/15 text-amber-300'
     case 'in_behandeling':
-      return 'bg-yellow-500/15 text-yellow-300'
+      return 'bg-blue-500/15 text-blue-300'
+    case 'facturatie':
     case 'klaar_voor_betaling':
+      return 'bg-purple-500/15 text-purple-300'
+    case 'factuur_verstuurd':
       return 'bg-orange-500/15 text-orange-300'
     case 'afgerond':
       return 'bg-green-500/15 text-green-300'
@@ -135,7 +149,7 @@ export default function RecentFilesList({ files }: Props) {
                     {file.file_name}
                   </p>
                   <p className="truncate text-xs text-[var(--text-soft)]">
-                    {file.projects?.title || 'Onbekend'}
+                    {file.projects?.name || 'Onbekend'}
                   </p>
                 </div>
 

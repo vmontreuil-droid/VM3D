@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Sidebar from './sidebar'
+import Logo from '@/components/logo'
 
 type Props = {
   children: React.ReactNode
@@ -36,7 +37,7 @@ export default function AppShell({ children, isAdmin = false }: Props) {
   }, [mobileOpen])
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
+    <div className="dashboard min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
       <div className="flex min-h-screen">
         <aside className="sticky top-0 hidden h-screen shrink-0 lg:block">
           <Sidebar
@@ -94,13 +95,8 @@ export default function AppShell({ children, isAdmin = false }: Props) {
                   </svg>
                 </button>
 
-                <div className="min-w-0 flex-1 text-center">
-                  <p className="truncate text-sm font-semibold tracking-wide text-[var(--text-main)]">
-                    MV3D
-                  </p>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)]">
-                    {isAdmin ? 'ADMIN CLOUD' : 'CLIENT CLOUD'}
-                  </p>
+                <div className="min-w-0 flex-1 flex justify-center">
+                  <Logo size="sm" variant="dark" />
                 </div>
 
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-xs font-bold text-[var(--text-main)]">

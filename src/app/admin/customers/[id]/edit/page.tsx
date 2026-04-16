@@ -328,7 +328,7 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
 
   const { data: projects } = await adminSupabase
     .from('projects')
-    .select('id, title, status, created_at')
+    .select('id, name, status, created_at')
     .eq('user_id', id)
     .order('created_at', { ascending: false })
 
@@ -339,13 +339,13 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const recentProjects = safeProjects.slice(0, 4)
   const totalProjects = safeProjects.length
   const submittedProjects = safeProjects.filter(
-    (project: any) => project.status === 'ingediend'
+    (project: any) => project.status === 'offerte_aangevraagd' || project.status === 'offerte_verstuurd'
   ).length
   const inProgressProjects = safeProjects.filter(
     (project: any) => project.status === 'in_behandeling'
   ).length
   const readyForPaymentProjects = safeProjects.filter(
-    (project: any) => project.status === 'klaar_voor_betaling'
+    (project: any) => project.status === 'facturatie' || project.status === 'factuur_verstuurd'
   ).length
   const completedProjects = safeProjects.filter(
     (project: any) => project.status === 'afgerond'
@@ -353,7 +353,8 @@ export default async function EditCustomerPage({ params, searchParams }: Props) 
   const activeProjects = safeProjects.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd'
   ).length
   const latestProject = safeProjects[0] ?? null
   const latestProjectDate = latestProject?.created_at

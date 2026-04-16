@@ -11,13 +11,16 @@ import {
   Download,
   Mail,
   Eye,
+  Receipt,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import AdminSearchPanel from '@/app/admin/admin-search-panel'
 import AdminUploadPanel from '@/app/admin/admin-upload-panel'
-import ProjectMap from '@/components/projects/project-map'
+import DashboardMap from '@/components/dashboard/dashboard-map'
+import DashboardNotesWidget from '@/components/dashboard/dashboard-notes-widget'
+import DashboardTimeWidget from '@/components/dashboard/dashboard-time-widget'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   getTicketNotificationConfig,
@@ -171,7 +174,7 @@ export default async function AdminPage({ searchParams }: Props) {
 
   const { data: customers, error: customersError } = await adminSupabase
     .from('profiles')
-    .select('id, full_name, company_name, email, vat_number, city, phone, created_at, role')
+    .select('id, full_name, company_name, email, vat_number, city, phone, created_at, role, latitude, longitude')
     .neq('role', 'admin')
     .order('company_name', { ascending: true })
 
@@ -248,12 +251,13 @@ export default async function AdminPage({ searchParams }: Props) {
   const customerCount = customersWithMeta.length
   const totalProjects = projectsWithProfiles.length
   const submittedProjects = projectsWithProfiles.filter(
-    (project: any) => project.status === 'ingediend'
+    (project: any) => project.status === 'offerte_aangevraagd' || project.status === 'offerte_verstuurd'
   ).length
   const activeProjects = projectsWithProfiles.filter(
     (project: any) =>
       project.status === 'in_behandeling' ||
-      project.status === 'klaar_voor_betaling'
+      project.status === 'facturatie' ||
+      project.status === 'factuur_verstuurd'
   ).length
   const completedProjects = projectsWithProfiles.filter(
     (project: any) => project.status === 'afgerond'
@@ -303,6 +307,17 @@ export default async function AdminPage({ searchParams }: Props) {
 
   const ticketCount = ticketCountRaw ?? 0
   const openTicketCount = openTicketCountRaw ?? 0
+
+  const { count: facturenCountRaw } = await adminSupabase
+    .from('facturen')
+    .select('id', { count: 'exact', head: true })
+  const facturenCount = facturenCountRaw ?? 0
+
+  const { count: offertesCountRaw } = await adminSupabase
+    .from('offertes')
+    .select('id', { count: 'exact', head: true })
+  const offertesCount = offertesCountRaw ?? 0
+
   const subscriptionCount = 0
   const ticketMailConfig = getTicketNotificationConfig()
   const ticketMailEnabled = ticketMailConfig.enabled
@@ -489,15 +504,15 @@ export default async function AdminPage({ searchParams }: Props) {
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Wervenkaart
+                  Kaart
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Visueel overzicht van alle werven en locaties.
+                  Werven en klanten op de kaart.
                 </p>
               </div>
 
               <div className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
-                <ProjectMap projects={projectsWithProfiles} height="100%" />
+                <DashboardMap projects={projectsWithProfiles} customers={customersWithMeta} height="100%" />
               </div>
             </div>
 
@@ -512,54 +527,6 @@ export default async function AdminPage({ searchParams }: Props) {
               </div>
 
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                <Link
-                  href="/admin/customers"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  {/* Badge rechtsboven */}
-                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
-                    {customerCount}
-                  </span>
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Users className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Klanten
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Open alle klantfiches.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/admin/werven"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  {/* Badge rechtsboven */}
-                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
-                    {totalProjects}
-                  </span>
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <FolderOpen className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Werven
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Ga naar het centrale werfoverzicht.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
                 <Link
                   href="/admin/customers/new"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
@@ -600,12 +567,13 @@ export default async function AdminPage({ searchParams }: Props) {
                   </div>
                 </Link>
 
+
                 <Link
                   href="/admin/tickets"
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <span className="absolute right-3 top-2 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/14 px-2 py-0.5 text-[10px] font-semibold text-[var(--accent)]">
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-[var(--accent)]/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-[var(--accent)] min-w-[1.8em] h-[1.6em] leading-none">
                     {openTicketCount}
                   </span>
                   <div className="flex items-start gap-2.5 pr-2">
@@ -624,32 +592,61 @@ export default async function AdminPage({ searchParams }: Props) {
                 </Link>
 
                 <Link
-                  href="/admin/customer-preview"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  href="/admin/offerte"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-blue-400/50 hover:bg-[var(--bg-card)]/80"
                 >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-blue-400/80" />
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-blue-400/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-blue-400 min-w-[1.8em] h-[1.6em] leading-none">
+                    {offertesCount}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Eye className="h-4 w-4" />
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-400/12 text-blue-400">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-4 w-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487a2.25 2.25 0 0 1 2.651 2.651l-2.25 9a2.25 2.25 0 0 1-1.697 1.697l-9 2.25a2.25 2.25 0 0 1-2.651-2.651l2.25-9a2.25 2.25 0 0 1 1.697-1.697l9-2.25Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 12.75l4.5-4.5m0 0v3.375a1.125 1.125 0 0 0 1.125 1.125H16.5" />
+                      </svg>
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Klantweergave
+                        Offertes
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk het portaal zoals de klant het ziet.
+                        Beheer en volg offertes op.
                       </span>
                     </span>
                   </div>
                 </Link>
 
                 <Link
-                  href="/admin/projects/statistics"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  href="/admin/facturen"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-emerald-400/50 hover:bg-[var(--bg-card)]/80"
                 >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-emerald-400/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-emerald-400 min-w-[1.8em] h-[1.6em] leading-none">
+                    {facturenCount}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-400/12 text-emerald-400">
+                      <Receipt className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Facturen
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Bekijk en beheer alle facturen.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/statistieken"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-purple-400/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-purple-400/80" />
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-400/12 text-purple-400">
                       <BarChart3 className="h-4 w-4" />
                     </span>
                     <span className="min-w-0">
@@ -657,71 +654,13 @@ export default async function AdminPage({ searchParams }: Props) {
                         Statistieken
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk cijfers en voortgang van werven.
+                        Bekijk omzet, uren en grafieken.
                       </span>
                     </span>
                   </div>
                 </Link>
 
-                <Link
-                  href="/dashboard/abonnement"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <CreditCard className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Abonnement
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk formule, opties en historiek.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
 
-                <Link
-                  href="/admin?view=uploads"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <UploadCloud className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Uploads
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Ga direct naar recente uploads en bestanden.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/admin/mail-preview"
-                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                >
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  <div className="flex items-start gap-2.5 pr-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                      <Mail className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Mail preview
-                      </span>
-                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk voorbeeld van ticketmails.
-                      </span>
-                    </span>
-                  </div>
-                </Link>
               </div>
             </div>
           </div>
@@ -740,7 +679,25 @@ export default async function AdminPage({ searchParams }: Props) {
           projects={projectsWithProfiles}
         />
 
-        <AdminUploadPanel projects={projectsWithProfiles} />
+        <div className="grid gap-3 xl:grid-cols-[1fr_1fr]">
+          <AdminUploadPanel projects={projectsWithProfiles} />
+
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 xl:grid-rows-2">
+            <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+              <DashboardNotesWidget />
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+              <DashboardTimeWidget
+                projects={projectsWithProfiles
+                  .filter((p: any) => p.user_id)
+                  .map((p: any) => ({
+                    id: String(p.id),
+                    label: `${p.profiles?.company_name || p.profiles?.full_name || 'Onbekend'} — ${p.name || 'Onbenoemd'}`,
+                  }))}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </AppShell>
   )

@@ -264,7 +264,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
     ticket.project_id
       ? adminSupabase
           .from('projects')
-          .select('id, title, address')
+          .select('id, name, address')
           .eq('id', ticket.project_id)
           .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
@@ -285,7 +285,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
       .order('company_name', { ascending: true }),
     adminSupabase
       .from('projects')
-      .select('id, title, address, user_id')
+      .select('id, name, address, user_id')
       .order('created_at', { ascending: false })
       .limit(500),
   ])
@@ -412,7 +412,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
                 <p className="mt-1 text-sm text-[var(--text-soft)]">
                   Werf:{' '}
                   <span className="text-[var(--text-main)]">
-                    {project ? project.title || project.address || `#${project.id}` : 'Niet gekoppeld'}
+                    {project ? project.name || project.address || `#${project.id}` : 'Niet gekoppeld'}
                   </span>
                 </p>
                 <p className="mt-1 text-sm text-[var(--text-soft)]">

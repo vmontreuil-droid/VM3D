@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 
 export default async function DashboardSubscriptionPage() {
   const supabase = await createClient()
@@ -15,13 +16,16 @@ export default async function DashboardSubscriptionPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
+  const adminSupabase = createAdminClient()
+
+  const { data: profile } = await adminSupabase
     .from('profiles')
     .select('role, full_name, company_name, logo_url')
     .eq('id', user.id)
     .single()
 
   const isAdmin = profile?.role === 'admin'
+  const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
   const displayName = profile?.company_name || profile?.full_name || 'klant'
 
   return (
@@ -34,7 +38,7 @@ export default async function DashboardSubscriptionPage() {
                 ← Terug naar dashboard
               </Link>
               <div className="ml-auto">
-                <CustomerLogoHeaderBlock logoUrl={profile?.logo_url} />
+                <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
               </div>
             </div>
 

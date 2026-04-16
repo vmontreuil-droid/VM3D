@@ -11,7 +11,7 @@ type TicketMailContentInput = {
   text: string
 }
 
-const MAIL_BRAND = 'MV3D Cloud'
+const MAIL_BRAND = 'VM Plan & Consult'
 
 function pickFirstEnv(keys: string[]) {
   for (const key of keys) {
@@ -81,9 +81,9 @@ export function buildBrandedTicketEmailContent(input: TicketMailContentInput) {
     ? input.subject
     : `${MAIL_BRAND} | ${input.subject}`
   const brandUrl = getBaseUrl().replace(/\/$/, '')
-  const logoUrl = `${brandUrl}/mv3d-logo.svg`
+  const logoUrl = `${brandUrl}/vm-logo.png`
   const decoratedText = `${input.text}\n\n---`
-  const decoratedHtml = `${input.html}<hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb"/><div style="margin:0"><img src="${logoUrl}" alt="MV3D logo" style="height:24px;width:auto;display:block"/></div>`
+  const decoratedHtml = `${input.html}<hr style="margin:20px 0;border:none;border-top:1px solid #e5e7eb"/><div style="margin:0"><img src="${logoUrl}" alt="VM Plan & Consult" style="height:24px;width:auto;display:block"/></div>`
 
   return {
     subject: normalizedSubject,

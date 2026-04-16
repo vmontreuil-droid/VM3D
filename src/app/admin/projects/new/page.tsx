@@ -60,8 +60,7 @@ async function createProject(formData: FormData) {
     .from('projects')
     .insert({
       user_id: userId,
-      title,
-      description: description || null,
+      name: title,
       address: address || null,
       status: status || 'ingediend',
       price: price === null || Number.isNaN(price) ? null : price,

@@ -13,7 +13,7 @@ import L, { Marker as LeafletMarker } from 'leaflet'
 
 type Project = {
   id: number
-  title: string
+  name: string
   address?: string | null
   status?: string | null
   latitude?: number | null
@@ -23,13 +23,20 @@ type Project = {
 
 function getMarkerColor(status?: string | null) {
   switch (status) {
+    case 'offerte_aangevraagd':
+      return '#94a3b8'
+    case 'offerte_verstuurd':
+      return '#f59e0b'
     case 'in_behandeling':
       return '#3b82f6'
-    case 'klaar_voor_betaling':
-      return '#f59e0b'
+    case 'facturatie':
+      return '#a855f7'
+    case 'factuur_verstuurd':
+      return '#f97316'
     case 'afgerond':
       return '#22c55e'
     case 'ingediend':
+    case 'klaar_voor_betaling':
     default:
       return '#94a3b8'
   }
@@ -37,14 +44,22 @@ function getMarkerColor(status?: string | null) {
 
 function getStatusLabel(status?: string | null) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -52,12 +67,17 @@ function getStatusLabel(status?: string | null) {
 
 function getStatusClass(status?: string | null) {
   switch (status) {
+    case 'offerte_verstuurd':
+      return 'project-popup-status project-popup-status--amber'
     case 'in_behandeling':
       return 'project-popup-status project-popup-status--blue'
-    case 'klaar_voor_betaling':
+    case 'facturatie':
+      return 'project-popup-status project-popup-status--amber'
+    case 'factuur_verstuurd':
       return 'project-popup-status project-popup-status--amber'
     case 'afgerond':
       return 'project-popup-status project-popup-status--green'
+    case 'offerte_aangevraagd':
     case 'ingediend':
     default:
       return 'project-popup-status project-popup-status--default'
@@ -157,7 +177,7 @@ function ProjectMarker({ project }: { project: Project }) {
     >
       <Popup autoPan className="project-popup">
         <div className="project-popup-inner">
-          <p className="project-popup-title">{project.title}</p>
+          <p className="project-popup-title">{project.name}</p>
 
           <p className="project-popup-address">
             {project.address || 'Geen adres'}

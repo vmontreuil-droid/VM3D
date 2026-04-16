@@ -38,7 +38,6 @@ export async function PATCH(
 
     const userId = String(body.userId || '').trim()
     const title = String(body.title || '').trim()
-    const description = String(body.description || '').trim()
     const address = String(body.address || '').trim()
     const currency = String(body.currency || 'EUR').trim()
     const status = String(body.status || 'ingediend').trim()
@@ -76,8 +75,7 @@ export async function PATCH(
       .from('projects')
       .update({
         user_id: userId,
-        title,
-        description: description || null,
+        name: title,
         address: address || null,
         price,
         currency,

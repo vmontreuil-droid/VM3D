@@ -17,7 +17,7 @@ import {
 
 type Project = {
   id: number
-  title: string
+  name: string
   description: string | null
   address: string | null
   status: string
@@ -128,7 +128,7 @@ export default function AdminProjectSearch({
     const filtered = projects.filter((project) => {
       const matchesSearch =
         search.trim() === '' ||
-        project.title?.toLowerCase().includes(search.toLowerCase()) ||
+        project.name?.toLowerCase().includes(search.toLowerCase()) ||
         project.description?.toLowerCase().includes(search.toLowerCase()) ||
         project.address?.toLowerCase().includes(search.toLowerCase()) ||
         project.klantEmail?.toLowerCase().includes(search.toLowerCase())
@@ -177,7 +177,7 @@ export default function AdminProjectSearch({
       let comparison = 0
 
       if (sortKey === 'title') {
-        comparison = (a.title || '').localeCompare(b.title || '', 'nl', {
+        comparison = (a.name || '').localeCompare(b.name || '', 'nl', {
           sensitivity: 'base',
         })
       }
@@ -397,7 +397,7 @@ export default function AdminProjectSearch({
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
-                        {project.title}
+                        {project.name}
                       </p>
                       <span
                         className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getStatusClass(

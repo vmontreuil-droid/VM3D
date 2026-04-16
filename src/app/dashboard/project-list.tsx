@@ -6,7 +6,7 @@ import { FolderOpen, HardHat } from 'lucide-react'
 
 type Project = {
   id: string | number
-  title: string | null
+  name: string | null
   description?: string | null
   address?: string | null
   status?: string | null
@@ -38,7 +38,7 @@ type Props = {
 }
 
 type SortKey =
-  | 'title'
+  | 'name'
   | 'customer'
   | 'address'
   | 'status'
@@ -49,14 +49,22 @@ type SortDirection = 'asc' | 'desc'
 
 function getStatusLabel(status: string | null | undefined) {
   switch (status) {
-    case 'ingediend':
-      return 'Ingediend'
+    case 'offerte_aangevraagd':
+      return 'Offerte aangevraagd'
+    case 'offerte_verstuurd':
+      return 'Offerte verstuurd'
     case 'in_behandeling':
       return 'In behandeling'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+    case 'facturatie':
+      return 'Facturatie'
+    case 'factuur_verstuurd':
+      return 'Factuur verstuurd'
     case 'afgerond':
       return 'Afgerond'
+    case 'ingediend':
+      return 'Ingediend'
+    case 'klaar_voor_betaling':
+      return 'Klaar voor betaling'
     default:
       return 'Onbekend'
   }
@@ -64,12 +72,18 @@ function getStatusLabel(status: string | null | undefined) {
 
 function getStatusClass(status: string | null | undefined) {
   switch (status) {
+    case 'offerte_aangevraagd':
     case 'ingediend':
       return 'badge-info'
+    case 'offerte_verstuurd':
+      return 'badge-warning'
     case 'in_behandeling':
       return 'badge-warning'
+    case 'facturatie':
     case 'klaar_voor_betaling':
       return 'badge-warning'
+    case 'factuur_verstuurd':
+      return 'badge-info'
     case 'afgerond':
       return 'badge-success'
     default:
@@ -140,7 +154,7 @@ export default function ProjectList({
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
       const haystack = [
-        project.title,
+        project.name,
         project.description,
         project.address,
         project.status,
@@ -169,8 +183,8 @@ export default function ProjectList({
     list.sort((a, b) => {
       let comparison = 0
 
-      if (sortKey === 'title') {
-        comparison = (a.title || '').localeCompare(b.title || '', 'nl', {
+      if (sortKey === 'name') {
+        comparison = (a.name || '').localeCompare(b.name || '', 'nl', {
           sensitivity: 'base',
         })
       }
@@ -215,9 +229,13 @@ export default function ProjectList({
     setCurrentPage(1)
   }, [search, statusFilter, sortKey, sortDirection])
 
-  const totalPages = 1
-  const safeCurrentPage = 1
-  const paginatedProjects = sortedProjects
+  const PAGE_SIZE = 10
+  const totalPages = Math.max(1, Math.ceil(sortedProjects.length / PAGE_SIZE))
+  const safeCurrentPage = Math.min(currentPage, totalPages)
+  const paginatedProjects = sortedProjects.slice(
+    (safeCurrentPage - 1) * PAGE_SIZE,
+    safeCurrentPage * PAGE_SIZE
+  )
 
   function renderPageNumbers() {
     const pages: number[] = []
@@ -366,8 +384,8 @@ export default function ProjectList({
               >
                 <option value="created_at-desc">Nieuwste eerst</option>
                 <option value="created_at-asc">Oudste eerst</option>
-                <option value="title-asc">Titel A-Z</option>
-                <option value="title-desc">Titel Z-A</option>
+                <option value="name-asc">Titel A-Z</option>
+                <option value="name-desc">Titel Z-A</option>
                 <option value="address-asc">Locatie A-Z</option>
                 <option value="status-asc">Status A-Z</option>
                 <option value="price-desc">Prijs hoog-laag</option>
@@ -398,10 +416,10 @@ export default function ProjectList({
               >
                 <button
                   type="button"
-                  onClick={() => handleSort('title')}
+                  onClick={() => handleSort('name')}
                   className="flex items-center gap-2 text-left text-sm font-semibold text-[var(--text-soft)] transition hover:text-[var(--text-main)]"
                 >
-                  Project <span>{sortIndicator('title')}</span>
+                  Project <span>{sortIndicator('name')}</span>
                 </button>
 
                 {showCustomerColumn && (
@@ -472,7 +490,7 @@ export default function ProjectList({
                         </span>
                         <div>
                           <p className="truncate font-semibold text-[var(--text-main)]">
-                            {project.title || '—'}
+                            {project.name || '—'}
                           </p>
                           <p className="mt-1 text-xs text-[var(--text-muted)] line-clamp-1">
                             {project.description || 'Geen beschrijving'}
@@ -553,10 +571,10 @@ export default function ProjectList({
                 <div className="grid gap-3 border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-5 py-3 grid-cols-[1.5fr_1.2fr_0.9fr_0.9fr_0.8fr_0.8fr_100px] text-[10px] font-semibold uppercase text-[var(--text-soft)]">
                   <button
                     type="button"
-                    onClick={() => handleSort('title')}
+                    onClick={() => handleSort('name')}
                     className="flex items-center gap-1 text-left transition hover:text-[var(--text-main)]"
                   >
-                    Project <span>{sortIndicator('title')}</span>
+                    Project <span>{sortIndicator('name')}</span>
                   </button>
 
                   <button
@@ -606,7 +624,7 @@ export default function ProjectList({
                         <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--accent)]/10">
                           <HardHat className="h-4 w-4 text-[var(--accent)]" />
                         </span>
-                        <span className="truncate">{project.title || '—'}</span>
+                        <span className="truncate">{project.name || '—'}</span>
                       </Link>
 
                       <div className="min-w-0 text-xs text-[var(--text-soft)]">
@@ -652,6 +670,46 @@ export default function ProjectList({
         </>
       )
       ) : null}
+
+      {shouldShowResults && totalPages > 1 && (
+        <div className="mt-3 flex items-center justify-between rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2.5 shadow-sm">
+          <p className="text-xs text-[var(--text-soft)]">
+            {sortedProjects.length} werven — pagina {safeCurrentPage} van {totalPages}
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={safeCurrentPage <= 1}
+              className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--text-main)] disabled:opacity-40"
+            >
+              ‹ Vorige
+            </button>
+            {renderPageNumbers().map((page) => (
+              <button
+                key={page}
+                type="button"
+                onClick={() => setCurrentPage(page)}
+                className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition ${
+                  page === safeCurrentPage
+                    ? 'border border-[var(--accent)]/60 bg-[var(--accent)]/15 text-[var(--accent)]'
+                    : 'border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-soft)] hover:text-[var(--text-main)]'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage >= totalPages}
+              className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--text-main)] disabled:opacity-40"
+            >
+              Volgende ›
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
