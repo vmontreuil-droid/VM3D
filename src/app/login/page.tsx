@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import Logo from '@/components/logo'
+import TopoBackground from '@/components/topo-background'
 import { LogIn, UserPlus, Loader } from 'lucide-react'
 
 export default function LoginPage() {
@@ -119,8 +120,9 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[var(--bg-main)] text-white">
-      <div className="flex min-h-screen items-center justify-center px-5 py-10">
+    <main className="relative min-h-screen bg-[var(--bg-main)] text-white">
+      <TopoBackground />
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-5 py-10">
         <div className="w-full max-w-md">
           <div className="mb-6 text-center">
             <div className="mb-5 flex justify-center">
