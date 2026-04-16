@@ -6,8 +6,10 @@ import Link from 'next/link'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
 import { LogIn, UserPlus, Loader } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 export default function LoginPage() {
+  const { t } = useT()
   const [rememberMe, setRememberMe] = useState(false);
   const supabase = useMemo(() => createClient(), [])
 
@@ -19,7 +21,7 @@ export default function LoginPage() {
   const handleForgotPassword = async () => {
     setMessage('')
     if (!email) {
-      setMessage('Vul eerst uw e-mailadres in.')
+      setMessage(t.login.errors.emailRequired)
       return
     }
     try {
@@ -30,11 +32,11 @@ export default function LoginPage() {
       if (error) {
         setMessage(error.message)
       } else {
-        setMessage('Er is een e-mail verstuurd om uw wachtwoord te herstellen.')
+        setMessage(t.login.success.forgot)
       }
     } catch (err) {
       console.error('Forgot password error:', err)
-      setMessage('Er liep iets fout. Probeer het later opnieuw.')
+      setMessage(t.login.errors.forgot)
     } finally {
       setLoading(false)
     }
@@ -45,7 +47,7 @@ export default function LoginPage() {
     setMessage('')
 
     if (!email || !password) {
-      setMessage('Vul e-mail en wachtwoord in.')
+      setMessage(t.login.errors.empty)
       return
     }
 
@@ -67,7 +69,7 @@ export default function LoginPage() {
         return
       }
 
-      setMessage('Succesvol ingelogd, even doorsturen...')
+      setMessage(t.login.success.login)
 
       // 🔑 Belangrijk voor iPhone / Safari
       setTimeout(() => {
@@ -75,7 +77,7 @@ export default function LoginPage() {
       }, 500)
     } catch (err) {
       console.error('Login error:', err)
-      setMessage('Er liep iets fout bij het inloggen.')
+      setMessage(t.login.errors.login)
     } finally {
       setLoading(false)
     }
@@ -85,7 +87,7 @@ export default function LoginPage() {
     setMessage('')
 
     if (!email || !password) {
-      setMessage('Vul e-mail en wachtwoord in.')
+      setMessage(t.login.errors.empty)
       return
     }
 
@@ -105,7 +107,7 @@ export default function LoginPage() {
       setMessage('Account aangemaakt. Je kan nu inloggen.')
     } catch (err) {
       console.error('Signup error:', err)
-      setMessage('Er liep iets fout bij het aanmaken van je account.')
+      setMessage(t.login.errors.signup)
     } finally {
       setLoading(false)
     }
@@ -128,9 +130,9 @@ export default function LoginPage() {
             <div className="mb-5 flex justify-center">
               <Logo size="xl" variant="dark" />
             </div>
-            <h1 className="text-2xl font-bold text-[var(--text-main)]">Welkom terug</h1>
+            <h1 className="text-2xl font-bold text-[var(--text-main)]">{t.login.welcome}</h1>
             <p className="mt-3 text-sm text-[var(--text-soft)]">
-              Log in om je werven, bestanden en opleveringen te bekijken.
+              {t.login.subtitle}
             </p>
           </div>
 
@@ -138,13 +140,13 @@ export default function LoginPage() {
             <form onSubmit={handleSignIn} className="space-y-4">
               <div>
                 <label className="mb-2 block text-sm font-medium text-[var(--text-soft)]">
-                  E-mail
+                  {t.login.emailLabel}
                 </label>
                 <input
                   type="email"
                   inputMode="email"
                   autoComplete="email"
-                  placeholder="naam@bedrijf.be"
+                  placeholder={t.login.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-[var(--text-main)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
@@ -153,12 +155,12 @@ export default function LoginPage() {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-[var(--text-soft)]">
-                  Wachtwoord
+                  {t.login.passwordLabel}
                 </label>
                 <input
                   type="password"
                   autoComplete="current-password"
-                  placeholder="Je wachtwoord"
+                  placeholder={t.login.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 text-[var(--text-main)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
@@ -175,7 +177,7 @@ export default function LoginPage() {
                     className="mr-2 h-4 w-4 rounded border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-soft)] focus:ring-[var(--accent)]/20"
                   />
                   <label htmlFor="rememberMe" className="text-sm text-[var(--text-soft)] select-none cursor-pointer">
-                    Onthoud mij
+                    {t.login.rememberMe}
                   </label>
                 </div>
                 <button
@@ -183,7 +185,7 @@ export default function LoginPage() {
                   onClick={handleForgotPassword}
                   className="text-xs text-[var(--accent)] hover:text-orange-300 transition"
                 >
-                  Wachtwoord vergeten?
+                  {t.login.forgotPassword}
                 </button>
               </div>
 
@@ -197,7 +199,7 @@ export default function LoginPage() {
                 ) : (
                   <LogIn className="h-4 w-4" />
                 )}
-                {loading ? 'Bezig...' : 'Inloggen'}
+                {loading ? t.login.loading : t.login.loginBtn}
               </button>
 
               <button
@@ -211,7 +213,7 @@ export default function LoginPage() {
                 ) : (
                   <UserPlus className="h-4 w-4" />
                 )}
-                {loading ? 'Bezig...' : 'Account aanmaken'}
+                {loading ? t.login.loading : t.login.signupBtn}
               </button>
 
               {message && (
@@ -226,7 +228,7 @@ export default function LoginPage() {
                 href="/"
                 className="text-sm font-medium text-orange-400 hover:text-orange-300"
               >
-                ← Terug naar home
+                {t.login.backHome}
               </Link>
             </div>
           </div>

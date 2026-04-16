@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { AlertCircle, CheckCircle } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
@@ -7,6 +8,8 @@ import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
 import FileUploadZone from '@/components/file-upload-zone'
 import SubmitButton from './submit-button'
+import { COOKIE_NAME, defaultLocale, locales, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function createContactRequest(formData: FormData) {
   'use server'
@@ -130,6 +133,11 @@ export default async function ContactPage({ searchParams }: Props) {
   const submitted = resolvedSearchParams.submitted === '1'
   const ticketId = resolvedSearchParams.ticket
 
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+
   return (
     <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
       <TopoBackground />
@@ -146,10 +154,10 @@ export default async function ContactPage({ searchParams }: Props) {
                 Contactportaal
               </p>
               <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                Contactaanvraag
+                {t.contact.title}
               </h1>
               <p className="mt-2.5 max-w-2xl text-sm leading-6 text-[var(--text-soft)]">
-                Stel uw vraag of vertel ons hoe we u kunnen helpen. Wij nemen zo snel mogelijk contact met u op.
+                {t.contact.subtitle}
               </p>
             </div>
           </div>
@@ -162,12 +170,12 @@ export default async function ContactPage({ searchParams }: Props) {
                     <CheckCircle className="h-8 w-8 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-emerald-300">Bericht verstuurd!</h2>
+                    <h2 className="text-lg font-bold text-emerald-300">{t.contact.successTitle}</h2>
                     <p className="mt-1.5 text-sm text-[var(--text-soft)]">
-                      Uw contactaanvraag is succesvol ingediend met referentie <span className="font-semibold text-[var(--accent)]">#{ticketId}</span>.
+                      {t.contact.successMsg} <span className="font-semibold text-[var(--accent)]">#{ticketId}</span>.
                     </p>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">
-                      U ontvangt een bevestiging per e-mail. We nemen zo snel mogelijk contact met u op.
+                      {t.contact.successEmail}
                     </p>
                   </div>
                 </div>
@@ -177,7 +185,7 @@ export default async function ContactPage({ searchParams }: Props) {
                     href="/contact"
                     className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
                   >
-                    <span className="pr-1">Nieuw bericht sturen</span>
+                    <span className="pr-1">{t.contact.newMessage}</span>
                     <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                   </a>
                 </div>
@@ -189,11 +197,11 @@ export default async function ContactPage({ searchParams }: Props) {
                     <div className="flex items-start gap-3">
                       <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-300" />
                       <p className="text-sm text-red-200">
-                        {resolvedSearchParams.error === 'name' && 'Vul alstublieft uw naam in.'}
-                        {resolvedSearchParams.error === 'email' && 'Voer een geldig e-mailadres in.'}
-                        {resolvedSearchParams.error === 'phone' && 'Vul alstublieft uw telefoonnummer in.'}
-                        {resolvedSearchParams.error === 'title' && 'Vul alstublieft een onderwerp in.'}
-                        {resolvedSearchParams.error === 'save' && 'Uw aanvraag kon niet worden opgeslagen. Probeer het later opnieuw.'}
+                        {resolvedSearchParams.error === 'name' && t.contact.errors.name}
+                        {resolvedSearchParams.error === 'email' && t.contact.errors.email}
+                        {resolvedSearchParams.error === 'phone' && t.contact.errors.phone}
+                        {resolvedSearchParams.error === 'title' && t.contact.errors.subject}
+                        {resolvedSearchParams.error === 'save' && t.contact.errors.server}
                       </p>
                     </div>
                   </div>
@@ -203,27 +211,27 @@ export default async function ContactPage({ searchParams }: Props) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-1.5">
                     <label htmlFor="name" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      Volledige naam *
+                      {t.contact.nameLabel}
                     </label>
                     <input
                       type="text"
                       id="name"
                       name="name"
                       required
-                      placeholder="Jan Jansen"
+                      placeholder={t.contact.namePlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
                   <div className="grid gap-1.5">
                     <label htmlFor="email" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      E-mailadres *
+                      {t.contact.emailLabel}
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
                       required
-                      placeholder="jan@voorbeeld.be"
+                      placeholder={t.contact.emailPlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
@@ -233,26 +241,26 @@ export default async function ContactPage({ searchParams }: Props) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-1.5">
                     <label htmlFor="phone" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      Telefoonnummer *
+                      {t.contact.phoneLabel}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       required
-                      placeholder="+32 470 12 34 56"
+                      placeholder={t.contact.phonePlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
                   <div className="grid gap-1.5">
                     <label htmlFor="vat" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      BTW-nummer
+                      {t.contact.vatLabel}
                     </label>
                     <input
                       type="text"
                       id="vat"
                       name="vat"
-                      placeholder="BE 0123.456.789"
+                      placeholder={t.contact.vatPlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
@@ -261,7 +269,7 @@ export default async function ContactPage({ searchParams }: Props) {
                 {/* Dienst selectie */}
                 <div className="grid gap-1.5">
                   <label htmlFor="service" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Betreft
+                    {t.contact.serviceLabel}
                   </label>
                   <select
                     id="service"
@@ -269,29 +277,24 @@ export default async function ContactPage({ searchParams }: Props) {
                     defaultValue=""
                     className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                   >
-                    <option value="" disabled>Kies een onderwerp...</option>
-                    <option value="3D Ontwerp">3D Ontwerp (machinebesturingsplan)</option>
-                    <option value="3D Opmeting">3D Opmeting</option>
-                    <option value="Plancontrole">Plancontrole (bestaand bestand controleren)</option>
-                    <option value="Bestandsconversie">Bestandsconversie (ander merk → uw machine)</option>
-                    <option value="Werfbeheer">Werfbeheer &amp; Cloud Setup</option>
-                    <option value="Advies">Advies &amp; Consultancy</option>
-                    <option value="Algemene vraag">Algemene vraag</option>
-                    <option value="Andere">Andere</option>
+                    <option value="" disabled>{t.contact.servicePlaceholder}</option>
+                    {t.contact.serviceOptions.map((opt, i) => (
+                      <option key={i} value={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
 
                 {/* Onderwerp */}
                 <div className="grid gap-1.5">
                   <label htmlFor="title" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Onderwerp *
+                    {t.contact.subjectLabel}
                   </label>
                   <input
                     type="text"
                     id="title"
                     name="title"
                     required
-                    placeholder="Bv. Vraag over 3D opmeting"
+                    placeholder={t.contact.subjectPlaceholder}
                     className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                   />
                 </div>
@@ -299,14 +302,14 @@ export default async function ContactPage({ searchParams }: Props) {
                 {/* Beschrijving */}
                 <div className="grid gap-1.5">
                   <label htmlFor="description" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Bericht *
+                    {t.contact.messageLabel}
                   </label>
                   <textarea
                     id="description"
                     name="description"
                     rows={5}
                     required
-                    placeholder="Beschrijf uw vraag of vertel ons hoe we u kunnen helpen..."
+                    placeholder={t.contact.messagePlaceholder}
                     className="input-dark min-h-[120px] w-full resize-none px-3 py-2 text-[12px]"
                   />
                 </div>
@@ -316,7 +319,7 @@ export default async function ContactPage({ searchParams }: Props) {
 
                 {/* Submit */}
                 <div className="flex items-center justify-between gap-3 pt-1">
-                  <p className="text-[11px] text-[var(--text-muted)]">* Verplichte velden</p>
+                  <p className="text-[11px] text-[var(--text-muted)]">{t.contact.required}</p>
 
                   <SubmitButton />
                 </div>

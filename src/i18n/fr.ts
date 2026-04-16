@@ -1,0 +1,333 @@
+import type { Dictionary } from './nl'
+
+const fr: Dictionary = {
+  /* ── Navigation ── */
+  nav: {
+    solutions: 'Solutions',
+    design: 'Conception',
+    agents: 'Agents',
+    faq: 'FAQ',
+    offerte: 'Devis',
+    login: 'Connexion',
+    offerteRequest: 'Demander un Devis',
+  },
+
+  /* ── Hero ── */
+  hero: {
+    badge: 'Restez Synchronisé',
+    description:
+      'Une plateforme unique pour tous vos chantiers, machines et fichiers. Gérez tout depuis le bureau \u2014 sans déplacements. MV3D.CLOUD est votre assistant 3D parfait.',
+    contactBtn: 'Nous Contacter',
+    loginBtn: 'Connexion',
+    badges: [
+      { val: '99.9%', label: 'Disponibilité' },
+      { val: '500+', label: 'Chantiers' },
+      { val: '24/7', label: 'Surveillance' },
+    ],
+  },
+
+  /* ── Spotlight labels ── */
+  spotlight: [
+    'Statistiques Live',
+    'Avancement Chantier',
+    'Conversion Machine',
+    'Écran Distant',
+    'Push Plans',
+    'Carte Chantiers',
+    'Flux d\u2019Activité',
+    'Vue d\u2019Ensemble',
+  ],
+
+  /* ── Dashboard preview ── */
+  dashboard: {
+    search: 'Rechercher...',
+    title: 'Tableau de Bord',
+    subtitle: 'Aperçu de tous vos chantiers',
+    tabs: ['Aujourd\u2019hui', 'Semaine', 'Mois'],
+    statLabels: ['Chantiers', 'Machines', 'Fichiers', 'Disponibilité'],
+    stable: 'Stable',
+    progress: 'Avancement Chantier',
+    active: 'Actif',
+    completed: 'Terminé',
+    recentActivity: 'Activité Récente',
+    activities: [
+      { t: 'Chantier Bruxelles', s: 'Nouveaux fichiers uploadés', time: '2m' },
+      { t: 'GPS Rover #4', s: 'Mis en ligne', time: '8m' },
+      { t: 'Chantier Liège', s: 'Relevé terminé', time: '15m' },
+      { t: 'Machine MC-12', s: 'Sync terminée', time: '23m' },
+      { t: 'Chantier Namur', s: 'Facture envoyée', time: '1h' },
+    ],
+    months: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+    siteMap: 'Carte Chantiers',
+    quick: 'Rapide',
+    quickActions: ['+ Nouveau Chantier', '+ Upload Fichier', '+ Lier Machine'],
+  },
+
+  /* ── Solutions ── */
+  solutions: {
+    title: 'Un cloud central pour toutes vos solutions 3D',
+    description:
+      'Synchronisez chantiers, fichiers et paramètres automatiquement sur toute votre flotte MV3D sans quitter votre bureau. Faites concevoir vos plans et envoyez-les directement vers la machine ou le rover.',
+    cards: [
+      'Faites concevoir vos plans 3D pour toutes les commandes de machines ou rovers',
+      'Synchronisez les fichiers livrés directement dans la pelleteuse ou le bulldozer',
+      'Gérez vos chantiers et paramètres dans le cloud avec service de tickets',
+    ],
+  },
+
+  /* ── Design ── */
+  design: {
+    title: 'Faites concevoir vos plans 3D sur mesure',
+    desc1: 'Notre équipe d\u2019experts géomètres conçoit vos plans de commande machine 3D entièrement sur mesure. Du DXF et DWG au XML \u2014 nous livrons des fichiers prêts à charger dans votre machine.',
+    desc2: 'Plus vous commandez tôt avant la date d\u2019exécution, plus c\u2019est avantageux. Planifiez à l\u2019avance et économisez sur vos coûts de conception \u2014 nous veillons à ce que tout soit prêt à temps.',
+    tiers: [
+      { weeks: '4+ semaines à l\u2019avance', discount: 'Meilleur prix' },
+      { weeks: '1\u20134 semaines à l\u2019avance', discount: 'Tarif standard' },
+      { weeks: '48h\u20131 semaine à l\u2019avance', discount: 'Tarif urgent' },
+      { weeks: '< 48h avant livraison', discount: 'Tarif express' },
+    ],
+    planning: 'PLANNING',
+  },
+
+  /* ── Conversion ── */
+  conversion: {
+    title: 'Autre marque ? Pas de panique \u2014 convertissez et envoyez',
+    desc1: 'Vous avez un fichier de commande machine d\u2019une autre marque ? Pas de problème. Uploadez-le sur MV3D Cloud, convertissez-le en un clic au bon format et envoyez-le directement à votre pelleteuse ou rover.',
+    desc2: 'De Topcon à Leica, de Trimble à tout autre système \u2014 MV3D Cloud comble le fossé entre les marques. Fini les fichiers incompatibles, fini les pertes de temps sur le chantier.',
+    brandX: 'MARQUE X',
+    convert: 'CONVERTIR',
+    crane: 'PELLE',
+    rover: 'ROVER',
+    price: 'PRIX',
+  },
+
+  /* ── CTA ── */
+  cta: {
+    title: 'Demander un Devis',
+    description: 'Recevez une proposition sur mesure sans engagement',
+    button: 'Demander un Devis',
+  },
+
+  /* ── Stats ── */
+  stats: [
+    { value: '85', label: 'Agents 3D' },
+    { value: '850+', label: 'Chantiers Traités' },
+    { value: '99.9%', label: 'Garantie Disponibilité' },
+  ],
+
+  /* ── Brands ── */
+  brands: { subtitle: 'Compatible avec toutes les grandes commandes' },
+
+  /* ── Agents ── */
+  agents: {
+    subtitle: 'Notre Réseau',
+    title: 'Agents 3D',
+    titleSuffix: 'À votre service',
+    description:
+      'Votre demande est automatiquement transmise au partenaire 3D le plus proche de votre chantier.\nRapide, local et personnel.',
+    cards: [
+      { label: '4 Pays', headline: 'Réseau actif', text: 'Nos agents sont actifs en Belgique, aux Pays-Bas, en France et au Luxembourg. Où que soit votre projet, nous avons un spécialiste local à proximité.' },
+      { label: '85 Agents', headline: 'Certifiés', text: 'Chaque membre de notre réseau est un géomètre certifié, pilote de drone ou spécialiste 3D. Qualité garantie à chaque mission.' },
+      { label: '12H', headline: 'Temps de réponse', text: 'Dans les 12 heures suivant votre demande, un agent qualifié est assigné à votre projet. Pas d\u2019attente, pas de retard.' },
+      { label: 'Ticketservice', headline: 'Toujours joignable', text: 'Via notre système de tickets, vous suivez chaque demande en temps réel. Posez des questions, partagez des fichiers et recevez des mises à jour \u2014 tout en un seul endroit.' },
+    ],
+  },
+
+  /* ── Partner ── */
+  partner: {
+    badge: 'Devenez Agent 3D',
+    title: ['Rejoignez', 'le réseau', 'MV3D'],
+    description:
+      'Vous êtes géomètre, pilote de drone ou spécialiste 3D ? Rejoignez-nous en tant qu\u2019agent MV3D certifié et recevez automatiquement des demandes de votre région. Vous déterminez vous-même votre disponibilité et vos tarifs.',
+    services: [
+      { title: 'Relevés', desc: 'Relevés classiques et GPS sur le chantier' },
+      { title: 'Relevés drone', desc: 'Photogrammétrie aérienne et scans de terrain' },
+      { title: 'Conception 3D', desc: 'Plans de commande machine et modèles de terrain' },
+      { title: 'Implantations', desc: 'Implantations précises et contrôle as-built' },
+    ],
+    formTitle: 'Devenir Agent',
+    formSubtitle: 'Inscrivez-vous comme partenaire',
+    firstName: 'Prénom',
+    lastName: 'Nom',
+    company: 'Nom de l\u2019entreprise',
+    email: 'Adresse e-mail',
+    phone: 'Numéro de téléphone',
+    region: 'Région / Zone de travail',
+    servicesLabel: 'Quels services proposez-vous ?',
+    serviceOptions: ['Relevés', 'Relevés drone', 'Conception 3D', 'Implantations'],
+    experience: 'Décrivez brièvement votre expérience et matériel disponible...',
+    submit: 'S\u2019inscrire comme Agent',
+  },
+
+  /* ── FAQ ── */
+  faq: {
+    subtitle: 'MV3D Cloud',
+    title: 'FAQ',
+    moreQuestions: 'D\u2019autres questions ? Écrivez-nous à',
+    items: [
+      { q: 'Qu\u2019est-ce que MV3D Cloud ?', a: 'MV3D Cloud est un service cloud qui vous permet d\u2019envoyer des fichiers de chantier directement depuis votre bureau vers vos équipes sur le terrain. Plus besoin de courir entre les machines pour transférer des données \u2014 cela vous fait gagner du temps et de l\u2019énergie. Les opérateurs et géomètres peuvent uploader des données de projet, des points, des lignes et des informations as-built. Toutes les données sont automatiquement sauvegardées, garantissant une documentation complète et précise pour chaque phase du projet.' },
+      { q: 'Quels sont les avantages de MV3D Cloud ?', a: 'MV3D Cloud offre plusieurs avantages : 1) Collaboration améliorée \u2014 échangez rapidement et facilement les informations as-built et fichiers de chantier entre le bureau et le terrain. 2) Gestion de données rationalisée \u2014 synchronisation automatique des points et lignes enregistrés, mises à jour en temps réel. 3) Efficacité machine améliorée \u2014 le diagnostic à distance et la récupération de sauvegardes minimisent les temps d\u2019arrêt.' },
+      { q: 'Quels formats de fichiers sont supportés ?', a: 'MV3D Cloud supporte les uploads dans les formats populaires comme DXF, XML, DWG et plus encore. Uploadez des données de projet et des fichiers de conception, et travaillez rapidement avec les informations as-built.' },
+      { q: 'Comment uploader des fichiers vers MV3D Cloud ?', a: 'Pour uploader des fichiers, créez simplement un chantier, assignez vos machines et rovers, et glissez les fichiers via l\u2019option \u00ABFichiers\u00BB > \u00ABUpload Design\u00BB. Tous les fichiers sont automatiquement envoyés aux machines assignées au chantier.' },
+      { q: 'Puis-je intégrer MV3D Cloud avec d\u2019autres systèmes ?', a: 'Oui ! MV3D Cloud s\u2019intègre parfaitement avec diverses plateformes, permettant un flux de données numériques de conception et d\u2019informations as-built entre différents logiciels de commande machine. Cela crée un flux de données ouvert quelle que soit la composition logicielle de votre flotte.' },
+      { q: 'Dans quels pays MV3D est-il actif ?', a: 'MV3D est actif dans 4 pays : Belgique, Pays-Bas, France et Luxembourg. Notre réseau de 85 agents certifiés couvre l\u2019ensemble du Benelux et de la France, pour qu\u2019un spécialiste local soit toujours disponible près de votre chantier.' },
+      { q: 'Quelle est la rapidité de traitement de ma demande ?', a: 'Dans les 12 heures suivant votre demande, un agent qualifié est assigné à votre projet. Via notre système de tickets, vous pouvez suivre l\u2019avancement en temps réel, poser des questions, partager des fichiers et recevoir des mises à jour \u2014 tout en un seul endroit.' },
+      { q: 'Que fait exactement un Agent MV3D ?', a: 'Un Agent MV3D est un géomètre certifié, pilote de drone ou spécialiste 3D disponible localement pour les relevés, relevés drone, conceptions 3D et implantations sur le chantier. Les agents reçoivent automatiquement des demandes de leur région et déterminent eux-mêmes leur disponibilité et leurs tarifs.' },
+      { q: 'Comment devenir Agent MV3D ?', a: 'Vous êtes géomètre, pilote de drone ou spécialiste 3D ? Via le formulaire sur notre site, vous pouvez vous inscrire comme Agent MV3D certifié. Après approbation, vous recevrez automatiquement des demandes de votre région. Vous déterminez vous-même votre disponibilité, vos services et vos tarifs.' },
+      { q: 'Quels services les Agents MV3D proposent-ils ?', a: 'Nos agents proposent quatre services clés : 1) Relevés classiques et GPS sur le chantier. 2) Photogrammétrie aérienne et scans de terrain par drone. 3) Plans de commande machine et modèles de terrain (conception 3D). 4) Implantations précises et contrôle as-built. Chaque agent choisit les services qu\u2019il propose.' },
+      { q: 'Comment fonctionne le service de tickets ?', a: 'Pour chaque demande, un ticket est automatiquement créé dans notre système. Via le ticket, vous pouvez uploader des fichiers, poser des questions à votre agent et recevoir des mises à jour en temps réel sur le statut de votre mission. Vous gardez ainsi toujours une vue complète.' },
+      { q: 'Puis-je demander un devis via la plateforme ?', a: 'Oui, via notre page devis vous pouvez facilement demander un devis. Remplissez vos coordonnées et les détails du projet, et nous vous mettons en contact avec l\u2019agent disponible le plus proche. Vous recevrez un devis personnalisé dans les 12 heures.' },
+    ],
+  },
+
+  /* ── Footer ── */
+  footer: {
+    description: 'Améliorez la collaboration, optimisez la productivité et réduisez les temps d\u2019arrêt avec MV3D Cloud.',
+    solutionsTitle: 'Solutions',
+    solutions: ['Relevé 3D', 'Gestion de chantier', 'Machine Control', 'Rover'],
+    platformTitle: 'Plateforme',
+    platform: ['Dashboard', 'Support', 'Machines', 'Fichiers'],
+    contactTitle: 'Contact',
+    country: 'Belgique',
+    copyright: '\u00A9 2026 MV3D Cloud. Tous droits réservés.',
+    login: 'Connexion',
+    support: 'Support',
+  },
+
+  /* ── Contact page ── */
+  contact: {
+    portal: 'Portail de Contact',
+    title: 'Demande de Contact',
+    subtitle: 'Posez votre question ou dites-nous comment nous pouvons vous aider. Nous vous recontacterons dès que possible.',
+    successTitle: 'Message envoyé !',
+    successMsg: 'Votre demande de contact a été soumise avec succès avec la référence',
+    successEmail: 'Vous recevrez une confirmation par e-mail. Nous vous recontacterons dès que possible.',
+    newMessage: 'Envoyer un nouveau message',
+    nameLabel: 'Nom complet *',
+    namePlaceholder: 'Jean Dupont',
+    emailLabel: 'Adresse e-mail *',
+    emailPlaceholder: 'jean@exemple.be',
+    phoneLabel: 'Numéro de téléphone *',
+    phonePlaceholder: '+32 470 12 34 56',
+    vatLabel: 'Numéro de TVA',
+    vatPlaceholder: 'BE 0123.456.789',
+    serviceLabel: 'Concerne',
+    servicePlaceholder: 'Choisissez un sujet...',
+    serviceOptions: [
+      'Conception 3D (plan de commande machine)',
+      'Relevé 3D',
+      'Contrôle de plan (vérifier un fichier existant)',
+      'Conversion de fichier (autre marque \u2192 votre machine)',
+      'Gestion de chantier & Cloud Setup',
+      'Conseil & Consultance',
+      'Question générale',
+      'Autre',
+    ],
+    subjectLabel: 'Sujet *',
+    subjectPlaceholder: 'Ex. Question sur le relevé 3D',
+    messageLabel: 'Message *',
+    messagePlaceholder: 'Décrivez votre question ou dites-nous comment nous pouvons vous aider...',
+    required: '* Champs obligatoires',
+    submitBtn: 'Envoyer le Message',
+    submitting: 'Envoi en cours...',
+    errors: {
+      name: 'Veuillez remplir votre nom.',
+      email: 'Veuillez entrer une adresse e-mail valide.',
+      phone: 'Veuillez remplir votre numéro de téléphone.',
+      subject: 'Veuillez remplir un sujet.',
+      server: 'Votre demande n\u2019a pas pu être enregistrée. Veuillez réessayer plus tard.',
+    },
+  },
+
+  /* ── Offerte page ── */
+  offerte: {
+    portal: 'Portail de Devis',
+    title: 'Demander un Devis',
+    subtitle: 'Recevez un devis sur mesure pour votre projet 3D.',
+    successTitle: 'Demande soumise !',
+    successMsg: 'Votre demande de devis a été soumise avec succès avec la référence',
+    successEmail: 'Vous recevrez une confirmation par e-mail. Nous vous enverrons un devis dès que possible.',
+    newRequest: 'Nouvelle demande',
+    nameLabel: 'Nom complet *',
+    namePlaceholder: 'Jean Dupont',
+    emailLabel: 'Adresse e-mail *',
+    emailPlaceholder: 'jean@exemple.be',
+    phoneLabel: 'Numéro de téléphone *',
+    phonePlaceholder: '+32 470 12 34 56',
+    vatLabel: 'Numéro de TVA *',
+    vatPlaceholder: 'BE 0123.456.789',
+    serviceLabel: 'Service souhaité *',
+    servicePlaceholder: 'Sélectionnez un service...',
+    serviceOptions: [
+      'Conception 3D (plan de commande machine)',
+      'Relevé 3D',
+      'Contrôle de plan (vérifier un fichier existant)',
+      'Conversion de fichier (autre marque \u2192 votre machine)',
+      'Installation Machine Control',
+      'Gestion de chantier & Cloud Setup',
+      'Conseil & Consultance',
+      'Autre',
+    ],
+    dateLabel: 'Date d\u2019exécution souhaitée',
+    dateHint: 'Commander plus tôt = tarif plus avantageux !',
+    subjectLabel: 'Titre / Sujet *',
+    subjectPlaceholder: 'Ex. Demande de devis chantier Bruxelles',
+    descLabel: 'Description du projet',
+    descPlaceholder: 'Décrivez votre projet ou demande en plus de détail...',
+    required: '* Champs obligatoires',
+    submitBtn: 'Envoyer la Demande',
+    submitting: 'Envoi en cours...',
+    errors: {
+      name: 'Veuillez remplir votre nom.',
+      email: 'Veuillez entrer une adresse e-mail valide.',
+      phone: 'Veuillez remplir votre numéro de téléphone.',
+      vat: 'Veuillez remplir votre numéro de TVA.',
+      subject: 'Veuillez remplir un sujet.',
+      server: 'Votre demande n\u2019a pas pu être enregistrée. Veuillez réessayer plus tard.',
+    },
+  },
+
+  /* ── Login page ── */
+  login: {
+    welcome: 'Bon retour',
+    subtitle: 'Connectez-vous pour consulter vos chantiers, fichiers et livrables.',
+    emailLabel: 'E-mail',
+    emailPlaceholder: 'nom@entreprise.be',
+    passwordLabel: 'Mot de passe',
+    passwordPlaceholder: 'Votre mot de passe',
+    rememberMe: 'Se souvenir de moi',
+    forgotPassword: 'Mot de passe oublié ?',
+    loginBtn: 'Connexion',
+    signupBtn: 'Créer un compte',
+    loading: 'Chargement...',
+    backHome: '\u2190 Retour à l\u2019accueil',
+    errors: {
+      empty: 'Veuillez remplir l\u2019e-mail et le mot de passe.',
+      emailRequired: 'Veuillez d\u2019abord remplir votre adresse e-mail.',
+      login: 'Une erreur s\u2019est produite lors de la connexion.',
+      signup: 'Une erreur s\u2019est produite lors de la création du compte.',
+      forgot: 'Une erreur s\u2019est produite. Veuillez réessayer plus tard.',
+    },
+    success: {
+      forgot: 'Un e-mail a été envoyé pour réinitialiser votre mot de passe.',
+      login: 'Connexion réussie, redirection en cours...',
+    },
+  },
+
+  /* ── Reset password ── */
+  resetPassword: {
+    title: 'Définir le mot de passe',
+    subtitle: 'Choisissez un nouveau mot de passe pour votre compte.',
+    passwordLabel: 'Nouveau mot de passe *',
+    passwordPlaceholder: 'Min. 8 caractères',
+    confirmLabel: 'Confirmer le mot de passe *',
+    confirmPlaceholder: 'Répétez le mot de passe',
+    submitBtn: 'Enregistrer le mot de passe',
+    submitting: 'Enregistrement...',
+    mismatch: 'Les mots de passe ne correspondent pas.',
+    minLength: 'Le mot de passe doit contenir au moins 8 caractères.',
+    success: 'Mot de passe modifié avec succès ! Redirection en cours...',
+  },
+}
+
+export default fr

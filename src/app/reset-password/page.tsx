@@ -5,8 +5,10 @@ import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
 import { Lock, CheckCircle, Eye, EyeOff } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 export default function ResetPasswordPage() {
+  const { t } = useT()
   const supabase = useMemo(() => createClient(), [])
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
@@ -22,12 +24,12 @@ export default function ResetPasswordPage() {
     setError('')
 
     if (!password || password.length < 8) {
-      setError('Wachtwoord moet minimaal 8 tekens bevatten.')
+      setError(t.resetPassword.minLength)
       return
     }
 
     if (password !== passwordConfirm) {
-      setError('Wachtwoorden komen niet overeen.')
+      setError(t.resetPassword.mismatch)
       return
     }
 
@@ -43,14 +45,14 @@ export default function ResetPasswordPage() {
       }
 
       setDone(true)
-      setMessage('Wachtwoord succesvol gewijzigd! U wordt doorgestuurd...')
+      setMessage(t.resetPassword.success)
 
       setTimeout(() => {
         window.location.href = '/dashboard'
       }, 2000)
     } catch (err) {
       console.error('Reset password error:', err)
-      setError('Er liep iets fout. Probeer het later opnieuw.')
+      setError('Something went wrong.')
     } finally {
       setLoading(false)
     }
@@ -68,10 +70,10 @@ export default function ResetPasswordPage() {
             <div className="relative">
               <Logo size="lg" variant="dark" />
               <h1 className="mt-3 text-xl font-semibold text-[var(--text-main)]">
-                Wachtwoord instellen
+                {t.resetPassword.title}
               </h1>
               <p className="mt-1.5 text-sm text-[var(--text-soft)]">
-                Kies een nieuw wachtwoord voor uw account.
+                {t.resetPassword.subtitle}
               </p>
             </div>
           </div>
@@ -96,7 +98,7 @@ export default function ResetPasswordPage() {
 
                 <div className="grid gap-1.5">
                   <label htmlFor="password" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Nieuw wachtwoord *
+                    {t.resetPassword.passwordLabel}
                   </label>
                   <div className="relative">
                     <input
@@ -106,7 +108,7 @@ export default function ResetPasswordPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={8}
-                      placeholder="Min. 8 tekens"
+                      placeholder={t.resetPassword.passwordPlaceholder}
                       className="input-dark h-10 w-full px-3 py-2 pr-10 text-sm"
                     />
                     <button
@@ -122,7 +124,7 @@ export default function ResetPasswordPage() {
 
                 <div className="grid gap-1.5">
                   <label htmlFor="passwordConfirm" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Bevestig wachtwoord *
+                    {t.resetPassword.confirmLabel}
                   </label>
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -131,13 +133,13 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setPasswordConfirm(e.target.value)}
                     required
                     minLength={8}
-                    placeholder="Herhaal wachtwoord"
+                    placeholder={t.resetPassword.confirmPlaceholder}
                     className="input-dark h-10 w-full px-3 py-2 text-sm"
                   />
                 </div>
 
                 {password && passwordConfirm && password !== passwordConfirm && (
-                  <p className="text-[11px] text-red-400">Wachtwoorden komen niet overeen.</p>
+                  <p className="text-[11px] text-red-400">{t.resetPassword.mismatch}</p>
                 )}
 
                 <button
@@ -146,7 +148,7 @@ export default function ResetPasswordPage() {
                   className="group relative flex h-10 w-full items-center justify-center gap-2 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:pointer-events-none disabled:opacity-60"
                 >
                   <Lock className="h-4 w-4 text-[var(--accent)]" />
-                  {loading ? 'Opslaan...' : 'Wachtwoord opslaan'}
+                  {loading ? t.resetPassword.submitting : t.resetPassword.submitBtn}
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                 </button>
               </form>

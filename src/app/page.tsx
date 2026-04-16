@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ArrowRight, ChevronDown, Mail, MapPin, Users, Crosshair, Plane, PenTool, Target, Menu, X } from 'lucide-react'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Logo from '@/components/logo'
+import LanguageSwitcher from '@/components/language-switcher'
+import { useT } from '@/i18n/context'
 import { useRef, useState, useEffect, type FormEvent } from 'react'
 
 
@@ -133,6 +135,7 @@ function SectionImage({ label, className = '' }: { label: string; className?: st
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 export default function HomePage() {
+  const { t } = useT()
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const heroImageY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
@@ -160,23 +163,24 @@ export default function HomePage() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#oplossingen" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Oplossingen</a>
-            <a href="#ontwerp" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Ontwerp</a>
-            <a href="#agenten" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Agenten</a>
-            <a href="#faq" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">FAQ</a>
+            <a href="#oplossingen" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">{t.nav.solutions}</a>
+            <a href="#ontwerp" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">{t.nav.design}</a>
+            <a href="#agenten" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">{t.nav.agents}</a>
+            <a href="#faq" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">{t.nav.faq}</a>
           </nav>
 
           {/* Desktop CTA */}
           <div className="hidden items-center gap-3 md:flex">
+            <LanguageSwitcher />
             <Link href="/offerte" className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)] hover:text-white transition">
-              Offerte
+              {t.nav.offerte}
             </Link>
             <Link
               href="/login"
               className="rounded-lg border border-[var(--accent)]/30 border-r-[3px] border-r-[var(--accent)] px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:border-[var(--accent)]/60 hover:shadow-lg hover:shadow-[var(--accent)]/20"
               style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
             >
-              Inloggen
+              {t.nav.login}
             </Link>
           </div>
 
@@ -201,19 +205,19 @@ export default function HomePage() {
               className="overflow-hidden border-t border-white/[0.06] bg-[#080e18]/95 backdrop-blur-xl md:hidden"
             >
               <nav className="flex flex-col gap-1 px-4 py-4">
-                <a href="#oplossingen" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Oplossingen</a>
-                <a href="#ontwerp" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Ontwerp</a>
-                <a href="#agenten" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Agenten</a>
-                <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">FAQ</a>
+                <a href="#oplossingen" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">{t.nav.solutions}</a>
+                <a href="#ontwerp" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">{t.nav.design}</a>
+                <a href="#agenten" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">{t.nav.agents}</a>
+                <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">{t.nav.faq}</a>
                 <div className="mt-2 border-t border-white/[0.06] pt-3 flex flex-col gap-2">
-                  <Link href="/offerte" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition">Offerte Aanvragen</Link>
+                  <Link href="/offerte" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition">{t.nav.offerteRequest}</Link>
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
                     className="rounded-lg border border-[var(--accent)]/30 border-r-[3px] border-r-[var(--accent)] px-4 py-3 text-center text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:border-[var(--accent)]/60"
                     style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
                   >
-                    Inloggen
+                    {t.nav.login}
                   </Link>
                 </div>
               </nav>
@@ -302,7 +306,7 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-sm font-bold uppercase tracking-[0.35em] text-[var(--accent)] mb-5"
               >
-                Blijf Gesynchroniseerd
+                {t.hero.badge}
               </motion.p>
 
               <motion.h1
@@ -320,7 +324,7 @@ export default function HomePage() {
                 transition={{ duration: 0.7, delay: 0.45 }}
                 className="mt-7 text-sm sm:text-base leading-relaxed text-gray-400 max-w-md uppercase tracking-[0.2em] font-bold"
               >
-                &Eacute;&eacute;n platform voor al je werven, machines en bestanden. Beheer alles vanaf kantoor &mdash; zonder verplaatsingen. MV3D.CLOUD is jouw perfecte 3D-assistent.
+                {t.hero.description}
               </motion.p>
 
               <motion.div
@@ -335,7 +339,7 @@ export default function HomePage() {
                   style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
                 >
                   <Mail size={16} />
-                  Contact Opnemen
+                  {t.hero.contactBtn}
                 </Link>
                 <Link
                   href="/login"
@@ -343,7 +347,7 @@ export default function HomePage() {
                   style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)' }}
                 >
                   <ArrowRight size={16} />
-                  Inloggen
+                  {t.hero.loginBtn}
                 </Link>
               </motion.div>
 
@@ -354,11 +358,7 @@ export default function HomePage() {
                 transition={{ duration: 0.8, delay: 0.9 }}
                 className="mt-10 sm:mt-14 flex flex-wrap items-center gap-4 sm:gap-8 text-gray-600"
               >
-                {[
-                  { val: '99.9%', label: 'Uptime' },
-                  { val: '500+', label: 'Werven' },
-                  { val: '24/7', label: 'Monitoring' },
-                ].map((b, i) => (
+                {t.hero.badges.map((b, i) => (
                   <div key={i} className="flex items-center gap-2.5">
                     <span className="text-lg font-bold uppercase tracking-[0.2em] text-[var(--accent)]">{b.val}</span>
                     <span className="text-xs font-bold uppercase tracking-[0.2em]">{b.label}</span>
@@ -636,7 +636,7 @@ export default function HomePage() {
                             ${isActive ? 'text-[var(--accent)]' : 'text-white/25'}
                           `}
                         >
-                          {section.label}
+                          {t.spotlight[i]}
                         </motion.span>
                         {/* Connecting line to laptop */}
                         {isActive && (
@@ -736,7 +736,7 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-5 text-center text-3xl font-black uppercase tracking-tight sm:text-4xl lg:text-[3.5rem] max-w-4xl mx-auto leading-[1.1]">
-              E&eacute;n centrale cloud voor al uw 3D oplossingen
+              {t.solutions.title}
             </h2>
           </Reveal>
           {/* Orange divider with signal icon */}
@@ -751,7 +751,7 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-6 mx-auto max-w-2xl text-center text-sm text-gray-400 leading-relaxed uppercase tracking-[0.2em] font-bold">
-              Synchroniseer werven, bestanden en instellingen automatisch over je hele MV3D-vloot zonder je bureau te verlaten. Laat uw plannen ontwerpen en push ze direct in Machine of Rover.
+              {t.solutions.description}
             </p>
           </Reveal>
 
@@ -1009,7 +1009,7 @@ export default function HomePage() {
                     {f.illustration}
                   </div>
                   <h4 className="mt-4 px-4 pb-4 text-sm font-bold uppercase tracking-[0.2em] text-white/90 leading-snug">
-                    {f.title}
+                    {t.solutions.cards[i]}
                   </h4>
                 </div>
               </Reveal>
@@ -1060,7 +1060,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="mt-5 text-3xl font-black uppercase tracking-tight sm:text-4xl lg:text-[2.75rem] leading-[1.1]">
-                  Laat uw 3D plannen op maat ontwerpen
+                  {t.design.title}
                 </h2>
               </Reveal>
               {/* Orange divider with drafting icon */}
@@ -1075,32 +1075,27 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mt-6 text-sm leading-relaxed text-gray-400 uppercase tracking-[0.2em] font-bold">
-                  Ons team van ervaren landmeter-experten ontwerpt uw 3D-machinebesturingsplannen volledig op maat. Van DXF en DWG tot XML &mdash; wij leveren bestanden die direct klaar zijn om in uw machine te laden.
+                  {t.design.desc1}
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
                 <p className="mt-4 text-sm leading-relaxed text-gray-500 uppercase tracking-[0.2em] font-bold">
-                  Hoe vroeger u bestelt v&oacute;&oacute;r de uitvoeringsdatum, hoe voordeliger. Plan vooruit en bespaar op uw ontwerpkosten &mdash; wij zorgen dat alles tijdig klaarstaat.
+                  {t.design.desc2}
                 </p>
               </Reveal>
 
               {/* Early-bird pricing tiers */}
               <Reveal delay={0.4}>
                 <div className="mt-8 space-y-3">
-                  {[
-                    { weeks: '4+ weken vooraf', discount: 'Beste prijs', accent: true },
-                    { weeks: '1–4 weken vooraf', discount: 'Standaard tarief', accent: false },
-                    { weeks: '48u–1 week vooraf', discount: 'Spoedtarief', accent: false },
-                    { weeks: '< 48u voor aflevering', discount: 'Express tarief', accent: false },
-                  ].map((tier, i) => (
-                    <div key={i} className={`flex items-center gap-4 rounded-lg border px-4 py-3 transition-all ${tier.accent ? 'border-[var(--accent)]/40 bg-[var(--accent)]/[0.06]' : 'border-white/5 bg-white/[0.02]'}`}>
-                      <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${tier.accent ? 'bg-[var(--accent)] text-[#080e18]' : 'bg-white/10 text-white/60'}`}>
+                  {t.design.tiers.map((tier, i) => (
+                    <div key={i} className={`flex items-center gap-4 rounded-lg border px-4 py-3 transition-all ${i === 0 ? 'border-[var(--accent)]/40 bg-[var(--accent)]/[0.06]' : 'border-white/5 bg-white/[0.02]'}`}>
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${i === 0 ? 'bg-[var(--accent)] text-[#080e18]' : 'bg-white/10 text-white/60'}`}>
                         {i === 0 ? '★' : i + 1}
                       </div>
                       <div className="flex-1">
-                        <p className={`text-xs font-bold uppercase tracking-[0.15em] ${tier.accent ? 'text-[var(--accent)]' : 'text-white/70'}`}>{tier.weeks}</p>
+                        <p className={`text-xs font-bold uppercase tracking-[0.15em] ${i === 0 ? 'text-[var(--accent)]' : 'text-white/70'}`}>{tier.weeks}</p>
                       </div>
-                      <p className={`text-xs font-bold uppercase tracking-[0.15em] ${tier.accent ? 'text-[var(--accent)]' : 'text-white/40'}`}>{tier.discount}</p>
+                      <p className={`text-xs font-bold uppercase tracking-[0.15em] ${i === 0 ? 'text-[var(--accent)]' : 'text-white/40'}`}>{tier.discount}</p>
                     </div>
                   ))}
                 </div>
@@ -1132,7 +1127,7 @@ export default function HomePage() {
                   <rect x="92" y="18" width="4" height="16" rx="2" fill="#f7941d" opacity="0.6"/>
                   <rect x="132" y="18" width="4" height="16" rx="2" fill="#f7941d" opacity="0.6"/>
                   {/* Month text */}
-                  <text x="95" y="43" fontSize="10" fill="#f7941d" opacity="0.7" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle" className="uppercase">PLANNING</text>
+                  <text x="95" y="43" fontSize="10" fill="#f7941d" opacity="0.7" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle" className="uppercase">{t.design.planning}</text>
 
                   {/* Calendar grid - 5x4 */}
                   {[0,1,2,3,4].map(col => [0,1,2,3].map(row => {
@@ -1187,7 +1182,7 @@ export default function HomePage() {
                     {/* Tag hole */}
                     <circle cx="10" cy="16" r="4" fill="none" stroke="#f7941d" strokeWidth="1" opacity="0.4"/>
                     {/* Euro symbol */}
-                    <text x="28" y="13" fontSize="7" fill="#f7941d" opacity="0.5" fontFamily="sans-serif" fontWeight="bold">PRIJS</text>
+                    <text x="28" y="13" fontSize="7" fill="#f7941d" opacity="0.5" fontFamily="sans-serif" fontWeight="bold">{t.conversion.price}</text>
                     {/* Down arrow = cheaper */}
                     <path d="M35,18 L35,27" stroke="#28c840" strokeWidth="2" strokeLinecap="round" opacity="0.7"/>
                     <path d="M31,24 L35,28 L39,24" fill="none" stroke="#28c840" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
@@ -1275,7 +1270,7 @@ export default function HomePage() {
                     <circle cx="37" cy="68" r="14" fill="none" stroke="#f7941d" strokeWidth="1.5" opacity="0.4"/>
                     <text x="37" y="73" fontSize="12" fill="#f7941d" opacity="0.5" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle">?</text>
                     {/* Label */}
-                    <text x="37" y="108" fontSize="7" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">MERK X</text>
+                    <text x="37" y="108" fontSize="7" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">{t.conversion.brandX}</text>
                   </g>
 
                   {/* ── Center: MV3D conversion hub ── */}
@@ -1301,7 +1296,7 @@ export default function HomePage() {
                     <path d="M101,51 L107,55 L101,59" fill="none" stroke="#28c840" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
                     
                     {/* Label below */}
-                    <text x="45" y="92" fontSize="6" fill="#f7941d" opacity="0.4" fontFamily="sans-serif" textAnchor="middle" fontWeight="bold">CONVERTEER</text>
+                    <text x="45" y="92" fontSize="6" fill="#f7941d" opacity="0.4" fontFamily="sans-serif" textAnchor="middle" fontWeight="bold">{t.conversion.convert}</text>
                   </g>
 
                   {/* ── Right: Two output targets ── */}
@@ -1318,7 +1313,7 @@ export default function HomePage() {
                     <circle cx="55" cy="55" r="8" fill="#28c840" fillOpacity="0.12" stroke="#28c840" strokeWidth="1.2" opacity="0.5"/>
                     <path d="M50,55 L53,58 L60,51" fill="none" stroke="#28c840" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
                     {/* Label */}
-                    <text x="36" y="75" fontSize="6" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">KRAAN</text>
+                    <text x="36" y="75" fontSize="6" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">{t.conversion.crane}</text>
                   </g>
 
                   {/* Target 2: Rover/GPS */}
@@ -1337,7 +1332,7 @@ export default function HomePage() {
                     <circle cx="55" cy="55" r="8" fill="#28c840" fillOpacity="0.12" stroke="#28c840" strokeWidth="1.2" opacity="0.5"/>
                     <path d="M50,55 L53,58 L60,51" fill="none" stroke="#28c840" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
                     {/* Label */}
-                    <text x="36" y="76" fontSize="6" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">ROVER</text>
+                    <text x="36" y="76" fontSize="6" fill="#f7941d" opacity="0.45" fontFamily="monospace" textAnchor="middle" fontWeight="bold">{t.conversion.rover}</text>
                   </g>
 
                   {/* Split arrows to both targets */}
@@ -1356,7 +1351,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="mt-5 text-2xl font-black uppercase tracking-tight sm:text-3xl lg:text-[2.75rem] leading-[1.1]">
-                  Ander merk? Geen paniek &mdash; converteer en verstuur
+                  {t.conversion.title}
                 </h2>
               </Reveal>
               {/* Orange divider with convert icon */}
@@ -1371,12 +1366,12 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mt-6 text-sm leading-relaxed text-gray-400 uppercase tracking-[0.2em] font-bold">
-                  Heb je een machinebesturingsbestand van een ander merk? Geen probleem. Upload het naar MV3D Cloud, converteer het met &eacute;&eacute;n klik naar het juiste formaat en stuur het rechtstreeks door naar je graafkraan of rover.
+                  {t.conversion.desc1}
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
                 <p className="mt-4 text-sm leading-relaxed text-gray-500 uppercase tracking-[0.2em] font-bold">
-                  Van Topcon naar Leica, van Trimble naar elk ander systeem &mdash; MV3D Cloud overbrugt de kloof tussen merken. Geen gedoe met incompatibele bestanden, geen tijdverlies op de werf.
+                  {t.conversion.desc2}
                 </p>
               </Reveal>
             </div>
@@ -1404,12 +1399,12 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-4xl px-4 sm:px-8 text-center">
           <Reveal>
             <h2 className="text-2xl font-black uppercase tracking-tight text-white drop-shadow-md sm:text-3xl lg:text-4xl">
-              Vraag Offerte
+              {t.cta.title}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-3 text-sm font-bold uppercase tracking-[0.2em] text-white/80">
-              Ontvang een vrijblijvend voorstel op maat
+              {t.cta.description}
             </p>
           </Reveal>
           <Reveal delay={0.2}>
@@ -1419,7 +1414,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-3 rounded-lg border-2 border-white/40 bg-white/15 px-8 py-3.5 text-sm font-bold uppercase tracking-[0.2em] text-white shadow-lg backdrop-blur-sm transition-all hover:border-white/70 hover:bg-white/25 hover:shadow-xl"
               >
                 <Mail size={16} />
-                Offerte Aanvragen
+                {t.cta.button}
               </Link>
             </div>
           </Reveal>
@@ -1442,11 +1437,7 @@ export default function HomePage() {
         </div>
         <div className="relative mx-auto max-w-5xl px-8 py-16">
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
-            {[
-              { value: '85', label: '3D Agenten' },
-              { value: '850+', label: 'Werven Verwerkt' },
-              { value: '99.9%', label: 'Uptime Garantie' },
-            ].map((stat, i) => (
+            {t.stats.map((stat, i) => (
               <Reveal key={i} delay={i * 0.1}>
                 <div className="text-center">
                   <p className="text-4xl font-black tracking-tight text-[var(--accent)] sm:text-5xl lg:text-6xl">{stat.value}</p>
@@ -1466,7 +1457,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-5xl px-4 sm:px-8">
           <Reveal>
             <p className="mb-10 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500">
-              Compatibel met alle grote besturingen
+              {t.brands.subtitle}
             </p>
           </Reveal>
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 lg:gap-20">
@@ -1615,50 +1606,23 @@ export default function HomePage() {
           <Reveal>
             <div className="mb-10 sm:mb-16 text-center">
               <p className="text-sm font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
-                Ons Netwerk
+                {t.agents.subtitle}
               </p>
               <h2 className="mt-5 text-3xl font-black uppercase tracking-tight sm:text-4xl lg:text-6xl">
-                85 <span className="text-[var(--accent)]">3D Agenten</span>
+                85 <span className="text-[var(--accent)]">{t.agents.title}</span>
                 <br />
-                Staan voor u klaar
+                {t.agents.titleSuffix}
               </h2>
-              <p className="mt-6 mx-auto max-w-3xl text-sm text-gray-400 uppercase tracking-[0.15em] font-bold leading-relaxed">
-                Uw aanvraag wordt automatisch doorgestuurd naar de 3D partner dichtst bij uw werf.
-                <br />
-                Snel, lokaal en persoonlijk.
+              <p className="mt-6 mx-auto max-w-3xl text-sm text-gray-400 uppercase tracking-[0.15em] font-bold leading-relaxed whitespace-pre-line">
+                {t.agents.description}
               </p>
             </div>
           </Reveal>
 
           {/* Network feature cards */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
-            {[
-              {
-                icon: MapPin,
-                label: '4 Landen',
-                headline: 'Actief netwerk',
-                text: 'Onze agenten zijn actief in België, Nederland, Frankrijk en Luxemburg. Waar uw project ook is, wij hebben een lokale specialist in de buurt.',
-              },
-              {
-                icon: Users,
-                label: '85 Agenten',
-                headline: 'Gecertificeerd',
-                text: 'Elk lid van ons netwerk is een gecertificeerde landmeter, drone-piloot of 3D-specialist. Gegarandeerde kwaliteit bij elke opdracht.',
-              },
-              {
-                icon: Crosshair,
-                label: '12H',
-                headline: 'Responstijd',
-                text: 'Binnen 12 uur na uw aanvraag wordt een gekwalificeerde agent aan uw project gekoppeld. Geen wachttijden, geen vertragingen.',
-              },
-              {
-                icon: Mail,
-                label: 'Ticketservice',
-                headline: 'Altijd bereikbaar',
-                text: 'Via ons ticketsysteem volgt u elke aanvraag in real-time. Stel vragen, deel bestanden en ontvang updates — alles op één plek.',
-              },
-            ].map(({ icon: Icon, label, headline, text }, i) => (
-              <Reveal key={label} delay={0.15 + i * 0.1}>
+            {[MapPin, Users, Crosshair, Mail].map((Icon, i) => (
+              <Reveal key={i} delay={0.15 + i * 0.1}>
                 <motion.div
                   whileHover={{ y: -4, borderColor: 'rgba(247,148,29,0.25)' }}
                   transition={{ duration: 0.25 }}
@@ -1671,9 +1635,9 @@ export default function HomePage() {
                     <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--accent)]/20 bg-[var(--accent)]/[0.08]">
                       <Icon className="h-5 w-5 text-[var(--accent)]" />
                     </div>
-                    <span className="text-3xl font-black text-white">{label}</span>
-                    <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--accent)]">{headline}</p>
-                    <p className="mt-4 text-sm leading-relaxed text-gray-400">{text}</p>
+                    <span className="text-3xl font-black text-white">{t.agents.cards[i].label}</span>
+                    <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--accent)]">{t.agents.cards[i].headline}</p>
+                    <p className="mt-4 text-sm leading-relaxed text-gray-400">{t.agents.cards[i].text}</p>
                   </div>
                 </motion.div>
               </Reveal>
@@ -1700,31 +1664,26 @@ export default function HomePage() {
             <div>
               <Reveal>
                 <p className="text-sm font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
-                  Word 3D Agent
+                  {t.partner.badge}
                 </p>
                 <h2 className="mt-5 text-3xl font-black uppercase tracking-tight leading-[1.08] sm:text-4xl lg:text-6xl">
-                  Sluit aan bij
+                  {t.partner.title[0]}
                   <br />
-                  <span className="text-[var(--accent)]">het MV3D</span>
+                  <span className="text-[var(--accent)]">{t.partner.title[1]}</span>
                   <br />
-                  netwerk
+                  {t.partner.title[2]}
                 </h2>
               </Reveal>
 
               <Reveal delay={0.15}>
                 <p className="mt-6 max-w-lg text-sm text-gray-400 leading-relaxed">
-                  Bent u landmeter, drone-piloot of 3D-specialist? Sluit u aan als gecertificeerd MV3D agent en ontvang automatisch aanvragen uit uw regio. U bepaalt zelf uw beschikbaarheid en tarieven.
+                  {t.partner.description}
                 </p>
               </Reveal>
 
               <div className="mt-10 space-y-4">
-                {[
-                  { icon: Crosshair, title: 'Opmetingen', desc: 'Klassieke en GPS-opmetingen op de werf' },
-                  { icon: Plane, title: 'Dronemetingen', desc: 'Luchtfotogrammetrie en terreinscans' },
-                  { icon: PenTool, title: '3D Ontwerp', desc: 'Machinebesturingsplannen en grondmodellen' },
-                  { icon: Target, title: 'Uitzettingen', desc: 'Precieze uitzettingen en as-built controle' },
-                ].map(({ icon: Icon, title, desc }, i) => (
-                  <Reveal key={title} delay={0.2 + i * 0.08}>
+                {[Crosshair, Plane, PenTool, Target].map((Icon, i) => (
+                  <Reveal key={i} delay={0.2 + i * 0.08}>
                     <motion.div
                       whileHover={{ x: 8 }}
                       className="flex items-start gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-colors hover:border-[var(--accent)]/20 hover:bg-[var(--accent)]/[0.03]"
@@ -1733,8 +1692,8 @@ export default function HomePage() {
                         <Icon className="h-5 w-5 text-[var(--accent)]" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold uppercase tracking-wider text-white">{title}</p>
-                        <p className="mt-0.5 text-xs text-gray-500">{desc}</p>
+                        <p className="text-sm font-bold uppercase tracking-wider text-white">{t.partner.services[i].title}</p>
+                        <p className="mt-0.5 text-xs text-gray-500">{t.partner.services[i].desc}</p>
                       </div>
                     </motion.div>
                   </Reveal>
@@ -1756,8 +1715,8 @@ export default function HomePage() {
                     <Users className="h-5 w-5 text-[var(--accent)]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold uppercase tracking-[0.15em]">Agent Worden</h3>
-                    <p className="text-[10px] uppercase tracking-widest text-gray-500">Schrijf u in als partner</p>
+                    <h3 className="text-lg font-bold uppercase tracking-[0.15em]">{t.partner.formTitle}</h3>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-500">{t.partner.formSubtitle}</p>
                   </div>
                 </div>
 
@@ -1765,42 +1724,42 @@ export default function HomePage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <input
                       type="text"
-                      placeholder="Voornaam"
+                      placeholder={t.partner.firstName}
                       className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                     />
                     <input
                       type="text"
-                      placeholder="Achternaam"
+                      placeholder={t.partner.lastName}
                       className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                     />
                   </div>
                   <input
                     type="text"
-                    placeholder="Bedrijfsnaam"
+                    placeholder={t.partner.company}
                     className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
                     <input
                       type="email"
-                      placeholder="E-mailadres"
+                      placeholder={t.partner.email}
                       className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                     />
                     <input
                       type="tel"
-                      placeholder="Telefoonnummer"
+                      placeholder={t.partner.phone}
                       className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                     />
                   </div>
                   <input
                     type="text"
-                    placeholder="Regio / Werkgebied"
+                    placeholder={t.partner.region}
                     className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition"
                   />
 
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-3">Welke diensten biedt u aan?</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-3">{t.partner.servicesLabel}</p>
                     <div className="flex flex-wrap gap-2">
-                      {['Opmetingen', 'Dronemetingen', '3D Ontwerp', 'Uitzettingen'].map((opt) => (
+                      {t.partner.serviceOptions.map((opt) => (
                         <label key={opt} className="cursor-pointer">
                           <input type="checkbox" className="peer sr-only" />
                           <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.1] border-r-[3px] border-r-white/20 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-400 transition peer-checked:border-[var(--accent)]/30 peer-checked:border-r-[var(--accent)] peer-checked:text-[var(--accent)]"
@@ -1815,7 +1774,7 @@ export default function HomePage() {
 
                   <textarea
                     rows={3}
-                    placeholder="Vertel kort over uw ervaring en beschikbaar materiaal..."
+                    placeholder={t.partner.experience}
                     className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-[var(--accent)] focus:outline-none transition resize-none"
                   />
 
@@ -1827,7 +1786,7 @@ export default function HomePage() {
                     style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
                   >
                     <Users size={16} />
-                    Aanmelden als Agent
+                    {t.partner.submit}
                   </motion.button>
                 </form>
               </motion.div>
@@ -1864,69 +1823,24 @@ export default function HomePage() {
           <Reveal>
             <div className="mb-14 text-center">
               <p className="text-sm font-bold uppercase tracking-[0.35em] text-[var(--accent)]">
-                MV3D Cloud
+                {t.faq.subtitle}
               </p>
               <h2 className="mt-5 text-3xl font-black uppercase tracking-tight sm:text-4xl lg:text-5xl">
-                FAQ
+                {t.faq.title}
               </h2>
             </div>
           </Reveal>
 
           <div className="max-w-3xl mx-auto">
             <Reveal delay={0.15}>
-              <FaqItem
-                question="Wat is MV3D Cloud?"
-                answer="MV3D Cloud is een cloudservice waarmee je werfbestanden rechtstreeks vanuit je kantoor naar je teams op het terrein kunt sturen. Zo hoef je niet meer tussen machines te lopen om data over te zetten &mdash; het bespaart je tijd en moeite. Operatoren en landmeters kunnen projectdata, punten, lijnen en as-built informatie uploaden. Alle projectdata wordt automatisch opgeslagen, wat zorgt voor grondige en nauwkeurige documentatie voor elke projectfase. Iedereen met toegang tot de cloud kan samenwerken en de productiviteit verbeteren."
-              />
-              <FaqItem
-                question="Wat zijn de voordelen van MV3D Cloud?"
-                answer="MV3D Cloud biedt verschillende voordelen: 1) Verbeterde samenwerking &mdash; snel en eenvoudig as-built informatie en werfbestanden uitwisselen tussen kantoor en terrein. 2) Gestroomlijnde databeheer &mdash; automatische synchronisatie van gelogde punten en lijnen, real-time updates en directe synchronisatie. 3) Verbeterde machine-effici&euml;ntie &mdash; diagnose op afstand en back-up herstel minimaliseren stilstand en verbeteren de algehele vloot-effici&euml;ntie."
-              />
-              <FaqItem
-                question="Welke bestandsformaten worden ondersteund?"
-                answer="MV3D Cloud ondersteunt uploads in populaire formaten zoals DXF, XML, DWG en meer. Upload projectdata en ontwerpbestanden, en werk snel en eenvoudig met as-built informatie."
-              />
-              <FaqItem
-                question="Hoe upload je bestanden naar MV3D Cloud?"
-                answer="Om bestanden te uploaden maak je eenvoudig een werf aan, wijs je je machines en rovers toe, en sleep je bestanden via de &lsquo;Bestanden&rsquo; &gt; &lsquo;Upload Ontwerp&rsquo; optie. Alle bestanden worden automatisch verstuurd naar de machines die aan de werf zijn toegewezen."
-              />
-              <FaqItem
-                question="Kan ik MV3D Cloud integreren met andere systemen?"
-                answer="Ja! MV3D Cloud integreert naadloos met diverse platforms, waardoor een digitale gegevensstroom van ontwerpen en as-built informatie mogelijk is over verschillende machinebesturingssoftware. Dit cre&euml;ert een open gegevensstroom ongeacht de samenstelling van machinebesturingssoftware in je vloot."
-              />
-              <FaqItem
-                question="In welke landen is MV3D actief?"
-                answer="MV3D is actief in 4 landen: België, Nederland, Frankrijk en Luxemburg. Ons netwerk van 85 gecertificeerde agenten dekt de volledige Benelux en Frankrijk, zodat er altijd een lokale specialist dichtbij uw werf beschikbaar is."
-              />
-              <FaqItem
-                question="Hoe snel wordt mijn aanvraag behandeld?"
-                answer="Binnen 12 uur na uw aanvraag wordt een gekwalificeerde agent aan uw project gekoppeld. Via ons ticketsysteem kunt u de voortgang in real-time volgen, vragen stellen, bestanden delen en updates ontvangen &mdash; alles op &eacute;&eacute;n plek."
-              />
-              <FaqItem
-                question="Wat doet een MV3D Agent precies?"
-                answer="Een MV3D Agent is een gecertificeerde landmeter, drone-piloot of 3D-specialist die lokaal beschikbaar is voor opmetingen, dronemetingen, 3D-ontwerpen en uitzettingen op de werf. Agenten ontvangen automatisch aanvragen uit hun regio en bepalen zelf hun beschikbaarheid en tarieven."
-              />
-              <FaqItem
-                question="Hoe kan ik zelf MV3D Agent worden?"
-                answer="Bent u landmeter, drone-piloot of 3D-specialist? Via het formulier op onze website kunt u zich aanmelden als gecertificeerd MV3D Agent. Na goedkeuring ontvangt u automatisch aanvragen uit uw regio. U bepaalt zelf uw beschikbaarheid, diensten en tarieven."
-              />
-              <FaqItem
-                question="Welke diensten bieden MV3D Agenten aan?"
-                answer="Onze agenten bieden vier kerndiensten: 1) Klassieke en GPS-opmetingen op de werf. 2) Luchtfotogrammetrie en terreinscans via drones. 3) Machinebesturingsplannen en grondmodellen (3D-ontwerp). 4) Precieze uitzettingen en as-built controle. Elke agent kiest zelf welke diensten hij aanbiedt."
-              />
-              <FaqItem
-                question="Hoe werkt de ticketservice?"
-                answer="Bij elke aanvraag wordt automatisch een ticket aangemaakt in ons systeem. Via het ticket kunt u bestanden uploaden, vragen stellen aan uw agent en real-time updates ontvangen over de status van uw opdracht. Zo heeft u altijd volledig overzicht."
-              />
-              <FaqItem
-                question="Kan ik een offerte aanvragen via het platform?"
-                answer="Ja, via onze offertepagina kunt u eenvoudig een offerte aanvragen. Vul uw gegevens en projectdetails in, en wij koppelen u aan de dichtstbijzijnde beschikbare agent. U ontvangt binnen 12 uur een gepersonaliseerde offerte."
-              />
+              {t.faq.items.map((item, i) => (
+                <FaqItem key={i} question={item.q} answer={item.a} />
+              ))}
             </Reveal>
 
             <Reveal delay={0.3}>
               <p className="mt-12 text-center text-gray-500 text-sm uppercase tracking-[0.2em] font-bold">
-                Nog vragen? Mail ons op{' '}
+                {t.faq.moreQuestions}{' '}
                 <a href="mailto:support@mv3d.be" className="text-[var(--accent)] underline underline-offset-4 hover:text-[var(--accent-hover)] transition">
                   support@mv3d.be
                 </a>
@@ -1944,15 +1858,15 @@ export default function HomePage() {
             <div>
               <Logo size="lg" variant="dark" />
               <p className="text-sm text-gray-500 leading-relaxed uppercase tracking-[0.2em] font-bold">
-                Verbeter samenwerking, optimaliseer productiviteit en verminder stilstand met MV3D Cloud.
+                {t.footer.description}
               </p>
             </div>
 
             {/* Links */}
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">Oplossingen</h4>
+              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">{t.footer.solutionsTitle}</h4>
               <ul className="space-y-3">
-                {['3D Opmeting', 'Werfbeheer', 'Machine Control', 'Rover'].map((l) => (
+                {t.footer.solutions.map((l) => (
                   <li key={l}>
                     <span className="text-sm text-gray-500 hover:text-[var(--accent)] transition cursor-pointer uppercase tracking-[0.2em] font-bold">{l}</span>
                   </li>
@@ -1961,9 +1875,9 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">Platform</h4>
+              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">{t.footer.platformTitle}</h4>
               <ul className="space-y-3">
-                {['Dashboard', 'Support', 'Machines', 'Bestanden'].map((l) => (
+                {t.footer.platform.map((l) => (
                   <li key={l}>
                     <Link href={`/${l.toLowerCase()}`} className="text-sm text-gray-500 hover:text-[var(--accent)] transition uppercase tracking-[0.2em] font-bold">{l}</Link>
                   </li>
@@ -1973,7 +1887,7 @@ export default function HomePage() {
 
             {/* Contact */}
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">Contact</h4>
+              <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">{t.footer.contactTitle}</h4>
               <ul className="space-y-3 text-sm text-gray-500 uppercase tracking-[0.2em] font-bold">
                 <li>
                   <a href="mailto:contact@mv3d.be" className="hover:text-[var(--accent)] transition">contact@mv3d.be</a>
@@ -1981,21 +1895,21 @@ export default function HomePage() {
                 <li>
                   <a href="tel:+3200000000" className="hover:text-[var(--accent)] transition">+32 (0) 000 00 00</a>
                 </li>
-                <li>Belgi&euml;</li>
+                <li>{t.footer.country}</li>
               </ul>
             </div>
           </div>
 
           <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-600 uppercase tracking-[0.2em] font-bold">
-              &copy; 2026 MV3D Cloud. Alle rechten voorbehouden.
+              &copy; 2026 MV3D Cloud. {t.footer.copyright.split('. ').pop()}
             </p>
             <div className="flex items-center gap-6">
               <Link href="/login" className="text-xs text-gray-500 hover:text-[var(--accent)] transition uppercase tracking-[0.2em] font-bold">
-                Inloggen
+                {t.footer.login}
               </Link>
               <Link href="/support" className="text-xs text-gray-500 hover:text-[var(--accent)] transition uppercase tracking-[0.2em] font-bold">
-                Support
+                {t.footer.support}
               </Link>
             </div>
           </div>

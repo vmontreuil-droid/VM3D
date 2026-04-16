@@ -2,9 +2,11 @@
 
 import { useFormStatus } from 'react-dom'
 import { Mail, Hourglass } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 export default function SubmitButton() {
   const { pending } = useFormStatus()
+  const { t } = useT()
 
   return (
     <button
@@ -19,7 +21,7 @@ export default function SubmitButton() {
           <Mail className="h-3 w-3" />
         )}
       </span>
-      <span className="pr-1">{pending ? 'Verzenden...' : 'Bericht Versturen'}</span>
+      <span className="pr-1">{pending ? t.contact.submitting : t.contact.submitBtn}</span>
       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
     </button>
   )

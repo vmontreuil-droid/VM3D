@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { locales, defaultLocale, COOKIE_NAME } from './i18n/config'
 
 export async function proxy(request: NextRequest) {
   const headerHost = request.headers.get('host')?.split(':')[0].toLowerCase().replace(/\.$/, '') || ''
@@ -15,6 +16,34 @@ export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request,
   })
+
+  // --- Locale detection ---
+  const existingLocale = request.cookies.get(COOKIE_NAME)?.value
+  if (!existingLocale || !(locales as readonly string[]).includes(existingLocale)) {
+    const acceptLang = request.headers.get('accept-language') || ''
+    let detected = defaultLocale
+
+    const langs = acceptLang
+      .split(',')
+      .map((part) => {
+        const [code, qPart] = part.trim().split(';q=')
+        return { code: code.trim().split('-')[0].toLowerCase(), q: qPart ? parseFloat(qPart) : 1 }
+      })
+      .sort((a, b) => b.q - a.q)
+
+    for (const { code } of langs) {
+      if ((locales as readonly string[]).includes(code)) {
+        detected = code as typeof defaultLocale
+        break
+      }
+    }
+
+    response.cookies.set(COOKIE_NAME, detected, {
+      maxAge: 365 * 24 * 60 * 60,
+      path: '/',
+      sameSite: 'lax',
+    })
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

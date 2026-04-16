@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { AlertCircle, CheckCircle, Calendar, PartyPopper } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendTicketNotificationEmail } from '@/lib/ticket-notifications'
@@ -7,6 +8,8 @@ import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
 import FileUploadZone from '@/components/file-upload-zone'
 import SubmitButton from './submit-button'
+import { COOKIE_NAME, defaultLocale, locales, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function createOfferteRequest(formData: FormData) {
   'use server'
@@ -133,6 +136,11 @@ export default async function OffertePage({ searchParams }: Props) {
   const submitted = resolvedSearchParams.submitted === '1'
   const ticketId = resolvedSearchParams.ticket
 
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+
   return (
     <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)]">
       <TopoBackground />
@@ -149,10 +157,10 @@ export default async function OffertePage({ searchParams }: Props) {
                 Offerteportaal
               </p>
               <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                Offerte Aanvragen
+                {t.offerte.title}
               </h1>
               <p className="mt-2.5 max-w-2xl text-sm leading-6 text-[var(--text-soft)]">
-                Vraag een vrijblijvende offerte aan voor 3D ontwerp, opmeting of machinebesturing. Upload uw plannen ter controle en wij bezorgen u een voorstel op maat.
+                {t.offerte.subtitle}
               </p>
             </div>
           </div>
@@ -165,12 +173,12 @@ export default async function OffertePage({ searchParams }: Props) {
                     <CheckCircle className="h-8 w-8 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-emerald-300">Aanvraag verstuurd!</h2>
+                    <h2 className="text-lg font-bold text-emerald-300">{t.offerte.successTitle}</h2>
                     <p className="mt-1.5 text-sm text-[var(--text-soft)]">
-                      Uw offerte aanvraag is succesvol ingediend met referentie <span className="font-semibold text-[var(--accent)]">#{ticketId}</span>.
+                      {t.offerte.successMsg} <span className="font-semibold text-[var(--accent)]">#{ticketId}</span>.
                     </p>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">
-                      U ontvangt een bevestiging per e-mail. We nemen zo snel mogelijk contact met u op.
+                      {t.offerte.successEmail}
                     </p>
                   </div>
                 </div>
@@ -180,7 +188,7 @@ export default async function OffertePage({ searchParams }: Props) {
                     href="/offerte"
                     className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 text-xs font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/45 hover:bg-[var(--bg-card)]/80"
                   >
-                    <span className="pr-1">Nieuwe aanvraag indienen</span>
+                    <span className="pr-1">{t.offerte.newRequest}</span>
                     <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                   </a>
                 </div>
@@ -192,12 +200,12 @@ export default async function OffertePage({ searchParams }: Props) {
                     <div className="flex items-start gap-3">
                       <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-300" />
                       <p className="text-sm text-red-200">
-                        {resolvedSearchParams.error === 'name' && 'Vul alstublieft uw naam in.'}
-                        {resolvedSearchParams.error === 'email' && 'Voer een geldig e-mailadres in.'}
-                        {resolvedSearchParams.error === 'phone' && 'Vul alstublieft uw telefoonnummer in.'}
-                        {resolvedSearchParams.error === 'vat' && 'Vul alstublieft uw BTW-nummer in.'}
-                        {resolvedSearchParams.error === 'title' && 'Vul alstublieft een onderwerp in.'}
-                        {resolvedSearchParams.error === 'save' && 'Uw aanvraag kon niet worden opgeslagen. Probeer het later opnieuw.'}
+                        {resolvedSearchParams.error === 'name' && t.offerte.errors.name}
+                        {resolvedSearchParams.error === 'email' && t.offerte.errors.email}
+                        {resolvedSearchParams.error === 'phone' && t.offerte.errors.phone}
+                        {resolvedSearchParams.error === 'vat' && t.offerte.errors.vat}
+                        {resolvedSearchParams.error === 'title' && t.offerte.errors.subject}
+                        {resolvedSearchParams.error === 'save' && t.offerte.errors.server}
                       </p>
                     </div>
                   </div>
@@ -207,27 +215,27 @@ export default async function OffertePage({ searchParams }: Props) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-1.5">
                     <label htmlFor="name" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      Volledige naam *
+                      {t.offerte.nameLabel}
                     </label>
                     <input
                       type="text"
                       id="name"
                       name="name"
                       required
-                      placeholder="Jan Jansen"
+                      placeholder={t.offerte.namePlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
                   <div className="grid gap-1.5">
                     <label htmlFor="email" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      E-mailadres *
+                      {t.offerte.emailLabel}
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
                       required
-                      placeholder="jan@voorbeeld.be"
+                      placeholder={t.offerte.emailPlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
@@ -237,27 +245,27 @@ export default async function OffertePage({ searchParams }: Props) {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-1.5">
                     <label htmlFor="phone" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      Telefoonnummer *
+                      {t.offerte.phoneLabel}
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       required
-                      placeholder="+32 470 12 34 56"
+                      placeholder={t.offerte.phonePlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
                   <div className="grid gap-1.5">
                     <label htmlFor="vat" className="text-[11px] font-medium text-[var(--text-soft)]">
-                      BTW-nummer *
+                      {t.offerte.vatLabel}
                     </label>
                     <input
                       type="text"
                       id="vat"
                       name="vat"
                       required
-                      placeholder="BE 0123.456.789"
+                      placeholder={t.offerte.vatPlaceholder}
                       className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                     />
                   </div>
@@ -266,7 +274,7 @@ export default async function OffertePage({ searchParams }: Props) {
                 {/* Dienst selectie */}
                 <div className="grid gap-1.5">
                   <label htmlFor="service" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Welke dienst interesseert u?
+                    {t.offerte.serviceLabel}
                   </label>
                   <select
                     id="service"
@@ -274,15 +282,10 @@ export default async function OffertePage({ searchParams }: Props) {
                     defaultValue=""
                     className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                   >
-                    <option value="" disabled>Kies een dienst...</option>
-                    <option value="3D Ontwerp">3D Ontwerp (machinebesturingsplan)</option>
-                    <option value="3D Opmeting">3D Opmeting</option>
-                    <option value="Plancontrole">Plancontrole (bestaand bestand controleren)</option>
-                    <option value="Bestandsconversie">Bestandsconversie (ander merk → uw machine)</option>
-                    <option value="Werfbeheer">Werfbeheer &amp; Cloud Setup</option>
-                    <option value="Machine Control">Machine Control Installatie</option>
-                    <option value="Advies">Advies &amp; Consultancy</option>
-                    <option value="Andere">Andere</option>
+                    <option value="" disabled>{t.offerte.servicePlaceholder}</option>
+                    {t.offerte.serviceOptions.map((opt, i) => (
+                      <option key={i} value={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -291,7 +294,7 @@ export default async function OffertePage({ searchParams }: Props) {
                   <label htmlFor="uitvoeringsdatum" className="text-[11px] font-medium text-[var(--text-soft)]">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="h-3 w-3 text-[var(--accent)]" />
-                      Gewenste uitvoeringsdatum
+                      {t.offerte.dateLabel}
                     </span>
                   </label>
                   <input
@@ -301,21 +304,21 @@ export default async function OffertePage({ searchParams }: Props) {
                     className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                   />
                   <p className="text-[10px] text-[var(--text-muted)]">
-                    Hoe vroeger u bestelt vóór de uitvoeringsdatum, hoe voordeliger.
+                    {t.offerte.dateHint}
                   </p>
                 </div>
 
                 {/* Onderwerp */}
                 <div className="grid gap-1.5">
                   <label htmlFor="title" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Onderwerp *
+                    {t.offerte.subjectLabel}
                   </label>
                   <input
                     type="text"
                     id="title"
                     name="title"
                     required
-                    placeholder="Bv. 3D plan voor werf Antwerpen"
+                    placeholder={t.offerte.subjectPlaceholder}
                     className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                   />
                 </div>
@@ -323,13 +326,13 @@ export default async function OffertePage({ searchParams }: Props) {
                 {/* Beschrijving */}
                 <div className="grid gap-1.5">
                   <label htmlFor="description" className="text-[11px] font-medium text-[var(--text-soft)]">
-                    Beschrijving
+                    {t.offerte.descLabel}
                   </label>
                   <textarea
                     id="description"
                     name="description"
                     rows={4}
-                    placeholder="Beschrijf uw project of aanvraag in meer detail..."
+                    placeholder={t.offerte.descPlaceholder}
                     className="input-dark min-h-[100px] w-full resize-none px-3 py-2 text-[12px]"
                   />
                 </div>
@@ -339,7 +342,7 @@ export default async function OffertePage({ searchParams }: Props) {
 
                 {/* Submit */}
                 <div className="flex items-center justify-between gap-3 pt-1">
-                  <p className="text-[11px] text-[var(--text-muted)]">* Verplichte velden</p>
+                  <p className="text-[11px] text-[var(--text-muted)]">{t.offerte.required}</p>
 
                   <SubmitButton />
                 </div>
