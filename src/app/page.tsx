@@ -330,7 +330,7 @@ export default function HomePage() {
                 className="mt-10 flex flex-wrap items-center gap-4"
               >
                 <Link
-                  href="mailto:contact@mv3d.be"
+                  href="/contact"
                   className="flex items-center gap-3 rounded-lg border border-[var(--accent)]/30 border-r-[3px] border-r-[var(--accent)] px-6 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:border-[var(--accent)]/60 hover:shadow-lg hover:shadow-[var(--accent)]/20"
                   style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
                 >
