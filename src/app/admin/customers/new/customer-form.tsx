@@ -7,6 +7,10 @@ import {
   Building2,
   ChevronDown,
   CreditCard,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Lock,
   Mail,
   MapPinned,
   MessageSquare,
@@ -128,6 +132,7 @@ export default function CustomerForm({
   const [passwordMode, setPasswordMode] = useState<'invite' | 'manual'>('invite');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [inviteCooldownUntil, setInviteCooldownUntil] = useState(0);
   const [nowTs, setNowTs] = useState(Date.now());
   const [quoteValidityDays, setQuoteValidityDays] = useState(initialData.quoteValidityDays || '');
@@ -408,6 +413,7 @@ export default function CustomerForm({
         name="send_invite"
         value={passwordMode === 'invite' ? 'yes' : 'no'}
       />
+      <input type="hidden" name="password_mode" value={passwordMode} />
       <input type="hidden" name="full_name" value={resolvedFullName} />
       <input type="hidden" name="send_xml" value={sendXml ? 'yes' : 'no'} />
       <input type="hidden" name="send_pdf" value={sendPdf ? 'yes' : 'no'} />
@@ -1018,6 +1024,153 @@ export default function CustomerForm({
               </section>
             </div>
           )}
+
+          {/* ───── Wachtwoord / Uitnodiging ───── */}
+          <section className={sectionClass}>
+            <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3.5 sm:px-5">
+              <div className="flex items-start gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
+                  <KeyRound className="h-4 w-4" />
+                </span>
+                <div>
+                  <h2 className="text-sm font-semibold text-[var(--text-main)]">
+                    Toegang &amp; wachtwoord
+                  </h2>
+                  <p className="mt-1 text-xs text-[var(--text-soft)]">
+                    Kies hoe de klant toegang krijgt tot het platform.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className={sectionBodyClass}>
+              {/* Mode toggle */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setPasswordMode('invite')}
+                  className={`flex items-start gap-3 rounded-xl border p-3.5 text-left transition ${
+                    passwordMode === 'invite'
+                      ? 'border-[var(--accent)]/50 bg-[var(--accent)]/[0.06]'
+                      : 'border-[var(--border-soft)] bg-[var(--bg-card)] hover:border-[var(--accent)]/30'
+                  }`}
+                >
+                  <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+                    passwordMode === 'invite' ? 'bg-[var(--accent)]/20 text-[var(--accent)]' : 'bg-[var(--bg-card-2)] text-[var(--text-muted)]'
+                  }`}>
+                    <Mail className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className={`block text-[13px] font-semibold leading-5 ${
+                      passwordMode === 'invite' ? 'text-[var(--accent)]' : 'text-[var(--text-main)]'
+                    }`}>
+                      Uitnodiging per e-mail
+                    </span>
+                    <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                      Klant ontvangt een e-mail om zelf een wachtwoord in te stellen
+                    </span>
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setPasswordMode('manual')}
+                  className={`flex items-start gap-3 rounded-xl border p-3.5 text-left transition ${
+                    passwordMode === 'manual'
+                      ? 'border-[var(--accent)]/50 bg-[var(--accent)]/[0.06]'
+                      : 'border-[var(--border-soft)] bg-[var(--bg-card)] hover:border-[var(--accent)]/30'
+                  }`}
+                >
+                  <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+                    passwordMode === 'manual' ? 'bg-[var(--accent)]/20 text-[var(--accent)]' : 'bg-[var(--bg-card-2)] text-[var(--text-muted)]'
+                  }`}>
+                    <Lock className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className={`block text-[13px] font-semibold leading-5 ${
+                      passwordMode === 'manual' ? 'text-[var(--accent)]' : 'text-[var(--text-main)]'
+                    }`}>
+                      Wachtwoord instellen
+                    </span>
+                    <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                      Stel zelf een tijdelijk wachtwoord in voor de klant
+                    </span>
+                  </span>
+                </button>
+              </div>
+
+              {/* Invite info */}
+              {passwordMode === 'invite' && (
+                <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.06] px-4 py-3">
+                  <p className="text-[12px] leading-5 text-blue-300">
+                    <strong>Hoe werkt het?</strong> De klant ontvangt een e-mail met een link om een eigen wachtwoord te kiezen. Het account is direct actief zodra het wachtwoord is ingesteld.
+                  </p>
+                </div>
+              )}
+
+              {/* Manual password fields */}
+              {passwordMode === 'manual' && (
+                <div className="space-y-3">
+                  <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-4 py-3">
+                    <p className="text-[12px] leading-5 text-amber-300">
+                      <strong>Let op:</strong> Deel het wachtwoord veilig met de klant. Er wordt geen automatische e-mail verstuurd.
+                    </p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-1.5">
+                      <label htmlFor="password" className="text-[11px] font-medium text-[var(--text-soft)]">
+                        Wachtwoord *
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          id="password"
+                          name="password"
+                          required
+                          minLength={8}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Min. 8 tekens"
+                          className="input-dark h-9 w-full px-3 py-1.5 pr-9 text-[12px]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-soft)] transition"
+                          tabIndex={-1}
+                        >
+                          {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid gap-1.5">
+                      <label htmlFor="password_confirm" className="text-[11px] font-medium text-[var(--text-soft)]">
+                        Bevestig wachtwoord *
+                      </label>
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        id="password_confirm"
+                        name="password_confirm"
+                        required
+                        minLength={8}
+                        value={passwordConfirm}
+                        onChange={(e) => setPasswordConfirm(e.target.value)}
+                        placeholder="Herhaal wachtwoord"
+                        className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+                      />
+                    </div>
+                  </div>
+                  {password && passwordConfirm && password !== passwordConfirm && (
+                    <p className="text-[11px] text-red-400">Wachtwoorden komen niet overeen.</p>
+                  )}
+                  {password && password.length > 0 && password.length < 8 && (
+                    <p className="text-[11px] text-amber-400">Wachtwoord moet minimaal 8 tekens bevatten.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+
           </div>
         </div>
 
