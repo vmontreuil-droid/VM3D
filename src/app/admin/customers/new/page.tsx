@@ -208,7 +208,7 @@ async function createCustomer(formData: FormData) {
       process.env.SITE_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
     const redirectTo = baseSiteUrl
-      ? `${baseSiteUrl.replace(/\/$/, '')}/login`
+      ? `${baseSiteUrl.replace(/\/$/, '')}/auth/callback?next=/reset-password`
       : undefined
 
     const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(

@@ -15,6 +15,30 @@ export default function LoginPage() {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const handleForgotPassword = async () => {
+    setMessage('')
+    if (!email) {
+      setMessage('Vul eerst uw e-mailadres in.')
+      return
+    }
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      })
+      if (error) {
+        setMessage(error.message)
+      } else {
+        setMessage('Er is een e-mail verstuurd om uw wachtwoord te herstellen.')
+      }
+    } catch (err) {
+      console.error('Forgot password error:', err)
+      setMessage('Er liep iets fout. Probeer het later opnieuw.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSignIn = async (e?: React.FormEvent) => {
     e?.preventDefault()
     setMessage('')
@@ -139,17 +163,26 @@ export default function LoginPage() {
                 />
               </div>
 
-              <div className="flex items-center mb-2">
-                <input
-                  id="rememberMe"
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={e => setRememberMe(e.target.checked)}
-                  className="mr-2 h-4 w-4 rounded border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-soft)] focus:ring-[var(--accent)]/20"
-                />
-                <label htmlFor="rememberMe" className="text-sm text-[var(--text-soft)] select-none cursor-pointer">
-                  Onthoud mij
-                </label>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <input
+                    id="rememberMe"
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                    className="mr-2 h-4 w-4 rounded border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-soft)] focus:ring-[var(--accent)]/20"
+                  />
+                  <label htmlFor="rememberMe" className="text-sm text-[var(--text-soft)] select-none cursor-pointer">
+                    Onthoud mij
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-xs text-[var(--accent)] hover:text-orange-300 transition"
+                >
+                  Wachtwoord vergeten?
+                </button>
               </div>
 
               <button
