@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, ChevronDown, Mail, MapPin, Users, Crosshair, Plane, PenTool, Target } from 'lucide-react'
+import { ArrowRight, ChevronDown, Mail, MapPin, Users, Crosshair, Plane, PenTool, Target, Menu, X } from 'lucide-react'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Logo from '@/components/logo'
 import { useRef, useState, useEffect, type FormEvent } from 'react'
@@ -139,6 +139,7 @@ export default function HomePage() {
 
   // Dashboard spotlight cycling
   const [spotlightIdx, setSpotlightIdx] = useState(0)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   useEffect(() => {
     const timer = setInterval(() => {
       setSpotlightIdx(prev => (prev + 1) % spotlightSections.length)
@@ -148,6 +149,78 @@ export default function HomePage() {
 
   return (
     <main className="bg-[#080e18] text-white overflow-x-hidden">
+
+      {/* ══════════ NAVBAR ══════════ */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#080e18]/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 sm:px-8 lg:px-16 h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition">
+            <Logo size="md" variant="dark" />
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-8 md:flex">
+            <a href="#oplossingen" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Oplossingen</a>
+            <a href="#ontwerp" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Ontwerp</a>
+            <a href="#agenten" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">Agenten</a>
+            <a href="#faq" className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[var(--accent)] transition">FAQ</a>
+          </nav>
+
+          {/* Desktop CTA */}
+          <div className="hidden items-center gap-3 md:flex">
+            <Link href="/offerte" className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)] hover:text-white transition">
+              Offerte
+            </Link>
+            <Link
+              href="/login"
+              className="rounded-lg border border-[var(--accent)]/30 border-r-[3px] border-r-[var(--accent)] px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:border-[var(--accent)]/60 hover:shadow-lg hover:shadow-[var(--accent)]/20"
+              style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
+            >
+              Inloggen
+            </Link>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 md:hidden transition hover:border-[var(--accent)]/30"
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? <X size={20} className="text-[var(--accent)]" /> : <Menu size={20} className="text-gray-400" />}
+          </button>
+        </div>
+
+        {/* Mobile menu overlay */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden border-t border-white/[0.06] bg-[#080e18]/95 backdrop-blur-xl md:hidden"
+            >
+              <nav className="flex flex-col gap-1 px-4 py-4">
+                <a href="#oplossingen" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Oplossingen</a>
+                <a href="#ontwerp" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Ontwerp</a>
+                <a href="#agenten" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">Agenten</a>
+                <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/[0.04] hover:text-[var(--accent)] transition">FAQ</a>
+                <div className="mt-2 border-t border-white/[0.06] pt-3 flex flex-col gap-2">
+                  <Link href="/offerte" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] hover:bg-[var(--accent)]/[0.06] transition">Offerte Aanvragen</Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg border border-[var(--accent)]/30 border-r-[3px] border-r-[var(--accent)] px-4 py-3 text-center text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all hover:border-[var(--accent)]/60"
+                    style={{ background: 'linear-gradient(135deg, rgba(247,148,29,0.12) 0%, rgba(247,148,29,0.04) 100%)' }}
+                  >
+                    Inloggen
+                  </Link>
+                </div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
 
       {/* ══════════ HERO — Full-screen like Unicontrol ══════════ */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
@@ -606,7 +679,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ SINGLE POINT OF CONNECTION ══════════ */}
-      <section className="relative bg-[#0a1220] py-16 sm:py-24 lg:py-36 overflow-hidden">
+      <section id="oplossingen" className="relative bg-[#0a1220] py-16 sm:py-24 lg:py-36 overflow-hidden scroll-mt-16">
         {/* Topographic contour background */}
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 1400 800" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -946,7 +1019,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ ONTWERP PLANNEN (text left, illustration right) ══════════ */}
-      <section className="relative bg-[#080e18] py-16 sm:py-24 lg:py-36 overflow-hidden">
+      <section id="ontwerp" className="relative bg-[#080e18] py-16 sm:py-24 lg:py-36 overflow-hidden scroll-mt-16">
         {/* Topographic contour background */}
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full opacity-[0.10]" viewBox="0 0 1400 800" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -1422,7 +1495,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ 3D AGENTS NETWORK + PARTNER SIGNUP ══════════ */}
-      <section className="relative bg-[#080e18] py-16 sm:py-24 lg:py-36 overflow-hidden">
+      <section id="agenten" className="relative bg-[#080e18] py-16 sm:py-24 lg:py-36 overflow-hidden scroll-mt-16">
         {/* Agent network illustration background */}
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1400 800" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -1764,7 +1837,7 @@ export default function HomePage() {
       </section>
 
       {/* ══════════ FAQ (like Unicontrol — accordion + image thumbnails) ══════════ */}
-      <section className="relative bg-[#0a1220] py-16 sm:py-24 lg:py-36 overflow-hidden">
+      <section id="faq" className="relative bg-[#0a1220] py-16 sm:py-24 lg:py-36 overflow-hidden scroll-mt-16">
         {/* Topographic contour background */}
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full opacity-[0.07]" viewBox="0 0 1400 800" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
