@@ -186,8 +186,9 @@ export default async function AdminOpenMachinePage({
         </div>
 
         {/* Locatie */}
-        {(machine.latitude != null && machine.longitude != null) && (
-          <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 shadow-sm">
+        <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 shadow-sm">
+          {(machine.latitude != null && machine.longitude != null) ? (
+          <>
             <div className="flex flex-wrap items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
                 <MapPin className="h-5 w-5 text-purple-400" />
@@ -230,8 +231,32 @@ export default async function AdminOpenMachinePage({
                 height={320}
               />
             </div>
-          </section>
-        )}
+          </>
+          ) : (
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
+                <MapPin className="h-5 w-5 text-purple-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
+                  GPS-locatie
+                </p>
+                <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
+                  Nog geen locatie ontvangen
+                </p>
+                <p className="mt-1 text-[11px] leading-relaxed text-[var(--text-soft)]">
+                  De tablet stuurt GPS-coördinaten door zodra <code className="rounded bg-[var(--bg-card-2)] px-1">termux-location</code> werkt. Vereist:
+                </p>
+                <ul className="mt-1 list-inside list-disc text-[11px] leading-relaxed text-[var(--text-soft)]">
+                  <li>Termux:API APK geïnstalleerd (F-Droid) naast Termux</li>
+                  <li><code className="rounded bg-[var(--bg-card-2)] px-1">pkg install termux-api</code></li>
+                  <li>Locatie-permissie toegestaan voor Termux:API in Android-instellingen</li>
+                  <li>Herinstalleer het sync-script om de nieuwe GPS-logica op te pikken</li>
+                </ul>
+              </div>
+            </div>
+          )}
+        </section>
 
         {/* Werven & bestanden */}
         <MachineTransferPanel
