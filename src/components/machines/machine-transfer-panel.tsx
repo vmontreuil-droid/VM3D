@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw, FileIcon, ChevronRight, ChevronDown } from 'lucide-react'
+import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw, FileIcon, ChevronRight, ChevronDown, Download, FileArchive } from 'lucide-react'
 
 type Transfer = {
   id: number
@@ -76,6 +76,8 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
   const [uploading, setUploading] = useState(false)
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const importInputRef = useRef<HTMLInputElement | null>(null)
+  const [importing, setImporting] = useState(false)
 
   const [tabletListing, setTabletListing] = useState<TabletListing | null>(null)
   const [tabletListingAt, setTabletListingAt] = useState<string | null>(null)
@@ -193,6 +195,47 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
     }
   }
 
+  async function handleImportZip(files: FileList | null) {
+    const zipFile = files && files[0]
+    if (!zipFile) return
+    setImporting(true)
+    setMsg(null)
+    const fd = new FormData()
+    fd.append('file', zipFile)
+    try {
+      const res = await fetch(`/api/machines/${machineId}/werf/import`, {
+        method: 'POST',
+        body: fd,
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setMsg({ ok: false, text: data.error || 'Import mislukt.' })
+      } else {
+        setMsg({
+          ok: true,
+          text: `Werf "${data.werf}" geïmporteerd (${data.uploaded} bestand(en)).`,
+        })
+        setSelectedWerf(data.werf)
+        load()
+      }
+    } catch (err) {
+      setMsg({
+        ok: false,
+        text: err instanceof Error ? err.message : 'Import mislukt.',
+      })
+    } finally {
+      setImporting(false)
+      if (importInputRef.current) importInputRef.current.value = ''
+    }
+  }
+
+  function handleExportWerf(werf: string) {
+    window.open(
+      `/api/machines/${machineId}/werf/${encodeURIComponent(werf)}/export`,
+      '_blank',
+    )
+  }
+
   return (
     <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 space-y-4">
       <div>
@@ -236,19 +279,31 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
           ) : (
             <div className="flex flex-wrap gap-1.5">
               {werven.map((w) => (
-                <button
+                <div
                   key={w}
-                  type="button"
-                  onClick={() => setSelectedWerf(selectedWerf === w ? '' : w)}
-                  className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition ${
+                  className={`group inline-flex items-center gap-0.5 rounded-lg border text-[11px] font-medium transition ${
                     selectedWerf === w
                       ? 'border-[var(--accent)] bg-[var(--accent)]/15 text-[var(--accent)]'
                       : 'border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] hover:border-[var(--accent)]/50'
                   }`}
                 >
-                  <Folder className="h-3 w-3" />
-                  {w}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedWerf(selectedWerf === w ? '' : w)}
+                    className="inline-flex items-center gap-1 pl-2 py-1"
+                  >
+                    <Folder className="h-3 w-3" />
+                    {w}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExportWerf(w)}
+                    title="Exporteer werf als .zip"
+                    className="px-1.5 py-1 text-[var(--text-muted)] opacity-60 hover:text-[var(--accent)] hover:opacity-100"
+                  >
+                    <Download className="h-3 w-3" />
+                  </button>
+                </div>
               ))}
             </div>
           )}
@@ -270,6 +325,29 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
               <FolderPlus className="h-3 w-3" />
               {creatingWerf ? 'Aanmaken...' : 'Aanmaken'}
             </button>
+          </div>
+
+          <div className="flex items-center gap-2 pt-1">
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".zip"
+              onChange={(e) => handleImportZip(e.target.files)}
+              disabled={importing}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => importInputRef.current?.click()}
+              disabled={importing}
+              className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-50"
+            >
+              <FileArchive className="h-3 w-3" />
+              {importing ? 'Importeren...' : 'Werf importeren (.zip)'}
+            </button>
+            <span className="text-[10px] text-[var(--text-muted)]">
+              Bestanden uit het zip-bestand worden in een nieuwe werf geplaatst.
+            </span>
           </div>
         </div>
       )}

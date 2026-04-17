@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
 
@@ -240,12 +240,20 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                       )}
                     </td>
                     <td className="px-3 py-2.5 text-right">
-                      <Link
-                        href={`/admin/machines/${m.id}/edit`}
-                        className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                      >
-                        <Pencil className="h-3 w-3" /> Bewerk
-                      </Link>
+                      <div className="inline-flex items-center gap-1.5">
+                        <Link
+                          href={`/admin/machines/${m.id}`}
+                          className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                        >
+                          <FolderOpen className="h-3 w-3" /> Openen
+                        </Link>
+                        <Link
+                          href={`/admin/machines/${m.id}/edit`}
+                          className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                        >
+                          <Pencil className="h-3 w-3" /> Bewerk
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 )
