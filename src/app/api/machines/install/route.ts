@@ -134,6 +134,44 @@ if [ -z "$HB" ]; then
 fi
 echo "  OK"
 
+# ---------- 4b. GPS-setup (termux-location) --------------------------------
+echo "[4b/5] GPS-setup..."
+if ! command -v termux-location >/dev/null 2>&1; then
+  echo "  WAARSCHUWING: termux-location ontbreekt (pkg termux-api niet geïnstalleerd)"
+  echo "  -> GPS zal NIET werken tot dit opgelost is:"
+  echo "     pkg install termux-api"
+else
+  # Test of Termux:API APK (de companion Android-app) aanwezig is.
+  # Zonder APK print termux-location een foutmelding en exit niet-nul.
+  GPS_TEST=$(timeout 10 termux-location -p network -r last 2>&1 || true)
+  if printf '%s' "$GPS_TEST" | grep -qiE 'not installed|not found|No such file'; then
+    echo "  LET OP: Termux:API APK ontbreekt op dit toestel."
+    echo "  De Termux:API Android-app moet geïnstalleerd zijn naast Termux."
+    echo "  Installeer via F-Droid: https://f-droid.org/packages/com.termux.api/"
+    echo "  (de gewone Termux-app alleen is niet genoeg voor GPS)"
+  elif printf '%s' "$GPS_TEST" | grep -qiE 'permission|denied'; then
+    echo "  Android vraagt nu locatie-permissie voor Termux:API..."
+    echo "  -> Tik in het Android-popup op 'Toestaan' (bij voorkeur 'Altijd')"
+    # Forceer de prompt door een live-fix op te vragen (triggert Android dialog)
+    timeout 15 termux-location -p network >/dev/null 2>&1 || true
+    sleep 2
+    GPS_RETRY=$(timeout 8 termux-location -p network -r last 2>&1 || true)
+    if printf '%s' "$GPS_RETRY" | grep -qE '"latitude"'; then
+      echo "  OK: locatie-permissie verleend — GPS werkt"
+    else
+      echo "  Nog geen permissie — open later handmatig Android-instellingen:"
+      echo "    Apps > Termux:API > Permissies > Locatie = Toestaan"
+    fi
+  elif printf '%s' "$GPS_TEST" | grep -qE '"latitude"'; then
+    echo "  OK: GPS werkt — coordinaten worden elke ~5 min doorgestuurd"
+  else
+    # Geen laatste-bekende positie maar geen harde fout: probeer verse fix kort
+    echo "  Geen bekende positie — vraag verse GPS-fix (max 15s, op dak of bij raam best)"
+    timeout 15 termux-location -p network >/dev/null 2>&1 || true
+    echo "  OK: termux-location is bereikbaar — GPS volgt zodra fix beschikbaar is"
+  fi
+fi
+
 # ---------- 5. sync.sh schrijven + boot-hook -------------------------------
 echo "[5/5] sync.sh installeren..."
 pkill -f "$HOME/sync.sh" 2>/dev/null || true
