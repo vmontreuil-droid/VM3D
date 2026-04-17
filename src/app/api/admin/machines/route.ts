@@ -57,12 +57,6 @@ export async function POST(req: Request) {
     let connectionCode = String(body.connection_code || '').trim().toUpperCase()
     let connectionPassword = String(body.connection_password || '')
 
-    if (!ownerUserId) {
-      return NextResponse.json(
-        { error: 'Selecteer eerst een klant.' },
-        { status: 400 }
-      )
-    }
     if (!name) {
       return NextResponse.json(
         { error: 'Naam is verplicht.' },
@@ -99,25 +93,27 @@ export async function POST(req: Request) {
 
     const adminSupabase = createAdminClient()
 
-    // Verify customer exists and is a client
-    const { data: ownerProfile, error: ownerError } = await adminSupabase
-      .from('profiles')
-      .select('id')
-      .eq('id', ownerUserId)
-      .single()
-    if (ownerError || !ownerProfile) {
-      return NextResponse.json(
-        { error: 'Klant niet gevonden.' },
-        { status: 400 }
-      )
+    // Verify customer exists if provided (optional — machines can exist without an owner)
+    if (ownerUserId) {
+      const { data: ownerProfile, error: ownerError } = await adminSupabase
+        .from('profiles')
+        .select('id')
+        .eq('id', ownerUserId)
+        .single()
+      if (ownerError || !ownerProfile) {
+        return NextResponse.json(
+          { error: 'Klant niet gevonden.' },
+          { status: 400 }
+        )
+      }
     }
 
-    // Optional project must belong to that customer
+    // Optional project must belong to that customer (only if both set)
     let projectId: number | null = null
     if (projectIdRaw) {
       projectId = parseInt(String(projectIdRaw), 10)
       if (Number.isNaN(projectId)) projectId = null
-      if (projectId !== null) {
+      if (projectId !== null && ownerUserId) {
         const { data: proj } = await adminSupabase
           .from('projects')
           .select('id, user_id')
@@ -149,7 +145,7 @@ export async function POST(req: Request) {
     const { data, error } = await adminSupabase
       .from('machines')
       .insert({
-        user_id: ownerUserId,
+        user_id: ownerUserId || null,
         project_id: projectId,
         name,
         machine_type: machineType,

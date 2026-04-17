@@ -146,17 +146,13 @@ export default function NewMachineForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
-    if (!customer) {
-      setError('Selecteer eerst een klant.')
-      return
-    }
     setSubmitting(true)
     try {
       const res = await fetch('/api/admin/machines', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: customer.id,
+          userId: customer?.id || null,
           name,
           machine_type: machineType,
           brand,
@@ -173,7 +169,7 @@ export default function NewMachineForm() {
         setError(data.error || 'Kon machine niet aanmaken.')
       } else {
         setCreated(data.machine)
-        setShareEmail(customer.email || '')
+        setShareEmail(customer?.email || '')
         setShareMethod(null)
         setShareResult(null)
       }
@@ -413,7 +409,7 @@ export default function NewMachineForm() {
         {/* Customer section */}
         <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 space-y-3">
           <h2 className="text-sm font-semibold text-[var(--text-main)]">
-            1. Klant
+            1. Klant <span className="text-[10px] font-normal text-[var(--text-muted)]">(optioneel)</span>
           </h2>
           {!showQuickCreate ? (
             <>
@@ -663,7 +659,7 @@ export default function NewMachineForm() {
 
         <button
           type="submit"
-          disabled={submitting || !customer || showQuickCreate}
+          disabled={submitting || showQuickCreate}
           className="w-full rounded-lg bg-[var(--accent)] px-4 py-3 text-sm font-semibold text-white hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="mr-1 inline h-4 w-4" />
