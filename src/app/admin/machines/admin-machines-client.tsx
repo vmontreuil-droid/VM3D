@@ -73,14 +73,14 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
 
   async function handleDelete(m: MachineWithOwner) {
     const label = `${m.brand} ${m.model} (${m.name})`
-    if (!confirm(`Machine definitief verwijderen?\n\n${label}\n\nDit verwijdert ook alle werven, bestandsoverdrachten en commands van deze machine.`)) {
+    if (!confirm(tt.deletePrompt.replace('{label}', label))) {
       return
     }
     setDeletingId(m.id)
     try {
       const res = await fetch(`/api/machines/${m.id}`, { method: 'DELETE' })
       const j = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(j.error || 'Verwijderen mislukt')
+      if (!res.ok) throw new Error(j.error || tt.deleteFailed)
       router.refresh()
     } catch (e) {
       alert('Fout: ' + (e as Error).message)
@@ -163,7 +163,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
               <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.13),rgba(168,85,247,0.04))] px-4 py-3 min-w-[120px]">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Graders</p>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.graders}</p>
                     <p className="mt-1 text-2xl font-bold text-purple-500">{graderCount}</p>
                   </div>
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/15">
@@ -180,12 +180,12 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
       <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
         <div className="flex items-center gap-2 border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2">
           <MapPin className="h-4 w-4 text-purple-400" />
-          <span className="text-xs font-semibold text-[var(--text-main)]">Locaties</span>
+          <span className="text-xs font-semibold text-[var(--text-main)]">{tt.locations}</span>
           <span className="ml-auto flex items-center gap-3 text-[10px] text-[var(--text-muted)]">
-            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500" /> Online</span>
-            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500" /> Offline</span>
+            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500" /> {tt.online}</span>
+            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500" /> {tt.offline}</span>
             <span>·</span>
-            <span>{locatedCount} van {machines.length} machine(s) met GPS</span>
+            <span>{tt.gpsCount.replace('{count}', String(locatedCount)).replace('{total}', String(machines.length))}</span>
           </span>
         </div>
         <div className="p-3">
@@ -203,7 +203,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             href="/admin/machines/new"
             className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-3 py-1.5 text-[11px] font-semibold text-[var(--accent)] shadow-[0_0_0_1px_rgba(251,146,60,0.05)] transition hover:border-[var(--accent)]/70 hover:bg-[var(--accent)]/15 hover:shadow-[0_0_14px_-4px_rgba(251,146,60,0.55)]"
           >
-            <Plus className="h-3.5 w-3.5" /> Nieuwe machine
+            <Plus className="h-3.5 w-3.5" /> {tt.newMachine}
           </Link>
         </div>
         <div className="px-4 py-3 flex flex-wrap gap-3">
@@ -225,7 +225,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             <option value="all">{tt.allTypes}</option>
             <option value="excavator">{tt.cranes}</option>
             <option value="bulldozer">{tt.bulldozers}</option>
-            <option value="grader">Graders</option>
+            <option value="grader">{tt.graders}</option>
           </select>
           <select
             value={filterBrand}
@@ -306,7 +306,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                       </div>
                     </td>
                     <td className="px-3 py-2.5 text-[var(--text-soft)]">
-                      {m.machine_type === 'bulldozer' ? tt.typeBulldozer : m.machine_type === 'grader' ? 'Grader' : tt.typeCrane}
+                      {m.machine_type === 'bulldozer' ? tt.typeBulldozer : m.machine_type === 'grader' ? tt.typeGrader : tt.typeCrane}
                     </td>
                     <td className="px-3 py-2.5 font-medium text-[var(--text-main)]">
                       {formatTonnage(m.tonnage)}
@@ -346,16 +346,16 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                           href={`/admin/machines/${m.id}/edit`}
                           className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
                         >
-                          <Pencil className="h-3 w-3" /> Bewerk
+                          <Pencil className="h-3 w-3" /> {tt.actionEdit}
                         </Link>
                         <button
                           type="button"
                           onClick={() => handleDelete(m)}
                           disabled={deletingId === m.id}
-                          title="Machine verwijderen"
+                          title={tt.deleteTitle}
                           className="inline-flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                         >
-                          <Trash2 className="h-3 w-3" /> {deletingId === m.id ? '…' : 'Verwijder'}
+                          <Trash2 className="h-3 w-3" /> {deletingId === m.id ? '…' : tt.actionDelete}
                         </button>
                       </div>
                     </td>

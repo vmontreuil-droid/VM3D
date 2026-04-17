@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useT } from '@/i18n/context'
 
 export type MachineMapPoint = {
   id: number
@@ -37,6 +38,9 @@ function pinSvg(online: boolean): string {
 }
 
 export default function MachinesMapInner({ points, height = 320 }: Props) {
+  const { t } = useT()
+  const tt = t.adminMachines
+  const td = t.adminMachineDetail
   const [mounted, setMounted] = useState(false)
   const [MapContainer, setMapContainer] = useState<any>(null)
   const [TileLayer, setTileLayer] = useState<any>(null)
@@ -89,7 +93,7 @@ export default function MachinesMapInner({ points, height = 320 }: Props) {
   if (!mounted || !MapContainer || !TileLayer || !Marker || !Popup || !useMap) {
     return (
       <div className="flex items-center justify-center text-xs text-[var(--text-soft)]" style={{ height }}>
-        Kaart laden…
+        …
       </div>
     )
   }
@@ -97,7 +101,7 @@ export default function MachinesMapInner({ points, height = 320 }: Props) {
   if (!safe.length) {
     return (
       <div className="flex items-center justify-center text-xs text-[var(--text-soft)]" style={{ height }}>
-        Nog geen machines met GPS-locatie — de tablet stuurt dit door zodra <code>termux-location</code> permissie heeft.
+        {tt.mapEmpty}
       </div>
     )
   }
@@ -152,19 +156,19 @@ export default function MachinesMapInner({ points, height = 320 }: Props) {
                 <p className="text-[11px] opacity-70">{p.name}</p>
                 <p className="mt-1">
                   <span className={p.is_online ? 'text-green-600' : 'text-red-600'}>
-                    {p.is_online ? '● Online' : '● Offline'}
+                    {p.is_online ? `● ${tt.online}` : `● ${tt.offline}`}
                   </span>
                 </p>
                 {p.location_updated_at && (
                   <p className="text-[10px] opacity-60">
-                    Locatie: {new Date(p.location_updated_at).toLocaleString()}
+                    {td.reportedAt.replace('{when}', new Date(p.location_updated_at).toLocaleString())}
                   </p>
                 )}
                 <a
                   href={`/admin/machines/${p.id}`}
                   className="mt-1 block text-[11px] text-[var(--accent)] underline"
                 >
-                  Open machine →
+                  {td.edit} →
                 </a>
               </div>
             </Popup>

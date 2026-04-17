@@ -1,5 +1,6 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -12,6 +13,8 @@ import {
   formatTonnage,
 } from '@/components/machines/machine-icons'
 import { ArrowLeft, Pencil, Wifi, WifiOff, Hash, Building2, Radio, Construction, MapPin } from 'lucide-react'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export default async function AdminOpenMachinePage({
   params,
@@ -21,6 +24,11 @@ export default async function AdminOpenMachinePage({
   const { id } = await params
   const machineId = parseInt(id, 10)
   if (Number.isNaN(machineId)) notFound()
+
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale).adminMachineDetail
 
   const supabase = await createClient()
   const {
@@ -61,14 +69,14 @@ export default async function AdminOpenMachinePage({
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
           <Link href="/admin" className="hover:text-[var(--text-main)]">
-            Admin
+            {t.breadcrumbAdmin}
           </Link>
           <span>/</span>
           <Link
             href="/admin/machines"
             className="hover:text-[var(--text-main)]"
           >
-            Machines
+            {t.breadcrumbMachines}
           </Link>
           <span>/</span>
           <span className="text-[var(--text-main)]">
@@ -87,13 +95,13 @@ export default async function AdminOpenMachinePage({
                 href="/admin/machines"
                 className="btn-secondary text-xs"
               >
-                <ArrowLeft className="inline h-3 w-3 mr-1" /> Terug
+                <ArrowLeft className="inline h-3 w-3 mr-1" /> {t.back}
               </Link>
               <Link
                 href={`/admin/machines/${machine.id}/edit`}
                 className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
               >
-                <Pencil className="h-3 w-3" /> Bewerken
+                <Pencil className="h-3 w-3" /> {t.edit}
               </Link>
             </div>
             <div className="relative mt-3 flex flex-wrap items-center gap-3">
@@ -105,7 +113,7 @@ export default async function AdminOpenMachinePage({
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-                  Machine
+                  {t.eyebrow}
                 </p>
                 <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   <span>
@@ -123,25 +131,25 @@ export default async function AdminOpenMachinePage({
                   )}
                   {machine.is_online ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                      <Wifi className="h-3 w-3" /> Online
+                      <Wifi className="h-3 w-3" /> {t.online}
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
-                      <WifiOff className="h-3 w-3" /> Offline
+                      <WifiOff className="h-3 w-3" /> {t.offline}
                     </span>
                   )}
                 </h1>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  {machine.machine_type === 'bulldozer' ? 'Bulldozer' : machine.machine_type === 'grader' ? 'Grader' : 'Kraan'}
+                  {machine.machine_type === 'bulldozer' ? t.typeBulldozer : machine.machine_type === 'grader' ? t.typeGrader : t.typeCrane}
                   {machine.tonnage
                     ? ` · ${formatTonnage(Number(machine.tonnage))}`
                     : ''}
-                  {machine.year ? ` · Bouwjaar ${machine.year}` : ''}
+                  {machine.year ? ` · ${t.year.replace('{year}', String(machine.year))}` : ''}
                   {owner
-                    ? ` · Klant: ${owner.company_name || owner.full_name}`
-                    : ' · Geen klant'}
+                    ? ` · ${t.customer.replace('{name}', String(owner.company_name || owner.full_name || ''))}`
+                    : ` · ${t.noCustomer}`}
                   {lastSeen
-                    ? ` · Laatst gezien ${lastSeen.toLocaleString()}`
+                    ? ` · ${t.lastSeen.replace('{when}', lastSeen.toLocaleString())}`
                     : ''}
                 </p>
               </div>
@@ -153,7 +161,7 @@ export default async function AdminOpenMachinePage({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
             <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Hash className="h-3 w-3" /> Code
+              <Hash className="h-3 w-3" /> {t.code}
             </p>
             <p className="mt-1 font-mono text-sm font-bold text-emerald-400">
               {machine.connection_code}
@@ -161,7 +169,7 @@ export default async function AdminOpenMachinePage({
           </div>
           <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
             <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Building2 className="h-3 w-3" /> Klant
+              <Building2 className="h-3 w-3" /> {t.customerLabel}
             </p>
             <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
               {owner?.company_name || owner?.full_name || '—'}
@@ -169,7 +177,7 @@ export default async function AdminOpenMachinePage({
           </div>
           <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
             <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Radio className="h-3 w-3" /> Besturing
+              <Radio className="h-3 w-3" /> {t.guidance}
             </p>
             <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
               {guidance || '—'}
@@ -177,7 +185,7 @@ export default async function AdminOpenMachinePage({
           </div>
           <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
             <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Construction className="h-3 w-3" /> Tonnage
+              <Construction className="h-3 w-3" /> {t.tonnage}
             </p>
             <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
               {machine.tonnage ? formatTonnage(Number(machine.tonnage)) : '—'}
@@ -195,7 +203,7 @@ export default async function AdminOpenMachinePage({
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
-                  GPS-locatie
+                  {t.gpsLocation}
                 </p>
                 <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
                   {Number(machine.latitude).toFixed(6)}, {Number(machine.longitude).toFixed(6)}
@@ -203,7 +211,7 @@ export default async function AdminOpenMachinePage({
                 <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                   {machine.location_accuracy != null && `±${Math.round(Number(machine.location_accuracy))} m · `}
                   {machine.location_updated_at
-                    ? `Gerapporteerd ${new Date(machine.location_updated_at).toLocaleString()}`
+                    ? t.reportedAt.replace('{when}', new Date(machine.location_updated_at).toLocaleString())
                     : ''}
                 </p>
               </div>
@@ -213,7 +221,7 @@ export default async function AdminOpenMachinePage({
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 rounded-lg bg-purple-500/15 px-3 py-1.5 text-xs font-semibold text-purple-400 hover:bg-purple-500/25"
               >
-                <MapPin className="h-3 w-3" /> Open in Google Maps
+                <MapPin className="h-3 w-3" /> {t.openInMaps}
               </a>
             </div>
             <div className="mt-3 overflow-hidden rounded-lg border border-[var(--border-soft)]">
@@ -239,19 +247,19 @@ export default async function AdminOpenMachinePage({
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
-                  GPS-locatie
+                  {t.gpsLocation}
                 </p>
                 <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
-                  Nog geen locatie ontvangen
+                  {t.noLocationYet}
                 </p>
                 <p className="mt-1 text-[11px] leading-relaxed text-[var(--text-soft)]">
-                  De tablet stuurt GPS-coördinaten door zodra <code className="rounded bg-[var(--bg-card-2)] px-1">termux-location</code> werkt. Vereist:
+                  {t.gpsIntro}
                 </p>
                 <ul className="mt-1 list-inside list-disc text-[11px] leading-relaxed text-[var(--text-soft)]">
-                  <li>Termux:API APK geïnstalleerd (F-Droid) naast Termux</li>
-                  <li><code className="rounded bg-[var(--bg-card-2)] px-1">pkg install termux-api</code></li>
-                  <li>Locatie-permissie toegestaan voor Termux:API in Android-instellingen</li>
-                  <li>Herinstalleer het sync-script om de nieuwe GPS-logica op te pikken</li>
+                  <li>{t.gpsReq1}</li>
+                  <li>{t.gpsReq2Prefix}<code className="rounded bg-[var(--bg-card-2)] px-1">pkg install termux-api</code></li>
+                  <li>{t.gpsReq3}</li>
+                  <li>{t.gpsReq4}</li>
                 </ul>
               </div>
             </div>
