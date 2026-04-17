@@ -8,35 +8,56 @@ export type TicketStatus =
 export type TicketPriority = 'laag' | 'normaal' | 'hoog' | 'urgent'
 export type TicketSlaState = 'on_track' | 'at_risk' | 'overdue' | 'paused' | 'resolved'
 
-export function getTicketStatusLabel(status: string | null) {
+type TicketDictShape = {
+  adminTickets?: {
+    statusNew?: string
+    statusInProgress?: string
+    statusWaitingCustomer?: string
+    statusDone?: string
+    statusClosed?: string
+    priorityLow?: string
+    priorityNormal?: string
+    priorityHigh?: string
+    priorityUrgent?: string
+  }
+  ticketSla?: {
+    met?: string
+    paused?: string
+    overdue?: string
+    atRisk?: string
+    onTrack?: string
+  }
+}
+
+export function getTicketStatusLabel(status: string | null, t?: TicketDictShape) {
   switch (status) {
     case 'nieuw':
-      return 'Nieuw'
+      return t?.adminTickets?.statusNew ?? 'Nieuw'
     case 'in_behandeling':
-      return 'In behandeling'
+      return t?.adminTickets?.statusInProgress ?? 'In behandeling'
     case 'wacht_op_klant':
-      return 'Wacht op klant'
+      return t?.adminTickets?.statusWaitingCustomer ?? 'Wacht op klant'
     case 'afgerond':
-      return 'Afgerond'
+      return t?.adminTickets?.statusDone ?? 'Afgerond'
     case 'gesloten':
-      return 'Gesloten'
+      return t?.adminTickets?.statusClosed ?? 'Gesloten'
     default:
       return 'Onbekend'
   }
 }
 
-export function getTicketPriorityLabel(priority: string | null) {
+export function getTicketPriorityLabel(priority: string | null, t?: TicketDictShape) {
   switch (priority) {
     case 'laag':
-      return 'Laag'
+      return t?.adminTickets?.priorityLow ?? 'Laag'
     case 'normaal':
-      return 'Normaal'
+      return t?.adminTickets?.priorityNormal ?? 'Normaal'
     case 'hoog':
-      return 'Hoog'
+      return t?.adminTickets?.priorityHigh ?? 'Hoog'
     case 'urgent':
-      return 'Urgent'
+      return t?.adminTickets?.priorityUrgent ?? 'Urgent'
     default:
-      return 'Normaal'
+      return t?.adminTickets?.priorityNormal ?? 'Normaal'
   }
 }
 
@@ -128,19 +149,19 @@ export function getTicketSlaState(input: {
   return 'on_track' as TicketSlaState
 }
 
-export function getTicketSlaLabel(state: TicketSlaState) {
+export function getTicketSlaLabel(state: TicketSlaState, t?: TicketDictShape) {
   switch (state) {
     case 'resolved':
-      return 'SLA voldaan'
+      return t?.ticketSla?.met ?? 'SLA voldaan'
     case 'paused':
-      return 'SLA gepauzeerd'
+      return t?.ticketSla?.paused ?? 'SLA gepauzeerd'
     case 'overdue':
-      return 'SLA overtijd'
+      return t?.ticketSla?.overdue ?? 'SLA overtijd'
     case 'at_risk':
-      return 'SLA risico'
+      return t?.ticketSla?.atRisk ?? 'SLA risico'
     case 'on_track':
     default:
-      return 'SLA op schema'
+      return t?.ticketSla?.onTrack ?? 'SLA op schema'
   }
 }
 

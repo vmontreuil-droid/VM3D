@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowUpDown, Edit, Eye } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import AdminCustomerActions from './admin-customer-actions'
+import { useT } from '@/i18n/context'
 
 type CustomerItem = {
   id: string
@@ -35,12 +36,12 @@ type Props = {
   embedded?: boolean
 }
 
-function getCustomerName(customer: CustomerItem) {
+function getCustomerName(customer: CustomerItem, fallback = 'Onbekende klant') {
   return (
     customer.company_name ||
     customer.full_name ||
     customer.email ||
-    'Onbekende klant'
+    fallback
   )
 }
 
@@ -65,10 +66,11 @@ function getSortableValue(customer: CustomerItem, key: SortKey) {
   }
 }
 
-function formatDate(value?: string | null) {
+function formatDate(value: string | null | undefined, locale: string) {
   if (!value) return '—'
   try {
-    return new Date(value).toLocaleDateString('nl-BE')
+    const loc = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
+    return new Date(value).toLocaleDateString(loc)
   } catch {
     return '—'
   }
@@ -95,6 +97,7 @@ export default function CustomerList({
   hideResultsUntilSearch = false,
   embedded = false,
 }: Props) {
+  const { t, locale } = useT()
   const [search, setSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortKey, setSortKey] = useState<SortKey>('name')
@@ -175,21 +178,20 @@ export default function CustomerList({
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                {embedded ? 'Snelle zoekopdracht' : 'Klantenlijst'}
+                {embedded ? t.customerList.quickSearch : t.customerList.customerListTitle}
               </p>
               <h2 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {embedded ? 'Klanten' : 'Alle klanten'}
+                {embedded ? t.customerList.customers : t.customerList.allCustomers}
               </h2>
               <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                Zoek, sorteer en open klantfiches in dezelfde compacte stijl als
-                de snelle zoekresultaten.
+                {t.customerList.searchDesc}
               </p>
             </div>
 
             {embedded ? null : (
               <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-right">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  Resultaten
+                  {t.customerList.results}
                 </p>
                 <p className="mt-1 text-base font-semibold text-[var(--text-main)]">
                   {visibleCustomers.length}
@@ -206,7 +208,7 @@ export default function CustomerList({
                 setSearch(e.target.value)
                 setCurrentPage(1)
               }}
-              placeholder="Zoek klant, btw, stad, mail..."
+              placeholder={t.customerList.searchPlaceholder}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
@@ -215,12 +217,12 @@ export default function CustomerList({
               onChange={(e) => handleSort(e.target.value as SortKey)}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             >
-              <option value="name">Sorteer op naam</option>
-              <option value="city">Sorteer op stad</option>
-              <option value="email">Sorteer op e-mail</option>
-              <option value="vat_number">Sorteer op btw</option>
-              <option value="project_count">Sorteer op werven</option>
-              <option value="last_project_at">Sorteer op activiteit</option>
+              <option value="name">{t.customerList.sortByName}</option>
+              <option value="city">{t.customerList.sortByCity}</option>
+              <option value="email">{t.customerList.sortByEmail}</option>
+              <option value="vat_number">{t.customerList.sortByVat}</option>
+              <option value="project_count">{t.customerList.sortBySites}</option>
+              <option value="last_project_at">{t.customerList.sortByActivity}</option>
             </select>
 
             <button
@@ -232,7 +234,7 @@ export default function CustomerList({
               className="btn-secondary btn-sm w-full"
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
-              <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
+              <span>{sortDirection === 'asc' ? t.customerList.asc : t.customerList.desc}</span>
             </button>
 
             <button
@@ -240,7 +242,7 @@ export default function CustomerList({
               onClick={resetFilters}
               className="btn-secondary btn-sm w-full"
             >
-              Reset
+              {t.customerList.reset}
             </button>
           </div>
         </div>
@@ -252,20 +254,20 @@ export default function CustomerList({
             <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                  Resultaten
+                  {t.customerList.results}
                 </p>
                 <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
-                  Klanten
+                  {t.customerList.customers}
                 </h4>
               </div>
               <p className="text-[10px] text-[var(--text-soft)]">
-                {visibleCustomers.length} gevonden
+                {visibleCustomers.length} {t.customerList.found}
               </p>
             </div>
 
             {visibleCustomers.length === 0 ? (
               <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
-                Geen klanten gevonden voor deze filters.
+                {t.customerList.noCustomersFound}
               </div>
             ) : (
               <div className="divide-y divide-[var(--border-soft)]">
@@ -277,32 +279,32 @@ export default function CustomerList({
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
-                          {getCustomerName(customer)}
+                          {getCustomerName(customer, t.customerList.unknownCustomer)}
                         </p>
                         <span className="badge-neutral px-2 py-0.5 text-[10px] font-semibold">
-                          {customer.project_count || 0} werven
+                          {customer.project_count || 0} {t.customerList.sites}
                         </span>
                         <span
                           className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                             customer.is_active === false ? 'badge-warning' : 'badge-success'
                           }`}
                         >
-                          {customer.is_active === false ? 'Inactief' : 'Actief'}
+                          {customer.is_active === false ? t.customerList.inactive : t.customerList.active}
                         </span>
                       </div>
 
                       <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                         {[customer.phone, customer.email, customer.city]
                           .filter(Boolean)
-                          .join(' · ') || 'Geen extra gegevens'}
+                          .join(' · ') || t.customerList.noExtraData}
                       </p>
 
                       <div className="mt-1.5 flex flex-wrap gap-1.5 text-[10px] text-[var(--text-soft)]">
                         <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                          BTW: {customer.vat_number || '—'}
+                          {t.customerList.vat}: {customer.vat_number || '—'}
                         </span>
                         <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                          Laatste activiteit: {formatDate(customer.last_project_at)}
+                          {t.customerList.lastActivity}: {formatDate(customer.last_project_at, locale)}
                         </span>
                       </div>
                     </div>
@@ -315,7 +317,7 @@ export default function CustomerList({
                         <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
                           <Eye className="h-3 w-3" />
                         </span>
-                        <span className="pr-1">Open</span>
+                        <span className="pr-1">{t.customerList.open}</span>
                         <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                       </Link>
 
@@ -326,13 +328,13 @@ export default function CustomerList({
                         <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
                           <Edit className="h-3 w-3" />
                         </span>
-                        <span className="pr-1">Bewerk</span>
+                        <span className="pr-1">{t.customerList.edit}</span>
                         <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
                       </Link>
 
                       <AdminCustomerActions
                         customerId={customer.id}
-                        customerName={getCustomerName(customer)}
+                        customerName={getCustomerName(customer, t.customerList.unknownCustomer)}
                         currentActive={customer.is_active}
                         compact
                       />

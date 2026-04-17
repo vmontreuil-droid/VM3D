@@ -3,6 +3,7 @@
 import { Loader2, Power, PowerOff, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   customerId: string
@@ -19,14 +20,15 @@ export default function AdminCustomerActions({
   redirectTo,
   compact = false,
 }: Props) {
+  const { t } = useT()
   const router = useRouter()
   const [isActive, setIsActive] = useState(currentActive !== false)
   const [loadingAction, setLoadingAction] = useState<'toggle' | 'delete' | null>(null)
   const [message, setMessage] = useState('')
 
   const toggleLabel = useMemo(
-    () => (isActive ? 'Zet inactief' : 'Zet actief'),
-    [isActive]
+    () => (isActive ? t.customerActions.setInactive : t.customerActions.setActive),
+    [isActive, t]
   )
 
   async function handleToggle() {
@@ -49,15 +51,15 @@ export default function AdminCustomerActions({
         | null
 
       if (!response.ok) {
-        setMessage(data?.error || 'Status wijzigen mislukt.')
+        setMessage(data?.error || t.customerActions.statusChangeFailed)
         return
       }
 
       setIsActive(nextActive)
-      setMessage(data?.message || (nextActive ? 'Klant geactiveerd.' : 'Klant gedeactiveerd.'))
+      setMessage(data?.message || (nextActive ? t.customerActions.activated : t.customerActions.deactivated))
       router.refresh()
     } catch {
-      setMessage('Status wijzigen mislukt.')
+      setMessage(t.customerActions.statusChangeFailed)
     } finally {
       setLoadingAction(null)
     }
@@ -65,7 +67,7 @@ export default function AdminCustomerActions({
 
   async function handleDelete() {
     const confirmed = window.confirm(
-      `Ben je zeker dat je klant "${customerName}" wilt verwijderen? Dit verwijdert ook gekoppelde werven en bestanden.`
+      t.customerActions.confirmDelete.replace('{name}', customerName)
     )
 
     if (!confirmed) return
@@ -83,7 +85,7 @@ export default function AdminCustomerActions({
         | null
 
       if (!response.ok) {
-        setMessage(data?.error || 'Klant verwijderen mislukt.')
+        setMessage(data?.error || t.customerActions.deleteFailed)
         return
       }
 
@@ -93,7 +95,7 @@ export default function AdminCustomerActions({
 
       router.refresh()
     } catch {
-      setMessage('Klant verwijderen mislukt.')
+      setMessage(t.customerActions.deleteFailed)
     } finally {
       setLoadingAction(null)
     }
@@ -123,7 +125,7 @@ export default function AdminCustomerActions({
               <Power className="h-3 w-3" />
             )}
           </span>
-          <span className="pr-1">{loadingAction === 'toggle' ? 'Opslaan...' : toggleLabel}</span>
+          <span className="pr-1">{loadingAction === 'toggle' ? t.customerActions.saving : toggleLabel}</span>
           <span className={`absolute right-0 top-0 h-full w-[2px] rounded-l-full ${
             isActive ? 'bg-emerald-400/80' : 'bg-amber-400/80'
           }`} />
@@ -142,7 +144,7 @@ export default function AdminCustomerActions({
               <Trash2 className="h-3 w-3" />
             )}
           </span>
-          <span className="pr-1">{loadingAction === 'delete' ? 'Verwijderen...' : 'Verwijder klant'}</span>
+          <span className="pr-1">{loadingAction === 'delete' ? t.customerActions.deleting : t.customerActions.deleteCustomer}</span>
           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-red-400/80" />
         </button>
       </div>

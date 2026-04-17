@@ -4,6 +4,9 @@ import { ArrowLeft, FolderOpen, PlusCircle, Ticket } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { cookies } from 'next/headers'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 import {
   getTicketAgeHours,
   getTicketPriorityClass,
@@ -27,19 +30,25 @@ function getCustomerLabel(customer: {
   company_name?: string | null
   full_name?: string | null
   email?: string | null
-} | null, ticket?: { visitor_name?: string | null; visitor_email?: string | null } | null) {
+} | null, ticket: { visitor_name?: string | null; visitor_email?: string | null } | null | undefined, fallback: string) {
   if (!customer) {
-    return ticket?.visitor_name || ticket?.visitor_email || 'Ongekende klant'
+    return ticket?.visitor_name || ticket?.visitor_email || fallback
   }
-  return customer.company_name || customer.full_name || customer.email || 'Ongekende klant'
+  return customer.company_name || customer.full_name || customer.email || fallback
 }
 
-function formatDayLabel(value: Date) {
-  return value.toLocaleDateString('nl-BE', { day: '2-digit', month: '2-digit' })
+function formatDayLabel(value: Date, locale: string) {
+  const loc = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
+  return value.toLocaleDateString(loc, { day: '2-digit', month: '2-digit' })
 }
 
 export default async function AdminTicketsPage({ searchParams }: Props) {
   const resolvedSearchParams = searchParams ? await searchParams : {}
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminTickets
   const supabase = await createClient()
 
   const {
@@ -196,7 +205,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     const count = createdPerDay.get(key) ?? 0
     return {
       key,
-      label: formatDayLabel(day),
+      label: formatDayLabel(day, locale),
       count,
     }
   })
@@ -239,21 +248,21 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
         type: 'created' as const,
         date: ticket.created_at,
         ticketId: ticket.id,
-        title: ticket.title || 'Zonder titel',
-        detail: 'Ticket aangemaakt',
+        title: ticket.title || tt.noTitle,
+        detail: tt.ticketCreated,
       })),
     ...recentMessages.map((message: any) => {
       const author = message.author_id ? authorMap.get(message.author_id) : null
       const authorLabel =
-        author?.full_name || author?.company_name || author?.email || (message.is_internal ? 'Admin' : 'Klant')
+        author?.full_name || author?.company_name || author?.email || (message.is_internal ? tt.adminLabel : tt.customerLabel)
 
       return {
         id: `msg-${message.id}`,
         type: 'message' as const,
         date: message.created_at,
         ticketId: message.ticket_id,
-        title: ticketById.get(message.ticket_id)?.title || 'Zonder titel',
-        detail: `${message.is_internal ? 'Interne notitie' : 'Reactie'} door ${authorLabel}`,
+        title: ticketById.get(message.ticket_id)?.title || tt.noTitle,
+        detail: `${message.is_internal ? tt.internalNote : tt.reply} ${tt.by} ${authorLabel}`,
       }
     }),
   ]
@@ -272,15 +281,15 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  Tickets
+                  {tt.tickets}
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Volg supportvragen, prioriteiten en statusupdates op in een centraal overzicht.
+                  {tt.ticketsDesc}
                 </p>
 
                 <div className="mt-4 max-w-[260px]">
@@ -295,10 +304,10 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                       </span>
                       <span className="min-w-0">
                         <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Dashboard
+                          {tt.dashboard}
                         </span>
                         <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Terug naar adminoverzicht
+                          {tt.backToAdmin}
                         </span>
                       </span>
                     </div>
@@ -309,19 +318,19 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
               <div className="w-full xl:ml-auto xl:max-w-[640px]">
                 <div className="grid w-full gap-2 sm:grid-cols-4">
                   <div className="overflow-hidden rounded-xl border border-sky-500/30 bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
                     <p className="mt-1 text-lg font-semibold text-sky-300">{safeTickets.length}</p>
                   </div>
                   <div className="overflow-hidden rounded-xl border border-amber-500/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Open</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.open}</p>
                     <p className="mt-1 text-lg font-semibold text-amber-300">{openCount}</p>
                   </div>
                   <div className="overflow-hidden rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Wacht op klant</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.waitingCustomer}</p>
                     <p className="mt-1 text-lg font-semibold text-violet-300">{waitingCount}</p>
                   </div>
                   <div className="overflow-hidden rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Afgerond</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.done}</p>
                     <p className="mt-1 text-lg font-semibold text-emerald-300">{doneCount}</p>
                   </div>
                 </div>
@@ -332,7 +341,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
           <div className="space-y-3 px-4 py-4 sm:px-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-xs text-[var(--text-soft)]">
-                {error ? 'Kon tickets niet laden.' : `${safeTickets.length} ticket(s) gevonden`}
+                {error ? tt.cantLoad : tt.ticketsFound.replace('{count}', String(safeTickets.length))}
               </p>
 
               <Link
@@ -342,7 +351,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                   <PlusCircle className="h-3 w-3" />
                 </span>
-                <span className="pr-1">Nieuw ticket</span>
+                <span className="pr-1">{tt.newTicket}</span>
                 <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
               </Link>
             </div>
@@ -351,33 +360,33 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
               <div className="space-y-3">
                 <div className="grid gap-2 sm:grid-cols-5">
                   <div className="rounded-xl border border-amber-500/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Urgent open</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.urgentOpen}</p>
                     <p className="mt-1 text-lg font-semibold text-amber-300">{urgentOpenCount}</p>
                   </div>
                   <div className="rounded-xl border border-red-500/30 bg-[linear-gradient(135deg,rgba(239,68,68,0.10),rgba(239,68,68,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Over tijd</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.overdue}</p>
                     <p className="mt-1 text-lg font-semibold text-red-300">{overdueCount}</p>
                   </div>
                   <div className="rounded-xl border border-orange-500/30 bg-[linear-gradient(135deg,rgba(249,115,22,0.10),rgba(249,115,22,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">SLA risico</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.slaRisk}</p>
                     <p className="mt-1 text-lg font-semibold text-orange-300">{slaRiskCount}</p>
                   </div>
                   <div className="rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Gem. oplostijd</p>
-                    <p className="mt-1 text-lg font-semibold text-emerald-300">{avgResolutionHours}u</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.avgResolveTime}</p>
+                    <p className="mt-1 text-lg font-semibold text-emerald-300">{avgResolutionHours}{tt.hoursShort}</p>
                   </div>
                   <div className="rounded-xl border border-sky-500/30 bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oudste open</p>
-                    <p className="mt-1 text-lg font-semibold text-sky-300">{oldestOpenAgeDays}d</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.oldestOpen}</p>
+                    <p className="mt-1 text-lg font-semibold text-sky-300">{oldestOpenAgeDays}{tt.daysShort}</p>
                   </div>
                   <div className="rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Afwerkingsgraad</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.completionRate}</p>
                     <p className="mt-1 text-lg font-semibold text-violet-300">
                       {safeTickets.length > 0 ? Math.round((doneCount / safeTickets.length) * 100) : 0}%
                     </p>
                   </div>
                   <div className="rounded-xl border border-zinc-500/30 bg-[linear-gradient(135deg,rgba(113,113,122,0.10),rgba(113,113,122,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Gepauzeerd</p>
+                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.paused}</p>
                     <p className="mt-1 text-lg font-semibold text-zinc-300">{pausedCount}</p>
                   </div>
                 </div>
@@ -385,9 +394,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                      Trend laatste 14 dagen
+                      {tt.trendLast14}
                     </p>
-                    <p className="text-[10px] text-[var(--text-soft)]">Nieuwe tickets per dag</p>
+                    <p className="text-[10px] text-[var(--text-soft)]">{tt.newTicketsPerDay}</p>
                   </div>
 
                   <div className="mt-3 grid grid-cols-7 gap-1.5 sm:grid-cols-14">
@@ -411,34 +420,34 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
 
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Statusverdeling</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.statusDistribution}</p>
                     <div className="mt-2 space-y-1.5 text-xs text-[var(--text-soft)]">
-                      <p>Nieuw: <span className="font-semibold text-[var(--text-main)]">{statusCounts.nieuw}</span></p>
-                      <p>In behandeling: <span className="font-semibold text-[var(--text-main)]">{statusCounts.in_behandeling}</span></p>
-                      <p>Wacht op klant: <span className="font-semibold text-[var(--text-main)]">{statusCounts.wacht_op_klant}</span></p>
-                      <p>Afgerond: <span className="font-semibold text-[var(--text-main)]">{statusCounts.afgerond}</span></p>
-                      <p>Gesloten: <span className="font-semibold text-[var(--text-main)]">{statusCounts.gesloten}</span></p>
+                      <p>{tt.statusNew}: <span className="font-semibold text-[var(--text-main)]">{statusCounts.nieuw}</span></p>
+                      <p>{tt.statusInProgress}: <span className="font-semibold text-[var(--text-main)]">{statusCounts.in_behandeling}</span></p>
+                      <p>{tt.statusWaitingCustomer}: <span className="font-semibold text-[var(--text-main)]">{statusCounts.wacht_op_klant}</span></p>
+                      <p>{tt.statusDone}: <span className="font-semibold text-[var(--text-main)]">{statusCounts.afgerond}</span></p>
+                      <p>{tt.statusClosed}: <span className="font-semibold text-[var(--text-main)]">{statusCounts.gesloten}</span></p>
                     </div>
                   </div>
 
                   <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Prioriteitsverdeling</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.priorityDistribution}</p>
                     <div className="mt-2 space-y-1.5 text-xs text-[var(--text-soft)]">
-                      <p>Laag: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.laag}</span></p>
-                      <p>Normaal: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.normaal}</span></p>
-                      <p>Hoog: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.hoog}</span></p>
-                      <p>Urgent: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.urgent}</span></p>
+                      <p>{tt.priorityLow}: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.laag}</span></p>
+                      <p>{tt.priorityNormal}: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.normaal}</span></p>
+                      <p>{tt.priorityHigh}: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.hoog}</span></p>
+                      <p>{tt.priorityUrgent}: <span className="font-semibold text-[var(--text-main)]">{priorityCounts.urgent}</span></p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Tijdlijn</p>
-                <p className="mt-1 text-[11px] text-[var(--text-soft)]">Recentste ticketactiviteit</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.timeline}</p>
+                <p className="mt-1 text-[11px] text-[var(--text-soft)]">{tt.recentActivity}</p>
 
                 {recentActivity.length === 0 ? (
-                  <p className="mt-3 text-sm text-[var(--text-soft)]">Nog geen activiteit.</p>
+                  <p className="mt-3 text-sm text-[var(--text-soft)]">{tt.noActivity}</p>
                 ) : (
                   <div className="mt-3 space-y-2">
                     {recentActivity.map((activity) => (
@@ -451,7 +460,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                             <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">{activity.detail}</p>
                           </div>
                           <span className="shrink-0 text-[10px] text-[var(--text-muted)]">
-                            {new Date(activity.date).toLocaleString('nl-BE', {
+                            {new Date(activity.date).toLocaleString(locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE', {
                               day: '2-digit',
                               month: '2-digit',
                               hour: '2-digit',
@@ -469,7 +478,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               {safeTickets.length === 0 ? (
                 <div className="px-4 py-5 text-sm text-[var(--text-soft)]">
-                  Nog geen tickets gevonden.
+                  {tt.noTicketsFound}
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--border-soft)]">
@@ -496,25 +505,25 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="truncate text-sm font-semibold text-[var(--text-main)]">
-                              #{ticket.id} · {ticket.title || 'Zonder titel'}
+                              #{ticket.id} · {ticket.title || tt.noTitle}
                             </p>
                             <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketStatusClass(ticket.status)}`}>
-                              {getTicketStatusLabel(ticket.status)}
+                              {getTicketStatusLabel(ticket.status, t)}
                             </span>
                             <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketPriorityClass(ticket.priority)}`}>
-                              {getTicketPriorityLabel(ticket.priority)}
+                              {getTicketPriorityLabel(ticket.priority, t)}
                             </span>
                             <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getTicketSlaClass(slaState)}`}>
-                              {getTicketSlaLabel(slaState)}
+                              {getTicketSlaLabel(slaState, t)}
                             </span>
                           </div>
 
                           <p className="mt-1 text-xs text-[var(--text-soft)]">
-                            Klant: {getCustomerLabel(customer, ticket)}
+                            {tt.customer}: {getCustomerLabel(customer, ticket, tt.unknownCustomer)}
                             {project
-                              ? ` · Werf: ${project.name || project.address || `#${project.id}`}`
+                              ? ` · ${tt.site}: ${project.name || project.address || `#${project.id}`}`
                               : ''}
-                            {` · SLA target: ${slaTargetHours}u`}
+                            {` · ${tt.slaTarget}: ${slaTargetHours}${tt.hoursShort}`}
                           </p>
                         </div>
 
@@ -525,7 +534,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
                             <FolderOpen className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Open</span>
+                          <span className="pr-1">{tt.open}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                         </Link>
                       </div>
