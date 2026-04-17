@@ -142,12 +142,37 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
 
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+              {tt.adminPortal}
+            </p>
             <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
               {tt.title}
             </h1>
             <p className="mt-2 text-sm text-[var(--text-soft)]">
               {tt.subtitle}
             </p>
+
+            <div className="mt-3 max-w-[280px]">
+              <Link
+                href="/admin"
+                className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+              >
+                <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                <div className="flex items-start gap-2.5 pr-2">
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                      {tt.dashboard}
+                    </span>
+                    <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                      {tt.backToAdmin}
+                    </span>
+                  </span>
+                </div>
+              </Link>
+            </div>
           </div>
 
           <form action={createTicket} className="space-y-3 px-4 py-4 sm:px-5">

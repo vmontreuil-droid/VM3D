@@ -229,7 +229,19 @@ export default async function AdminCustomersPage() {
 
             <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
-                <h1 className="text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Dashboard
+                </Link>
+
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
+
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   Klantenbeheer
                 </h1>
               </div>

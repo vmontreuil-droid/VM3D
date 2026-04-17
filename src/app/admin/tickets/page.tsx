@@ -280,6 +280,10 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
 
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
+                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  {tt.adminPortal}
+                </p>
+
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
                   {tt.tickets}
                 </h1>
@@ -287,6 +291,28 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
                   {tt.ticketsDesc}
                 </p>
+
+                <div className="mt-4 max-w-[260px]">
+                  <Link
+                    href="/admin"
+                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
+                  >
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                    <div className="flex items-start gap-2.5 pr-2">
+                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                          {tt.dashboard}
+                        </span>
+                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
+                          {tt.backToAdmin}
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </div>
               </div>
 
               <div className="w-full xl:ml-auto xl:max-w-[640px]">

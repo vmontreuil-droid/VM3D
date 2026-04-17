@@ -294,6 +294,9 @@ export default async function AdminOfferteNewPage({ searchParams }: Props) {
 
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+              Adminportaal
+            </p>
             <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
               Nieuwe offerte
             </h1>
