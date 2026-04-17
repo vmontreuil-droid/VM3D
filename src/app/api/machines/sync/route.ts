@@ -5,7 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 // Geeft lijst van pending bestanden + download URLs
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { connection_code, listing } = body
+  const { connection_code, listing, latitude, longitude, accuracy } = body
 
   if (!connection_code || typeof connection_code !== 'string') {
     return NextResponse.json({ error: 'connection_code verplicht' }, { status: 400 })
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Machine niet gevonden' }, { status: 404 })
   }
 
-  // Update heartbeat (+ optional directory listing)
+  // Update heartbeat (+ optional directory listing + optional location)
   const heartbeat: Record<string, unknown> = {
     is_online: true,
     last_seen_at: new Date().toISOString(),
@@ -33,6 +33,12 @@ export async function POST(req: NextRequest) {
     heartbeat.last_listing = listing
     heartbeat.last_listing_at = new Date().toISOString()
   }
+  if (typeof latitude === 'number' && typeof longitude === 'number' && isFinite(latitude) && isFinite(longitude)) {
+    heartbeat.latitude = latitude
+    heartbeat.longitude = longitude
+    heartbeat.location_accuracy = typeof accuracy === 'number' && isFinite(accuracy) ? accuracy : null
+    heartbeat.location_updated_at = new Date().toISOString()
+  }
   const { error: hbError } = await adminSupabase
     .from('machines')
     .update(heartbeat)
@@ -40,7 +46,7 @@ export async function POST(req: NextRequest) {
   if (hbError) {
     console.error('[machines/sync] heartbeat update failed:', hbError.message)
     // Retry zonder listing-velden — waarschijnlijk ontbreekt de migratie
-    if (listing) {
+    if (listing || typeof latitude === 'number') {
       await adminSupabase
         .from('machines')
         .update({

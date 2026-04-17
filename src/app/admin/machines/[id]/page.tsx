@@ -10,7 +10,7 @@ import {
   GUIDANCE_COLORS,
   formatTonnage,
 } from '@/components/machines/machine-icons'
-import { ArrowLeft, Pencil, Wifi, WifiOff, Hash, Building2, Radio, Construction } from 'lucide-react'
+import { ArrowLeft, Pencil, Wifi, WifiOff, Hash, Building2, Radio, Construction, MapPin } from 'lucide-react'
 
 export default async function AdminOpenMachinePage({
   params,
@@ -183,6 +183,49 @@ export default async function AdminOpenMachinePage({
             </p>
           </div>
         </div>
+
+        {/* Locatie */}
+        {(machine.latitude != null && machine.longitude != null) && (
+          <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 shadow-sm">
+            <div className="flex flex-wrap items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
+                <MapPin className="h-5 w-5 text-purple-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
+                  GPS-locatie
+                </p>
+                <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
+                  {Number(machine.latitude).toFixed(6)}, {Number(machine.longitude).toFixed(6)}
+                </p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
+                  {machine.location_accuracy != null && `±${Math.round(Number(machine.location_accuracy))} m · `}
+                  {machine.location_updated_at
+                    ? `Gerapporteerd ${new Date(machine.location_updated_at).toLocaleString()}`
+                    : ''}
+                </p>
+              </div>
+              <a
+                href={`https://www.google.com/maps?q=${machine.latitude},${machine.longitude}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 rounded-lg bg-purple-500/15 px-3 py-1.5 text-xs font-semibold text-purple-400 hover:bg-purple-500/25"
+              >
+                <MapPin className="h-3 w-3" /> Open in Google Maps
+              </a>
+            </div>
+            <div className="mt-3 overflow-hidden rounded-lg border border-[var(--border-soft)]">
+              <iframe
+                title="Machine locatie"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${Number(machine.longitude)-0.01}%2C${Number(machine.latitude)-0.005}%2C${Number(machine.longitude)+0.01}%2C${Number(machine.latitude)+0.005}&layer=mapnik&marker=${machine.latitude}%2C${machine.longitude}`}
+                width="100%"
+                height="280"
+                loading="lazy"
+                style={{ border: 0 }}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Werven & bestanden */}
         <MachineTransferPanel

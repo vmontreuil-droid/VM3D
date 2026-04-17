@@ -86,11 +86,46 @@ LOG "Poll interval: ${POLL_INTERVAL}s"
 HAS_JQ=0
 command -v jq >/dev/null 2>&1 && HAS_JQ=1
 
+HAS_LOC=0
+command -v termux-location >/dev/null 2>&1 && HAS_LOC=1
+if [ $HAS_LOC -eq 1 ]; then
+  LOG "termux-location beschikbaar — GPS wordt elke ~5 min opgehaald"
+else
+  LOG "termux-location niet beschikbaar — installeer: pkg install termux-api  (+ Termux:API apk)"
+fi
+LOC_COUNTER=0
+
+get_location() {
+  [ $HAS_LOC -ne 1 ] || [ $HAS_JQ -ne 1 ] && return
+  local J=""
+  for P in gps network passive; do
+    J=$(timeout 8 termux-location -p "$P" -r last 2>/dev/null)
+    if [ -n "$J" ] && printf '%s' "$J" | jq -e '.latitude' >/dev/null 2>&1; then break; fi
+    J=""
+  done
+  if [ -z "$J" ]; then
+    J=$(timeout 20 termux-location -p network 2>/dev/null)
+  fi
+  [ -z "$J" ] && return
+  printf '%s' "$J" | jq -e '.latitude' >/dev/null 2>&1 || return
+  local LAT LON ACC
+  LAT=$(printf '%s' "$J" | jq -r '.latitude')
+  LON=$(printf '%s' "$J" | jq -r '.longitude')
+  ACC=$(printf '%s' "$J" | jq -r '.accuracy // 0')
+  printf ',"latitude":%s,"longitude":%s,"accuracy":%s' "$LAT" "$LON" "$ACC"
+}
+
 while true; do
   LISTING=$(build_listing "$LAST_LIST")
   [ -z "$LISTING" ] && LISTING='null'
 
-  PAYLOAD="{\"connection_code\":\"$CODE\",\"listing\":$LISTING}"
+  LOC_FRAG=""
+  if [ $LOC_COUNTER -eq 0 ]; then
+    LOC_FRAG=$(get_location)
+  fi
+  LOC_COUNTER=$(((LOC_COUNTER + 1) % 10))
+
+  PAYLOAD="{\"connection_code\":\"$CODE\",\"listing\":$LISTING$LOC_FRAG}"
   R=$(curl -fsS --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \
       -H "Content-Type: application/json" \
       -d "$PAYLOAD" 2>/dev/null)
