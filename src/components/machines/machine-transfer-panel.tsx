@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder } from 'lucide-react'
+import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw } from 'lucide-react'
 
 type Transfer = {
   id: number
@@ -12,6 +12,11 @@ type Transfer = {
   subfolder?: string | null
 }
 
+type TabletListing = {
+  root?: string
+  werven?: { name: string; files: { name: string; size: number }[] }[]
+}
+
 type Props = {
   machineId: number
   guidanceSystem: string | null
@@ -19,6 +24,13 @@ type Props = {
 
 const ACCEPTED =
   '.xml,.dxf,.dwg,.csv,.cfg,.ini,.txt,.pdf,.zip,.rar,.gc3,.tp3,.svd,.dsz,.cal,.man,.dc,.prj,.ttm,.vcl,.yml,.yaml'
+
+function formatBytes(bytes: number): string {
+  if (!bytes) return '0 B'
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
 
 export default function MachineTransferPanel({ machineId, guidanceSystem }: Props) {
   const [transfers, setTransfers] = useState<Transfer[]>([])
@@ -30,6 +42,10 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
   const [uploading, setUploading] = useState(false)
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const [tabletListing, setTabletListing] = useState<TabletListing | null>(null)
+  const [tabletListingAt, setTabletListingAt] = useState<string | null>(null)
+  const [loadingTablet, setLoadingTablet] = useState(false)
 
   const isUnicontrol = (guidanceSystem || '').toUpperCase() === 'UNICONTROL'
 
@@ -59,6 +75,26 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
   useEffect(() => {
     load()
   }, [load])
+
+  const loadTabletListing = useCallback(async () => {
+    setLoadingTablet(true)
+    try {
+      const res = await fetch(`/api/machines/${machineId}/listing`)
+      if (res.ok) {
+        const data = await res.json()
+        setTabletListing(data.listing || null)
+        setTabletListingAt(data.listing_at || null)
+      }
+    } catch {
+      /* ignore */
+    } finally {
+      setLoadingTablet(false)
+    }
+  }, [machineId])
+
+  useEffect(() => {
+    loadTabletListing()
+  }, [loadTabletListing])
 
   async function handleCreateWerf() {
     if (!newWerfName.trim()) return
@@ -262,6 +298,81 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
           {msg.text}
         </p>
       )}
+
+      {/* Tablet listing — live contents of the crane tablet */}
+      <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3 space-y-2">
+        <div className="flex items-center justify-between gap-2">
+          <p className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--text-soft)]">
+            <Tablet className="h-3.5 w-3.5" /> Op de tablet in de kraan
+          </p>
+          <button
+            type="button"
+            onClick={loadTabletListing}
+            disabled={loadingTablet}
+            className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-1 text-[10px] font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card-2)] disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3 w-3 ${loadingTablet ? 'animate-spin' : ''}`} />
+            Ververs
+          </button>
+        </div>
+        {tabletListingAt && (
+          <p className="text-[10px] text-[var(--text-muted)]">
+            Laatst gerapporteerd:{' '}
+            {new Date(tabletListingAt).toLocaleString()}
+          </p>
+        )}
+        {tabletListing?.root && (
+          <p className="text-[10px] text-[var(--text-muted)]">
+            Map:{' '}
+            <code className="rounded bg-black/30 px-1 font-mono">
+              {tabletListing.root}
+            </code>
+          </p>
+        )}
+        {!tabletListing ? (
+          <p className="text-[11px] text-[var(--text-muted)]">
+            Nog geen melding ontvangen van de tablet. Dit vult zichzelf na de
+            volgende sync (±30s).
+          </p>
+        ) : !tabletListing.werven || tabletListing.werven.length === 0 ? (
+          <p className="text-[11px] text-[var(--text-muted)]">
+            De tablet rapporteert geen bestanden in deze map.
+          </p>
+        ) : (
+          <div className="max-h-64 overflow-y-auto rounded border border-[var(--border-soft)] bg-[var(--bg-card)]">
+            {tabletListing.werven.map((w, idx) => (
+              <details
+                key={w.name || `root-${idx}`}
+                className="border-b border-[var(--border-soft)] last:border-0"
+                open={w.name === selectedWerf}
+              >
+                <summary className="flex cursor-pointer items-center gap-1.5 px-2 py-1.5 text-[11px] font-medium text-[var(--text-main)] hover:bg-[var(--bg-card-2)]">
+                  <Folder className="h-3 w-3 text-[var(--accent)]" />
+                  {w.name || '(hoofdmap)'}
+                  <span className="ml-1 rounded bg-[var(--bg-card-2)] px-1.5 py-0.5 text-[9px] text-[var(--text-muted)]">
+                    {w.files.length}
+                  </span>
+                </summary>
+                <ul className="bg-[var(--bg-card-2)] px-2 py-1">
+                  {w.files.map((f) => (
+                    <li
+                      key={f.name}
+                      className="flex items-center justify-between py-0.5 text-[10px]"
+                    >
+                      <span className="truncate text-[var(--text-soft)]">
+                        {f.name}
+                      </span>
+                      <span className="ml-2 shrink-0 text-[var(--text-muted)]">
+                        {formatBytes(f.size)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Recent transfers */}
       <div>

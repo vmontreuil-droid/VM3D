@@ -40,10 +40,32 @@ echo "Checking every 30 seconds..."
 echo ""
 
 while true; do
-  # Vraag pending bestanden op (en stuur heartbeat tegelijk)
+  # Build directory listing for current guidance folder (best-effort)
+  PREV_GUIDANCE_FOLDER=${LAST_TARGET:-""}
+  LISTING_JSON="null"
+  if [ -n "$PREV_GUIDANCE_FOLDER" ] && [ -d "$PREV_GUIDANCE_FOLDER" ]; then
+    # Produce {"root": "...", "werven": [{"name": "...", "files": [{"name":"","size":0}]}]}
+    LISTING_JSON=$(
+      cd "$PREV_GUIDANCE_FOLDER" 2>/dev/null && \
+      find . -maxdepth 2 -type f -printf '%P\t%s\n' 2>/dev/null | \
+      jq -Rsc --arg root "$PREV_GUIDANCE_FOLDER" '
+        split("\n") | map(select(length>0)) |
+        map(split("\t") | {path: .[0], size: (.[1]|tonumber? // 0)}) |
+        group_by(.path | split("/") | if length>1 then .[0] else "" end) |
+        map({
+          name: (.[0].path | split("/") | if length>1 then .[0] else "" end),
+          files: map({name: (.path|split("/")|last), size: .size})
+        }) |
+        {root: $root, werven: .}
+      ' 2>/dev/null || echo "null"
+    )
+    [ -z "$LISTING_JSON" ] && LISTING_JSON="null"
+  fi
+
+  # Vraag pending bestanden op (en stuur heartbeat + listing tegelijk)
   RESPONSE=$(curl -s -X POST "$SERVER/api/machines/sync" \
     -H "Content-Type: application/json" \
-    -d "{\"connection_code\":\"$CONNECTION_CODE\"}" 2>/dev/null)
+    -d "{\"connection_code\":\"$CONNECTION_CODE\",\"listing\":$LISTING_JSON}" 2>/dev/null)
 
   if [ -z "$RESPONSE" ]; then
     sleep 30
@@ -60,6 +82,7 @@ while true; do
   fi
 
   TARGET_FOLDER=$(get_target_folder "$GUIDANCE")
+  LAST_TARGET="$TARGET_FOLDER"
   mkdir -p "$TARGET_FOLDER"
 
   echo "[$(date '+%H:%M:%S')] $FILE_COUNT nieuw(e) bestand(en) gevonden"

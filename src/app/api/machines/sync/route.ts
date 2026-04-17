@@ -5,7 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 // Geeft lijst van pending bestanden + download URLs
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { connection_code } = body
+  const { connection_code, listing } = body
 
   if (!connection_code || typeof connection_code !== 'string') {
     return NextResponse.json({ error: 'connection_code verplicht' }, { status: 400 })
@@ -24,11 +24,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Machine niet gevonden' }, { status: 404 })
   }
 
-  // Update heartbeat
-  await adminSupabase
-    .from('machines')
-    .update({ is_online: true, last_seen_at: new Date().toISOString() })
-    .eq('id', machine.id)
+  // Update heartbeat (+ optional directory listing)
+  const heartbeat: Record<string, unknown> = {
+    is_online: true,
+    last_seen_at: new Date().toISOString(),
+  }
+  if (listing && typeof listing === 'object') {
+    heartbeat.last_listing = listing
+    heartbeat.last_listing_at = new Date().toISOString()
+  }
+  await adminSupabase.from('machines').update(heartbeat).eq('id', machine.id)
 
   // Get pending transfers
   const { data: transfers } = await adminSupabase

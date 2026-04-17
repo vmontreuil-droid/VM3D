@@ -100,17 +100,39 @@ echo "Check elke 30s op nieuwe bestanden..."
 echo ""
 
 while true; do
+  # Build directory listing of last-known guidance folder
+  LISTING="null"
+  if [ -n "$LAST_TGT" ] && [ -d "$LAST_TGT" ]; then
+    LISTING=$(
+      cd "$LAST_TGT" 2>/dev/null && \
+      find . -maxdepth 2 -type f -printf '%P\\t%s\\n' 2>/dev/null | \
+      jq -Rsc --arg root "$LAST_TGT" '
+        split("\\n") | map(select(length>0)) |
+        map(split("\\t") | {path: .[0], size: (.[1]|tonumber? // 0)}) |
+        group_by(.path | split("/") | if length>1 then .[0] else "" end) |
+        map({
+          name: (.[0].path | split("/") | if length>1 then .[0] else "" end),
+          files: map({name: (.path|split("/")|last), size: .size})
+        }) |
+        {root: $root, werven: .}
+      ' 2>/dev/null || echo "null"
+    )
+    [ -z "$LISTING" ] && LISTING="null"
+  fi
+
   R=$(curl -s --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \\
     -H "Content-Type: application/json" \\
-    -d "{\\"connection_code\\":\\"$CODE\\"}" 2>/dev/null)
+    -d "{\\"connection_code\\":\\"$CODE\\",\\"listing\\":$LISTING}" 2>/dev/null)
 
   [ -z "$R" ] && sleep 30 && continue
+
+  GS=$(echo "$R" | jq -r '.guidance_system // empty')
+  [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
 
   N=$(echo "$R" | jq '.files | length' 2>/dev/null)
   [ "$N" = "0" ] || [ -z "$N" ] || [ "$N" = "null" ] && sleep 30 && continue
 
-  GS=$(echo "$R" | jq -r '.guidance_system // empty')
-  TGT=$(gps_folder "$GS")
+  TGT="$LAST_TGT"
   echo "[$(date '+%H:%M:%S')] $N bestand(en) gevonden"
 
   IDS="[]"
