@@ -33,7 +33,23 @@ export async function POST(req: NextRequest) {
     heartbeat.last_listing = listing
     heartbeat.last_listing_at = new Date().toISOString()
   }
-  await adminSupabase.from('machines').update(heartbeat).eq('id', machine.id)
+  const { error: hbError } = await adminSupabase
+    .from('machines')
+    .update(heartbeat)
+    .eq('id', machine.id)
+  if (hbError) {
+    console.error('[machines/sync] heartbeat update failed:', hbError.message)
+    // Retry zonder listing-velden — waarschijnlijk ontbreekt de migratie
+    if (listing) {
+      await adminSupabase
+        .from('machines')
+        .update({
+          is_online: true,
+          last_seen_at: new Date().toISOString(),
+        })
+        .eq('id', machine.id)
+    }
+  }
 
   // Get pending transfers
   const { data: transfers } = await adminSupabase
