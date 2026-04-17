@@ -201,7 +201,7 @@ export default function EditMachineForm({
   )}`
 
   return (
-    <div className="mx-auto max-w-5xl space-y-4 pb-24">
+    <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-24">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
         <Link href="/admin" className="hover:text-[var(--text-main)]">
@@ -306,7 +306,7 @@ export default function EditMachineForm({
         </div>
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-4 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
         {/* Main column */}
         <div className="space-y-4">
           <form onSubmit={handleSave} className="space-y-4" id="machine-form">
@@ -594,7 +594,7 @@ export default function EditMachineForm({
 
       {/* Sticky action bar */}
       <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--border-soft)] bg-[var(--bg-main)]/95 px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.15)] backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center gap-2">
+        <div className="mx-auto flex w-full max-w-[1600px] items-center gap-2">
           <Link
             href="/admin/machines"
             className="flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card-2)]"
