@@ -100,7 +100,7 @@ export default async function AdminOpenMachinePage({
                 className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                 style={{ backgroundColor: `${brandColor}22` }}
               >
-                <MachineIcon type={machine.machine_type} size={32} />
+                <MachineIcon type={machine.machine_type} tonnage={machine.tonnage ?? undefined} size={32} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">

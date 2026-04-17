@@ -240,7 +240,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                           style={{ backgroundColor: brandColor + '1A' }}
                         >
-                          <MachineIcon type={m.machine_type} size={20} />
+                          <MachineIcon type={m.machine_type} tonnage={m.tonnage ?? undefined} size={20} />
                         </div>
                         <div>
                           <span

@@ -56,6 +56,7 @@ export function MachineCard({
       >
         <MachineIcon
           type={machine.machine_type}
+          tonnage={machine.tonnage}
           size={compact ? 28 : 32}
           className="drop-shadow-sm"
         />
