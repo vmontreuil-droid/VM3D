@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Logo from '@/components/logo'
+import { useT } from '@/i18n/context'
 
 interface Props {
   machine: {
@@ -19,6 +20,8 @@ const TERMUX_APK = 'https://f-droid.org/repo/com.termux_1000.apk'
 const TERMUX_BOOT_APK = 'https://f-droid.org/repo/com.termux.boot_7.apk'
 
 export default function SetupClient({ machine }: Props) {
+  const { t } = useT()
+  const tt = t.machineSetup
   const [step, setStep] = useState(1)
   const [copied, setCopied] = useState(false)
 
@@ -51,7 +54,7 @@ export default function SetupClient({ machine }: Props) {
         <Logo size="sm" variant="dark" />
         <h1 className="text-lg font-bold mt-1">{machine.brand} {machine.model}</h1>
         <p className="text-sm text-white/50 mt-0.5">
-          {machine.name} • {machine.guidance_system || 'GPS'} sync instellen
+          {machine.name} • {tt.gpsSyncSetup.replace('{system}', machine.guidance_system || 'GPS')}
         </p>
       </div>
 
@@ -73,7 +76,7 @@ export default function SetupClient({ machine }: Props) {
               {step > 1 ? '✓' : '1'}
             </div>
             <div className="flex-1">
-              <h2 className="font-bold text-base">Termux downloaden</h2>
+              <h2 className="font-bold text-base">{tt.downloadTermux}</h2>
               {step === 1 ? (
                 <div className="mt-3 space-y-2">
                   <a
@@ -81,20 +84,20 @@ export default function SetupClient({ machine }: Props) {
                     className="flex items-center justify-center gap-2 w-full rounded-xl bg-blue-500 py-4 text-center text-base font-bold text-white active:bg-blue-600"
                     onClick={() => setTimeout(() => setStep(2), 1500)}
                   >
-                    ⬇️ Download Termux APK
+                    ⬇️ {tt.downloadApk.replace('⬇️ ', '')}
                   </a>
                   <p className="text-[11px] text-white/40 text-center mt-1">
-                    Tik &quot;Toch installeren&quot; bij waarschuwing
+                    {tt.installWarning}
                   </p>
                   <button
                     onClick={() => setStep(2)}
                     className="block w-full rounded-xl bg-white/10 py-3 text-center text-sm font-semibold text-white/50 active:bg-white/20 mt-1"
                   >
-                    Al geïnstalleerd →
+                    {tt.alreadyInstalled}
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-emerald-400 mt-1">✓ Termux geïnstalleerd</p>
+                <p className="text-sm text-emerald-400 mt-1">{tt.termuxInstalled}</p>
               )}
             </div>
           </div>
@@ -117,17 +120,17 @@ export default function SetupClient({ machine }: Props) {
               {step > 2 ? '✓' : '2'}
             </div>
             <div className="flex-1">
-              <h2 className="font-bold text-base">Commando kopiëren</h2>
+              <h2 className="font-bold text-base">{tt.copyCommand}</h2>
               {step === 2 && (
                 <button
                   onClick={handleCopy}
                   className="mt-3 block w-full rounded-xl bg-emerald-500 py-4 text-center text-base font-bold text-white active:bg-emerald-600"
                 >
-                  {copied ? '✓ Gekopieerd!' : '📋 Tik hier om te kopiëren'}
+                  {copied ? tt.copied : tt.copyCta}
                 </button>
               )}
               {step > 2 && (
-                <p className="text-sm text-emerald-400 mt-1">✓ Gekopieerd</p>
+                <p className="text-sm text-emerald-400 mt-1">{tt.copiedShort}</p>
               )}
             </div>
           </div>
@@ -148,31 +151,31 @@ export default function SetupClient({ machine }: Props) {
               3
             </div>
             <div className="flex-1">
-              <h2 className="font-bold text-base">Plak in Termux</h2>
+              <h2 className="font-bold text-base">{tt.pasteInTermux}</h2>
               {step === 3 && (
                 <div className="mt-3 space-y-3">
                   <div className="rounded-xl bg-black/60 border border-white/10 p-4 space-y-3">
                     <p className="text-base text-white/80 leading-relaxed">
-                      <span className="text-emerald-400 font-bold">1.</span> Open <span className="font-bold text-white">Termux</span>
+                      <span className="text-emerald-400 font-bold">1.</span> {tt.pasteStep1} <span className="font-bold text-white">Termux</span>
                     </p>
                     <p className="text-base text-white/80 leading-relaxed">
-                      <span className="text-emerald-400 font-bold">2.</span> <span className="font-bold text-white">Lang indrukken</span> op scherm
+                      <span className="text-emerald-400 font-bold">2.</span> <span className="font-bold text-white">{tt.pasteStep2Prefix}</span> {tt.pasteStep2}
                     </p>
                     <p className="text-base text-white/80 leading-relaxed">
-                      <span className="text-emerald-400 font-bold">3.</span> Tik <span className="font-bold text-white">Paste</span>
+                      <span className="text-emerald-400 font-bold">3.</span> {tt.pasteStep3} <span className="font-bold text-white">{tt.pasteStep3Value}</span>
                     </p>
                     <p className="text-base text-white/80 leading-relaxed">
-                      <span className="text-emerald-400 font-bold">4.</span> Druk <span className="inline-block rounded bg-white/20 px-3 py-1 text-sm font-bold text-white">Enter ↵</span>
+                      <span className="text-emerald-400 font-bold">4.</span> {tt.pasteStep4} <span className="inline-block rounded bg-white/20 px-3 py-1 text-sm font-bold text-white">Enter ↵</span>
                     </p>
                   </div>
                   <p className="text-base text-emerald-400 font-bold text-center">
-                    Daarna gaat alles automatisch! ✅
+                    {tt.autoFinish}
                   </p>
                   <button
                     onClick={handleCopy}
                     className="block w-full rounded-xl bg-white/10 py-3 text-center text-sm font-semibold text-white/50 active:bg-white/20"
                   >
-                    Opnieuw kopiëren
+                    {tt.copyAgain}
                   </button>
                 </div>
               )}

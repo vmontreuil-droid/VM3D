@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useT } from '@/i18n/context'
 
 type Props = {
   projectId: number | string
@@ -11,6 +12,8 @@ type Props = {
 const BUCKET_NAME = 'project-files'
 
 export default function FinalFileUploadForm({ projectId }: Props) {
+  const { t } = useT()
+  const tt = t.finalFileUpload
   const supabase = createClient()
   const router = useRouter()
 
@@ -20,7 +23,7 @@ export default function FinalFileUploadForm({ projectId }: Props) {
 
   const handleUpload = async () => {
     if (!file) {
-      setMessage('Kies eerst een bestand.')
+      setMessage(tt.chooseFileFirst)
       return
     }
 
@@ -39,7 +42,7 @@ export default function FinalFileUploadForm({ projectId }: Props) {
     if (uploadError) {
       setUploading(false)
       setMessage(
-        'Upload mislukt. Controleer je bucketnaam of storage-instellingen.'
+        tt.uploadFailed
       )
       return
     }
@@ -54,12 +57,12 @@ export default function FinalFileUploadForm({ projectId }: Props) {
     setUploading(false)
 
     if (insertError) {
-      setMessage('Bestand werd opgeladen, maar niet in de databank opgeslagen.')
+      setMessage(tt.uploadedNotSaved)
       return
     }
 
     setFile(null)
-    setMessage('Opleverbestand succesvol opgeladen.')
+    setMessage(tt.uploadSuccess)
     router.refresh()
   }
 
@@ -77,7 +80,7 @@ export default function FinalFileUploadForm({ projectId }: Props) {
         disabled={uploading}
         className="inline-flex h-[42px] w-full items-center justify-center rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60 sm:w-fit"
       >
-        {uploading ? 'Uploaden...' : 'Opleverbestand uploaden'}
+        {uploading ? tt.uploading : tt.uploadFinalFile}
       </button>
 
       {message ? (
@@ -85,7 +88,7 @@ export default function FinalFileUploadForm({ projectId }: Props) {
       ) : null}
 
       <p className="text-xs text-[var(--text-muted)]">
-        Bucket verondersteld: <span className="font-semibold">{BUCKET_NAME}</span>
+        {tt.bucketAssumed} <span className="font-semibold">{BUCKET_NAME}</span>
       </p>
     </div>
   )

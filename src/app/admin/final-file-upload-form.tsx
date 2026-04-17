@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 type Props = {
   userId: string
@@ -10,6 +11,8 @@ type Props = {
 }
 
 export default function FinalFileUploadForm({ userId, projectId }: Props) {
+  const { t } = useT()
+  const tt = t.finalFileUpload
   const [file, setFile] = useState<File | null>(null)
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,7 +23,7 @@ export default function FinalFileUploadForm({ userId, projectId }: Props) {
     setMessage('')
 
     if (!file) {
-      setMessage('Kies eerst een bestand.')
+      setMessage(tt.chooseFileFirst)
       return
     }
 
@@ -40,7 +43,7 @@ export default function FinalFileUploadForm({ userId, projectId }: Props) {
 
     if (uploadError) {
       setLoading(false)
-      setMessage(`Upload fout: ${uploadError.message}`)
+      setMessage(`${tt.uploadErrorPrefix}${uploadError.message}`)
       return
     }
 
@@ -57,11 +60,11 @@ export default function FinalFileUploadForm({ userId, projectId }: Props) {
     setLoading(false)
 
     if (dbError) {
-      setMessage(`Database fout: ${dbError.message}`)
+      setMessage(`${tt.databaseErrorPrefix}${dbError.message}`)
       return
     }
 
-    setMessage('Finale bestand succesvol geüpload.')
+    setMessage(tt.finalFileSuccess)
     setFile(null)
     router.refresh()
   }
@@ -70,10 +73,10 @@ export default function FinalFileUploadForm({ userId, projectId }: Props) {
     <form onSubmit={handleUpload} className="space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-[var(--text-main)]">
-          Finale bestanden uploaden
+          {tt.uploadFinalFiles}
         </h3>
         <p className="text-sm text-[var(--text-soft)]">
-          Upload hier het afgewerkte 3D-bestand voor de klant.
+          {tt.uploadFinalFilesDesc}
         </p>
       </div>
 
@@ -89,7 +92,7 @@ export default function FinalFileUploadForm({ userId, projectId }: Props) {
         disabled={loading}
         className="btn-primary"
       >
-        {loading ? 'Uploaden...' : 'Finale bestand uploaden'}
+        {loading ? tt.uploading : tt.uploadFinalFileBtn}
       </button>
 
       {message ? (

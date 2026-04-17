@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 type Customer = {
   id: string
@@ -28,6 +29,8 @@ export default function EditProjectForm({
   project: Project
   customers: Customer[]
 }) {
+  const { t } = useT()
+  const tt = t.editProject
   const router = useRouter()
 
   const [userId, setUserId] = useState(project.user_id ?? '')
@@ -54,11 +57,11 @@ export default function EditProjectForm({
 
     try {
       if (!userId) {
-        throw new Error('Geen klant geselecteerd.')
+        throw new Error(tt.noCustomer)
       }
 
       if (!title.trim()) {
-        throw new Error('Projecttitel is verplicht.')
+        throw new Error(tt.titleRequired)
       }
 
       const response = await fetch(`/api/admin/projects/${project.id}`, {
@@ -80,17 +83,17 @@ export default function EditProjectForm({
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || 'Er ging iets mis.')
+        throw new Error(result.error || tt.genericError)
       }
 
-      setSuccess('Project succesvol bijgewerkt.')
+      setSuccess(tt.successMessage)
 
       setTimeout(() => {
         router.push('/admin')
         router.refresh()
       }, 1000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Er ging iets mis.')
+      setError(err instanceof Error ? err.message : tt.genericError)
     } finally {
       setLoading(false)
     }
@@ -104,7 +107,7 @@ export default function EditProjectForm({
       <div className="grid gap-4">
         <div>
           <label className="mb-2 block text-sm font-medium text-white">
-            Klant
+            {tt.customer}
           </label>
           <select
             value={userId}
@@ -112,7 +115,7 @@ export default function EditProjectForm({
             className="input-dark w-full px-3 py-2.5 text-sm"
             required
           >
-            <option value="">Selecteer een klant</option>
+            <option value="">{tt.selectCustomer}</option>
             {customers.map((customer) => {
               const company = customer.company_name?.trim() || ''
               const name = customer.full_name?.trim() || ''
@@ -136,7 +139,7 @@ export default function EditProjectForm({
 
         <div>
           <label className="mb-2 block text-sm font-medium text-white">
-            Projecttitel
+            {tt.projectTitle}
           </label>
           <input
             type="text"
@@ -149,7 +152,7 @@ export default function EditProjectForm({
 
         <div>
           <label className="mb-2 block text-sm font-medium text-white">
-            Beschrijving
+            {tt.description}
           </label>
           <textarea
             value={description}
@@ -161,7 +164,7 @@ export default function EditProjectForm({
 
         <div>
           <label className="mb-2 block text-sm font-medium text-white">
-            Locatie
+            {tt.location}
           </label>
           <input
             type="text"
@@ -174,7 +177,7 @@ export default function EditProjectForm({
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-medium text-white">
-              Prijs
+              {tt.price}
             </label>
             <input
               type="number"
@@ -186,7 +189,7 @@ export default function EditProjectForm({
 
           <div>
             <label className="mb-2 block text-sm font-medium text-white">
-              Munt
+              {tt.currency}
             </label>
             <select
               value={currency}
@@ -201,17 +204,17 @@ export default function EditProjectForm({
 
         <div>
           <label className="mb-2 block text-sm font-medium text-white">
-            Status
+            {tt.status}
           </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             className="input-dark w-full px-3 py-2.5 text-sm"
           >
-            <option value="ingediend">Ingediend</option>
-            <option value="in_behandeling">In behandeling</option>
-            <option value="klaar_voor_betaling">Klaar voor betaling</option>
-            <option value="afgerond">Afgerond</option>
+            <option value="ingediend">{tt.statusSubmitted}</option>
+            <option value="in_behandeling">{tt.statusInProgress}</option>
+            <option value="klaar_voor_betaling">{tt.statusReadyForPayment}</option>
+            <option value="afgerond">{tt.statusDone}</option>
           </select>
         </div>
 
@@ -233,7 +236,7 @@ export default function EditProjectForm({
             disabled={loading}
             className="btn-primary rounded-2xl px-4 py-2.5 text-sm"
           >
-            {loading ? 'Project wordt opgeslagen...' : 'Project opslaan'}
+            {loading ? tt.saving : tt.save}
           </button>
 
           <button
@@ -241,7 +244,7 @@ export default function EditProjectForm({
             onClick={() => router.push('/admin')}
             className="btn-secondary rounded-2xl px-4 py-2.5 text-sm"
           >
-            Annuleren
+            {tt.cancel}
           </button>
         </div>
       </div>

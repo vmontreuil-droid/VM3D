@@ -2,6 +2,7 @@
 
 import { type FormEvent, useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useT } from '@/i18n/context'
 import {
   ArrowLeft,
   Building2,
@@ -78,6 +79,8 @@ type LookupResult = {
 }
 
 export default function CustomerEditForm({ action, customer, logoPreviewUrl }: Props) {
+  const { t } = useT()
+  const tt = t.customerForm
   const INVITE_COOLDOWN_SECONDS = 90
   const INVITE_COOLDOWN_MS = INVITE_COOLDOWN_SECONDS * 1000
   const inviteCooldownStorageKey = `invite-cooldown:customer-edit:${customer.id}`
@@ -198,7 +201,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
   const handleVatLookup = async () => {
     if (!vatNumber.trim()) {
-      setLookupMessage('Vul eerst een btw-nummer in.')
+      setLookupMessage(tt.vatLookupEmpty)
       return
     }
 
@@ -223,7 +226,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
         }
       } catch {
         console.error('VAT lookup returned non-JSON:', rawText)
-        setLookupMessage('De btw-opzoeking gaf geen geldig antwoord terug.')
+        setLookupMessage(tt.vatLookupInvalidResponse)
         return
       }
 
@@ -233,14 +236,14 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
             ? data.details
               ? `${data.error} (${data.details})`
               : data.error
-            : 'Lookup mislukt.'
+            : tt.vatLookupFailed
 
         setLookupMessage(message)
         return
       }
 
       if (!data.valid) {
-        setLookupMessage('BTW-nummer is niet geldig volgens VIES.')
+        setLookupMessage(tt.vatNumberInvalidVies)
         return
       }
 
@@ -255,10 +258,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
       if (data.longitude != null) setLongitude(data.longitude)
       if (data.mapLabel) setMapLabel(data.mapLabel)
 
-      setLookupMessage('Gegevens succesvol opnieuw opgehaald via btw-nummer.')
+      setLookupMessage(tt.updateVatSuccess)
     } catch (error) {
       console.error('VAT lookup fetch error:', error)
-      setLookupMessage('Er liep iets fout bij het ophalen van btw-gegevens.')
+      setLookupMessage(tt.vatLookupError)
     } finally {
       setLookupLoading(false)
     }
@@ -281,7 +284,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
       if (!silent) {
         setAddressLookupMessage(
-          'Vul minstens straat, postcode of gemeente, en land in voor de kaartpositie.'
+          tt.addressLookupIncomplete
         )
       }
       return
@@ -289,7 +292,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
     try {
       setAddressLookupLoading(true)
-      if (!silent) setAddressLookupMessage('Adres op kaart zoeken...')
+      if (!silent) setAddressLookupMessage(tt.addressLookupSearching)
 
       const response = await fetch('/api/geocode', {
         method: 'POST',
@@ -300,13 +303,13 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Geen coördinaten gevonden.')
+        throw new Error(data.error || tt.geocodeNoResults)
       }
 
       setLatitude(data.latitude ?? null)
       setLongitude(data.longitude ?? null)
       setMapLabel(data.display_name || address)
-      setAddressLookupMessage('Adres op kaart gevonden.')
+      setAddressLookupMessage(tt.addressLookupSuccess)
     } catch (error) {
       setLatitude(null)
       setLongitude(null)
@@ -314,7 +317,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
       setAddressLookupMessage(
         error instanceof Error
           ? error.message
-          : 'Er liep iets fout bij het zoeken van de kaartpositie.'
+          : tt.addressLookupError
       )
     } finally {
       setAddressLookupLoading(false)
@@ -363,22 +366,22 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
     'text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]'
   const nativeSelectStyle = { colorScheme: 'dark' as const }
   const validationLabels: Record<string, string> = {
-    vat_number: 'het btw-nummer',
-    company_name: 'de bedrijfsnaam',
-    email: 'het e-mailadres',
-    invoice_email: 'het facturatie e-mailadres',
-    salutation: 'de aanspreektitel',
-    director_first_name: 'de voornaam',
-    director_last_name: 'de familienaam',
-    mobile: 'het mobiele nummer',
-    language: 'de taal',
-    iban: 'de IBAN',
-    bic: 'de BIC',
-    payment_term_days: 'de betalingstermijn',
-    quote_validity_days: 'de geldigheid van de offerte',
-    payment_method: 'de betaalwijze',
-    currency: 'de munteenheid',
-    vat_rate: 'het btw-tarief',
+    vat_number: tt.valLabelVatNumber,
+    company_name: tt.valLabelCompanyName,
+    email: tt.valLabelEmail,
+    invoice_email: tt.valLabelInvoiceEmail,
+    salutation: tt.valLabelSalutation,
+    director_first_name: tt.valLabelFirstName,
+    director_last_name: tt.valLabelLastName,
+    mobile: tt.valLabelMobile,
+    language: tt.valLabelLanguage,
+    iban: tt.valLabelIban,
+    bic: tt.valLabelBic,
+    payment_term_days: tt.valLabelPaymentTerm,
+    quote_validity_days: tt.valLabelQuoteValidity,
+    payment_method: tt.valLabelPaymentMethod,
+    currency: tt.valLabelCurrency,
+    vat_rate: tt.valLabelVatRate,
   }
   const handleFormValidation = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target
@@ -391,19 +394,19 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
       return
     }
 
-    const fieldLabel = validationLabels[target.name] || 'dit veld'
+    const fieldLabel = validationLabels[target.name] || tt.thisField
 
     if (target.validity.valueMissing) {
-      target.setCustomValidity(`Gelieve ${fieldLabel} in te vullen.`)
+      target.setCustomValidity(`${tt.requiredFieldPrefix}${fieldLabel}${tt.requiredFieldSuffix}`)
       return
     }
 
     if (target.validity.typeMismatch && target instanceof HTMLInputElement && target.type === 'email') {
-      target.setCustomValidity('Gelieve een geldig e-mailadres in te vullen.')
+      target.setCustomValidity(tt.invalidEmail)
       return
     }
 
-    target.setCustomValidity('Controleer dit veld.')
+    target.setCustomValidity(tt.checkField)
   }
   const clearFormValidationMessage = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target
@@ -499,10 +502,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      BTW-opzoeking
+                      {tt.vatLookupSection}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Werk het btw-nummer bij om bedrijfs- en adresgegevens snel te verversen.
+                      {tt.vatEditDesc}
                     </p>
                   </div>
                 </div>
@@ -516,7 +519,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       type="text"
                       value={vatNumber}
                       onChange={(e) => setVatNumber(e.target.value)}
-                      placeholder="Bijv. BE0123456789 of DE123456789"
+                      placeholder={tt.vatNumberPlaceholder}
                       className="input-dark min-w-0 flex-1 px-3 py-2.5 text-sm"
                       required
                     />
@@ -533,7 +536,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                           <Search className="h-3.5 w-3.5" />
                         </span>
                         <span className="text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          {lookupLoading ? 'Zoeken...' : 'Zoek via btw'}
+                          {lookupLoading ? tt.searching : tt.vatSearchBtn}
                         </span>
                       </span>
                     </button>
@@ -551,10 +554,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Resultaten van opzoeking
+                          {tt.lookupResults}
                         </p>
                         <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          De gevonden gegevens worden hier samengevat en blijven meteen bewerkbaar.
+                          {tt.lookupResultsEditDesc}
                         </p>
                       </div>
                     </div>
@@ -562,16 +565,16 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Bedrijf
+                          {tt.company}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {companyName || 'Niet gevonden'}
+                          {companyName || tt.notFound}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          BTW-nummer
+                          {tt.vatNumber}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                           {vatNumber || '—'}
@@ -580,7 +583,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Land
+                          {tt.country}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                           {country || '—'}
@@ -589,19 +592,19 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5 sm:col-span-2 xl:col-span-2">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Straat / adres
+                          {tt.streetAddress}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {[street, houseNumber, bus].filter(Boolean).join(' ') || 'Niet gevonden'}
+                          {[street, houseNumber, bus].filter(Boolean).join(' ') || tt.notFound}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5 sm:col-span-2 xl:col-span-1">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Postcode / plaats
+                          {tt.postalCity}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {[postalCode, city].filter(Boolean).join(' · ') || 'Niet gevonden'}
+                          {[postalCode, city].filter(Boolean).join(' · ') || tt.notFound}
                         </p>
                       </div>
                     </div>
@@ -618,10 +621,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Adreskaartje
+                      {tt.addressMap}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Live kaartpositie van dit klantadres.
+                      {tt.mapEditDesc}
                     </p>
                   </div>
                 </div>
@@ -647,10 +650,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Klant & contact
+                      {tt.customerContact}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Dezelfde verzorgde basisweergave als bij een nieuwe klant.
+                      {tt.customerContactEditDesc}
                     </p>
                   </div>
                 </div>
@@ -663,43 +666,43 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                      Contact & verzending
+                      {tt.contactShipping}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Alle kerngegevens netjes uitgelijnd in één gelijkmatig overzicht.
+                      {tt.contactShippingDesc}
                     </p>
                   </div>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Bedrijf</label>
+                    <label className={fieldLabelClass}>{tt.company}</label>
                     <input
                       name="company_name"
                       type="text"
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. Atelier Nova BV"
+                      placeholder={tt.companyExample}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>E-mail</label>
+                    <label className={fieldLabelClass}>{tt.email}</label>
                     <input
                       name="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="bijv. info@bedrijf.be"
+                      placeholder={tt.emailExample}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Aanspreektitel</label>
+                    <label className={fieldLabelClass}>{tt.salutation}</label>
                     <div className="relative">
                       <select
                         name="salutation"
@@ -709,25 +712,25 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         style={nativeSelectStyle}
                         required
                       >
-                        <option value="">Selecteer aanspreking</option>
-                        <option value="Dhr.">Dhr.</option>
-                        <option value="Mevr.">Mevr.</option>
-                        <option value="Dr.">Dr.</option>
-                        <option value="Familie">Familie</option>
-                        <option value="Team">Team</option>
+                        <option value="">{tt.selectSalutation}</option>
+                        <option value="Dhr.">{tt.salutationMr}</option>
+                        <option value="Mevr.">{tt.salutationMrs}</option>
+                        <option value="Dr.">{tt.salutationDr}</option>
+                        <option value="Familie">{tt.salutationFamily}</option>
+                        <option value="Team">{tt.salutationTeam}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Facturatie e-mail</label>
+                    <label className={fieldLabelClass}>{tt.invoiceEmail}</label>
                     <input
                       type="email"
                       value={invoiceEmail}
                       onChange={(e) => setInvoiceEmail(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
+                      placeholder={email ? tt.sameAs.replace('{email}', email) : tt.invoiceEmailExample}
                     />
                     <input
                       type="hidden"
@@ -737,70 +740,70 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Voornaam</label>
+                    <label className={fieldLabelClass}>{tt.firstName}</label>
                     <input
                       name="director_first_name"
                       type="text"
                       value={directorFirstName}
                       onChange={(e) => setDirectorFirstName(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. Sophie"
+                      placeholder={tt.firstNameExample}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Vast nummer</label>
+                    <label className={fieldLabelClass}>{tt.phone}</label>
                     <input
                       name="phone"
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. 02 123 45 67"
+                      placeholder={tt.phoneExample}
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Familienaam</label>
+                    <label className={fieldLabelClass}>{tt.lastName}</label>
                     <input
                       name="director_last_name"
                       type="text"
                       value={directorLastName}
                       onChange={(e) => setDirectorLastName(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. Peeters"
+                      placeholder={tt.lastNameExample}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Mobiel nummer</label>
+                    <label className={fieldLabelClass}>{tt.mobile}</label>
                     <input
                       name="mobile"
                       type="tel"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. 0470 12 34 56"
+                      placeholder={tt.mobileExample}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Faxnummer</label>
+                    <label className={fieldLabelClass}>{tt.fax}</label>
                     <input
                       name="fax"
                       type="tel"
                       value={fax}
                       onChange={(e) => setFax(e.target.value)}
                       className="input-dark w-full px-3 py-2.5 text-sm"
-                      placeholder="Bijv. 02 123 45 68"
+                      placeholder={tt.faxExample}
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Taal</label>
+                    <label className={fieldLabelClass}>{tt.language}</label>
                     <div className="relative">
                       <select
                         name="language"
@@ -810,7 +813,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         style={nativeSelectStyle}
                         required
                       >
-                        <option value="">Selecteer taal</option>
+                        <option value="">{tt.selectLanguage}</option>
                         <option value="NL">NL</option>
                         <option value="FR">FR</option>
                         <option value="ENG">ENG</option>
@@ -827,85 +830,85 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     </span>
                     <div>
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Adres
+                        {tt.address}
                       </p>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Automatisch overgenomen of bijgewerkt via de btw-opzoeking.
+                        {tt.addressFromVatEdit}
                       </p>
                     </div>
                   </div>
 
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-2 sm:col-span-2">
-                      <label className={fieldLabelClass}>Straat</label>
+                      <label className={fieldLabelClass}>{tt.street}</label>
                       <input
                         type="text"
                         value={street}
                         onChange={(e) => setStreet(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. Kerkstraat"
+                        placeholder={tt.streetExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Nr</label>
+                      <label className={fieldLabelClass}>{tt.houseNumber}</label>
                       <input
                         type="text"
                         value={houseNumber}
                         onChange={(e) => setHouseNumber(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. 12"
+                        placeholder={tt.houseNumberExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Bus</label>
+                      <label className={fieldLabelClass}>{tt.bus}</label>
                       <input
                         type="text"
                         value={bus}
                         onChange={(e) => setBus(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. A"
+                        placeholder={tt.busExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Postcode</label>
+                      <label className={fieldLabelClass}>{tt.postalCode}</label>
                       <input
                         type="text"
                         value={postalCode}
                         onChange={(e) => setPostalCode(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. 9000"
+                        placeholder={tt.postalCodeExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Gemeente</label>
+                      <label className={fieldLabelClass}>{tt.city}</label>
                       <input
                         type="text"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. Gent"
+                        placeholder={tt.cityExample}
                       />
                     </div>
 
                     <div className="grid gap-2 sm:col-span-2">
-                      <label className={fieldLabelClass}>Land</label>
+                      <label className={fieldLabelClass}>{tt.countryField}</label>
                       <input
                         type="text"
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. België"
+                        placeholder={tt.countryExample}
                       />
                     </div>
                   </div>
 
                   <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-3">
                     <p className="text-sm font-semibold text-[var(--text-main)]">
-                      {addressPreview || 'Nog geen adres beschikbaar'}
+                      {addressPreview || tt.noAddress}
                     </p>
 
                     {addressLookupMessage && (
@@ -921,7 +924,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       className="mt-3 inline-flex items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-card)]/80 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Search className="h-4 w-4 text-[var(--accent)]" />
-                      {addressLookupLoading ? 'Adres zoeken...' : 'Kaartpositie opnieuw bepalen'}
+                      {addressLookupLoading ? tt.addressSearching : tt.recomputeMapPosition}
                     </button>
                   </div>
                 </div>
@@ -936,10 +939,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Facturatie
+                      {tt.billing}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Betaalinstellingen en voorwaarden in hetzelfde verfijnde blok.
+                      {tt.billingEditDesc}
                     </p>
                   </div>
                 </div>
@@ -948,16 +951,16 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
               <div className={sectionBodyClass}>
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                    Facturatie & voorwaarden
+                    {tt.billingTerms}
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Standaard betaal- en offerte-instellingen voor deze klant.
+                    {tt.billingTermsDesc}
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Betalingstermijn (dagen)</label>
+                    <label className={fieldLabelClass}>{tt.paymentTerm}</label>
                     <div className="relative">
                       <select
                         name="payment_term_days"
@@ -966,22 +969,22 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         className={softSelectClass}
                         style={nativeSelectStyle}
                       >
-                        <option value="">Selecteer betalingstermijn</option>
-                        <option value="0">Contant / onmiddellijk</option>
-                        <option value="7">7 dagen</option>
-                        <option value="14">14 dagen</option>
-                        <option value="21">21 dagen</option>
-                        <option value="30">30 dagen</option>
-                        <option value="45">45 dagen</option>
-                        <option value="60">60 dagen</option>
-                        <option value="90">90 dagen</option>
+                        <option value="">{tt.selectPaymentTerm}</option>
+                        <option value="0">{tt.paymentTermImmediate}</option>
+                        <option value="7">7 {tt.days}</option>
+                        <option value="14">14 {tt.days}</option>
+                        <option value="21">21 {tt.days}</option>
+                        <option value="30">30 {tt.days}</option>
+                        <option value="45">45 {tt.days}</option>
+                        <option value="60">60 {tt.days}</option>
+                        <option value="90">90 {tt.days}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Geldigheid offerte (dagen)</label>
+                    <label className={fieldLabelClass}>{tt.quoteValidity}</label>
                     <div className="relative">
                       <select
                         name="quote_validity_days"
@@ -990,21 +993,21 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         className={softSelectClass}
                         style={nativeSelectStyle}
                       >
-                        <option value="">Selecteer geldigheid</option>
-                        <option value="7">7 dagen</option>
-                        <option value="14">14 dagen</option>
-                        <option value="15">15 dagen</option>
-                        <option value="30">30 dagen</option>
-                        <option value="45">45 dagen</option>
-                        <option value="60">60 dagen</option>
-                        <option value="90">90 dagen</option>
+                        <option value="">{tt.selectQuoteValidity}</option>
+                        <option value="7">7 {tt.days}</option>
+                        <option value="14">14 {tt.days}</option>
+                        <option value="15">15 {tt.days}</option>
+                        <option value="30">30 {tt.days}</option>
+                        <option value="45">45 {tt.days}</option>
+                        <option value="60">60 {tt.days}</option>
+                        <option value="90">90 {tt.days}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Betaalwijze</label>
+                    <label className={fieldLabelClass}>{tt.paymentMethod}</label>
                     <div className="relative">
                       <select
                         name="payment_method"
@@ -1013,20 +1016,20 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         className={softSelectClass}
                         style={nativeSelectStyle}
                       >
-                        <option value="">Selecteer betaalwijze</option>
-                        <option value="overschrijving">Overschrijving</option>
-                        <option value="bancontact">Bancontact</option>
-                        <option value="kredietkaart">Kredietkaart</option>
-                        <option value="domiciliëring">Domiciliëring</option>
-                        <option value="contant">Contant</option>
-                        <option value="paypal">PayPal</option>
+                        <option value="">{tt.selectPaymentMethod}</option>
+                        <option value="overschrijving">{tt.paymentMethodTransfer}</option>
+                        <option value="bancontact">{tt.paymentMethodBancontact}</option>
+                        <option value="kredietkaart">{tt.paymentMethodCreditCard}</option>
+                        <option value="domiciliëring">{tt.paymentMethodDirectDebit}</option>
+                        <option value="contant">{tt.paymentMethodCash}</option>
+                        <option value="paypal">{tt.paymentMethodPaypal}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>Munteenheid</label>
+                    <label className={fieldLabelClass}>{tt.currency}</label>
                     <div className="relative">
                       <select
                         name="currency"
@@ -1035,17 +1038,17 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         className={softSelectClass}
                         style={nativeSelectStyle}
                       >
-                        <option value="EUR">EUR — Euro</option>
-                        <option value="USD">USD — US Dollar</option>
-                        <option value="GBP">GBP — Britse pond</option>
-                        <option value="CHF">CHF — Zwitserse frank</option>
+                        <option value="EUR">{tt.currencyEur}</option>
+                        <option value="USD">{tt.currencyUsd}</option>
+                        <option value="GBP">{tt.currencyGbp}</option>
+                        <option value="CHF">{tt.currencyChf}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>BTW-nummer</label>
+                    <label className={fieldLabelClass}>{tt.vatNumber}</label>
                     <input
                       type="text"
                       value={vatNumber}
@@ -1055,7 +1058,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </div>
 
                   <div className="grid gap-2">
-                    <label className={fieldLabelClass}>BTW-tarief</label>
+                    <label className={fieldLabelClass}>{tt.vatRate}</label>
                     <div className="relative">
                       <select
                         name="vat_rate"
@@ -1064,14 +1067,14 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                         className={softSelectClass}
                         style={nativeSelectStyle}
                       >
-                        <option value="">Selecteer btw-tarief</option>
+                        <option value="">{tt.selectVatRate}</option>
                         <option value="21%">21%</option>
                         <option value="12%">12%</option>
                         <option value="6%">6%</option>
                         <option value="0%">0%</option>
-                        <option value="vrijgesteld">Vrijgesteld</option>
-                        <option value="btw verlegd">Btw verlegd</option>
-                        <option value="intracommunautair">Intracommunautair</option>
+                        <option value="vrijgesteld">{tt.vatExempt}</option>
+                        <option value="btw verlegd">{tt.vatReverseCharge}</option>
+                        <option value="intracommunautair">{tt.vatIntraCommunity}</option>
                       </select>
                       <ChevronDown className={softSelectIconClass} size={16} />
                     </div>
@@ -1085,36 +1088,36 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     </span>
                     <div>
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Bankgegevens
+                        {tt.bankDetails}
                       </p>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Voor facturen en betalingen. Vul hier de IBAN en BIC van de klant in.
+                        {tt.bankDetailsDesc}
                       </p>
                     </div>
                   </div>
 
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>IBAN</label>
+                      <label className={fieldLabelClass}>{tt.iban}</label>
                       <input
                         name="iban"
                         type="text"
                         value={iban}
                         onChange={(e) => setIban(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. BE68 5390 0754 7034"
+                        placeholder={tt.ibanExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>BIC</label>
+                      <label className={fieldLabelClass}>{tt.bic}</label>
                       <input
                         name="bic"
                         type="text"
                         value={bic}
                         onChange={(e) => setBic(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. GKCCBEBB"
+                        placeholder={tt.bicExample}
                       />
                     </div>
                   </div>
@@ -1138,10 +1141,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Commentaar
+                      {tt.commentsSection}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Interne notities of extra opmerkingen voor dit klantdossier.
+                      {tt.commentsDesc}
                     </p>
                   </div>
                 </div>
@@ -1153,7 +1156,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                   className="input-dark min-h-[320px] w-full flex-1 resize-none px-3 py-2.5 text-sm"
-                  placeholder="Extra opmerkingen of interne notities"
+                  placeholder={tt.commentsPlaceholder}
                 />
               </div>
             </section>
@@ -1166,10 +1169,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </span>
                   <div className="min-w-0 flex-1">
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Toegang klantportaal
+                      {tt.accessPortalTitle}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Kies of je niets wijzigt, een uitnodiging stuurt, of zelf een tijdelijk wachtwoord instelt.
+                      {tt.accessPortalDesc}
                     </p>
                   </div>
                 </div>
@@ -1192,7 +1195,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       onChange={() => setPasswordMode('keep')}
                       className="mt-1 accent-[var(--accent)]"
                     />
-                    <span>Geen wijziging aan login of wachtwoord</span>
+                    <span>{tt.modeKeep}</span>
                   </label>
 
                   <label
@@ -1210,7 +1213,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       onChange={() => setPasswordMode('invite')}
                       className="mt-1 accent-[var(--accent)]"
                     />
-                    <span>Klant kiest zelf een wachtwoord via uitnodigingsmail</span>
+                    <span>{tt.modeInviteEdit}</span>
                   </label>
 
                   <label
@@ -1228,14 +1231,14 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                       onChange={() => setPasswordMode('manual')}
                       className="mt-1 accent-[var(--accent)]"
                     />
-                    <span>Ik stel nu zelf een tijdelijk wachtwoord in</span>
+                    <span>{tt.modeManualEdit}</span>
                   </label>
                 </div>
 
                 {passwordMode === 'manual' ? (
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Nieuw tijdelijk wachtwoord</label>
+                      <label className={fieldLabelClass}>{tt.newTempPassword}</label>
                       <input
                         name="password"
                         type="password"
@@ -1248,7 +1251,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                     </div>
 
                     <div className="grid gap-2">
-                      <label className={fieldLabelClass}>Bevestig wachtwoord</label>
+                      <label className={fieldLabelClass}>{tt.confirmPasswordShort}</label>
                       <input
                         name="password_confirm"
                         type="password"
@@ -1262,11 +1265,11 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
                   </div>
                 ) : passwordMode === 'invite' ? (
                   <p className="mt-3 text-xs text-[var(--text-soft)]">
-                    Na opslaan ontvangt de klant een e-mail om zelf een nieuw wachtwoord te kiezen.
+                    {tt.inviteAfterSave}
                   </p>
                 ) : (
                   <p className="mt-3 text-xs text-[var(--text-soft)]">
-                    De bestaande login van deze klant blijft ongewijzigd.
+                    {tt.loginUnchanged}
                   </p>
                 )}
               </div>
@@ -1284,10 +1287,10 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
             </span>
             <span className="min-w-0">
               <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                Klantfiche
+                {tt.customerFile}
               </span>
               <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                Terug zonder wijzigingen
+                {tt.backWithoutChanges}
               </span>
             </span>
           </span>
@@ -1306,19 +1309,19 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
             <span className="min-w-0">
               <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
                 {inviteCooldownActive
-                  ? `Wacht ${inviteCooldownRemainingSec}s`
+                  ? tt.waitSeconds.replace('{count}', String(inviteCooldownRemainingSec))
                   : passwordMode === 'manual'
-                  ? 'Opslaan met wachtwoord'
+                  ? tt.saveWithPasswordShort
                   : passwordMode === 'invite'
-                    ? 'Opslaan & uitnodigen'
-                    : 'Wijzigingen opslaan'}
+                    ? tt.saveAndInvite
+                    : tt.saveChanges}
               </span>
               <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
                 {passwordMode === 'manual'
-                  ? 'Update klant en stel meteen een tijdelijk wachtwoord in'
+                  ? tt.saveManualDesc
                   : passwordMode === 'invite'
-                    ? 'Sla op en verstuur een uitnodigingsmail'
-                    : 'Bewaar de aangepaste klantfiche'}
+                    ? tt.saveInviteDesc
+                    : tt.saveDefaultDesc}
               </span>
             </span>
           </span>
@@ -1327,8 +1330,7 @@ export default function CustomerEditForm({ action, customer, logoPreviewUrl }: P
 
       {inviteCooldownActive && (
         <p className="text-xs text-[var(--text-soft)]">
-          Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
-          {inviteCooldownRemainingSec}s.
+          {tt.inviteCooldownActive.replace('{count}', String(inviteCooldownRemainingSec))}
         </p>
       )}
     </form>

@@ -2,6 +2,7 @@
 
 import { type FormEvent, useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useT } from '@/i18n/context'
 import {
   ArrowLeft,
   Building2,
@@ -92,6 +93,9 @@ export default function CustomerForm({
   showSubmitAndBackButton = true,
 }: CustomerFormProps) {
 
+  const { t } = useT()
+  const tt = t.customerForm
+
   // --- STATE ---
   const [vatNumber, setVatNumber] = useState(initialData.vatNumber || "");
   const [companyName, setCompanyName] = useState(initialData.companyName || "");
@@ -150,7 +154,7 @@ export default function CustomerForm({
 
   const handleVatLookup = async () => {
     if (!vatNumber.trim()) {
-      setLookupMessage('Vul eerst een btw-nummer in.')
+      setLookupMessage(tt.vatLookupEmpty)
       return
     }
 
@@ -175,7 +179,7 @@ export default function CustomerForm({
         }
       } catch {
         console.error('VAT lookup returned non-JSON:', rawText)
-        setLookupMessage('De btw-opzoeking gaf geen geldig antwoord terug.')
+        setLookupMessage(tt.vatLookupInvalidResponse)
         return
       }
 
@@ -185,14 +189,14 @@ export default function CustomerForm({
             ? data.details
               ? `${data.error} (${data.details})`
               : data.error
-            : 'Lookup mislukt.'
+            : tt.vatLookupFailed
 
         setLookupMessage(message)
         return
       }
 
       if (!data.valid) {
-        setLookupMessage('BTW-nummer is niet geldig volgens VIES.')
+        setLookupMessage(tt.vatNumberInvalidVies)
         return
       }
 
@@ -206,10 +210,10 @@ export default function CustomerForm({
       if (data.longitude != null) setLongitude(data.longitude)
       if (data.mapLabel) setMapLabel(data.mapLabel)
 
-      setLookupMessage('Gegevens succesvol opgehaald via btw-nummer.')
+      setLookupMessage(tt.vatLookupSuccess)
     } catch (error) {
       console.error('VAT lookup fetch error:', error)
-      setLookupMessage('Er liep iets fout bij het ophalen van btw-gegevens.')
+      setLookupMessage(tt.vatLookupError)
     } finally {
       setLookupLoading(false)
     }
@@ -232,7 +236,7 @@ export default function CustomerForm({
 
       if (!silent) {
         setAddressLookupMessage(
-          'Vul minstens straat, postcode of gemeente, en land in voor de kaartpositie.'
+          tt.addressLookupIncomplete
         )
       }
       return
@@ -240,7 +244,7 @@ export default function CustomerForm({
 
     try {
       setAddressLookupLoading(true)
-      if (!silent) setAddressLookupMessage('Adres op kaart zoeken...')
+      if (!silent) setAddressLookupMessage(tt.addressLookupSearching)
 
       const response = await fetch('/api/geocode', {
         method: 'POST',
@@ -251,13 +255,13 @@ export default function CustomerForm({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Geen coördinaten gevonden.')
+        throw new Error(data.error || tt.geocodeNoResults)
       }
 
       setLatitude(data.latitude ?? null)
       setLongitude(data.longitude ?? null)
       setMapLabel(data.display_name || address)
-      setAddressLookupMessage('Adres op kaart gevonden.')
+      setAddressLookupMessage(tt.addressLookupSuccess)
     } catch (error) {
       setLatitude(null)
       setLongitude(null)
@@ -265,7 +269,7 @@ export default function CustomerForm({
       setAddressLookupMessage(
         error instanceof Error
           ? error.message
-          : 'Er liep iets fout bij het zoeken van de kaartpositie.'
+          : tt.addressLookupError
       )
     } finally {
       setAddressLookupLoading(false)
@@ -314,22 +318,22 @@ export default function CustomerForm({
     'text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]'
   const nativeSelectStyle = { colorScheme: 'dark' as const }
   const validationLabels: Record<string, string> = {
-    vat_number: 'het btw-nummer',
-    company_name: 'de bedrijfsnaam',
-    email: 'het e-mailadres',
-    invoice_email: 'het facturatie e-mailadres',
-    salutation: 'de aanspreektitel',
-    director_first_name: 'de voornaam',
-    director_last_name: 'de familienaam',
-    mobile: 'het mobiele nummer',
-    language: 'de taal',
-    iban: 'de IBAN',
-    bic: 'de BIC',
-    payment_term_days: 'de betalingstermijn',
-    quote_validity_days: 'de geldigheid van de offerte',
-    payment_method: 'de betaalwijze',
-    currency: 'de munteenheid',
-    vat_rate: 'het btw-tarief',
+    vat_number: tt.valLabelVatNumber,
+    company_name: tt.valLabelCompanyName,
+    email: tt.valLabelEmail,
+    invoice_email: tt.valLabelInvoiceEmail,
+    salutation: tt.valLabelSalutation,
+    director_first_name: tt.valLabelFirstName,
+    director_last_name: tt.valLabelLastName,
+    mobile: tt.valLabelMobile,
+    language: tt.valLabelLanguage,
+    iban: tt.valLabelIban,
+    bic: tt.valLabelBic,
+    payment_term_days: tt.valLabelPaymentTerm,
+    quote_validity_days: tt.valLabelQuoteValidity,
+    payment_method: tt.valLabelPaymentMethod,
+    currency: tt.valLabelCurrency,
+    vat_rate: tt.valLabelVatRate,
   }
   const handleFormValidation = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target
@@ -342,19 +346,19 @@ export default function CustomerForm({
       return
     }
 
-    const fieldLabel = validationLabels[target.name] || 'dit veld'
+    const fieldLabel = validationLabels[target.name] || tt.thisField
 
     if (target.validity.valueMissing) {
-      target.setCustomValidity(`Gelieve ${fieldLabel} in te vullen.`)
+      target.setCustomValidity(`${tt.requiredFieldPrefix}${fieldLabel}${tt.requiredFieldSuffix}`)
       return
     }
 
     if (target.validity.typeMismatch && target instanceof HTMLInputElement && target.type === 'email') {
-      target.setCustomValidity('Gelieve een geldig e-mailadres in te vullen.')
+      target.setCustomValidity(tt.invalidEmail)
       return
     }
 
-    target.setCustomValidity('Controleer dit veld.')
+    target.setCustomValidity(tt.checkField)
   }
   const clearFormValidationMessage = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target
@@ -440,11 +444,10 @@ export default function CustomerForm({
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      BTW-opzoeking
+                      {tt.vatLookupSection}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Start met het btw-nummer om bedrijfs- en adresgegevens sneller
-                      in te vullen.
+                      {tt.vatLookupDesc}
                     </p>
                   </div>
                 </div>
@@ -474,7 +477,7 @@ export default function CustomerForm({
                           <Search className="h-3.5 w-3.5" />
                         </span>
                         <span className="text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          {lookupLoading ? 'Zoeken...' : 'Zoek via btw'}
+                          {lookupLoading ? tt.searching : tt.vatSearchBtn}
                         </span>
                       </span>
                     </button>
@@ -492,10 +495,10 @@ export default function CustomerForm({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Resultaten van opzoeking
+                          {tt.lookupResults}
                         </p>
                         <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          Gevonden gegevens worden ook automatisch hieronder in het formulier ingevuld.
+                          {tt.lookupAutoFill}
                         </p>
                       </div>
                     </div>
@@ -503,16 +506,16 @@ export default function CustomerForm({
                     <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Bedrijf
+                          {tt.company}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {companyName || 'Niet gevonden'}
+                          {companyName || tt.notFound}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          BTW-nummer
+                          {tt.vatNumber}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                           {vatNumber || '—'}
@@ -521,7 +524,7 @@ export default function CustomerForm({
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Land
+                          {tt.country}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                           {country || '—'}
@@ -530,19 +533,19 @@ export default function CustomerForm({
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5 sm:col-span-2 xl:col-span-2">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Straat / adres
+                          {tt.streetAddress}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {[street, houseNumber, bus].filter(Boolean).join(' ') || 'Niet gevonden'}
+                          {[street, houseNumber, bus].filter(Boolean).join(' ') || tt.notFound}
                         </p>
                       </div>
 
                       <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5 sm:col-span-2 xl:col-span-1">
                         <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Postcode / plaats
+                          {tt.postalCity}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-                          {[postalCode, city].filter(Boolean).join(' · ') || 'Niet gevonden'}
+                          {[postalCode, city].filter(Boolean).join(' · ') || tt.notFound}
                         </p>
                       </div>
                     </div>
@@ -559,10 +562,10 @@ export default function CustomerForm({
                   </span>
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                      Adreskaartje
+                      {tt.addressMap}
                     </h2>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Kaartpositie vanuit de btw-opzoeking.
+                      {tt.addressMapDesc}
                     </p>
                   </div>
                 </div>
@@ -589,10 +592,10 @@ export default function CustomerForm({
                     </span>
                     <div>
                       <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                        Klant & contact
+                        {tt.customerContact}
                       </h2>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Alle basis-, contact- en verzendgegevens samen in één overzichtelijk blok.
+                        {tt.customerContactDesc}
                       </p>
                     </div>
                   </div>
@@ -605,10 +608,10 @@ export default function CustomerForm({
                     </span>
                     <div>
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                        Contact & verzending
+                        {tt.contactShipping}
                       </p>
                       <p className="mt-1 text-xs text-[var(--text-soft)]">
-                        Alle kerngegevens netjes uitgelijnd in één gelijkmatig overzicht.
+                        {tt.contactShippingDesc}
                       </p>
                     </div>
                   </div>
@@ -616,7 +619,7 @@ export default function CustomerForm({
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Bedrijf
+                        {tt.company}
                       </label>
                       <input
                         name="company_name"
@@ -624,14 +627,14 @@ export default function CustomerForm({
                         value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. Atelier Nova BV"
+                        placeholder={tt.companyExample}
                         required
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        E-mail
+                        {tt.email}
                       </label>
                       <input
                         name="email"
@@ -639,14 +642,14 @@ export default function CustomerForm({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="bijv. info@bedrijf.be"
+                        placeholder={tt.emailExample}
                         required
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Aanspreektitel
+                        {tt.salutation}
                       </label>
                       <div className="relative">
                         <select
@@ -657,12 +660,12 @@ export default function CustomerForm({
                           style={nativeSelectStyle}
                           required
                         >
-                          <option value="">Selecteer aanspreking</option>
-                          <option value="Dhr.">Dhr.</option>
-                          <option value="Mevr.">Mevr.</option>
-                          <option value="Dr.">Dr.</option>
-                          <option value="Familie">Familie</option>
-                          <option value="Team">Team</option>
+                          <option value="">{tt.selectSalutation}</option>
+                          <option value="Dhr.">{tt.salutationMr}</option>
+                          <option value="Mevr.">{tt.salutationMrs}</option>
+                          <option value="Dr.">{tt.salutationDr}</option>
+                          <option value="Familie">{tt.salutationFamily}</option>
+                          <option value="Team">{tt.salutationTeam}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -670,21 +673,21 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Facturatie e-mail
+                        {tt.invoiceEmail}
                       </label>
                       <input
                         type="email"
                         value={invoiceEmail}
                         onChange={(e) => setInvoiceEmail(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder={email ? `Zelfde als ${email}` : 'bijv. administratie@ateliernova.be'}
+                        placeholder={email ? tt.sameAs.replace('{email}', email) : tt.invoiceEmailExample}
                       />
                       <input type="hidden" name="invoice_email" value={resolvedInvoiceEmail} />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Voornaam
+                        {tt.firstName}
                       </label>
                       <input
                         name="director_first_name"
@@ -692,14 +695,14 @@ export default function CustomerForm({
                         value={directorFirstName}
                         onChange={(e) => setDirectorFirstName(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. Sophie"
+                        placeholder={tt.firstNameExample}
                         required
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Vast nummer
+                        {tt.phone}
                       </label>
                       <input
                         name="phone"
@@ -707,13 +710,13 @@ export default function CustomerForm({
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. 02 123 45 67"
+                        placeholder={tt.phoneExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Familienaam
+                        {tt.lastName}
                       </label>
                       <input
                         name="director_last_name"
@@ -721,14 +724,14 @@ export default function CustomerForm({
                         value={directorLastName}
                         onChange={(e) => setDirectorLastName(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. Peeters"
+                        placeholder={tt.lastNameExample}
                         required
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Mobiel nummer
+                        {tt.mobile}
                       </label>
                       <input
                         name="mobile"
@@ -736,14 +739,14 @@ export default function CustomerForm({
                         value={mobile}
                         onChange={(e) => setMobile(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. 0470 12 34 56"
+                        placeholder={tt.mobileExample}
                         required
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Faxnummer
+                        {tt.fax}
                       </label>
                       <input
                         name="fax"
@@ -751,13 +754,13 @@ export default function CustomerForm({
                         value={fax}
                         onChange={(e) => setFax(e.target.value)}
                         className="input-dark w-full px-3 py-2.5 text-sm"
-                        placeholder="Bijv. 02 123 45 68"
+                        placeholder={tt.faxExample}
                       />
                     </div>
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Taal
+                        {tt.language}
                       </label>
                       <div className="relative">
                         <select
@@ -768,7 +771,7 @@ export default function CustomerForm({
                           style={nativeSelectStyle}
                           required
                         >
-                          <option value="">Selecteer taal</option>
+                          <option value="">{tt.selectLanguage}</option>
                           <option value="NL">NL</option>
                           <option value="FR">FR</option>
                           <option value="ENG">ENG</option>
@@ -785,17 +788,17 @@ export default function CustomerForm({
                       </span>
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Adres
+                          {tt.address}
                         </p>
                         <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          Automatisch overgenomen vanuit de btw-opzoeking.
+                          {tt.addressFromVat}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-3">
                       <p className="text-sm font-semibold text-[var(--text-main)]">
-                        {addressPreview || 'Nog geen adres beschikbaar'}
+                        {addressPreview || tt.noAddress}
                       </p>
 
                       {addressLookupMessage && (
@@ -817,10 +820,10 @@ export default function CustomerForm({
                       </span>
                       <div>
                         <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                          Facturatie
+                          {tt.billing}
                         </h2>
                         <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          Betaalinstellingen en voorwaarden in één praktisch blok.
+                          {tt.billingDesc}
                         </p>
                       </div>
                     </div>
@@ -831,17 +834,17 @@ export default function CustomerForm({
                 <div className={sectionBodyClass}>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                      Facturatie & voorwaarden
+                      {tt.billingTerms}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Standaard betaal- en offerte-instellingen voor deze klant.
+                      {tt.billingTermsDesc}
                     </p>
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Betalingstermijn (dagen)
+                        {tt.paymentTerm}
                       </label>
                       <div className="relative">
                         <select
@@ -851,15 +854,15 @@ export default function CustomerForm({
                           className={softSelectClass}
                           style={nativeSelectStyle}
                         >
-                          <option value="">Selecteer betalingstermijn</option>
-                          <option value="0">Contant / onmiddellijk</option>
-                          <option value="7">7 dagen</option>
-                          <option value="14">14 dagen</option>
-                          <option value="21">21 dagen</option>
-                          <option value="30">30 dagen</option>
-                          <option value="45">45 dagen</option>
-                          <option value="60">60 dagen</option>
-                          <option value="90">90 dagen</option>
+                          <option value="">{tt.selectPaymentTerm}</option>
+                          <option value="0">{tt.paymentTermImmediate}</option>
+                          <option value="7">7 {tt.days}</option>
+                          <option value="14">14 {tt.days}</option>
+                          <option value="21">21 {tt.days}</option>
+                          <option value="30">30 {tt.days}</option>
+                          <option value="45">45 {tt.days}</option>
+                          <option value="60">60 {tt.days}</option>
+                          <option value="90">90 {tt.days}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -867,7 +870,7 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Geldigheid offerte (dagen)
+                        {tt.quoteValidity}
                       </label>
                       <div className="relative">
                         <select
@@ -877,14 +880,14 @@ export default function CustomerForm({
                           className={softSelectClass}
                           style={nativeSelectStyle}
                         >
-                          <option value="">Selecteer geldigheid</option>
-                          <option value="7">7 dagen</option>
-                          <option value="14">14 dagen</option>
-                          <option value="15">15 dagen</option>
-                          <option value="30">30 dagen</option>
-                          <option value="45">45 dagen</option>
-                          <option value="60">60 dagen</option>
-                          <option value="90">90 dagen</option>
+                          <option value="">{tt.selectQuoteValidity}</option>
+                          <option value="7">7 {tt.days}</option>
+                          <option value="14">14 {tt.days}</option>
+                          <option value="15">15 {tt.days}</option>
+                          <option value="30">30 {tt.days}</option>
+                          <option value="45">45 {tt.days}</option>
+                          <option value="60">60 {tt.days}</option>
+                          <option value="90">90 {tt.days}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -892,7 +895,7 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Betaalwijze
+                        {tt.paymentMethod}
                       </label>
                       <div className="relative">
                         <select
@@ -902,13 +905,13 @@ export default function CustomerForm({
                           className={softSelectClass}
                           style={nativeSelectStyle}
                         >
-                          <option value="">Selecteer betaalwijze</option>
-                          <option value="overschrijving">Overschrijving</option>
-                          <option value="bancontact">Bancontact</option>
-                          <option value="kredietkaart">Kredietkaart</option>
-                          <option value="domiciliëring">Domiciliëring</option>
-                          <option value="contant">Contant</option>
-                          <option value="paypal">PayPal</option>
+                          <option value="">{tt.selectPaymentMethod}</option>
+                          <option value="overschrijving">{tt.paymentMethodTransfer}</option>
+                          <option value="bancontact">{tt.paymentMethodBancontact}</option>
+                          <option value="kredietkaart">{tt.paymentMethodCreditCard}</option>
+                          <option value="domiciliëring">{tt.paymentMethodDirectDebit}</option>
+                          <option value="contant">{tt.paymentMethodCash}</option>
+                          <option value="paypal">{tt.paymentMethodPaypal}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -916,7 +919,7 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        Munteenheid
+                        {tt.currency}
                       </label>
                       <div className="relative">
                         <select
@@ -926,10 +929,10 @@ export default function CustomerForm({
                           className={softSelectClass}
                           style={nativeSelectStyle}
                         >
-                          <option value="EUR">EUR — Euro</option>
-                          <option value="USD">USD — US Dollar</option>
-                          <option value="GBP">GBP — Britse pond</option>
-                          <option value="CHF">CHF — Zwitserse frank</option>
+                          <option value="EUR">{tt.currencyEur}</option>
+                          <option value="USD">{tt.currencyUsd}</option>
+                          <option value="GBP">{tt.currencyGbp}</option>
+                          <option value="CHF">{tt.currencyChf}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -937,7 +940,7 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        BTW-nummer
+                        {tt.vatNumber}
                       </label>
                       <input
                         type="text"
@@ -949,7 +952,7 @@ export default function CustomerForm({
 
                     <div className="grid gap-2">
                       <label className={fieldLabelClass}>
-                        BTW-tarief
+                        {tt.vatRate}
                       </label>
                       <div className="relative">
                         <select
@@ -959,14 +962,14 @@ export default function CustomerForm({
                           className={softSelectClass}
                           style={nativeSelectStyle}
                         >
-                          <option value="">Selecteer btw-tarief</option>
+                          <option value="">{tt.selectVatRate}</option>
                           <option value="21%">21%</option>
                           <option value="12%">12%</option>
                           <option value="6%">6%</option>
                           <option value="0%">0%</option>
-                          <option value="vrijgesteld">Vrijgesteld</option>
-                          <option value="btw verlegd">Btw verlegd</option>
-                          <option value="intracommunautair">Intracommunautair</option>
+                          <option value="vrijgesteld">{tt.vatExempt}</option>
+                          <option value="btw verlegd">{tt.vatReverseCharge}</option>
+                          <option value="intracommunautair">{tt.vatIntraCommunity}</option>
                         </select>
                         <ChevronDown className={softSelectIconClass} size={16} />
                       </div>
@@ -980,10 +983,10 @@ export default function CustomerForm({
                       </span>
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                          Bankgegevens
+                          {tt.bankDetails}
                         </p>
                         <p className="mt-1 text-xs text-[var(--text-soft)]">
-                          Voor facturen en betalingen. Vul hier de IBAN en BIC van de klant in.
+                          {tt.bankDetailsDesc}
                         </p>
                       </div>
                     </div>
@@ -991,7 +994,7 @@ export default function CustomerForm({
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       <div className="grid gap-2">
                         <label className={fieldLabelClass}>
-                          IBAN
+                          {tt.iban}
                         </label>
                         <input
                           name="iban"
@@ -999,13 +1002,13 @@ export default function CustomerForm({
                           value={iban}
                           onChange={(e) => setIban(e.target.value)}
                           className="input-dark w-full px-3 py-2.5 text-sm"
-                          placeholder="Bijv. BE68 5390 0754 7034"
+                          placeholder={tt.ibanExample}
                         />
                       </div>
 
                       <div className="grid gap-2">
                         <label className={fieldLabelClass}>
-                          BIC
+                          {tt.bic}
                         </label>
                         <input
                           name="bic"
@@ -1013,7 +1016,7 @@ export default function CustomerForm({
                           value={bic}
                           onChange={(e) => setBic(e.target.value)}
                           className="input-dark w-full px-3 py-2.5 text-sm"
-                          placeholder="Bijv. GKCCBEBB"
+                          placeholder={tt.bicExample}
                         />
                       </div>
                     </div>
@@ -1034,10 +1037,10 @@ export default function CustomerForm({
                 </span>
                 <div>
                   <h2 className="text-sm font-semibold text-[var(--text-main)]">
-                    Toegang &amp; wachtwoord
+                    {tt.accessPassword}
                   </h2>
                   <p className="mt-1 text-xs text-[var(--text-soft)]">
-                    Kies hoe de klant toegang krijgt tot het platform.
+                    {tt.accessPasswordDesc}
                   </p>
                 </div>
               </div>
@@ -1064,10 +1067,10 @@ export default function CustomerForm({
                     <span className={`block text-[13px] font-semibold leading-5 ${
                       passwordMode === 'invite' ? 'text-[var(--accent)]' : 'text-[var(--text-main)]'
                     }`}>
-                      Uitnodiging per e-mail
+                      {tt.passwordModeInvite}
                     </span>
                     <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                      Klant ontvangt een e-mail om zelf een wachtwoord in te stellen
+                      {tt.passwordModeInviteDesc}
                     </span>
                   </span>
                 </button>
@@ -1090,10 +1093,10 @@ export default function CustomerForm({
                     <span className={`block text-[13px] font-semibold leading-5 ${
                       passwordMode === 'manual' ? 'text-[var(--accent)]' : 'text-[var(--text-main)]'
                     }`}>
-                      Wachtwoord instellen
+                      {tt.passwordModeManual}
                     </span>
                     <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                      Stel zelf een tijdelijk wachtwoord in voor de klant
+                      {tt.passwordModeManualDesc}
                     </span>
                   </span>
                 </button>
@@ -1103,7 +1106,7 @@ export default function CustomerForm({
               {passwordMode === 'invite' && (
                 <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.06] px-4 py-3">
                   <p className="text-[12px] leading-5 text-blue-300">
-                    <strong>Hoe werkt het?</strong> De klant ontvangt een e-mail met een link om een eigen wachtwoord te kiezen. Het account is direct actief zodra het wachtwoord is ingesteld.
+                    <strong>{tt.howItWorks}</strong>{tt.howItWorksDesc}
                   </p>
                 </div>
               )}
@@ -1113,13 +1116,13 @@ export default function CustomerForm({
                 <div className="space-y-3">
                   <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-4 py-3">
                     <p className="text-[12px] leading-5 text-amber-300">
-                      <strong>Let op:</strong> Deel het wachtwoord veilig met de klant. Er wordt geen automatische e-mail verstuurd.
+                      <strong>{tt.attention}</strong>{tt.attentionDesc}
                     </p>
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="grid gap-1.5">
                       <label htmlFor="password" className="text-[11px] font-medium text-[var(--text-soft)]">
-                        Wachtwoord *
+                        {tt.password}
                       </label>
                       <div className="relative">
                         <input
@@ -1130,7 +1133,7 @@ export default function CustomerForm({
                           minLength={8}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Min. 8 tekens"
+                          placeholder={tt.passwordPlaceholder}
                           className="input-dark h-9 w-full px-3 py-1.5 pr-9 text-[12px]"
                         />
                         <button
@@ -1145,7 +1148,7 @@ export default function CustomerForm({
                     </div>
                     <div className="grid gap-1.5">
                       <label htmlFor="password_confirm" className="text-[11px] font-medium text-[var(--text-soft)]">
-                        Bevestig wachtwoord *
+                        {tt.passwordConfirm}
                       </label>
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -1155,16 +1158,16 @@ export default function CustomerForm({
                         minLength={8}
                         value={passwordConfirm}
                         onChange={(e) => setPasswordConfirm(e.target.value)}
-                        placeholder="Herhaal wachtwoord"
+                        placeholder={tt.passwordConfirmPlaceholder}
                         className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
                       />
                     </div>
                   </div>
                   {password && passwordConfirm && password !== passwordConfirm && (
-                    <p className="text-[11px] text-red-400">Wachtwoorden komen niet overeen.</p>
+                    <p className="text-[11px] text-red-400">{tt.passwordMismatch}</p>
                   )}
                   {password && password.length > 0 && password.length < 8 && (
-                    <p className="text-[11px] text-amber-400">Wachtwoord moet minimaal 8 tekens bevatten.</p>
+                    <p className="text-[11px] text-amber-400">{tt.passwordTooShort}</p>
                   )}
                 </div>
               )}
@@ -1187,10 +1190,10 @@ export default function CustomerForm({
                 </span>
                 <span className="min-w-0">
                   <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                    Klanten
+                    {tt.customersBtn}
                   </span>
                   <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                    Terug naar overzicht
+                    {tt.backToOverview}
                   </span>
                 </span>
               </span>
@@ -1209,15 +1212,15 @@ export default function CustomerForm({
                 <span className="min-w-0">
                   <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
                     {inviteCooldownActive
-                      ? `Wacht ${inviteCooldownRemainingSec}s`
+                      ? tt.waitSeconds.replace('{count}', String(inviteCooldownRemainingSec))
                       : passwordMode === 'manual'
-                        ? 'Klant aanmaken'
-                        : 'Klantaccount aanmaken'}
+                        ? tt.createCustomer
+                        : tt.createCustomerAccount}
                   </span>
                   <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
                     {passwordMode === 'manual'
-                      ? 'Account opslaan met tijdelijk wachtwoord'
-                      : 'Verstuur uitnodiging voor toegang'}
+                      ? tt.saveWithPassword
+                      : tt.sendInvite}
                   </span>
                 </span>
               </span>
@@ -1227,8 +1230,7 @@ export default function CustomerForm({
 
         {inviteCooldownActive && (
           <p className="text-xs text-[var(--text-soft)]">
-            Uitnodigingsmail cooldown actief. Je kan opnieuw uitnodigen over{' '}
-            {inviteCooldownRemainingSec}s.
+            {tt.inviteCooldownActive.replace('{count}', String(inviteCooldownRemainingSec))}
           </p>
         )}
     </form>
