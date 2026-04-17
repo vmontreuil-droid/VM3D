@@ -854,6 +854,69 @@ const en: Dictionary = {
     noSitesForStatus: 'No sites found for this status.',
     priceUndetermined: 'Not yet determined',
   },
+
+  portal: {
+    customerPortal: 'Customer portal',
+    welcome: 'Welcome',
+    welcomeNoCompanyDesc: 'Welcome to your customer portal. Easily track your ongoing projects, uploads and deliverables.',
+    welcomeCompanyDesc: 'Welcome to the customer portal of {company}. Easily track your ongoing projects, uploads and deliverables.',
+    sites: 'Sites',
+    active: 'Active',
+    uploads: 'Uploads',
+    delivery: 'Delivery',
+  },
+
+  mapPopup: {
+    noAddress: 'No address',
+    customerLabel: 'Customer',
+    unknown: 'Unknown',
+    openSite: 'Open site',
+    openCustomer: 'Open customer',
+    siteCount: '{count} site',
+    sitesCount: '{count} sites',
+    customer: 'Customer',
+    sitesLayer: 'Sites',
+    customersLayer: 'Customers',
+    loadingMap: 'Loading map...',
+    noLocations: 'No locations available',
+    noLocationsDot: 'No locations available.',
+  },
+
+  notesWidget: {
+    title: 'Notes',
+    newNotePlaceholder: 'New note...',
+    noNotes: 'No notes yet.',
+  },
+
+  logoUpload: {
+    companyLogo: 'Company logo',
+    companyLogoDesc: 'Add a logo for the customer card and billing overviews.',
+    uploadLogo: 'Upload logo',
+    logoTip: 'Tip: use a landscape logo in PNG, JPG, WEBP or SVG.',
+    clear: 'Clear',
+    logoPreviewAlt: 'Logo preview',
+    noLogo: 'No logo yet',
+    previewHint: 'A preview will appear here after upload.',
+    uploadFailed: 'Logo upload failed.',
+    uploaded: 'Logo uploaded. Will be saved on save.',
+    errorUploading: 'Something went wrong while uploading the logo.',
+    willBeRemoved: 'Logo will be removed when you save.',
+    uploading: 'Uploading...',
+    uploadFailedShort: 'Upload failed',
+    customerLogoAlt: 'Customer logo',
+    removeLogoAria: 'Remove logo',
+    uploadLogoAria: 'Upload logo',
+  },
+
+  fileList: {
+    noFilesFound: 'No files found.',
+    clientUpload: 'Client upload',
+    deliveryFile: 'Delivery file',
+    fileLabel: 'File',
+    view: 'View',
+    download: 'Download',
+    noLink: 'No link',
+  },
 }
 
 export default en

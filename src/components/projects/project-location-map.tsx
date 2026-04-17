@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useT } from '@/i18n/context'
 
 const ProjectLocationMapInner = dynamic(
   () => import('./project-location-map-inner'),
@@ -8,11 +9,16 @@ const ProjectLocationMapInner = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex h-[320px] w-full items-center justify-center text-sm text-[var(--text-soft)]">
-        Kaart laden...
+        <MapLoadingPlaceholder />
       </div>
     ),
   }
 )
+
+function MapLoadingPlaceholder() {
+  const { t } = useT()
+  return <>{t.mapPopup.loadingMap}</>
+}
 
 type Props = {
   latitude: number

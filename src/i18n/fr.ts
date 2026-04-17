@@ -854,6 +854,69 @@ const fr: Dictionary = {
     noSitesForStatus: 'Aucun chantier trouvé pour ce statut.',
     priceUndetermined: 'Pas encore déterminé',
   },
+
+  portal: {
+    customerPortal: 'Portail client',
+    welcome: 'Bienvenue',
+    welcomeNoCompanyDesc: 'Bienvenue dans votre portail client. Suivez facilement vos dossiers en cours, vos téléversements et vos livrables.',
+    welcomeCompanyDesc: 'Bienvenue dans le portail client de {company}. Suivez facilement vos dossiers en cours, vos téléversements et vos livrables.',
+    sites: 'Chantiers',
+    active: 'Actif',
+    uploads: 'Téléversements',
+    delivery: 'Livraison',
+  },
+
+  mapPopup: {
+    noAddress: 'Pas d\'adresse',
+    customerLabel: 'Client',
+    unknown: 'Inconnu',
+    openSite: 'Ouvrir le chantier',
+    openCustomer: 'Ouvrir le client',
+    siteCount: '{count} chantier',
+    sitesCount: '{count} chantiers',
+    customer: 'Client',
+    sitesLayer: 'Chantiers',
+    customersLayer: 'Clients',
+    loadingMap: 'Chargement de la carte...',
+    noLocations: 'Aucun emplacement disponible',
+    noLocationsDot: 'Aucun emplacement disponible.',
+  },
+
+  notesWidget: {
+    title: 'Notes',
+    newNotePlaceholder: 'Nouvelle note...',
+    noNotes: 'Aucune note.',
+  },
+
+  logoUpload: {
+    companyLogo: 'Logo de l\'entreprise',
+    companyLogoDesc: 'Ajoutez un logo pour la fiche client et les aperçus de facturation.',
+    uploadLogo: 'Téléverser le logo',
+    logoTip: 'Conseil : utilisez un logo horizontal en PNG, JPG, WEBP ou SVG.',
+    clear: 'Effacer',
+    logoPreviewAlt: 'Aperçu du logo',
+    noLogo: 'Aucun logo',
+    previewHint: 'Après téléversement, un aperçu s\'affichera ici.',
+    uploadFailed: 'Le téléversement du logo a échoué.',
+    uploaded: 'Logo téléversé. Sera conservé lors de l\'enregistrement.',
+    errorUploading: 'Une erreur s\'est produite lors du téléversement du logo.',
+    willBeRemoved: 'Le logo sera supprimé dès que vous enregistrez.',
+    uploading: 'Téléversement...',
+    uploadFailedShort: 'Téléversement échoué',
+    customerLogoAlt: 'Logo client',
+    removeLogoAria: 'Supprimer le logo',
+    uploadLogoAria: 'Téléverser un logo',
+  },
+
+  fileList: {
+    noFilesFound: 'Aucun fichier trouvé.',
+    clientUpload: 'Fichier client',
+    deliveryFile: 'Fichier de livraison',
+    fileLabel: 'Fichier',
+    view: 'Voir',
+    download: 'Télécharger',
+    noLink: 'Pas de lien',
+  },
 }
 
 export default fr

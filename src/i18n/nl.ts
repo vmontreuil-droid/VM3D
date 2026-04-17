@@ -888,6 +888,74 @@ const nl = {
     noSitesForStatus: 'Geen werven gevonden voor deze status.',
     priceUndetermined: 'Nog niet bepaald',
   },
+
+  /* ── Customer portal header ── */
+  portal: {
+    customerPortal: 'Klantenportaal',
+    welcome: 'Welkom',
+    welcomeNoCompanyDesc: 'Welkom in je klantenportaal. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.',
+    welcomeCompanyDesc: 'Welkom in het klantenportaal van {company}. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.',
+    sites: 'Werven',
+    active: 'Actief',
+    uploads: 'Uploads',
+    delivery: 'Oplevering',
+  },
+
+  /* ── Map popups ── */
+  mapPopup: {
+    noAddress: 'Geen adres',
+    customerLabel: 'Klant',
+    unknown: 'Onbekend',
+    openSite: 'Open werf',
+    openCustomer: 'Open klant',
+    siteCount: '{count} werf',
+    sitesCount: '{count} werven',
+    customer: 'Klant',
+    sitesLayer: 'Werven',
+    customersLayer: 'Klanten',
+    loadingMap: 'Kaart laden...',
+    noLocations: 'Geen locaties beschikbaar',
+    noLocationsDot: 'Geen locaties beschikbaar.',
+  },
+
+  /* ── Notes widget ── */
+  notesWidget: {
+    title: 'Notities',
+    newNotePlaceholder: 'Nieuwe notitie...',
+    noNotes: 'Nog geen notities.',
+  },
+
+  /* ── Customer logo upload ── */
+  logoUpload: {
+    companyLogo: 'Bedrijfslogo',
+    companyLogoDesc: 'Voeg hier een logo toe voor de klantfiche en facturatie-overzichten.',
+    uploadLogo: 'Logo uploaden',
+    logoTip: 'Tip: gebruik een liggend logo in PNG, JPG, WEBP of SVG.',
+    clear: 'Wissen',
+    logoPreviewAlt: 'Logo voorbeeld',
+    noLogo: 'Nog geen logo',
+    previewHint: 'Na upload zie je hier meteen een voorbeeld.',
+    uploadFailed: 'Logo uploaden mislukt.',
+    uploaded: 'Logo opgeladen. Wordt bewaard bij opslaan.',
+    errorUploading: 'Er liep iets fout bij het uploaden van het logo.',
+    willBeRemoved: 'Logo wordt verwijderd zodra je opslaat.',
+    uploading: 'Uploaden...',
+    uploadFailedShort: 'Uploaden mislukt',
+    customerLogoAlt: 'Klantlogo',
+    removeLogoAria: 'Logo verwijderen',
+    uploadLogoAria: 'Logo uploaden',
+  },
+
+  /* ── File list ── */
+  fileList: {
+    noFilesFound: 'Geen bestanden gevonden.',
+    clientUpload: 'Upload klant',
+    deliveryFile: 'Opleverbestand',
+    fileLabel: 'Bestand',
+    view: 'Bekijk',
+    download: 'Download',
+    noLink: 'Geen link',
+  },
 } as const
 
 type DeepString<T> = T extends string

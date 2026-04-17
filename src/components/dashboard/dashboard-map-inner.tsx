@@ -11,6 +11,7 @@ import {
 } from 'react-leaflet'
 import L, { Marker as LeafletMarker } from 'leaflet'
 import type { MapProject, MapCustomer } from './dashboard-map'
+import { useT } from '@/i18n/context'
 
 /* ── status helpers (projects) ── */
 
@@ -25,17 +26,17 @@ function getMarkerColor(status?: string | null) {
   }
 }
 
-function getStatusLabel(status?: string | null) {
+function getStatusLabel(status: string | null | undefined, t: ReturnType<typeof useT>['t']) {
   switch (status) {
-    case 'offerte_aangevraagd': return 'Offerte aangevraagd'
-    case 'offerte_verstuurd':   return 'Offerte verstuurd'
-    case 'in_behandeling':      return 'In behandeling'
-    case 'facturatie':          return 'Facturatie'
-    case 'factuur_verstuurd':   return 'Factuur verstuurd'
-    case 'afgerond':            return 'Afgerond'
-    case 'ingediend':           return 'Ingediend'
-    case 'klaar_voor_betaling': return 'Klaar voor betaling'
-    default:                    return 'Onbekend'
+    case 'offerte_aangevraagd': return t.status.offerte_aangevraagd
+    case 'offerte_verstuurd':   return t.status.offerte_verstuurd
+    case 'in_behandeling':      return t.status.in_behandeling
+    case 'facturatie':          return t.status.facturatie
+    case 'factuur_verstuurd':   return t.status.factuur_verstuurd
+    case 'afgerond':            return t.status.afgerond
+    case 'ingediend':           return t.status.ingediend
+    case 'klaar_voor_betaling': return t.status.klaar_voor_betaling
+    default:                    return t.mapPopup.unknown
   }
 }
 
@@ -105,7 +106,7 @@ function FitBounds({ points }: { points: [number, number][] }) {
 
 /* ── individual markers ── */
 
-function ProjectMarker({ project }: { project: MapProject }) {
+function ProjectMarker({ project, t }: { project: MapProject; t: ReturnType<typeof useT>['t'] }) {
   const ref = useRef<LeafletMarker | null>(null)
   const icon = useMemo(() => createProjectIcon(project.status), [project.status])
 
@@ -123,13 +124,13 @@ function ProjectMarker({ project }: { project: MapProject }) {
       <Popup autoPan className="project-popup">
         <div className="project-popup-inner">
           <p className="project-popup-title">{project.name}</p>
-          <p className="project-popup-address">{project.address || 'Geen adres'}</p>
-          <p className="project-popup-client">Klant: {project.klantEmail || 'Onbekend'}</p>
+          <p className="project-popup-address">{project.address || t.mapPopup.noAddress}</p>
+          <p className="project-popup-client">{t.mapPopup.customerLabel}: {project.klantEmail || t.mapPopup.unknown}</p>
           <div className="project-popup-status-wrap">
-            <span className={getStatusClass(project.status)}>{getStatusLabel(project.status)}</span>
+            <span className={getStatusClass(project.status)}>{getStatusLabel(project.status, t)}</span>
           </div>
           <div className="project-popup-actions">
-            <Link href={`/admin/projects/${project.id}`} className="project-popup-button">Open werf</Link>
+            <Link href={`/admin/projects/${project.id}`} className="project-popup-button">{t.mapPopup.openSite}</Link>
           </div>
         </div>
       </Popup>
@@ -137,11 +138,11 @@ function ProjectMarker({ project }: { project: MapProject }) {
   )
 }
 
-function CustomerMarker({ customer }: { customer: MapCustomer }) {
+function CustomerMarker({ customer, t }: { customer: MapCustomer; t: ReturnType<typeof useT>['t'] }) {
   const ref = useRef<LeafletMarker | null>(null)
   const icon = useMemo(() => createCustomerIcon(), [])
 
-  const label = customer.company_name || customer.full_name || customer.email || 'Klant'
+  const label = customer.company_name || customer.full_name || customer.email || t.mapPopup.customer
 
   return (
     <Marker
@@ -160,10 +161,10 @@ function CustomerMarker({ customer }: { customer: MapCustomer }) {
           {customer.city && <p className="project-popup-address">{customer.city}</p>}
           {customer.email && <p className="project-popup-client">{customer.email}</p>}
           {typeof customer.project_count === 'number' && (
-            <p className="project-popup-client">{customer.project_count} werf{customer.project_count !== 1 ? 'en' : ''}</p>
+            <p className="project-popup-client">{(customer.project_count === 1 ? t.mapPopup.siteCount : t.mapPopup.sitesCount).replace('{count}', String(customer.project_count))}</p>
           )}
           <div className="project-popup-actions">
-            <Link href={`/admin/customers/${customer.id}/edit`} className="project-popup-button">Open klant</Link>
+            <Link href={`/admin/customers/${customer.id}/edit`} className="project-popup-button">{t.mapPopup.openCustomer}</Link>
           </div>
         </div>
       </Popup>
@@ -185,6 +186,7 @@ export default function DashboardMapInner({
   height?: string
 }) {
   const [layer, setLayer] = useState<Layer>('werven')
+  const { t } = useT()
 
   const validProjects = useMemo(
     () => projects.filter((p) => p.latitude != null && p.longitude != null),
@@ -218,7 +220,7 @@ export default function DashboardMapInner({
               : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
           }`}
         >
-          Werven
+          {t.mapPopup.sitesLayer}
           <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
             layer === 'werven' ? 'bg-[var(--accent)]/20 text-[var(--accent)]' : 'bg-white/5 text-[var(--text-muted)]'
           }`}>
@@ -234,7 +236,7 @@ export default function DashboardMapInner({
               : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
           }`}
         >
-          Klanten
+          {t.mapPopup.customersLayer}
           <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
             layer === 'klanten' ? 'bg-purple-500/20 text-purple-400' : 'bg-white/5 text-[var(--text-muted)]'
           }`}>
@@ -252,10 +254,10 @@ export default function DashboardMapInner({
           />
           <FitBounds points={points} />
           {layer === 'werven' && validProjects.map((p) => (
-            <ProjectMarker key={p.id} project={p} />
+            <ProjectMarker key={p.id} project={p} t={t} />
           ))}
           {layer === 'klanten' && validCustomers.map((c) => (
-            <CustomerMarker key={c.id} customer={c} />
+            <CustomerMarker key={c.id} customer={c} t={t} />
           ))}
         </MapContainer>
       </div>

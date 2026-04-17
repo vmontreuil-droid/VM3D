@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useT } from '@/i18n/context'
 
 type Location = {
   name: string
@@ -19,6 +20,7 @@ export default function ProjectsMapInner({
   title,
   height = 400,
 }: Props) {
+  const { t } = useT()
   const [mounted, setMounted] = useState(false)
   const [MapContainer, setMapContainer] = useState<any>(null)
   const [TileLayer, setTileLayer] = useState<any>(null)
@@ -87,7 +89,7 @@ export default function ProjectsMapInner({
         className="flex items-center justify-center text-sm text-[var(--text-soft)]"
         style={{ height: resolvedHeight }}
       >
-        Kaart laden...
+        {t.mapPopup.loadingMap}
       </div>
     )
   }
@@ -98,7 +100,7 @@ export default function ProjectsMapInner({
         className="flex items-center justify-center text-sm text-[var(--text-soft)]"
         style={{ height: resolvedHeight }}
       >
-        Geen locaties beschikbaar
+        {t.mapPopup.noLocations}
       </div>
     )
   }

@@ -10,6 +10,7 @@ import {
   useMap,
 } from 'react-leaflet'
 import L, { Marker as LeafletMarker } from 'leaflet'
+import { useT } from '@/i18n/context'
 
 type Project = {
   id: number
@@ -42,26 +43,26 @@ function getMarkerColor(status?: string | null) {
   }
 }
 
-function getStatusLabel(status?: string | null) {
+function getStatusLabel(status: string | null | undefined, t: ReturnType<typeof useT>['t']) {
   switch (status) {
     case 'offerte_aangevraagd':
-      return 'Offerte aangevraagd'
+      return t.status.offerte_aangevraagd
     case 'offerte_verstuurd':
-      return 'Offerte verstuurd'
+      return t.status.offerte_verstuurd
     case 'in_behandeling':
-      return 'In behandeling'
+      return t.status.in_behandeling
     case 'facturatie':
-      return 'Facturatie'
+      return t.status.facturatie
     case 'factuur_verstuurd':
-      return 'Factuur verstuurd'
+      return t.status.factuur_verstuurd
     case 'afgerond':
-      return 'Afgerond'
+      return t.status.afgerond
     case 'ingediend':
-      return 'Ingediend'
+      return t.status.ingediend
     case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
+      return t.status.klaar_voor_betaling
     default:
-      return 'Onbekend'
+      return t.mapPopup.unknown
   }
 }
 
@@ -153,6 +154,7 @@ function FitBounds({ projects }: { projects: Project[] }) {
 
 function ProjectMarker({ project }: { project: Project }) {
   const markerRef = useRef<LeafletMarker | null>(null)
+  const { t } = useT()
 
   const markerIcon = useMemo(() => createMarkerIcon(project.status), [project.status])
 
@@ -180,16 +182,16 @@ function ProjectMarker({ project }: { project: Project }) {
           <p className="project-popup-title">{project.name}</p>
 
           <p className="project-popup-address">
-            {project.address || 'Geen adres'}
+            {project.address || t.mapPopup.noAddress}
           </p>
 
           <p className="project-popup-client">
-            Klant: {project.klantEmail || 'Onbekend'}
+            {t.mapPopup.customerLabel}: {project.klantEmail || t.mapPopup.unknown}
           </p>
 
           <div className="project-popup-status-wrap">
             <span className={getStatusClass(project.status)}>
-              {getStatusLabel(project.status)}
+              {getStatusLabel(project.status, t)}
             </span>
           </div>
 
@@ -198,7 +200,7 @@ function ProjectMarker({ project }: { project: Project }) {
               href={`/admin/projects/${project.id}`}
               className="project-popup-button"
             >
-              Open werf
+              {t.mapPopup.openSite}
             </Link>
           </div>
         </div>

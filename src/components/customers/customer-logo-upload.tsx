@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ImageUp, Trash2 } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   customerId?: string
@@ -14,6 +15,7 @@ export default function CustomerLogoUpload({
   initialPath,
   initialPreviewUrl,
 }: Props) {
+  const { t } = useT()
   const [logoPath, setLogoPath] = useState(initialPath || '')
   const [previewUrl, setPreviewUrl] = useState(initialPreviewUrl || '')
   const [message, setMessage] = useState('')
@@ -57,16 +59,16 @@ export default function CustomerLogoUpload({
       }
 
       if (!response.ok || !data.filePath) {
-        setMessage(data.error || 'Logo uploaden mislukt.')
+        setMessage(data.error || t.logoUpload.uploadFailed)
         return
       }
 
       setLogoPath(data.filePath)
       setPreviewUrl(data.previewUrl || localPreview)
-      setMessage('Logo opgeladen. Wordt bewaard bij opslaan.')
+      setMessage(t.logoUpload.uploaded)
     } catch (error) {
       console.error('customer logo upload error:', error)
-      setMessage('Er liep iets fout bij het uploaden van het logo.')
+      setMessage(t.logoUpload.errorUploading)
     } finally {
       setUploading(false)
       event.target.value = ''
@@ -76,7 +78,7 @@ export default function CustomerLogoUpload({
   const handleClear = () => {
     setLogoPath('')
     setPreviewUrl('')
-    setMessage('Logo wordt verwijderd zodra je opslaat.')
+    setMessage(t.logoUpload.willBeRemoved)
   }
 
   return (
@@ -89,10 +91,10 @@ export default function CustomerLogoUpload({
         </span>
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Bedrijfslogo
+            {t.logoUpload.companyLogo}
           </p>
           <p className="mt-1 text-xs text-[var(--text-soft)]">
-            Voeg hier een logo toe voor de klantfiche en facturatie-overzichten.
+            {t.logoUpload.companyLogoDesc}
           </p>
         </div>
       </div>
@@ -100,7 +102,7 @@ export default function CustomerLogoUpload({
       <div className="mt-3 grid gap-3 lg:grid-cols-[1fr_210px]">
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
           <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Logo uploaden
+            {t.logoUpload.uploadLogo}
           </label>
 
           <input
@@ -112,7 +114,7 @@ export default function CustomerLogoUpload({
           />
 
           <p className="mt-2 text-xs text-[var(--text-soft)]">
-            Tip: gebruik een liggend logo in `PNG`, `JPG`, `WEBP` of `SVG`.
+            {t.logoUpload.logoTip}
           </p>
 
           {message ? (
@@ -126,7 +128,7 @@ export default function CustomerLogoUpload({
               className="mt-3 inline-flex items-center gap-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-xs font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Wissen
+              {t.logoUpload.clear}
             </button>
           ) : null}
         </div>
@@ -135,16 +137,16 @@ export default function CustomerLogoUpload({
           {previewUrl ? (
             <img
               src={previewUrl}
-              alt="Logo voorbeeld"
+              alt={t.logoUpload.logoPreviewAlt}
               className="max-h-[120px] w-full object-contain"
             />
           ) : (
             <div className="text-center">
               <p className="text-sm font-semibold text-[var(--text-main)]">
-                Nog geen logo
+                {t.logoUpload.noLogo}
               </p>
               <p className="mt-1 text-xs text-[var(--text-soft)]">
-                Na upload zie je hier meteen een voorbeeld.
+                {t.logoUpload.previewHint}
               </p>
             </div>
           )}

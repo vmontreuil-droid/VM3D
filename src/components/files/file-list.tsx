@@ -1,6 +1,7 @@
 'use client'
 
 import { FileText, FileArchive, File, Image, Video, Music, FileQuestion } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type FileItem = {
   id: string
@@ -39,18 +40,20 @@ function getFileIcon(extension: string) {
   return <File className="h-4 w-4" />
 }
 
-function formatDate(date?: string | null) {
+function formatDate(date: string | null | undefined, locale: string) {
   if (!date) return '—'
-  return new Date(date).toLocaleDateString('nl-BE')
+  const loc = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
+  return new Date(date).toLocaleDateString(loc)
 }
 
 export default function FileList({ files }: Props) {
+  const { t, locale } = useT()
   if (!files || files.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-8 text-center">
         <FileQuestion className="h-12 w-12 text-[var(--text-muted)] mb-3" />
         <p className="text-sm text-[var(--text-soft)]">
-          Geen bestanden gevonden.
+          {t.fileList.noFilesFound}
         </p>
       </div>
     )
@@ -80,14 +83,14 @@ export default function FileList({ files }: Props) {
 
                 <p className="mt-3 text-xs text-[var(--text-muted)]">
                   {file.file_type === 'client_upload'
-                    ? 'Upload klant'
+                    ? t.fileList.clientUpload
                     : file.file_type === 'final_file'
-                    ? 'Opleverbestand'
-                    : 'Bestand'}
+                    ? t.fileList.deliveryFile
+                    : t.fileList.fileLabel}
                 </p>
 
                 <p className="mt-1 text-xs text-[var(--text-muted)]">
-                  {formatDate(file.created_at)}
+                  {formatDate(file.created_at, locale)}
                 </p>
               </div>
 
@@ -100,7 +103,7 @@ export default function FileList({ files }: Props) {
                       rel="noreferrer"
                       className="btn-secondary text-xs px-3 py-1"
                     >
-                      Bekijk
+                      {t.fileList.view}
                     </a>
 
                     <a
@@ -108,12 +111,12 @@ export default function FileList({ files }: Props) {
                       download={file.file_name}
                       className="btn-secondary text-xs px-3 py-1"
                     >
-                      Download
+                      {t.fileList.download}
                     </a>
                   </>
                 ) : (
                   <span className="text-xs text-[var(--text-muted)]">
-                    Geen link
+                    {t.fileList.noLink}
                   </span>
                 )}
               </div>
