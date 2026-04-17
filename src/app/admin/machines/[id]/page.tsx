@@ -10,7 +10,7 @@ import {
   GUIDANCE_COLORS,
   formatTonnage,
 } from '@/components/machines/machine-icons'
-import { ArrowLeft, Pencil, Wifi, WifiOff } from 'lucide-react'
+import { ArrowLeft, Pencil, Wifi, WifiOff, Hash, Building2, Radio, Construction } from 'lucide-react'
 
 export default async function AdminOpenMachinePage({
   params,
@@ -75,31 +75,43 @@ export default async function AdminOpenMachinePage({
           </span>
         </div>
 
-        {/* Hero */}
+        {/* Hero — uniform dashboard style */}
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div
-            className="border-b border-[var(--border-soft)] px-5 py-5"
-            style={{
-              backgroundImage: `linear-gradient(135deg, ${brandColor}22 0%, transparent 60%)`,
-            }}
-          >
-            <div className="flex flex-wrap items-start gap-4">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
+            <div className="relative flex flex-wrap items-center justify-between gap-2">
+              <Link
+                href="/admin/machines"
+                className="btn-secondary text-xs"
+              >
+                <ArrowLeft className="inline h-3 w-3 mr-1" /> Terug
+              </Link>
+              <Link
+                href={`/admin/machines/${machine.id}/edit`}
+                className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
+              >
+                <Pencil className="h-3 w-3" /> Bewerken
+              </Link>
+            </div>
+            <div className="relative mt-3 flex flex-wrap items-center gap-3">
               <div
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-sm"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
                 style={{ backgroundColor: `${brandColor}22` }}
               >
-                <MachineIcon type={machine.machine_type} size={40} />
+                <MachineIcon type={machine.machine_type} size={32} />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className="rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                    style={{
-                      backgroundColor: `${brandColor}25`,
-                      color: brandColor,
-                    }}
-                  >
-                    {brand}
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
+                  Machine
+                </p>
+                <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  <span>
+                    {brand} {machine.model}
+                  </span>
+                  <span className="font-normal text-[var(--text-soft)]">
+                    · {machine.name}
                   </span>
                   {guidanceStyle && guidance && (
                     <span
@@ -117,17 +129,8 @@ export default async function AdminOpenMachinePage({
                       <WifiOff className="h-3 w-3" /> Offline
                     </span>
                   )}
-                  <span className="ml-1 rounded bg-black/30 px-2 py-0.5 font-mono text-[10px] text-emerald-400">
-                    {machine.connection_code}
-                  </span>
-                </div>
-                <h1 className="mt-1 text-2xl font-semibold text-[var(--text-main)]">
-                  {machine.model}{' '}
-                  <span className="text-[var(--text-soft)]">
-                    · {machine.name}
-                  </span>
                 </h1>
-                <p className="mt-0.5 text-xs text-[var(--text-soft)]">
+                <p className="mt-1 text-xs text-[var(--text-soft)]">
                   {machine.machine_type === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
                   {machine.tonnage
                     ? ` · ${formatTonnage(Number(machine.tonnage))}`
@@ -141,23 +144,45 @@ export default async function AdminOpenMachinePage({
                     : ''}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Link
-                  href="/admin/machines"
-                  className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-xs font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card)]"
-                >
-                  <ArrowLeft className="h-3.5 w-3.5" /> Terug
-                </Link>
-                <Link
-                  href={`/admin/machines/${machine.id}/edit`}
-                  className="inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-2 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
-                >
-                  <Pencil className="h-3.5 w-3.5" /> Bewerken
-                </Link>
-              </div>
             </div>
           </div>
         </section>
+
+        {/* Stats tiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+              <Hash className="h-3 w-3" /> Code
+            </p>
+            <p className="mt-1 font-mono text-sm font-bold text-emerald-400">
+              {machine.connection_code}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+              <Building2 className="h-3 w-3" /> Klant
+            </p>
+            <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
+              {owner?.company_name || owner?.full_name || '—'}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+              <Radio className="h-3 w-3" /> Besturing
+            </p>
+            <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+              {guidance || '—'}
+            </p>
+          </div>
+          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+              <Construction className="h-3 w-3" /> Tonnage
+            </p>
+            <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+              {machine.tonnage ? formatTonnage(Number(machine.tonnage)) : '—'}
+            </p>
+          </div>
+        </div>
 
         {/* Werven & bestanden */}
         <MachineTransferPanel

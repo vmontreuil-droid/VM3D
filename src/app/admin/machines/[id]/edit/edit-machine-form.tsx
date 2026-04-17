@@ -217,31 +217,40 @@ export default function EditMachineForm({
         </span>
       </div>
 
-      {/* Hero header */}
+      {/* Hero — uniform dashboard style */}
       <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-        <div
-          className="relative border-b border-[var(--border-soft)] px-5 py-5"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${brandColor}22 0%, transparent 60%)`,
-          }}
-        >
-          <div className="flex flex-wrap items-start gap-4">
+        <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
+          <div className="absolute inset-0 opacity-30">
+            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+          </div>
+          <div className="relative flex flex-wrap items-center justify-between gap-2">
+            <Link href="/admin/machines" className="btn-secondary text-xs">
+              <ArrowLeft className="inline h-3 w-3 mr-1" /> Terug
+            </Link>
+            <Link
+              href={`/admin/machines/${machine.id}`}
+              className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
+            >
+              Openen
+            </Link>
+          </div>
+          <div className="relative mt-3 flex flex-wrap items-center gap-3">
             <div
-              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-sm"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
               style={{ backgroundColor: `${brandColor}22` }}
             >
-              <MachineIcon type={machineType} size={40} />
+              <MachineIcon type={machineType} size={32} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <span
-                  className="rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                  style={{
-                    backgroundColor: `${brandColor}25`,
-                    color: brandColor,
-                  }}
-                >
-                  {brand}
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
+                Machine bewerken
+              </p>
+              <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                <span>
+                  {brand} {model}
+                </span>
+                <span className="font-normal text-[var(--text-soft)]">
+                  · {name}
                 </span>
                 {guidanceStyle && guidance && (
                   <span
@@ -259,12 +268,8 @@ export default function EditMachineForm({
                     <WifiOff className="h-3 w-3" /> Offline
                   </span>
                 )}
-              </div>
-              <h1 className="mt-1 text-2xl font-semibold text-[var(--text-main)]">
-                {model}{' '}
-                <span className="text-[var(--text-soft)]">· {name}</span>
               </h1>
-              <p className="mt-0.5 text-xs text-[var(--text-soft)]">
+              <p className="mt-1 text-xs text-[var(--text-soft)]">
                 {machineType === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
                 {tonnage ? ` · ${formatTonnage(Number(tonnage))}` : ''}
                 {year ? ` · Bouwjaar ${year}` : ''}
@@ -275,36 +280,43 @@ export default function EditMachineForm({
             </div>
           </div>
         </div>
-
-        {/* Quick stats bar */}
-        <div className="grid grid-cols-2 gap-px border-t border-[var(--border-soft)] bg-[var(--border-soft)] sm:grid-cols-4">
-          <StatTile
-            icon={<Hash className="h-3.5 w-3.5" />}
-            label="Code"
-            value={machine.connection_code}
-            mono
-          />
-          <StatTile
-            icon={<Building2 className="h-3.5 w-3.5" />}
-            label="Klant"
-            value={
-              customer?.company_name ||
-              customer?.full_name ||
-              '(geen)'
-            }
-          />
-          <StatTile
-            icon={<Radio className="h-3.5 w-3.5" />}
-            label="Besturing"
-            value={guidance || '—'}
-          />
-          <StatTile
-            icon={<Construction className="h-3.5 w-3.5" />}
-            label="Tonnage"
-            value={tonnage ? formatTonnage(Number(tonnage)) : '—'}
-          />
-        </div>
       </section>
+
+      {/* Stats tiles */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+            <Hash className="h-3 w-3" /> Code
+          </p>
+          <p className="mt-1 font-mono text-sm font-bold text-emerald-400">
+            {machine.connection_code}
+          </p>
+        </div>
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+            <Building2 className="h-3 w-3" /> Klant
+          </p>
+          <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
+            {customer?.company_name || customer?.full_name || '—'}
+          </p>
+        </div>
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+            <Radio className="h-3 w-3" /> Besturing
+          </p>
+          <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+            {guidance || '—'}
+          </p>
+        </div>
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
+          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+            <Construction className="h-3 w-3" /> Tonnage
+          </p>
+          <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
+            {tonnage ? formatTonnage(Number(tonnage)) : '—'}
+          </p>
+        </div>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
         {/* Main column */}
@@ -647,32 +659,6 @@ function Field({
         {required && <span className="ml-0.5 text-red-400">*</span>}
       </label>
       <div className="mt-1">{children}</div>
-    </div>
-  )
-}
-
-function StatTile({
-  icon,
-  label,
-  value,
-  mono,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  mono?: boolean
-}) {
-  return (
-    <div className="bg-[var(--bg-card)] px-3 py-2.5">
-      <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-        {icon}
-        {label}
-      </p>
-      <p
-        className={`mt-0.5 truncate text-sm font-semibold text-[var(--text-main)] ${mono ? 'font-mono' : ''}`}
-      >
-        {value}
-      </p>
     </div>
   )
 }
