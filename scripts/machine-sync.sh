@@ -39,24 +39,46 @@ echo "Server: $SERVER"
 echo "Checking every 30 seconds..."
 echo ""
 
+# JSON-escape helper (pure bash, no jq needed)
+json_escape() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//$'\n'/\\n}
+  s=${s//$'\r'/\\r}
+  s=${s//$'\t'/\\t}
+  printf '%s' "$s"
+}
+
+build_listing() {
+  local root="$1"
+  [ -z "$root" ] || [ ! -d "$root" ] && { printf 'null'; return; }
+  local out='{"root":"'"$(json_escape "$root")"'","files":['
+  local first=1
+  local count=0
+  while IFS=$'\t' read -r p sz; do
+    [ -z "$p" ] && continue
+    [ $count -ge 5000 ] && break
+    if [ $first -eq 1 ]; then first=0; else out+=","; fi
+    out+='{"path":"'"$(json_escape "$p")"'","size":'"${sz:-0}"'}'
+    count=$((count+1))
+  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\t%s\n' 2>/dev/null)
+  out+=']}'
+  printf '%s' "$out"
+}
+
+# Best-effort guess if nothing known yet
+LAST_TARGET=""
+for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
+  F=$(get_target_folder "$GUESS")
+  if [ -d "$F" ]; then LAST_TARGET="$F"; break; fi
+done
+echo "Listing start-folder: ${LAST_TARGET:-onbekend}"
+
 while true; do
-  # Build directory listing for current guidance folder (best-effort)
-  PREV_GUIDANCE_FOLDER=${LAST_TARGET:-""}
-  LISTING_JSON="null"
-  if [ -n "$PREV_GUIDANCE_FOLDER" ] && [ -d "$PREV_GUIDANCE_FOLDER" ]; then
-    # Produce {"root": "...", "files": [{"path": "Werf1/sub/file.xml", "size": 1234}]}
-    # Fully recursive — every file under the guidance folder.
-    LISTING_JSON=$(
-      cd "$PREV_GUIDANCE_FOLDER" 2>/dev/null && \
-      find . -type f -printf '%P\t%s\n' 2>/dev/null | head -n 5000 | \
-      jq -Rsc --arg root "$PREV_GUIDANCE_FOLDER" '
-        split("\n") | map(select(length>0)) |
-        map(split("\t") | {path: .[0], size: (.[1]|tonumber? // 0)}) |
-        {root: $root, files: .}
-      ' 2>/dev/null || echo "null"
-    )
-    [ -z "$LISTING_JSON" ] && LISTING_JSON="null"
-  fi
+  # Build directory listing for current guidance folder (no jq required)
+  LISTING_JSON=$(build_listing "$LAST_TARGET")
+  [ -z "$LISTING_JSON" ] && LISTING_JSON="null"
 
   # Vraag pending bestanden op (en stuur heartbeat + listing tegelijk)
   RESPONSE=$(curl -s -X POST "$SERVER/api/machines/sync" \
@@ -72,13 +94,17 @@ while true; do
   GUIDANCE=$(echo "$RESPONSE" | jq -r '.guidance_system // empty')
   FILE_COUNT=$(echo "$RESPONSE" | jq '.files | length')
 
+  # Update target folder if server tells us which guidance system
+  if [ -n "$GUIDANCE" ]; then
+    LAST_TARGET=$(get_target_folder "$GUIDANCE")
+  fi
+
   if [ "$FILE_COUNT" = "0" ] || [ -z "$FILE_COUNT" ]; then
     sleep 30
     continue
   fi
 
-  TARGET_FOLDER=$(get_target_folder "$GUIDANCE")
-  LAST_TARGET="$TARGET_FOLDER"
+  TARGET_FOLDER="$LAST_TARGET"
   mkdir -p "$TARGET_FOLDER"
 
   echo "[$(date '+%H:%M:%S')] $FILE_COUNT nieuw(e) bestand(en) gevonden"

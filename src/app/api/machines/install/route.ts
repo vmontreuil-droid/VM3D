@@ -45,25 +45,44 @@ echo "[1/4] Storage toegang..."
 termux-setup-storage 2>/dev/null || true
 
 # Stap 2: Repos fixen + updaten
-echo "[2/4] Packages updaten..."
+echo "[2/4] Packages updaten (stabiele mirror forceren)..."
 mkdir -p $PREFIX/etc/apt
+# Forceer Cloudflare-mirror; andere zijn soms stuk of gedeeltelijk gesynchroniseerd
 cat > $PREFIX/etc/apt/sources.list << 'SRC'
 deb https://packages-cf.termux.dev/apt/termux-main stable main
 SRC
-apt update -y
-echo "  Volledige upgrade..."
-yes | apt full-upgrade -y
+# Probeer meerdere mirrors als CF niet wil
+MIRRORS=(
+  "https://packages-cf.termux.dev/apt/termux-main"
+  "https://packages.termux.dev/apt/termux-main"
+  "https://grimler.se/termux/termux-main"
+)
+UPDATED=0
+for M in "\${MIRRORS[@]}"; do
+  echo "deb $M stable main" > $PREFIX/etc/apt/sources.list
+  if apt update -o Acquire::Retries=2 2>&1 | tail -n 3; then
+    if apt-cache show jq >/dev/null 2>&1; then
+      echo "  OK: mirror werkt -> $M"
+      UPDATED=1
+      break
+    fi
+  fi
+done
+[ "$UPDATED" = "0" ] && echo "  WAARSCHUWING: geen werkende mirror gevonden"
 dpkg --configure -a 2>/dev/null
 
 # Stap 3: Dependencies
 echo "[3/4] curl en jq installeren..."
-apt install -y curl jq
+apt install -y --no-install-recommends curl jq 2>&1 | tail -n 5
 
 if ! command -v curl &>/dev/null; then
   echo "FOUT: curl installatie mislukt"
   exit 1
 fi
 echo "  OK: curl werkt"
+if ! command -v jq &>/dev/null; then
+  echo "  WAARSCHUWING: jq ontbreekt — listing wordt in pure bash gemaakt"
+fi
 
 # Test verbinding
 echo "  Verbinding testen..."
@@ -94,26 +113,52 @@ gps_folder() {
   esac
 }
 
+# Escape a string for JSON (pure bash, no jq needed)
+json_escape() {
+  local s=$1
+  s=\${s//\\\\/\\\\\\\\}
+  s=\${s//\\"/\\\\\\"}
+  s=\${s//$'\\n'/\\\\n}
+  s=\${s//$'\\r'/\\\\r}
+  s=\${s//$'\\t'/\\\\t}
+  printf '%s' "$s"
+}
+
+# Build a JSON listing of a folder, recursively, pure bash (no jq)
+build_listing() {
+  local root="$1"
+  [ -z "$root" ] || [ ! -d "$root" ] && { printf 'null'; return; }
+  local out='{"root":"'"$(json_escape "$root")"'","files":['
+  local first=1
+  local count=0
+  while IFS=$'\\t' read -r p sz; do
+    [ -z "$p" ] && continue
+    [ $count -ge 5000 ] && break
+    if [ $first -eq 1 ]; then first=0; else out+=","; fi
+    out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
+    count=$((count+1))
+  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
+  out+=']}'
+  printf '%s' "$out"
+}
+
+# Default guess based on which guidance folder exists right now
+LAST_TGT=""
+for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
+  F=$(gps_folder "$GUESS")
+  if [ -d "$F" ]; then LAST_TGT="$F"; break; fi
+done
+
 echo "=== VM Machine Sync ==="
 echo "Code: $CODE | Server: $SERVER"
+echo "Listing start-folder: \${LAST_TGT:-onbekend}"
 echo "Check elke 30s op nieuwe bestanden..."
 echo ""
 
 while true; do
-  # Build directory listing of last-known guidance folder
-  LISTING="null"
-  if [ -n "$LAST_TGT" ] && [ -d "$LAST_TGT" ]; then
-    LISTING=$(
-      cd "$LAST_TGT" 2>/dev/null && \
-      find . -type f -printf '%P\\t%s\\n' 2>/dev/null | head -n 5000 | \
-      jq -Rsc --arg root "$LAST_TGT" '
-        split("\\n") | map(select(length>0)) |
-        map(split("\\t") | {path: .[0], size: (.[1]|tonumber? // 0)}) |
-        {root: $root, files: .}
-      ' 2>/dev/null || echo "null"
-    )
-    [ -z "$LISTING" ] && LISTING="null"
-  fi
+  # Build directory listing of current guidance folder
+  LISTING=$(build_listing "$LAST_TGT")
+  [ -z "$LISTING" ] && LISTING="null"
 
   R=$(curl -s --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \\
     -H "Content-Type: application/json" \\
@@ -121,8 +166,18 @@ while true; do
 
   [ -z "$R" ] && sleep 30 && continue
 
-  GS=$(echo "$R" | jq -r '.guidance_system // empty')
+  if command -v jq >/dev/null 2>&1; then
+    GS=$(echo "$R" | jq -r '.guidance_system // empty')
+  else
+    GS=$(echo "$R" | grep -oE '"guidance_system"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*"\\([A-Z]*\\)"$/\\1/')
+  fi
   [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
+
+  if ! command -v jq >/dev/null 2>&1; then
+    # No jq -> can't parse file list, just keep sending listing + sleep
+    sleep 30
+    continue
+  fi
 
   N=$(echo "$R" | jq '.files | length' 2>/dev/null)
   [ "$N" = "0" ] || [ -z "$N" ] || [ "$N" = "null" ] && sleep 30 && continue
