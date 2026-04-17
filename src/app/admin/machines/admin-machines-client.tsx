@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
 
@@ -176,6 +176,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                 <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colSite}</th>
                 <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colCode}</th>
                 <th className="px-3 py-2.5 text-center font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colStatus}</th>
+                <th className="px-3 py-2.5 text-right font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]"></th>
               </tr>
             </thead>
             <tbody>
@@ -238,12 +239,20 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                         </span>
                       )}
                     </td>
+                    <td className="px-3 py-2.5 text-right">
+                      <Link
+                        href={`/admin/machines/${m.id}/edit`}
+                        className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                      >
+                        <Pencil className="h-3 w-3" /> Bewerk
+                      </Link>
+                    </td>
                   </tr>
                 )
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={8} className="px-3 py-12 text-center text-[var(--text-muted)]">
+                  <td colSpan={9} className="px-3 py-12 text-center text-[var(--text-muted)]">
                     {tt.noMachines}
                   </td>
                 </tr>
