@@ -160,27 +160,31 @@ json_escape() {
 # Build a JSON listing of a folder, recursively, pure bash (no jq)
 build_listing() {
   local root="$1"
-  [ -z "$root" ] || [ ! -d "$root" ] && { printf 'null'; return; }
+  [ -z "$root" ] && { printf 'null'; return; }
+  mkdir -p "$root" 2>/dev/null
   local out='{"root":"'"$(json_escape "$root")"'","files":['
   local first=1
   local count=0
-  while IFS=$'\\t' read -r p sz; do
-    [ -z "$p" ] && continue
-    [ $count -ge 5000 ] && break
-    if [ $first -eq 1 ]; then first=0; else out+=","; fi
-    out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
-    count=$((count+1))
-  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
+  if [ -d "$root" ]; then
+    while IFS=$'\\t' read -r p sz; do
+      [ -z "$p" ] && continue
+      [ $count -ge 5000 ] && break
+      if [ $first -eq 1 ]; then first=0; else out+=","; fi
+      out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
+      count=$((count+1))
+    done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
+  fi
   out+=']}'
   printf '%s' "$out"
 }
 
-# Default guess based on which guidance folder exists right now
-LAST_TGT=""
+# Always start by guessing + ensuring the Unicontrol folder exists
+LAST_TGT="/sdcard/Unicontrol/Projects"
 for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
   F=$(gps_folder "$GUESS")
   if [ -d "$F" ]; then LAST_TGT="$F"; break; fi
 done
+mkdir -p "$LAST_TGT" 2>/dev/null
 
 echo "=== VM Machine Sync ==="
 echo "Code: $CODE | Server: $SERVER"

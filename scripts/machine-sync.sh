@@ -52,28 +52,32 @@ json_escape() {
 
 build_listing() {
   local root="$1"
-  [ -z "$root" ] || [ ! -d "$root" ] && { printf 'null'; return; }
+  [ -z "$root" ] && { printf 'null'; return; }
+  mkdir -p "$root" 2>/dev/null
   local out='{"root":"'"$(json_escape "$root")"'","files":['
   local first=1
   local count=0
-  while IFS=$'\t' read -r p sz; do
-    [ -z "$p" ] && continue
-    [ $count -ge 5000 ] && break
-    if [ $first -eq 1 ]; then first=0; else out+=","; fi
-    out+='{"path":"'"$(json_escape "$p")"'","size":'"${sz:-0}"'}'
-    count=$((count+1))
-  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\t%s\n' 2>/dev/null)
+  if [ -d "$root" ]; then
+    while IFS=$'\t' read -r p sz; do
+      [ -z "$p" ] && continue
+      [ $count -ge 5000 ] && break
+      if [ $first -eq 1 ]; then first=0; else out+=","; fi
+      out+='{"path":"'"$(json_escape "$p")"'","size":'"${sz:-0}"'}'
+      count=$((count+1))
+    done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\t%s\n' 2>/dev/null)
+  fi
   out+=']}'
   printf '%s' "$out"
 }
 
 # Best-effort guess if nothing known yet
-LAST_TARGET=""
+LAST_TARGET="/sdcard/Unicontrol/Projects"
 for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
   F=$(get_target_folder "$GUESS")
   if [ -d "$F" ]; then LAST_TARGET="$F"; break; fi
 done
-echo "Listing start-folder: ${LAST_TARGET:-onbekend}"
+mkdir -p "$LAST_TARGET" 2>/dev/null
+echo "Listing start-folder: ${LAST_TARGET}"
 
 while true; do
   # Build directory listing for current guidance folder (no jq required)
