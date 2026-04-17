@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { cookies } from 'next/headers'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
 
@@ -14,6 +16,16 @@ export default async function OGImage() {
     ? (raw as Locale)
     : defaultLocale
   const t = getDictionary(locale)
+
+  // Read logo from public folder and encode as data URI
+  let logoSrc: string | null = null
+  try {
+    const logoPath = join(process.cwd(), 'public', 'vm-logo.png')
+    const logoBuffer = await readFile(logoPath)
+    logoSrc = `data:image/png;base64,${logoBuffer.toString('base64')}`
+  } catch {
+    logoSrc = null
+  }
 
   return new ImageResponse(
     (
@@ -91,22 +103,38 @@ export default async function OGImage() {
             }}
           >
             {/* Logo icon */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '72px',
-                height: '72px',
-                borderRadius: '18px',
-                background: 'linear-gradient(135deg, #f7941d, #e8850f)',
-                boxShadow: '0 8px 32px rgba(247,148,29,0.35)',
-              }}
-            >
-              <span style={{ fontSize: '36px', fontWeight: 900, color: 'white', fontFamily: 'Arial' }}>
-                M
-              </span>
-            </div>
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoSrc}
+                alt="MV3D"
+                width={120}
+                height={120}
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  objectFit: 'contain',
+                  borderRadius: '18px',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '18px',
+                  background: 'linear-gradient(135deg, #f7941d, #e8850f)',
+                  boxShadow: '0 8px 32px rgba(247,148,29,0.35)',
+                }}
+              >
+                <span style={{ fontSize: '36px', fontWeight: 900, color: 'white', fontFamily: 'Arial' }}>
+                  M
+                </span>
+              </div>
+            )}
             <span style={{ fontSize: '42px', fontWeight: 800, color: '#f8fafc', fontFamily: 'Arial', letterSpacing: '-1px' }}>
               MV3D.CLOUD
             </span>
