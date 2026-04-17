@@ -1,29 +1,24 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/env bash
 # VM Plan & Consult — Machine File Sync
-# Dit script draait op de tablet in Termux.
-# Het haalt automatisch nieuwe bestanden op en zet ze in de juiste GPS-map.
+# Draait op een Android-tablet in Termux. Polt de server elke 30s.
 #
 # Gebruik:
-#   bash sync.sh JOUW_CONNECTION_CODE
-#
-# Eenmalig installeren:
-#   pkg install curl jq -y
-#   chmod +x sync.sh
-#   nohup bash sync.sh HTJN5JHT &
+#   bash sync.sh JOUW_CONNECTION_CODE [http://server:3000]
 
-CONNECTION_CODE="$1"
-if [ -z "$CONNECTION_CODE" ]; then
-  echo "Gebruik: bash sync.sh CONNECTION_CODE"
+set -u
+
+CODE="${1:-}"
+SERVER="${2:-http://192.168.0.250:3000}"
+if [ -z "$CODE" ]; then
+  echo "Gebruik: bash sync.sh CONNECTION_CODE [SERVER_URL]"
   exit 1
 fi
 
-# Server URL — pas aan voor productie
-SERVER="http://192.168.0.250:3000"
+POLL_INTERVAL=30
+LOG() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
-# GPS systeem → download folder mapping
-get_target_folder() {
-  local gs="$1"
-  case "$gs" in
+gps_folder() {
+  case "$1" in
     UNICONTROL) echo "/sdcard/Unicontrol/Projects" ;;
     TRIMBLE)    echo "/sdcard/Trimble Data/Projects" ;;
     TOPCON)     echo "/sdcard/TopconData/Projects" ;;
@@ -33,13 +28,6 @@ get_target_folder() {
   esac
 }
 
-echo "=== VM Machine Sync ==="
-echo "Connection code: $CONNECTION_CODE"
-echo "Server: $SERVER"
-echo "Checking every 30 seconds..."
-echo ""
-
-# JSON-escape helper (pure bash, no jq needed)
 json_escape() {
   local s=$1
   s=${s//\\/\\\\}
@@ -52,103 +40,100 @@ json_escape() {
 
 build_listing() {
   local root="$1"
-  [ -z "$root" ] && { printf 'null'; return; }
+  if [ -z "$root" ]; then printf 'null'; return; fi
   mkdir -p "$root" 2>/dev/null
   local out='{"root":"'"$(json_escape "$root")"'","files":['
   local first=1
   local count=0
-  if [ -d "$root" ]; then
-    while IFS=$'\t' read -r p sz; do
-      [ -z "$p" ] && continue
-      [ $count -ge 5000 ] && break
-      if [ $first -eq 1 ]; then first=0; else out+=","; fi
-      out+='{"path":"'"$(json_escape "$p")"'","size":'"${sz:-0}"'}'
-      count=$((count+1))
-    done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\t%s\n' 2>/dev/null)
-  fi
+  while IFS=$'\t' read -r p sz; do
+    [ -z "$p" ] && continue
+    if [ $count -ge 5000 ]; then break; fi
+    if [ $first -eq 1 ]; then first=0; else out+=","; fi
+    out+='{"path":"'"$(json_escape "$p")"'","size":'"${sz:-0}"'}'
+    count=$((count+1))
+  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\t%s\n' 2>/dev/null)
   out+=']}'
   printf '%s' "$out"
 }
 
-# Best-effort guess if nothing known yet
-LAST_TARGET="/sdcard/Unicontrol/Projects"
-for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
-  F=$(get_target_folder "$GUESS")
-  if [ -d "$F" ]; then LAST_TARGET="$F"; break; fi
+LAST_TGT="/sdcard/Unicontrol/Projects"
+for G in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
+  F=$(gps_folder "$G")
+  if [ -d "$F" ]; then LAST_TGT="$F"; break; fi
 done
-mkdir -p "$LAST_TARGET" 2>/dev/null
-echo "Listing start-folder: ${LAST_TARGET}"
+mkdir -p "$LAST_TGT" 2>/dev/null
+
+LOG "=== VM Machine Sync ==="
+LOG "Code: $CODE | Server: $SERVER"
+LOG "Start-folder: $LAST_TGT"
+LOG "Poll interval: ${POLL_INTERVAL}s"
+
+HAS_JQ=0
+command -v jq >/dev/null 2>&1 && HAS_JQ=1
 
 while true; do
-  # Build directory listing for current guidance folder (no jq required)
-  LISTING_JSON=$(build_listing "$LAST_TARGET")
-  [ -z "$LISTING_JSON" ] && LISTING_JSON="null"
+  LISTING=$(build_listing "$LAST_TGT")
+  [ -z "$LISTING" ] && LISTING='null'
 
-  # Vraag pending bestanden op (en stuur heartbeat + listing tegelijk)
-  RESPONSE=$(curl -s -X POST "$SERVER/api/machines/sync" \
-    -H "Content-Type: application/json" \
-    -d "{\"connection_code\":\"$CONNECTION_CODE\",\"listing\":$LISTING_JSON}" 2>/dev/null)
+  PAYLOAD="{\"connection_code\":\"$CODE\",\"listing\":$LISTING}"
+  R=$(curl -fsS --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \
+      -H "Content-Type: application/json" \
+      -d "$PAYLOAD" 2>/dev/null)
 
-  if [ -z "$RESPONSE" ]; then
-    sleep 30
+  if [ -z "$R" ]; then
+    LOG "Geen response — netwerk down?"
+    sleep "$POLL_INTERVAL"
     continue
   fi
 
-  # Parse guidance system en aantal bestanden
-  GUIDANCE=$(echo "$RESPONSE" | jq -r '.guidance_system // empty')
-  FILE_COUNT=$(echo "$RESPONSE" | jq '.files | length')
-
-  # Update target folder if server tells us which guidance system
-  if [ -n "$GUIDANCE" ]; then
-    LAST_TARGET=$(get_target_folder "$GUIDANCE")
+  if [ "$HAS_JQ" = "1" ]; then
+    GS=$(printf '%s' "$R" | jq -r '.guidance_system // empty' 2>/dev/null)
+    N=$(printf '%s' "$R"  | jq -r '.files | length'          2>/dev/null)
+  else
+    GS=$(printf '%s' "$R" | grep -oE '"guidance_system"[[:space:]]*:[[:space:]]*"[A-Z]+"' \
+         | sed 's/.*"\([A-Z][A-Z]*\)"$/\1/')
+    N=0
   fi
+  [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
+  mkdir -p "$LAST_TGT" 2>/dev/null
 
-  if [ "$FILE_COUNT" = "0" ] || [ -z "$FILE_COUNT" ]; then
-    sleep 30
+  if [ "$HAS_JQ" != "1" ]; then
+    sleep "$POLL_INTERVAL"
     continue
   fi
 
-  TARGET_FOLDER="$LAST_TARGET"
-  mkdir -p "$TARGET_FOLDER"
+  if [ -z "$N" ] || [ "$N" = "null" ] || [ "$N" = "0" ]; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
 
-  echo "[$(date '+%H:%M:%S')] $FILE_COUNT nieuw(e) bestand(en) gevonden"
-
-  SYNCED_IDS="[]"
-
-  for i in $(seq 0 $((FILE_COUNT - 1))); do
-    FILE_ID=$(echo "$RESPONSE" | jq -r ".files[$i].id")
-    FILE_NAME=$(echo "$RESPONSE" | jq -r ".files[$i].name")
-    FILE_URL=$(echo "$RESPONSE" | jq -r ".files[$i].url")
-    SUBFOLDER=$(echo "$RESPONSE" | jq -r ".files[$i].subfolder // empty")
-
-    # Determine target path (with optional werf subfolder)
-    if [ -n "$SUBFOLDER" ]; then
-      DEST="$TARGET_FOLDER/$SUBFOLDER"
+  LOG "$N bestand(en) te downloaden"
+  IDS="[]"
+  for i in $(seq 0 $((N-1))); do
+    FID=$(printf '%s' "$R" | jq -r ".files[$i].id")
+    FN=$(printf  '%s' "$R" | jq -r ".files[$i].name")
+    URL=$(printf '%s' "$R" | jq -r ".files[$i].url")
+    SUB=$(printf '%s' "$R" | jq -r ".files[$i].subfolder // empty")
+    DST="$LAST_TGT"
+    [ -n "$SUB" ] && DST="$LAST_TGT/$SUB"
+    mkdir -p "$DST"
+    LOG "  $FN -> $DST/"
+    HC=$(curl -fsS --connect-timeout 30 -w "%{http_code}" -o "$DST/$FN" "$URL" 2>/dev/null || echo 000)
+    if [ "$HC" = "200" ]; then
+      LOG "    OK"
+      IDS=$(printf '%s' "$IDS" | jq ". + [$FID]")
     else
-      DEST="$TARGET_FOLDER"
-    fi
-    mkdir -p "$DEST"
-
-    echo "  Downloading: $FILE_NAME → $DEST/"
-
-    # Download het bestand
-    HTTP_CODE=$(curl -s -w "%{http_code}" -o "$DEST/$FILE_NAME" "$FILE_URL" 2>/dev/null)
-
-    if [ "$HTTP_CODE" = "200" ]; then
-      echo "  ✓ $FILE_NAME opgeslagen"
-      SYNCED_IDS=$(echo "$SYNCED_IDS" | jq ". + [$FILE_ID]")
-    else
-      echo "  ✗ Download mislukt ($HTTP_CODE)"
+      LOG "    FOUT (http $HC)"
+      rm -f "$DST/$FN" 2>/dev/null
     fi
   done
 
-  # Bevestig sync aan server
-  if [ "$SYNCED_IDS" != "[]" ]; then
-    curl -s -X PATCH "$SERVER/api/machines/sync" \
+  if [ "$IDS" != "[]" ]; then
+    curl -fsS -X PATCH "$SERVER/api/machines/sync" \
       -H "Content-Type: application/json" \
-      -d "{\"connection_code\":\"$CONNECTION_CODE\",\"transfer_ids\":$SYNCED_IDS}" >/dev/null 2>&1
-    echo "  Sync bevestigd"
+      -d "{\"connection_code\":\"$CODE\",\"transfer_ids\":$IDS}" >/dev/null 2>&1
+    LOG "Sync bevestigd"
   fi
 
-  sleep 30
+  sleep "$POLL_INTERVAL"
 done

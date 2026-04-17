@@ -1,20 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Complete installer voor tablet — één commando doet alles
-// Gebruik: wget -qO- "http://SERVER/api/machines/install?code=XXXX" | bash
+// Tablet installer — one command does everything.
+// Usage on the tablet (inside Termux):
+//   wget -qO- "http://SERVER/api/machines/install?code=XXXX" | bash
 export async function GET(req: NextRequest) {
-  const code = req.nextUrl.searchParams.get('code')
+  const code = (req.nextUrl.searchParams.get('code') || '').trim().toUpperCase()
   if (!code || code.length < 4) {
-    return new NextResponse('echo "FOUT: geen connection code"\necho "Gebruik: wget -qO- URL?code=JOUWCODE | bash"\nexit 1\n', {
-      headers: { 'Content-Type': 'text/plain' },
-    })
+    return new NextResponse(
+      'echo "FOUT: geen connection code"\necho "Gebruik: wget -qO- URL?code=JOUWCODE | bash"\nexit 1\n',
+      { headers: { 'Content-Type': 'text/plain' } },
+    )
   }
 
   const host = req.headers.get('host') || 'localhost:3000'
   const proto = req.headers.get('x-forwarded-proto') || 'http'
   const serverUrl = `${proto}://${host}`
 
-  const script = generateInstallScript(code, serverUrl)
+  const script = buildInstallerScript(code, serverUrl)
 
   return new NextResponse(script, {
     headers: {
@@ -24,116 +26,177 @@ export async function GET(req: NextRequest) {
   })
 }
 
-function generateInstallScript(code: string, server: string): string {
-  return `#!/bin/bash
-# VM Plan & Consult — Machine Sync Installer
-# Automatische installatie voor Termux
+function buildInstallerScript(code: string, server: string): string {
+  // The installer is written in 3 distinct pieces:
+  //   1. the installer itself (this function returns bash that runs on the tablet)
+  //   2. a sync.sh payload (below, inside a heredoc with NO expansion)
+  //   3. a boot script to auto-start sync.sh
+  //
+  // Only ${CODE} / ${SERVER} are substituted into sync.sh at install time
+  // via plain `sed`. All other shell expansion inside sync.sh is literal.
+  const SYNC_SH = buildSyncScript()
+
+  return `#!/data/data/com.termux/files/usr/bin/env bash
+# VM Plan & Consult — Tablet Sync Installer
+set -u
 
 CODE="${code}"
 SERVER="${server}"
 
-echo ""
-echo "==================================="
-echo "  VM Machine Sync — Installatie"
-echo "==================================="
-echo "  Code: $CODE"
-echo "  Server: $SERVER"
-echo ""
+banner() {
+  echo ""
+  echo "======================================"
+  echo "  VM Machine Sync — Installatie"
+  echo "======================================"
+  echo "  Code:   $CODE"
+  echo "  Server: $SERVER"
+  echo ""
+}
+banner
 
-# Stap 1: Storage toegang
-echo "[1/4] Storage toegang..."
+# ---------- 1. Storage -----------------------------------------------------
+echo "[1/5] Storage toegang..."
 termux-setup-storage 2>/dev/null || true
+sleep 1
 
-# Stap 2: Mirror forceren op Termux-niveau (overruled nyist/chinese_mainland)
-echo "[2/4] Mirror forceren op Cloudflare..."
-mkdir -p $PREFIX/etc/apt $PREFIX/etc/termux
-# Termux kijkt naar chosen_mirrors (symlink/dir/file) en zet dat als sources.list.
-# Sloop alle bestaande keuzes en zet een vaste mirror.
-rm -rf $PREFIX/etc/termux/chosen_mirrors 2>/dev/null
-cat > $PREFIX/etc/termux/chosen_mirrors << 'CHO'
-deb https://packages-cf.termux.dev/apt/termux-main stable main
-CHO
-cat > $PREFIX/etc/apt/sources.list << 'SRC'
-deb https://packages-cf.termux.dev/apt/termux-main stable main
-SRC
-# sources.list.d opkuisen (anders mixt apt meerdere mirrors)
-rm -f $PREFIX/etc/apt/sources.list.d/*.list 2>/dev/null
+# ---------- 2. Mirror forceren ---------------------------------------------
+echo "[2/5] Termux-mirror forceren op Cloudflare..."
+mkdir -p "$PREFIX/etc/apt" "$PREFIX/etc/termux"
+rm -rf "$PREFIX/etc/termux/chosen_mirrors" 2>/dev/null
+rm -f  "$PREFIX/etc/apt/sources.list.d/"*.list 2>/dev/null
 
-# Probeer meerdere mirrors als CF niet wil
 MIRRORS=(
   "https://packages-cf.termux.dev/apt/termux-main"
   "https://packages.termux.dev/apt/termux-main"
   "https://grimler.se/termux/termux-main"
 )
-UPDATED=0
+WORKING_MIRROR=""
 for M in "\${MIRRORS[@]}"; do
   echo "  -> $M"
-  echo "deb $M stable main" > $PREFIX/etc/apt/sources.list
-  echo "deb $M stable main" > $PREFIX/etc/termux/chosen_mirrors
-  # Wis caches om oude hash-mismatches te vermijden
-  rm -rf $PREFIX/var/lib/apt/lists/* 2>/dev/null
-  if apt update -o Acquire::Retries=2 -o Acquire::ForceIPv4=true 2>&1 | tail -n 2; then
+  printf 'deb %s stable main\\n' "$M" > "$PREFIX/etc/apt/sources.list"
+  printf 'deb %s stable main\\n' "$M" > "$PREFIX/etc/termux/chosen_mirrors"
+  rm -rf "$PREFIX/var/lib/apt/lists/"* 2>/dev/null
+  if apt update -o Acquire::Retries=2 -o Acquire::ForceIPv4=true >/dev/null 2>&1; then
     if apt-cache show curl >/dev/null 2>&1; then
-      echo "  OK: mirror werkt"
-      UPDATED=1
+      WORKING_MIRROR="$M"
+      echo "  OK"
       break
     fi
   fi
 done
-[ "$UPDATED" = "0" ] && echo "  WAARSCHUWING: geen werkende mirror gevonden — ga verder met bestaande tools"
-dpkg --configure -a 2>/dev/null
+if [ -z "$WORKING_MIRROR" ]; then
+  echo "  WAARSCHUWING: geen werkende Termux-mirror — bestaande tools worden gebruikt"
+fi
+dpkg --configure -a >/dev/null 2>&1 || true
 
-# Stap 3: Dependencies
-echo "[3/4] curl en jq installeren..."
-if [ "$UPDATED" = "1" ]; then
-  apt install -y --no-install-recommends curl jq 2>&1 | tail -n 3
+# ---------- 3. Dependencies ------------------------------------------------
+echo "[3/5] curl + jq installeren..."
+if [ -n "$WORKING_MIRROR" ]; then
+  apt install -y --no-install-recommends curl jq >/dev/null 2>&1 || true
 fi
 
-if ! command -v curl &>/dev/null; then
-  echo "FOUT: curl ontbreekt en kan niet geïnstalleerd worden"
+if ! command -v curl >/dev/null 2>&1; then
+  echo "FOUT: curl is niet beschikbaar en kan niet geïnstalleerd worden."
   echo "Probeer handmatig: pkg i curl"
   exit 1
 fi
-echo "  OK: curl werkt"
 
-# jq via apt mislukt? Probeer static binary (aarch64)
-if ! command -v jq &>/dev/null; then
-  echo "  jq ontbreekt, probeer static binary..."
-  ARCH=\$(uname -m)
-  JQ_URL=""
-  case "\$ARCH" in
+# jq via apt faalt vaak — gebruik static binary als fallback
+if ! command -v jq >/dev/null 2>&1; then
+  echo "  jq ontbreekt — static binary downloaden..."
+  ARCH=$(uname -m 2>/dev/null || echo unknown)
+  case "$ARCH" in
     aarch64|arm64) JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-arm64" ;;
     armv7l|armv8l) JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-armhf" ;;
     x86_64)        JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64" ;;
+    *)             JQ_URL="" ;;
   esac
-  if [ -n "\$JQ_URL" ]; then
-    if curl -fsSL --connect-timeout 15 -o $PREFIX/bin/jq "\$JQ_URL"; then
-      chmod +x $PREFIX/bin/jq
-      echo "  OK: jq static binary geïnstalleerd"
-    else
-      echo "  WAARSCHUWING: jq download mislukt — listing blijft werken, maar server-response parseren valt terug op bash"
+  if [ -n "$JQ_URL" ]; then
+    if curl -fsSL --connect-timeout 15 -o "$PREFIX/bin/jq" "$JQ_URL"; then
+      chmod +x "$PREFIX/bin/jq"
     fi
   fi
 fi
-command -v jq >/dev/null 2>&1 && echo "  OK: jq beschikbaar" || echo "  LET OP: jq ontbreekt"
+if command -v jq >/dev/null 2>&1; then
+  echo "  OK: curl + jq beschikbaar"
+else
+  echo "  WAARSCHUWING: jq ontbreekt — server-response kan niet geparseerd worden."
+  echo "  Sync probeert verder, maar downloads werken niet zonder jq."
+fi
 
-# Test verbinding
-echo "  Verbinding testen..."
-HB=$(curl -s --connect-timeout 5 "$SERVER/api/machines/heartbeat" 2>/dev/null)
+# ---------- 4. Verbinding testen ------------------------------------------
+echo "[4/5] Verbinding testen..."
+HB=$(curl -fsS --connect-timeout 6 "$SERVER/api/machines/heartbeat" 2>/dev/null || true)
 if [ -z "$HB" ]; then
-  echo "  FOUT: kan server niet bereiken"
-  echo "  Check wifi verbinding"
+  echo "FOUT: kan $SERVER niet bereiken"
+  echo "Check of de tablet in hetzelfde netwerk zit als de server."
   exit 1
 fi
-echo "  OK: verbinding werkt"
+echo "  OK"
 
-# Stap 4: Sync script
-echo "[4/4] Sync script installeren..."
+# ---------- 5. sync.sh schrijven + boot-hook -------------------------------
+echo "[5/5] sync.sh installeren..."
+pkill -f "$HOME/sync.sh" 2>/dev/null || true
+pkill -f "sync.sh" 2>/dev/null || true
 
-cat > $HOME/sync.sh << 'SCRIPT'
-#!/bin/bash
-CODE="%%CODE%%"
-SERVER="%%SERVER%%"
+# Schrijf sync.sh letterlijk weg (geen variabele-expansie in dit heredoc)
+cat > "$HOME/sync.sh" <<'__SYNC_EOF__'
+${SYNC_SH}
+__SYNC_EOF__
+
+# Substitueer alleen CODE + SERVER via sed
+sed -i "s|__CODE__|$CODE|g" "$HOME/sync.sh"
+sed -i "s|__SERVER__|$SERVER|g" "$HOME/sync.sh"
+chmod +x "$HOME/sync.sh"
+
+# Auto-start bij boot (vereist Termux:Boot app)
+mkdir -p "$HOME/.termux/boot"
+cat > "$HOME/.termux/boot/start-vm-sync.sh" <<'__BOOT_EOF__'
+#!/data/data/com.termux/files/usr/bin/env bash
+termux-wake-lock
+exec bash "$HOME/sync.sh" >> "$HOME/sync.log" 2>&1
+__BOOT_EOF__
+chmod +x "$HOME/.termux/boot/start-vm-sync.sh"
+
+# Preload guidance-mappen zodat ze direct scanbaar zijn
+for F in \\
+  "/sdcard/Unicontrol/Projects" \\
+  "/sdcard/Trimble Data/Projects" \\
+  "/sdcard/TopconData/Projects" \\
+  "/sdcard/Leica iCON/Projects" \\
+  "/sdcard/CHCData/Projects"
+do
+  mkdir -p "$F" 2>/dev/null || true
+done
+
+echo ""
+echo "======================================"
+echo "  Installatie voltooid"
+echo "======================================"
+echo "  Logbestand: $HOME/sync.log"
+echo "  Stoppen:    pkill -f sync.sh"
+echo ""
+echo "  Sync start nu..."
+echo ""
+
+termux-wake-lock 2>/dev/null || true
+exec bash "$HOME/sync.sh"
+`
+}
+
+// -------------------------------------------------------------------------
+// sync.sh payload (runs on the tablet, polls the server every 30s)
+// -------------------------------------------------------------------------
+// This string is injected verbatim into the installer. It uses single-quoted
+// heredoc on the tablet, so NO substitution happens for ${...}, $VAR, etc.
+// Only the two placeholders __CODE__ and __SERVER__ are replaced by sed.
+function buildSyncScript(): string {
+  return `#!/data/data/com.termux/files/usr/bin/env bash
+CODE="__CODE__"
+SERVER="__SERVER__"
+
+POLL_INTERVAL=30
+LOG() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 gps_folder() {
   case "$1" in
@@ -146,7 +209,7 @@ gps_folder() {
   esac
 }
 
-# Escape a string for JSON (pure bash, no jq needed)
+# Minimal JSON-escape in pure bash (handles backslash, quote, newline)
 json_escape() {
   local s=$1
   s=\${s//\\\\/\\\\\\\\}
@@ -157,121 +220,109 @@ json_escape() {
   printf '%s' "$s"
 }
 
-# Build a JSON listing of a folder, recursively, pure bash (no jq)
+# Build a JSON object {"root":"...","files":[{"path":"a/b.xml","size":123}, ...]}
+# Recursive, pure bash (jq not required). Capped at 5000 files.
 build_listing() {
   local root="$1"
-  [ -z "$root" ] && { printf 'null'; return; }
+  if [ -z "$root" ]; then printf 'null'; return; fi
   mkdir -p "$root" 2>/dev/null
   local out='{"root":"'"$(json_escape "$root")"'","files":['
   local first=1
   local count=0
-  if [ -d "$root" ]; then
-    while IFS=$'\\t' read -r p sz; do
-      [ -z "$p" ] && continue
-      [ $count -ge 5000 ] && break
-      if [ $first -eq 1 ]; then first=0; else out+=","; fi
-      out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
-      count=$((count+1))
-    done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
-  fi
+  while IFS=$'\\t' read -r p sz; do
+    [ -z "$p" ] && continue
+    if [ $count -ge 5000 ]; then break; fi
+    if [ $first -eq 1 ]; then first=0; else out+=","; fi
+    out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
+    count=$((count+1))
+  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
   out+=']}'
   printf '%s' "$out"
 }
 
-# Always start by guessing + ensuring the Unicontrol folder exists
+# Initial guidance folder (before server replies): prefer Unicontrol, else
+# first existing one, else default to Unicontrol.
 LAST_TGT="/sdcard/Unicontrol/Projects"
-for GUESS in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
-  F=$(gps_folder "$GUESS")
+for G in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
+  F=$(gps_folder "$G")
   if [ -d "$F" ]; then LAST_TGT="$F"; break; fi
 done
 mkdir -p "$LAST_TGT" 2>/dev/null
 
-echo "=== VM Machine Sync ==="
-echo "Code: $CODE | Server: $SERVER"
-echo "Listing start-folder: \${LAST_TGT:-onbekend}"
-echo "Check elke 30s op nieuwe bestanden..."
-echo ""
+LOG "=== VM Machine Sync ==="
+LOG "Code: $CODE | Server: $SERVER"
+LOG "Start-folder: $LAST_TGT"
+LOG "Poll interval: \${POLL_INTERVAL}s"
+
+HAS_JQ=0
+command -v jq >/dev/null 2>&1 && HAS_JQ=1
 
 while true; do
-  # Build directory listing of current guidance folder
   LISTING=$(build_listing "$LAST_TGT")
-  [ -z "$LISTING" ] && LISTING="null"
+  [ -z "$LISTING" ] && LISTING='null'
 
-  R=$(curl -s --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \\
-    -H "Content-Type: application/json" \\
-    -d "{\\"connection_code\\":\\"$CODE\\",\\"listing\\":$LISTING}" 2>/dev/null)
+  PAYLOAD="{\\"connection_code\\":\\"$CODE\\",\\"listing\\":$LISTING}"
+  R=$(curl -fsS --connect-timeout 10 -X POST "$SERVER/api/machines/sync" \\
+      -H "Content-Type: application/json" \\
+      -d "$PAYLOAD" 2>/dev/null)
 
-  [ -z "$R" ] && sleep 30 && continue
-
-  if command -v jq >/dev/null 2>&1; then
-    GS=$(echo "$R" | jq -r '.guidance_system // empty')
-  else
-    GS=$(echo "$R" | grep -oE '"guidance_system"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*"\\([A-Z]*\\)"$/\\1/')
-  fi
-  [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
-
-  if ! command -v jq >/dev/null 2>&1; then
-    # No jq -> can't parse file list, just keep sending listing + sleep
-    sleep 30
+  if [ -z "$R" ]; then
+    LOG "Geen response — netwerk down?"
+    sleep "$POLL_INTERVAL"
     continue
   fi
 
-  N=$(echo "$R" | jq '.files | length' 2>/dev/null)
-  [ "$N" = "0" ] || [ -z "$N" ] || [ "$N" = "null" ] && sleep 30 && continue
+  # Parse guidance_system (works with or without jq)
+  if [ "$HAS_JQ" = "1" ]; then
+    GS=$(printf '%s' "$R" | jq -r '.guidance_system // empty' 2>/dev/null)
+    N=$(printf '%s' "$R"  | jq -r '.files | length'        2>/dev/null)
+  else
+    GS=$(printf '%s' "$R" | grep -oE '"guidance_system"[[:space:]]*:[[:space:]]*"[A-Z]+"' \\
+         | sed 's/.*"\\([A-Z][A-Z]*\\)"$/\\1/')
+    N=0
+  fi
+  [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
+  mkdir -p "$LAST_TGT" 2>/dev/null
 
-  TGT="$LAST_TGT"
-  echo "[$(date '+%H:%M:%S')] $N bestand(en) gevonden"
+  if [ "$HAS_JQ" != "1" ]; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
 
+  if [ -z "$N" ] || [ "$N" = "null" ] || [ "$N" = "0" ]; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
+
+  LOG "$N bestand(en) te downloaden"
   IDS="[]"
   for i in $(seq 0 $((N-1))); do
-    FID=$(echo "$R" | jq -r ".files[$i].id")
-    FN=$(echo "$R" | jq -r ".files[$i].name")
-    URL=$(echo "$R" | jq -r ".files[$i].url")
-    SUB=$(echo "$R" | jq -r ".files[$i].subfolder // empty")
-    DST="$TGT"; [ -n "$SUB" ] && DST="$TGT/$SUB"
+    FID=$(printf '%s' "$R" | jq -r ".files[$i].id")
+    FN=$(printf  '%s' "$R" | jq -r ".files[$i].name")
+    URL=$(printf '%s' "$R" | jq -r ".files[$i].url")
+    SUB=$(printf '%s' "$R" | jq -r ".files[$i].subfolder // empty")
+    DST="$LAST_TGT"
+    [ -n "$SUB" ] && DST="$LAST_TGT/$SUB"
     mkdir -p "$DST"
-    echo "  $FN -> $DST/"
-    HC=$(curl -s --connect-timeout 30 -w "%{http_code}" -o "$DST/$FN" "$URL" 2>/dev/null)
+    LOG "  $FN -> $DST/"
+    HC=$(curl -fsS --connect-timeout 30 -w "%{http_code}" -o "$DST/$FN" "$URL" 2>/dev/null || echo 000)
     if [ "$HC" = "200" ]; then
-      echo "  OK"
-      IDS=$(echo "$IDS" | jq ". + [$FID]")
+      LOG "    OK"
+      IDS=$(printf '%s' "$IDS" | jq ". + [$FID]")
     else
-      echo "  FOUT ($HC)"
+      LOG "    FOUT (http $HC)"
+      rm -f "$DST/$FN" 2>/dev/null
     fi
   done
 
   if [ "$IDS" != "[]" ]; then
-    curl -s -X PATCH "$SERVER/api/machines/sync" \\
+    curl -fsS -X PATCH "$SERVER/api/machines/sync" \\
       -H "Content-Type: application/json" \\
       -d "{\\"connection_code\\":\\"$CODE\\",\\"transfer_ids\\":$IDS}" >/dev/null 2>&1
-    echo "  Sync OK"
+    LOG "Sync bevestigd"
   fi
-  sleep 30
+
+  sleep "$POLL_INTERVAL"
 done
-SCRIPT
-
-sed -i "s|%%CODE%%|$CODE|g" $HOME/sync.sh
-sed -i "s|%%SERVER%%|$SERVER|g" $HOME/sync.sh
-chmod +x $HOME/sync.sh
-
-# Auto-start bij boot
-mkdir -p $HOME/.termux/boot
-cat > $HOME/.termux/boot/start-sync.sh << BOOT
-#!/bin/bash
-termux-wake-lock
-bash $HOME/sync.sh
-BOOT
-chmod +x $HOME/.termux/boot/start-sync.sh
-
-echo ""
-echo "==================================="
-echo "  Installatie voltooid!"
-echo "==================================="
-echo ""
-echo "  Sync start nu automatisch..."
-echo "  CTRL+C om te stoppen"
-echo ""
-
-exec bash $HOME/sync.sh
 `
 }
