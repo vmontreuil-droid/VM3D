@@ -271,8 +271,10 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
         </p>
       </div>
 
-      {/* Werf management (Unicontrol only) */}
-      {isUnicontrol && (
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,380px)_1fr]">
+        <div className="space-y-4">
+          {/* Werf management (Unicontrol only) */}
+          {isUnicontrol && (
         <div className="space-y-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
           <p className="text-[11px] font-semibold text-[var(--text-soft)]">
             Werven op deze machine
@@ -416,6 +418,18 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
         </p>
       )}
 
+          <button
+            type="button"
+            onClick={load}
+            disabled={loading}
+            className="w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card)] disabled:opacity-50"
+          >
+            <Upload className="mr-1 inline h-3 w-3" />
+            Vernieuwen
+          </button>
+        </div>
+
+        <div className="space-y-4">
       {/* Tablet listing — live contents of the crane tablet */}
       <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3 space-y-2">
         <div className="flex items-center justify-between gap-2">
@@ -547,16 +561,8 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
           )}
         </div>
       </div>
-
-      <button
-        type="button"
-        onClick={load}
-        disabled={loading}
-        className="w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card)] disabled:opacity-50"
-      >
-        <Upload className="mr-1 inline h-3 w-3" />
-        Vernieuwen
-      </button>
+        </div>
+      </div>
     </section>
   )
 }
