@@ -62,6 +62,12 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
               <ArrowLeft className="inline h-3 w-3 mr-1" />
               {tt.back}
             </Link>
+            <Link
+              href="/admin/machines/new"
+              className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-white hover:brightness-110"
+            >
+              + Nieuwe machine
+            </Link>
           </div>
           <div className="relative mt-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
