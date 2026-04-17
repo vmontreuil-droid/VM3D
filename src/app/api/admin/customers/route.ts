@@ -12,13 +12,14 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const search = searchParams.get('search')?.trim() || ''
+    const all = searchParams.get('all') === '1'
 
     let query = supabaseAdmin
       .from('profiles')
       .select('id, company_name, full_name, email')
       .eq('role', 'client')
       .order('company_name', { ascending: true })
-      .limit(20)
+      .limit(all ? 500 : 20)
 
     if (search) {
       query = query.or(`company_name.ilike.%${search}%,full_name.ilike.%${search}%,email.ilike.%${search}%`)

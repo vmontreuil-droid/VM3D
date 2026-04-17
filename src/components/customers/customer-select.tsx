@@ -28,12 +28,11 @@ export default function CustomerSelect({ value, onChange, onCreateNew, label, pl
   const [showDropdown, setShowDropdown] = useState(false)
 
   useEffect(() => {
-    if (!query) {
-      setResults([])
-      return
-    }
     setLoading(true)
-    fetch(`/api/admin/customers?search=${encodeURIComponent(query)}`)
+    const url = query
+      ? `/api/admin/customers?search=${encodeURIComponent(query)}`
+      : `/api/admin/customers?all=1`
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setResults(Array.isArray(data.customers) ? data.customers : [])
