@@ -4,6 +4,7 @@ import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
+import MachinesMap from '@/components/machines/machines-map'
 import {
   MachineIcon,
   BRAND_COLORS,
@@ -215,13 +216,18 @@ export default async function AdminOpenMachinePage({
               </a>
             </div>
             <div className="mt-3 overflow-hidden rounded-lg border border-[var(--border-soft)]">
-              <iframe
-                title="Machine locatie"
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${Number(machine.longitude)-0.01}%2C${Number(machine.latitude)-0.005}%2C${Number(machine.longitude)+0.01}%2C${Number(machine.latitude)+0.005}&layer=mapnik&marker=${machine.latitude}%2C${machine.longitude}`}
-                width="100%"
-                height="280"
-                loading="lazy"
-                style={{ border: 0 }}
+              <MachinesMap
+                points={[{
+                  id: machine.id,
+                  name: machine.name,
+                  brand: machine.brand,
+                  model: machine.model,
+                  latitude: Number(machine.latitude),
+                  longitude: Number(machine.longitude),
+                  is_online: !!machine.is_online,
+                  location_updated_at: machine.location_updated_at ?? null,
+                }]}
+                height={320}
               />
             </div>
           </section>
