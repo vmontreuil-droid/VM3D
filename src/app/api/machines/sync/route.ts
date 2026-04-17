@@ -59,13 +59,9 @@ export async function POST(req: NextRequest) {
     .eq('status', 'pending')
     .order('created_at')
 
-  if (!transfers?.length) {
-    return NextResponse.json({ files: [], guidance_system: machine.guidance_system })
-  }
-
   // Generate signed download URLs
   const files = await Promise.all(
-    transfers.map(async (t) => {
+    (transfers || []).map(async (t) => {
       const { data } = await adminSupabase.storage
         .from('machine-files')
         .createSignedUrl(t.storage_path, 600) // 10 min
@@ -79,24 +75,58 @@ export async function POST(req: NextRequest) {
     })
   )
 
+  // Pending commands (delete/move/pull/push) — met signed URLs waar nodig
+  const { data: rawCmds } = await adminSupabase
+    .from('machine_commands')
+    .select('id, kind, path, new_path, storage_path, file_name')
+    .eq('machine_id', machine.id)
+    .eq('status', 'pending')
+    .order('created_at')
+    .limit(25)
+
+  const commands = await Promise.all((rawCmds || []).map(async (c) => {
+    let upload_url: string | null = null
+    let download_url: string | null = null
+    if (c.kind === 'pull' && c.storage_path) {
+      const { data } = await adminSupabase.storage
+        .from('machine-files')
+        .createSignedUploadUrl(c.storage_path)
+      upload_url = data?.signedUrl || null
+    } else if (c.kind === 'push' && c.storage_path) {
+      const { data } = await adminSupabase.storage
+        .from('machine-files')
+        .createSignedUrl(c.storage_path, 600)
+      download_url = data?.signedUrl || null
+    }
+    return { id: c.id, kind: c.kind, path: c.path, new_path: c.new_path, file_name: c.file_name, upload_url, download_url }
+  }))
+
+  // Markeer uitgestuurde commands als "running" zodat ze niet opnieuw verstuurd worden
+  if (commands.length > 0) {
+    await adminSupabase
+      .from('machine_commands')
+      .update({ status: 'running' })
+      .in('id', commands.map(c => c.id))
+  }
+
   return NextResponse.json({
     files: files.filter(f => f.url),
     guidance_system: machine.guidance_system,
+    commands,
   })
 }
 
-// Tablet bevestigt dat een bestand gesynct is
+// Tablet bevestigt dat een bestand gesynct is, of meldt command-resultaten
 export async function PATCH(req: NextRequest) {
   const body = await req.json()
-  const { connection_code, transfer_ids } = body
+  const { connection_code, transfer_ids, command_results } = body
 
-  if (!connection_code || !Array.isArray(transfer_ids)) {
+  if (!connection_code) {
     return NextResponse.json({ error: 'Ongeldige data' }, { status: 400 })
   }
 
   const adminSupabase = createAdminClient()
 
-  // Verify machine
   const { data: machine } = await adminSupabase
     .from('machines')
     .select('id')
@@ -107,12 +137,29 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Machine niet gevonden' }, { status: 404 })
   }
 
-  // Mark as synced
-  await adminSupabase
-    .from('machine_file_transfers')
-    .update({ status: 'synced', synced_at: new Date().toISOString() })
-    .eq('machine_id', machine.id)
-    .in('id', transfer_ids)
+  if (Array.isArray(transfer_ids) && transfer_ids.length > 0) {
+    await adminSupabase
+      .from('machine_file_transfers')
+      .update({ status: 'synced', synced_at: new Date().toISOString() })
+      .eq('machine_id', machine.id)
+      .in('id', transfer_ids)
+  }
+
+  if (Array.isArray(command_results)) {
+    for (const r of command_results) {
+      if (!r?.id) continue
+      const ok = r.status === 'done' || r.ok === true
+      await adminSupabase
+        .from('machine_commands')
+        .update({
+          status: ok ? 'done' : 'failed',
+          error: ok ? null : (r.error || null),
+          executed_at: new Date().toISOString(),
+        })
+        .eq('machine_id', machine.id)
+        .eq('id', r.id)
+    }
+  }
 
   return NextResponse.json({ ok: true })
 }

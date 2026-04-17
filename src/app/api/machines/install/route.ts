@@ -310,6 +310,71 @@ while true; do
     continue
   fi
 
+  # ---------------------------------------------------------------------------
+  # Commands (delete / move / pull / push) — remote control vanuit browser
+  # ---------------------------------------------------------------------------
+  NC=$(printf '%s' "$R" | jq -r '.commands | length' 2>/dev/null)
+  if [ -n "$NC" ] && [ "$NC" != "null" ] && [ "$NC" != "0" ]; then
+    LOG "$NC command(s) te verwerken"
+    CRES="[]"
+    for j in $(seq 0 $((NC-1))); do
+      CID=$(printf '%s' "$R" | jq -r ".commands[$j].id")
+      CKIND=$(printf '%s' "$R" | jq -r ".commands[$j].kind")
+      CPATH=$(printf '%s' "$R" | jq -r ".commands[$j].path")
+      CNEW=$(printf '%s' "$R" | jq -r ".commands[$j].new_path // empty")
+      CUP=$(printf '%s' "$R" | jq -r ".commands[$j].upload_url // empty")
+      CDL=$(printf '%s' "$R" | jq -r ".commands[$j].download_url // empty")
+
+      OK=0; ERR=""
+      case "$CKIND" in
+        delete)
+          if [ -e "$CPATH" ]; then
+            rm -rf "$CPATH" 2>/tmp/vm_err && OK=1
+          else OK=1; fi
+          [ $OK -eq 0 ] && ERR=$(cat /tmp/vm_err 2>/dev/null)
+          LOG "  delete $CPATH -> $([ $OK -eq 1 ] && echo OK || echo FAIL)"
+          ;;
+        move)
+          mkdir -p "$(dirname "$CNEW")" 2>/dev/null
+          mv -f "$CPATH" "$CNEW" 2>/tmp/vm_err && OK=1 || ERR=$(cat /tmp/vm_err 2>/dev/null)
+          LOG "  move $CPATH -> $CNEW  $([ $OK -eq 1 ] && echo OK || echo FAIL)"
+          ;;
+        pull)
+          if [ -f "$CPATH" ] && [ -n "$CUP" ]; then
+            HC=$(curl -fsS --connect-timeout 60 -X PUT -w "%{http_code}" \\
+                 -H "Content-Type: application/octet-stream" \\
+                 --data-binary "@$CPATH" "$CUP" -o /dev/null 2>/dev/null || echo 000)
+            if [ "$HC" = "200" ] || [ "$HC" = "201" ]; then OK=1
+            else ERR="http $HC"; fi
+          else ERR="bestand niet gevonden of geen upload url"; fi
+          LOG "  pull $CPATH  $([ $OK -eq 1 ] && echo OK || echo FAIL)"
+          ;;
+        push)
+          TARGET="$CPATH"
+          if [ -n "$CDL" ]; then
+            mkdir -p "$(dirname "$TARGET")" 2>/dev/null
+            HC=$(curl -fsS --connect-timeout 60 -w "%{http_code}" -o "$TARGET.tmp" "$CDL" 2>/dev/null || echo 000)
+            if [ "$HC" = "200" ]; then
+              mv -f "$TARGET.tmp" "$TARGET" && OK=1 || ERR="mv faalde"
+            else ERR="http $HC"; rm -f "$TARGET.tmp" 2>/dev/null; fi
+          else ERR="geen download url"; fi
+          LOG "  push $TARGET  $([ $OK -eq 1 ] && echo OK || echo FAIL)"
+          ;;
+        *) ERR="onbekend kind: $CKIND" ;;
+      esac
+
+      RES_STATUS=$([ $OK -eq 1 ] && echo '"done"' || echo '"failed"')
+      ERR_JSON="null"
+      [ -n "$ERR" ] && ERR_JSON="\\"$(printf '%s' "$ERR" | sed 's/\\\\/\\\\\\\\/g; s/"/\\\\"/g' | tr '\\n' ' ')\\""
+      CRES=$(printf '%s' "$CRES" | jq ". + [{id: $CID, status: $RES_STATUS, error: $ERR_JSON}]")
+    done
+
+    curl -fsS -X PATCH "$SERVER/api/machines/sync" \\
+      -H "Content-Type: application/json" \\
+      -d "{\\"connection_code\\":\\"$CODE\\",\\"command_results\\":$CRES}" >/dev/null 2>&1
+    LOG "Command-resultaten verstuurd"
+  fi
+
   if [ -z "$N" ] || [ "$N" = "null" ] || [ "$N" = "0" ]; then
     sleep "$POLL_INTERVAL"
     continue

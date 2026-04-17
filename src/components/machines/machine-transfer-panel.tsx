@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw, FileIcon, ChevronRight, ChevronDown, Download, FileArchive } from 'lucide-react'
+import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw, FileIcon, ChevronRight, ChevronDown, Download, FileArchive, Trash2, Pencil, ArrowRightLeft } from 'lucide-react'
 
 type Transfer = {
   id: number
@@ -485,6 +485,9 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
                     node={tree}
                     depth={0}
                     selectedWerf={selectedWerf}
+                    parentPath={tabletListing.root || ''}
+                    machineId={machineId}
+                    onChanged={loadTabletListing}
                   />
                 </div>
               </>
@@ -562,10 +565,16 @@ function TreeView({
   node,
   depth,
   selectedWerf,
+  parentPath,
+  machineId,
+  onChanged,
 }: {
   node: TreeNode
   depth: number
   selectedWerf: string
+  parentPath: string
+  machineId: number
+  onChanged: () => void
 }) {
   const children = node.children ? Object.values(node.children) : []
   // Sort: folders first, then files, alphabetical
@@ -581,6 +590,9 @@ function TreeView({
           node={child}
           depth={depth}
           selectedWerf={selectedWerf}
+          parentPath={parentPath}
+          machineId={machineId}
+          onChanged={onChanged}
         />
       ))}
     </ul>
@@ -591,26 +603,188 @@ function TreeItem({
   node,
   depth,
   selectedWerf,
+  parentPath,
+  machineId,
+  onChanged,
 }: {
   node: TreeNode
   depth: number
   selectedWerf: string
+  parentPath: string
+  machineId: number
+  onChanged: () => void
 }) {
   const [open, setOpen] = useState(false)
+  const [busy, setBusy] = useState<string | null>(null)
   const indent = { paddingLeft: `${depth * 12 + 6}px` }
+  const fullPath = parentPath ? `${parentPath}/${node.name}` : node.name
+  const uploadRef = useRef<HTMLInputElement | null>(null)
+
+  async function sendCommand(kind: 'delete' | 'move' | 'pull', extra?: Record<string, unknown>) {
+    setBusy(kind)
+    try {
+      const res = await fetch(`/api/machines/${machineId}/command`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind, path: fullPath, ...extra }),
+      })
+      const j = await res.json()
+      if (!res.ok) throw new Error(j.error || 'Fout')
+      return j.command as { id: number; kind: string }
+    } catch (e) {
+      alert('Fout: ' + (e as Error).message)
+      return null
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  async function handleDelete() {
+    if (!confirm(`Verwijderen op tablet?\n\n${fullPath}`)) return
+    const cmd = await sendCommand('delete')
+    if (cmd) {
+      alert('Verwijder-opdracht verstuurd. Tablet voert dit uit binnen 30s.')
+      onChanged()
+    }
+  }
+
+  async function handleMove() {
+    const target = prompt(`Nieuw pad op tablet:`, fullPath)
+    if (!target || target === fullPath) return
+    const cmd = await sendCommand('move', { new_path: target })
+    if (cmd) {
+      alert('Verplaats-opdracht verstuurd.')
+      onChanged()
+    }
+  }
+
+  async function pollDownload(commandId: number): Promise<string | null> {
+    // Poll up to ~3 min
+    for (let i = 0; i < 60; i++) {
+      await new Promise(r => setTimeout(r, 3000))
+      const res = await fetch(`/api/machines/${machineId}/command?command_id=${commandId}`)
+      const j = await res.json()
+      const c = j.commands?.[0]
+      if (!c) return null
+      if (c.status === 'done' && c.download_url) return c.download_url as string
+      if (c.status === 'failed') throw new Error(c.error || 'Tablet faalde')
+    }
+    throw new Error('Timeout — tablet antwoordde niet')
+  }
+
+  async function handleDownload(editAfter = false) {
+    setBusy(editAfter ? 'edit' : 'download')
+    try {
+      const cmd = await sendCommand('pull')
+      if (!cmd) return
+      const url = await pollDownload(cmd.id)
+      if (!url) throw new Error('Geen download url')
+      if (editAfter) {
+        // Open file in new tab + prompt user to re-upload
+        window.open(url, '_blank')
+        alert('Bestand geopend in tab. Bewerk lokaal, bewaar, en gebruik daarna de upload-knop om terug te versturen.')
+      } else {
+        const a = document.createElement('a')
+        a.href = url
+        a.download = node.name
+        a.click()
+      }
+    } catch (e) {
+      alert('Fout: ' + (e as Error).message)
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  async function handleUpload(file: File) {
+    setBusy('upload')
+    try {
+      const fd = new FormData()
+      fd.append('kind', 'push')
+      fd.append('path', fullPath)
+      fd.append('file', file)
+      const res = await fetch(`/api/machines/${machineId}/command`, { method: 'POST', body: fd })
+      const j = await res.json()
+      if (!res.ok) throw new Error(j.error || 'Fout')
+      alert('Upload-opdracht verstuurd. Tablet schrijft het bestand binnen 30s.')
+      onChanged()
+    } catch (e) {
+      alert('Fout: ' + (e as Error).message)
+    } finally {
+      setBusy(null)
+    }
+  }
 
   if (node.isFile) {
     return (
       <li
-        className="flex items-center justify-between border-t border-[var(--border-soft)]/50 py-0.5 hover:bg-[var(--bg-card-2)]"
+        className="group flex items-center justify-between border-t border-[var(--border-soft)]/50 py-0.5 hover:bg-[var(--bg-card-2)]"
         style={indent}
       >
-        <span className="flex min-w-0 items-center gap-1.5">
+        <span className="flex min-w-0 flex-1 items-center gap-1.5">
           <FileIcon className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
-          <span className="truncate text-[var(--text-soft)]">{node.name}</span>
+          <span className="truncate text-[var(--text-soft)]" title={fullPath}>{node.name}</span>
         </span>
-        <span className="ml-2 shrink-0 pr-2 text-[10px] text-[var(--text-muted)]">
+        <span className="ml-2 shrink-0 text-[10px] text-[var(--text-muted)]">
           {formatBytes(node.size || 0)}
+        </span>
+        <span className="ml-2 flex shrink-0 items-center gap-0.5 pr-2 opacity-0 transition group-hover:opacity-100">
+          <input
+            ref={uploadRef}
+            type="file"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0]
+              if (f) handleUpload(f)
+              e.target.value = ''
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => handleDownload(false)}
+            disabled={!!busy}
+            title="Download van tablet"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <Download className="h-3 w-3 text-[var(--accent)]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleDownload(true)}
+            disabled={!!busy}
+            title="Openen om te bewerken"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <Pencil className="h-3 w-3 text-[var(--accent)]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => uploadRef.current?.click()}
+            disabled={!!busy}
+            title="Upload overschrijft bestand op tablet"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <Upload className="h-3 w-3 text-[var(--accent)]" />
+          </button>
+          <button
+            type="button"
+            onClick={handleMove}
+            disabled={!!busy}
+            title="Verplaatsen / hernoemen"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <ArrowRightLeft className="h-3 w-3 text-[var(--text-muted)]" />
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={!!busy}
+            title="Verwijderen op tablet"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <Trash2 className="h-3 w-3 text-red-500" />
+          </button>
+          {busy && <RefreshCw className="h-3 w-3 animate-spin text-[var(--text-muted)]" />}
         </span>
       </li>
     )
@@ -618,31 +792,56 @@ function TreeItem({
 
   const childCount = node.children ? Object.keys(node.children).length : 0
   return (
-    <li className="border-t border-[var(--border-soft)]/50 first:border-t-0">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-1.5 py-1 text-left hover:bg-[var(--bg-card-2)]"
-        style={indent}
-      >
-        {open ? (
-          <ChevronDown className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
-        ) : (
-          <ChevronRight className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
-        )}
-        <Folder className="h-3 w-3 shrink-0 text-[var(--accent)]" />
-        <span className="truncate font-medium text-[var(--text-main)]">
-          {node.name}
+    <li className="group border-t border-[var(--border-soft)]/50 first:border-t-0">
+      <div className="flex items-center" style={indent}>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="flex flex-1 items-center gap-1.5 py-1 text-left hover:bg-[var(--bg-card-2)]"
+        >
+          {open ? (
+            <ChevronDown className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
+          ) : (
+            <ChevronRight className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
+          )}
+          <Folder className="h-3 w-3 shrink-0 text-[var(--accent)]" />
+          <span className="truncate font-medium text-[var(--text-main)]">
+            {node.name}
+          </span>
+          <span className="ml-2 rounded bg-[var(--bg-card-2)] px-1.5 py-0.5 text-[9px] text-[var(--text-muted)]">
+            {childCount}
+          </span>
+        </button>
+        <span className="flex shrink-0 items-center gap-0.5 pr-2 opacity-0 transition group-hover:opacity-100">
+          <button
+            type="button"
+            onClick={handleMove}
+            disabled={!!busy}
+            title="Map hernoemen / verplaatsen"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <ArrowRightLeft className="h-3 w-3 text-[var(--text-muted)]" />
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={!!busy}
+            title="Map + inhoud verwijderen"
+            className="rounded p-0.5 hover:bg-[var(--bg-card)] disabled:opacity-40"
+          >
+            <Trash2 className="h-3 w-3 text-red-500" />
+          </button>
+          {busy && <RefreshCw className="h-3 w-3 animate-spin text-[var(--text-muted)]" />}
         </span>
-        <span className="ml-auto mr-2 rounded bg-[var(--bg-card-2)] px-1.5 py-0.5 text-[9px] text-[var(--text-muted)]">
-          {childCount}
-        </span>
-      </button>
+      </div>
       {open && node.children && (
         <TreeView
           node={node}
           depth={depth + 1}
           selectedWerf={selectedWerf}
+          parentPath={fullPath}
+          machineId={machineId}
+          onChanged={onChanged}
         />
       )}
     </li>
