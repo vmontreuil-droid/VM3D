@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 export default function NewProjectForm({ userId }: { userId: string }) {
   const [title, setTitle] = useState('')
@@ -11,7 +12,7 @@ export default function NewProjectForm({ userId }: { userId: string }) {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-
+  const { t } = useT()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -35,7 +36,7 @@ export default function NewProjectForm({ userId }: { userId: string }) {
     setTitle('')
     setDescription('')
     setAddress('')
-    setMessage('Project succesvol aangemaakt.')
+    setMessage(t.newProject.success)
     router.refresh()
   }
 
@@ -44,7 +45,7 @@ export default function NewProjectForm({ userId }: { userId: string }) {
       <div className="flex-1 space-y-4">
         <input
           type="text"
-          placeholder="Projectnaam"
+          placeholder={t.newProject.namePlaceholder}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="input-dark h-13 w-full px-4 text-sm"
@@ -53,14 +54,14 @@ export default function NewProjectForm({ userId }: { userId: string }) {
 
         <input
           type="text"
-          placeholder="Adres / locatie"
+          placeholder={t.newProject.addressPlaceholder}
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           className="input-dark h-13 w-full px-4 text-sm"
         />
 
         <textarea
-          placeholder="Beschrijving van het project"
+          placeholder={t.newProject.descPlaceholder}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="input-dark min-h-[228px] w-full resize-none px-4 py-3 text-sm"
@@ -74,7 +75,7 @@ export default function NewProjectForm({ userId }: { userId: string }) {
           disabled={loading}
           className="btn-primary inline-flex h-12 w-full items-center justify-center px-5 text-sm font-semibold"
         >
-          {loading ? 'Bezig...' : 'Project opslaan'}
+          {loading ? t.newProject.saving : t.newProject.saveBtn}
         </button>
 
         {message && (

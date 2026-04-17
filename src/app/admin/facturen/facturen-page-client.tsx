@@ -12,6 +12,7 @@ import {
   Plus,
 } from 'lucide-react'
 import AppShell from '@/components/app-shell'
+import { useT } from '@/i18n/context'
 
 const sectionClass =
   'overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm'
@@ -27,23 +28,26 @@ type Factuur = {
   due_date: string | null
 }
 
-function statusBadge(status: string) {
-  const map: Record<string, { label: string; color: string }> = {
-    concept: { label: 'Concept', color: 'bg-zinc-500/15 text-zinc-300' },
-    verstuurd: { label: 'Verstuurd', color: 'bg-amber-500/15 text-amber-300' },
-    betaald: { label: 'Betaald', color: 'bg-emerald-500/15 text-emerald-300' },
-    vervallen: { label: 'Vervallen', color: 'bg-red-500/15 text-red-300' },
-    gecrediteerd: { label: 'Gecrediteerd', color: 'bg-purple-500/15 text-purple-300' },
+function statusBadge(status: string, t: any) {
+  const map: Record<string, { labelKey: string; color: string }> = {
+    concept: { labelKey: 'statusConcept', color: 'bg-zinc-500/15 text-zinc-300' },
+    verstuurd: { labelKey: 'statusSent', color: 'bg-amber-500/15 text-amber-300' },
+    betaald: { labelKey: 'statusPaid', color: 'bg-emerald-500/15 text-emerald-300' },
+    vervallen: { labelKey: 'statusOverdue', color: 'bg-red-500/15 text-red-300' },
+    gecrediteerd: { labelKey: 'statusCredited', color: 'bg-purple-500/15 text-purple-300' },
   }
-  const s = map[status] ?? { label: status, color: 'bg-zinc-500/15 text-zinc-300' }
+  const s = map[status]
+  const label = s ? (t.facturenPage as any)[s.labelKey] : status
+  const color = s?.color ?? 'bg-zinc-500/15 text-zinc-300'
   return (
-    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${s.color}`}>
-      {s.label}
+    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${color}`}>
+      {label}
     </span>
   )
 }
 
 export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }) {
+  const { t } = useT()
   const totalCount = facturen.length
   const verstuurdCount = facturen.filter((f) => f.status === 'verstuurd').length
   const betaaldCount = facturen.filter((f) => f.status === 'betaald').length
@@ -67,8 +71,8 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <ArrowLeft className="h-3.5 w-3.5" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">Dashboard</span>
-                <span className="block text-[11px] leading-4 text-[var(--text-soft)]">Terug naar adminoverzicht</span>
+                <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">{t.platform.dashboard}</span>
+                <span className="block text-[11px] leading-4 text-[var(--text-soft)]">{t.facturenPage.backToAdmin}</span>
               </span>
             </span>
           </Link>
@@ -82,25 +86,25 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
             </div>
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">Facturatie</p>
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">Facturen</h1>
-                <p className="mt-1 text-sm text-[var(--text-soft)]">Overzicht van alle facturen.</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">{t.facturenPage.billing}</p>
+                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">{t.facturenPage.invoices}</h1>
+                <p className="mt-1 text-sm text-[var(--text-soft)]">{t.facturenPage.overview}</p>
               </div>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.total}</p>
                   <p className="mt-1 text-lg font-semibold text-[var(--text-main)]">{totalCount}</p>
                 </div>
                 <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Verstuurd</p>
+                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.sent}</p>
                   <p className="mt-1 text-lg font-semibold text-amber-400">{verstuurdCount}</p>
                 </div>
                 <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Betaald</p>
+                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.paid}</p>
                   <p className="mt-1 text-lg font-semibold text-emerald-400">{betaaldCount}</p>
                 </div>
                 <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Vervallen</p>
+                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.overdue}</p>
                   <p className="mt-1 text-lg font-semibold text-red-400">{vervallenCount}</p>
                 </div>
               </div>
@@ -114,7 +118,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <Euro className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Totaal gefactureerd</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.totalInvoiced}</p>
                 <p className="text-sm font-bold text-[var(--text-main)]">€{totalBedrag.toFixed(2)}</p>
               </div>
             </div>
@@ -123,7 +127,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <CheckCircle2 className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Betaald</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.paid}</p>
                 <p className="text-sm font-bold text-emerald-400">€{betaaldBedrag.toFixed(2)}</p>
               </div>
             </div>
@@ -132,7 +136,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <Clock className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.outstanding}</p>
                 <p className="text-sm font-bold text-amber-400">€{openBedrag.toFixed(2)}</p>
               </div>
             </div>
@@ -147,8 +151,8 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <FileText className="h-4 w-4" />
               </span>
               <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Alle facturen</h2>
-                <p className="mt-0.5 text-xs text-[var(--text-soft)]">{totalCount} facturen totaal</p>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.allInvoices}</h2>
+                <p className="mt-0.5 text-xs text-[var(--text-soft)]">{totalCount} {t.facturenPage.invoicesTotal}</p>
               </div>
             </div>
           </div>
@@ -156,9 +160,9 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
           {facturen.length === 0 ? (
             <div className="px-5 py-12 text-center">
               <FileText className="mx-auto h-8 w-8 text-[var(--text-muted)]" />
-              <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">Nog geen facturen</p>
+              <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.noInvoices}</p>
               <p className="mt-1 text-xs text-[var(--text-soft)]">
-                Facturen worden aangemaakt vanuit goedgekeurde offertes.
+                {t.facturenPage.createdFromOffertes}
               </p>
             </div>
           ) : (
@@ -175,10 +179,10 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-[var(--text-main)]">{f.factuur_number}</p>
-                      {statusBadge(f.status)}
+                      {statusBadge(f.status, t)}
                     </div>
                     <p className="mt-0.5 truncate text-xs text-[var(--text-soft)]">
-                      {f.customer_name || 'Onbekende klant'}
+                      {f.customer_name || t.facturenPage.unknownCustomer}
                       {f.subject ? ` — ${f.subject}` : ''}
                     </p>
                   </div>

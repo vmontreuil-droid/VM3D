@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 type Project = {
   id: number
@@ -21,13 +22,13 @@ export default function FileUploadForm({
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
-
+  const { t } = useT()
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault()
     setMessage('')
 
     if (!projectId || !file) {
-      setMessage('Kies eerst een project en een bestand.')
+      setMessage(t.fileUpload.chooseProjectFirst)
       return
     }
 
@@ -65,7 +66,7 @@ export default function FileUploadForm({
 
     setProjectId('')
     setFile(null)
-    setMessage('Bestand succesvol geüpload.')
+    setMessage(t.fileUpload.uploadSuccess)
     router.refresh()
   }
 
@@ -78,7 +79,7 @@ export default function FileUploadForm({
           className="input-dark h-13 w-full px-4 text-sm"
           required
         >
-          <option value="">Kies een project</option>
+          <option value="">{t.fileUpload.chooseProject}</option>
           {projects.map((project) => (
             <option key={project.id} value={project.id}>
               {project.name}
@@ -107,15 +108,15 @@ export default function FileUploadForm({
 
             <div className="max-w-md">
               <p className="text-sm font-medium text-[var(--text-main)]">
-                {file ? file.name : 'Klik om een bestand te kiezen'}
+                {file ? file.name : t.fileUpload.clickToChoose}
               </p>
               <p className="mt-1 text-xs text-[var(--text-muted)]">
-                Upload plannen, PDF’s, DWG’s of bronbestanden
+                {t.fileUpload.uploadDesc}
               </p>
             </div>
 
             <span className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-3)] px-4 py-2 text-xs font-semibold text-[var(--text-soft)] transition hover:bg-[#314153]">
-              Bladeren
+              {t.fileUpload.browse}
             </span>
 
             <input
@@ -134,7 +135,7 @@ export default function FileUploadForm({
           disabled={uploading}
           className="btn-primary inline-flex h-12 w-full items-center justify-center px-5 text-sm font-semibold"
         >
-          {uploading ? 'Uploaden...' : 'Bestand uploaden'}
+          {uploading ? t.fileUpload.uploading : t.fileUpload.uploadBtn}
         </button>
 
         {message && (

@@ -1,11 +1,19 @@
 import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export default async function DashboardSubscriptionPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+
   const supabase = await createClient()
 
   const {
@@ -35,7 +43,7 @@ export default async function DashboardSubscriptionPage() {
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
             <div className="flex flex-wrap items-center gap-2">
               <Link href="/dashboard" className="btn-secondary">
-                ← Terug naar dashboard
+                {t.abonnement.back}
               </Link>
               <div className="ml-auto">
                 <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
@@ -43,38 +51,38 @@ export default async function DashboardSubscriptionPage() {
             </div>
 
             <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-              Formule
+              {t.abonnement.portal}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">
-              Abonnement
+              {t.abonnement.title}
             </h1>
             <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Hier zal {displayName} binnenkort het actieve abonnement, opties en facturatie-info kunnen bekijken.
+              {t.abonnement.desc}
             </p>
           </div>
 
           <div className="grid gap-3 px-4 py-4 sm:px-5 md:grid-cols-2">
             <div className="card-mini">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Binnenkort
+                {t.abonnement.soon}
               </p>
               <p className="mt-2 text-sm font-semibold text-[var(--text-main)]">
-                Formuleoverzicht
+                {t.abonnement.formulaTitle}
               </p>
               <p className="mt-1 text-sm text-[var(--text-soft)]">
-                Raadpleeg later je gekozen plan, inbegrepen diensten en eventuele uitbreidingen.
+                {t.abonnement.formulaDesc}
               </p>
             </div>
 
             <div className="card-mini">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Facturatie
+                {t.abonnement.billingLabel}
               </p>
               <p className="mt-2 text-sm font-semibold text-[var(--text-main)]">
-                Betaling en historiek
+                {t.abonnement.billingTitle}
               </p>
               <p className="mt-1 text-sm text-[var(--text-soft)]">
-                Een overzicht van facturen en betalingsstatus kan hier later toegevoegd worden.
+                {t.abonnement.billingDesc}
               </p>
             </div>
           </div>

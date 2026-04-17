@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 type Props = {
   projectId: number
@@ -24,6 +25,7 @@ export default function PriceForm({
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { t } = useT()
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,7 +38,7 @@ export default function PriceForm({
 
     if (price !== '' && Number.isNaN(parsedPrice)) {
       setLoading(false)
-      setMessage('Geef een geldig bedrag in.')
+      setMessage(t.priceForm.invalidAmount)
       return
     }
 
@@ -51,11 +53,11 @@ export default function PriceForm({
     setLoading(false)
 
     if (error) {
-      setMessage(`Fout: ${error.message}`)
+      setMessage(`${t.priceForm.errorPrefix}: ${error.message}`)
       return
     }
 
-    setMessage('Prijs opgeslagen.')
+    setMessage(t.priceForm.saved)
     router.refresh()
   }
 
@@ -63,7 +65,7 @@ export default function PriceForm({
     <form onSubmit={handleSave} className="space-y-4">
       <div>
         <label className="mb-2 block text-sm font-medium text-[var(--text-soft)]">
-          Prijs
+          {t.priceForm.price}
         </label>
         <input
           type="number"
@@ -72,14 +74,14 @@ export default function PriceForm({
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
-          placeholder="Bijv. 350.00"
+          placeholder={t.priceForm.pricePlaceholder}
           disabled={loading}
         />
       </div>
 
       <div>
         <label className="mb-2 block text-sm font-medium text-[var(--text-soft)]">
-          Munt
+          {t.priceForm.currency}
         </label>
         <select
           value={currency}
@@ -96,7 +98,7 @@ export default function PriceForm({
         disabled={loading}
         className="btn-primary"
       >
-        {loading ? 'Opslaan...' : 'Prijs opslaan'}
+        {loading ? t.priceForm.saving : t.priceForm.savePrice}
       </button>
 
       {message ? (

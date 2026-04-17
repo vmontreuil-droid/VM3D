@@ -1,9 +1,12 @@
 import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 import { UserRound, Mail, Phone, Building2, MapPin, FileText } from 'lucide-react'
 
 function display(value: unknown) {
@@ -12,6 +15,11 @@ function display(value: unknown) {
 }
 
 export default async function DashboardCustomerProfilePage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+
   const supabase = await createClient()
 
   const {
@@ -53,7 +61,7 @@ export default async function DashboardCustomerProfilePage() {
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
             <div className="flex flex-wrap items-center gap-2">
               <Link href="/dashboard" className="btn-secondary">
-                ← Terug naar dashboard
+                {t.klantfiche.back}
               </Link>
               <div className="ml-auto">
                 <CustomerLogoHeaderBlock logoUrl={logoSignedUrl} />
@@ -61,19 +69,19 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-              Klantenportaal
+              {t.klantfiche.portal}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">
-              Klantfiche
+              {t.klantfiche.title}
             </h1>
             <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Dit is jouw read-only klantfiche. Gegevens kunnen alleen door admin aangepast worden.
+              {t.klantfiche.desc}
             </p>
           </div>
 
           <div className="grid gap-3 px-4 py-4 sm:px-5 md:grid-cols-2 xl:grid-cols-3">
             <div className="card-mini">
-              <p className="text-xs text-[var(--text-muted)]">Naam / firma</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.name}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <UserRound className="h-4 w-4 text-[var(--accent)]" />
                 {display(profile?.company_name || profile?.full_name)}
@@ -81,7 +89,7 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <div className="card-mini">
-              <p className="text-xs text-[var(--text-muted)]">E-mail</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.email}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <Mail className="h-4 w-4 text-[var(--accent)]" />
                 {display(profile?.email)}
@@ -89,7 +97,7 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <div className="card-mini">
-              <p className="text-xs text-[var(--text-muted)]">Mobiel / telefoon</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.phone}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <Phone className="h-4 w-4 text-[var(--accent)]" />
                 {display(profile?.mobile || profile?.phone)}
@@ -97,7 +105,7 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <div className="card-mini">
-              <p className="text-xs text-[var(--text-muted)]">BTW-nummer</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.vat}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <FileText className="h-4 w-4 text-[var(--accent)]" />
                 {display(profile?.vat_number)}
@@ -105,7 +113,7 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <div className="card-mini md:col-span-2 xl:col-span-2">
-              <p className="text-xs text-[var(--text-muted)]">Adres</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.address}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <MapPin className="h-4 w-4 text-[var(--accent)]" />
                 {display(address)}
@@ -113,7 +121,7 @@ export default async function DashboardCustomerProfilePage() {
             </div>
 
             <div className="card-mini">
-              <p className="text-xs text-[var(--text-muted)]">Toegang</p>
+              <p className="text-xs text-[var(--text-muted)]">{t.klantfiche.access}</p>
               <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-[var(--text-main)]">
                 <Building2 className="h-4 w-4 text-[var(--accent)]" />
                 Read-only

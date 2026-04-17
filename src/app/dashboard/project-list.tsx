@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { FolderOpen, HardHat } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Project = {
   id: string | number
@@ -47,7 +48,11 @@ type SortKey =
 
 type SortDirection = 'asc' | 'desc'
 
-function getStatusLabel(status: string | null | undefined) {
+function getStatusLabel(status: string | null | undefined, t?: any) {
+  if (t) {
+    const key = status as string
+    return t.status?.[key] ?? t.status?.onbekend ?? status ?? 'Unknown'
+  }
   switch (status) {
     case 'offerte_aangevraagd':
       return 'Offerte aangevraagd'
@@ -110,6 +115,7 @@ export default function ProjectList({
   hideResultsUntilSearch = false,
   embedded = false,
 }: Props) {
+  const { t } = useT()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('created_at')
@@ -202,8 +208,8 @@ export default function ProjectList({
       }
 
       if (sortKey === 'status') {
-        comparison = getStatusLabel(a.status).localeCompare(
-          getStatusLabel(b.status),
+        comparison = getStatusLabel(a.status, t).localeCompare(
+          getStatusLabel(b.status, t),
           'nl',
           { sensitivity: 'base' }
         )
@@ -637,7 +643,7 @@ export default function ProjectList({
                             project.status
                           )}`}
                         >
-                          {getStatusLabel(project.status)}
+                          {getStatusLabel(project.status, t)}
                         </span>
                       </div>
 

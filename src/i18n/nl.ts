@@ -1,4 +1,12 @@
 const nl = {
+  /* ── Open Graph / Social Media ── */
+  og: {
+    title: 'MV3D Cloud — Beheer al je werven, machines en bestanden',
+    description: 'Eén platform voor al je 3D-projecten. Synchroniseer werven, verstuur bestanden en beheer machines in real-time. Vraag een gratis offerte aan.',
+    imageTitle: 'MV3D Cloud',
+    imageSubtitle: 'Uw 3D-partner in België, Nederland, Frankrijk & Luxemburg',
+  },
+
   /* ── Navigation ── */
   nav: {
     solutions: 'Oplossingen',
@@ -325,6 +333,560 @@ const nl = {
     mismatch: 'Wachtwoorden komen niet overeen.',
     minLength: 'Wachtwoord moet minimaal 8 tekens bevatten.',
     success: 'Wachtwoord succesvol gewijzigd! U wordt doorgestuurd...',
+  },
+
+  /* ══════════════════════════════════════════
+     PLATFORM  (dashboard / admin / components)
+     ══════════════════════════════════════════ */
+
+  /* ── Shared status labels ── */
+  status: {
+    offerte_aangevraagd: 'Offerte aangevraagd',
+    offerte_verstuurd: 'Offerte verstuurd',
+    in_behandeling: 'In behandeling',
+    facturatie: 'Facturatie',
+    factuur_verstuurd: 'Factuur verstuurd',
+    afgerond: 'Afgerond',
+    ingediend: 'Ingediend',
+    klaar_voor_betaling: 'Klaar voor betaling',
+    onbekend: 'Onbekend',
+  },
+
+  /* ── Platform nav / sidebar / shell ── */
+  platform: {
+    adminPortal: 'Adminportaal',
+    clientPortal: 'Klantenportaal',
+    securedPortal: 'Beveiligd portaal',
+    homepage: 'Startpagina',
+    general: 'Algemeen',
+    home: 'Home',
+    dashboard: 'Dashboard',
+    admin: 'Admin',
+    logout: 'Uitloggen',
+    closeNav: 'Sluit navigatie',
+    openNav: 'Open navigatie',
+    toggleSidebar: 'Sidebar toggelen',
+    myMachines: 'Mijn Machines',
+    machinetools: 'Machinetools',
+    customers: 'Klanten',
+    projects: 'Werven',
+    tickets: 'Tickets',
+    offertes: 'Offertes',
+    invoices: 'Facturen',
+    machines: 'Machines',
+    statistics: 'Statistieken',
+    billing: 'Facturatie',
+    theme: 'Thema',
+    light: 'Licht',
+    dark: 'Donker',
+  },
+
+  /* ── Dashboard main ── */
+  dash: {
+    projectsTitle: 'Werven',
+    projectsDesc: 'Overzicht van je werven.',
+    recentActivity: 'Recente activiteit',
+    recentFiles: 'Recente bestanden',
+    upload: 'Upload',
+    delivery: 'Oplevering',
+    file: 'Bestand',
+    noFiles: 'Geen bestanden gevonden.',
+    clientFile: 'Klantbestand',
+    deliveryFile: 'Opleverbestand',
+    download: 'Download',
+    downloadFailed: 'Download mislukt.',
+    downloadError: 'Fout bij maken downloadlink',
+    noDownloadLink: 'Geen downloadlink ontvangen.',
+    deleteConfirm: 'Weet je zeker dat je dit bestand wilt verwijderen?',
+    deleting: 'Bezig...',
+    delete: 'Verwijder',
+    deleteFailed: 'Kon bestand niet verwijderen.',
+    openFailed: 'Kon bestand niet openen.',
+    somethingWrong: 'Er ging iets mis.',
+    opening: 'Openen...',
+    view: 'Bekijk',
+    printOverview: 'Print projectoverzicht',
+    saveAsPdf: 'Opslaan als PDF',
+    unknown: 'Onbekend',
+    loading: 'Bezig...',
+    newest: 'Nieuwst',
+    oldest: 'Oudst',
+    noRecentFiles: 'Geen recente bestanden',
+    type: 'Type',
+    status: 'Status',
+    date: 'Datum',
+    action: 'Actie',
+    open: 'Open',
+  },
+
+  /* ── New project form ── */
+  newProject: {
+    namePlaceholder: 'Projectnaam',
+    addressPlaceholder: 'Adres / locatie',
+    descPlaceholder: 'Beschrijving van het project',
+    saving: 'Bezig...',
+    saveBtn: 'Project opslaan',
+    success: 'Project succesvol aangemaakt.',
+  },
+
+  /* ── File upload ── */
+  fileUpload: {
+    chooseProject: 'Kies een project',
+    chooseProjectFirst: 'Kies eerst een project en een bestand.',
+    chooseFileFirst: 'Kies eerst een bestand.',
+    uploadDesc: 'Upload plannen, PDF\'s, DWG\'s of bronbestanden',
+    clickToChoose: 'Klik om een bestand te kiezen',
+    browse: 'Bladeren',
+    uploading: 'Uploaden...',
+    uploadBtn: 'Bestand uploaden',
+    uploadSuccess: 'Bestand succesvol geüpload.',
+    uploadError: 'Upload fout',
+    dbError: 'Database fout',
+    dropLabel: 'Bestand uploaden',
+    dropDesc: 'Sleep een bestand hierheen of klik om een bestand te kiezen.',
+    dropHere: 'Sleep je bestand hierheen',
+    orClick: 'of klik hier',
+    uploadingDefault: 'Bezig met uploaden...',
+    attachments: 'Bijlagen (optioneel)',
+    clickToSelect: 'Klik om bestanden te selecteren',
+    fileTypes: 'DXF, DWG, XML, PDF, ZIP — max 50MB per bestand',
+    filesSelected: 'bestand(en) geselecteerd',
+  },
+
+  /* ── Klantfiche ── */
+  klantfiche: {
+    back: '← Terug naar dashboard',
+    portal: 'Klantenportaal',
+    title: 'Klantfiche',
+    desc: 'Dit is jouw read-only klantfiche. Gegevens kunnen alleen door admin aangepast worden.',
+    name: 'Naam / firma',
+    email: 'E-mail',
+    phone: 'Mobiel / telefoon',
+    vat: 'BTW-nummer',
+    address: 'Adres',
+    access: 'Toegang',
+  },
+
+  /* ── Abonnement ── */
+  abonnement: {
+    back: '← Terug naar dashboard',
+    portal: 'Formule',
+    title: 'Abonnement',
+    desc: 'Hier zal u binnenkort het actieve abonnement, opties en facturatie-info kunnen bekijken.',
+    soon: 'Binnenkort',
+    formulaTitle: 'Formuleoverzicht',
+    formulaDesc: 'Raadpleeg later je gekozen plan, inbegrepen diensten en eventuele uitbreidingen.',
+    billingLabel: 'Facturatie',
+    billingTitle: 'Betaling en historiek',
+    billingDesc: 'Een overzicht van facturen en betalingsstatus kan hier later toegevoegd worden.',
+  },
+
+  /* ── Dashboard machines ── */
+  dashMachines: {
+    back: '← Dashboard',
+    portal: 'Machinepark',
+    title: 'Mijn Machines',
+    desc: 'Beheer je kranen, bulldozers en machinebesturingen.',
+    noControl: 'Geen machinebesturing',
+    online: 'Online',
+    offline: 'Offline',
+    bulldozer: 'Bulldozer',
+    crane: 'Kraan',
+  },
+
+  /* ── Project detail ── */
+  projectDetail: {
+    finalUploadTitle: 'Finale bestanden uploaden',
+    finalUploadDesc: 'Upload hier het afgewerkte 3D-bestand voor de klant.',
+    finalUploadBtn: 'Finale bestand uploaden',
+    finalUploadSuccess: 'Finale bestand succesvol geüpload.',
+  },
+
+  /* ── Admin dashboard ── */
+  adminDash: {
+    total: 'Totaal',
+    offerte: 'Offerte',
+    inProgress: 'In behandeling',
+    billing: 'Facturatie',
+    completed: 'Afgerond',
+    mapTitle: 'Locaties van de werven',
+    mapDesc: 'Overzicht van alle werven op kaart.',
+    visible: 'zichtbaar',
+    quickSearch: 'Snelle zoekopdracht',
+    customersHeading: 'Klanten',
+    customersDesc: 'Zoek rechtstreeks op klantnaam, btw, stad of e-mail.',
+    customersPlaceholder: 'Zoek klant, btw, stad, mail...',
+    projectsHeading: 'Werven',
+    projectsDesc: 'Zoek en filter op project, klant of locatie.',
+    reset: 'Reset',
+    unknownCustomer: 'Onbekende klant',
+    unknownProject: 'Onbenoemde werf',
+    priceUndetermined: 'Nog niet bepaald',
+  },
+
+  /* ── Admin offertes ── */
+  adminOffertes: {
+    concept: 'Concept',
+    sent: 'Verstuurd',
+    waitingClient: 'Wacht op klant',
+    approved: 'Goedgekeurd',
+    rejected: 'Afgekeurd',
+    expired: 'Verlopen',
+    dashboardLink: 'Dashboard',
+    backToAdmin: 'Terug naar adminoverzicht',
+    newOfferte: 'Nieuwe offerte',
+    createOfferte: 'Offerte aanmaken',
+    portal: 'Offertes',
+    title: 'Offertebeheer',
+    desc: 'Overzicht van alle offertes.',
+    totalStat: 'Totaal',
+    sentStat: 'Verstuurd',
+    approvedStat: 'Goedgekeurd',
+    conversionStat: 'Conversie',
+    totalValueStat: 'Totaalwaarde',
+    backToOverview: 'Terug naar overzicht',
+  },
+
+  /* ── Admin facturen ── */
+  adminFacturen: {
+    concept: 'Concept',
+    sent: 'Verstuurd',
+    paid: 'Betaald',
+    overdue: 'Vervallen',
+    credited: 'Gecrediteerd',
+    dashboardLink: 'Dashboard',
+    backToAdmin: 'Terug naar adminoverzicht',
+    portal: 'Facturatie',
+    title: 'Facturen',
+    desc: 'Overzicht van alle facturen.',
+    totalStat: 'Totaal',
+    sentStat: 'Verstuurd',
+    paidStat: 'Betaald',
+  },
+
+  /* ── Admin file operations ── */
+  adminFiles: {
+    deleteConfirm: 'Ben je zeker dat je dit bestand wilt verwijderen?',
+    deleting: 'Verwijderen...',
+    deleteBtn: 'Verwijder bestand',
+    storageError: 'Storage fout',
+    dbError: 'Database fout',
+    downloading: 'Bezig...',
+    downloadFailed: 'Download mislukt.',
+  },
+
+  /* ── Payment toggle ── */
+  payment: {
+    paidLabel: 'Betaald:',
+    yes: 'Ja',
+    no: 'Nee',
+    saved: 'Betaalstatus opgeslagen.',
+    markUnpaid: 'Markeer als niet betaald',
+    markPaid: 'Markeer als betaald',
+    saving: 'Opslaan...',
+  },
+
+  /* ── Price form ── */
+  price: {
+    label: 'Prijs',
+    placeholder: 'Bijv. 350.00',
+    currency: 'Munt',
+    invalidAmount: 'Geef een geldig bedrag in.',
+    saved: 'Prijs opgeslagen.',
+    saving: 'Opslaan...',
+    saveBtn: 'Prijs opslaan',
+  },
+
+  /* ── Geocode button ── */
+  geocode: {
+    loading: 'Coördinaten ophalen...',
+    btn: 'Ontbrekende coördinaten aanvullen',
+    failed: 'Bulk geocoding mislukt.',
+    done: 'Klaar: {updated} bijgewerkt, {failed} mislukt, {skipped} overgeslagen.',
+    error: 'Er liep iets fout.',
+  },
+
+  /* ── Notes widget ── */
+  notes: {
+    title: 'Notities',
+    placeholder: 'Nieuwe notitie...',
+  },
+
+  /* ── Time widget ── */
+  timeWidget: {
+    projectFallback: 'Werf',
+    taskPlaceholder: 'Werkzaamheid beschrijven...',
+    chooseSite: 'Kies werf...',
+    activity: 'Werkzaamheid...',
+  },
+
+  /* ── Upload type toggle ── */
+  uploadType: {
+    client: 'Klantbestand',
+    delivery: 'Opleverbestand',
+  },
+
+  /* ── Customer portal header ── */
+  portalHeader: {
+    portal: 'Klantenportaal',
+    welcomeCompany: 'Welkom in het klantenportaal van',
+    welcomeGeneric: 'Welkom in je klantenportaal. Hier beheer je je werven en bestanden.',
+    sites: 'Werven',
+    active: 'Actief',
+    uploads: 'Uploads',
+    deliveries: 'Oplevering',
+  },
+
+  /* ── Admin dashboard cards ── */
+  adminCards: {
+    customers: 'Klanten',
+    customersDesc: 'Open alle klantfiches.',
+    sites: 'Werven',
+    sitesDesc: 'Ga naar het werfoverzicht.',
+    newCustomer: 'Nieuwe klant',
+    newCustomerDesc: 'Voeg snel een klant toe.',
+    newSite: 'Nieuwe werf',
+    newSiteDesc: 'Start een nieuwe werf.',
+    tickets: 'Tickets',
+    ticketsDesc: 'Beheer vragen en opvolgingen.',
+    offerte: 'Offerte',
+    offerteDesc: 'Maak of bekijk offertes.',
+    subscription: 'Abonnement',
+    subscriptionDesc: 'Bekijk formule en opties.',
+    statistics: 'Statistieken',
+    statisticsDesc: 'Bekijk cijfers en voortgang.',
+    uploadsCard: 'Uploads',
+    uploadsDesc: 'Ga naar bestanden en uploads.',
+    mySites: 'Mijn werven',
+    mySitesDesc: 'Overzicht van je werven.',
+    ticketReport: 'Meld een vraag of opvolging.',
+    subscriptionSelf: 'Bekijk je formule en opties.',
+    requestQuote: 'Offerte aanvragen',
+    requestQuoteDesc: 'Vraag een nieuwe offerte aan.',
+    billingSelf: 'Bekijk je facturen en betalingen.',
+    uploadsSelf: 'Bekijk je aangeleverde bestanden.',
+    deliverySelf: 'Open je finale bestanden.',
+    machinetoolsDesc: 'Beheer en volg je machinetools.',
+    siteLoadError: 'Werven konden niet volledig geladen worden.',
+    fileLoadError: 'Bestanden konden niet volledig geladen worden.',
+    siteLocations: 'Werflocaties',
+    siteLocationsDesc: 'Kaart van je werven met gekende adressen.',
+    quickLinks: 'Sneltoetsen',
+    sitesOverviewDesc: 'Sneller overzicht van je werven met status, prijs en bestandsaantallen.',
+  },
+
+  /* ── Admin search / sort ── */
+  adminSearch: {
+    searchPlaceholder: 'Zoek werf, locatie, status...',
+    sortName: 'Sorteer op naam',
+    sortLocation: 'Sorteer op locatie',
+    sortStatus: 'Sorteer op status',
+    sortPrice: 'Sorteer op prijs',
+    sortDate: 'Sorteer op datum',
+    ascending: 'Oplopend',
+    descending: 'Aflopend',
+    searchCustomerPlaceholder: 'Zoek klant, btw, stad, mail...',
+    searchProjectPlaceholder: 'Zoek project, klant of locatie...',
+    searchDossier: 'Zoek dossier',
+    searchDossierPlaceholder: 'Typ klant, werf of adres...',
+    searchCustomerSelect: 'Zoek klant op naam, bedrijf, e-mail...',
+    siteList: 'Wervenlijst',
+    allSites: 'Alle werven',
+    siteListDesc: 'Zoek, filter en open werfdossiers in dezelfde compacte stijl als het klantenoverzicht.',
+    noSitesForFilters: 'Geen werven gevonden voor deze filters.',
+  },
+
+  /* ── Admin upload panel ── */
+  adminUpload: {
+    unnamed: 'Onbenoemde werf',
+    clientFile: 'klantbestand',
+    deliveryFile: 'opleverbestand',
+  },
+
+  /* ── Customer form ── */
+  customerForm: {
+    companyPlaceholder: 'Bijv. Atelier Nova BV',
+    emailPlaceholder: 'bijv. info@bedrijf.be',
+    invoiceEmailSame: 'Zelfde als',
+    invoiceEmailPlaceholder: 'bijv. administratie@ateliernova.be',
+    firstNamePlaceholder: 'Bijv. Sophie',
+    phonePlaceholder: 'Bijv. 02 123 45 67',
+    lastNamePlaceholder: 'Bijv. Peeters',
+    mobilePlaceholder: 'Bijv. 0470 12 34 56',
+    ibanPlaceholder: 'Bijv. BE68 5390 0754 7034',
+    bicPlaceholder: 'Bijv. GKCCBEBB',
+    passwordMinLength: 'Min. 8 tekens',
+    passwordRepeat: 'Herhaal wachtwoord',
+    removeLogo: 'Logo verwijderen',
+    uploadLogo: 'Logo uploaden',
+  },
+
+  /* ── Admin project form ── */
+  adminProjectForm: {
+    namePlaceholder: 'Bijv. Werf Brug Gent',
+    descPlaceholder: 'Korte omschrijving van het project',
+    addressPlaceholder: 'Bijv. Kortrijksesteenweg 12, Gent',
+    pricePlaceholder: 'Bijv. 5000',
+  },
+
+  /* ── Tickets ── */
+  ticketLabels: {
+    noTitle: 'Zonder titel',
+    notePlaceholder: 'Plaats hier een opvolgnotitie',
+    newSubjectPlaceholder: 'Bijv. Loginprobleem bij klantportaal',
+    newDescPlaceholder: 'Omschrijf het probleem of de vraag',
+    newTicketEmail: 'Nieuw klantticket #',
+    newTicketBody: 'Er werd een nieuw ticket aangemaakt door',
+  },
+
+  /* ── Map labels ── */
+  map: {
+    projectLocation: 'Projectlocatie',
+    customerLocation: 'Klantlocatie',
+    customer: 'Klant',
+  },
+
+  /* ── Admin search panel ── */
+  adminSearchPanel: {
+    quickSearch: 'Snelle zoekopdracht',
+    customers: 'Klanten',
+    searchCustomerDesc: 'Zoek rechtstreeks op klantnaam, btw, stad of e-mail.',
+    total: 'totaal',
+    searchCustomerPlaceholder: 'Zoek klant, btw, stad, mail...',
+    sites: 'Werven',
+    searchSiteDesc: 'Zoek en filter op project, klant of locatie.',
+    searchSitePlaceholder: 'Zoek project, klant of locatie...',
+    allStatuses: 'Alle statussen',
+    results: 'Resultaten',
+    found: 'gevonden',
+    noCustomersFound: 'Geen klanten gevonden voor deze zoekopdracht.',
+    noExtraData: 'Geen extra gegevens',
+    open: 'Open',
+    edit: 'Bewerk',
+    newSite: 'Nieuwe werf',
+    noSitesFound: 'Geen werven gevonden voor deze zoekopdracht.',
+    unknownCustomer: 'Onbekende klant',
+  },
+
+  /* ── Admin upload panel ── */
+  adminUploadPanel: {
+    unknownCustomer: 'Onbekende klant',
+    unnamedSite: 'Onbenoemde werf',
+    clientFile: 'Klantbestand',
+    deliveryFile: 'Opleverbestand',
+    searchDossier: 'Zoek dossier',
+    typePlaceholder: 'Typ klant, werf of adres...',
+    dossierSelected: 'Dossier geselecteerd.',
+    typeThenChoose: 'Typ en kies een dossier.',
+    dropFileHere: 'Sleep bestand hierheen',
+    orClickToChoose: 'of klik om te kiezen',
+    uploadClientFile: 'Upload klantbestand',
+    uploadDeliveryFile: 'Upload opleverbestand',
+    chooseFirst: 'Kies eerst een dossier en een bestand.',
+    invalidDossier: 'Ongeldig dossier gekozen.',
+    uploadFailedRetry: 'Upload mislukt. Probeer opnieuw.',
+    uploadSuccessClient: 'Upload geslaagd: klantbestand staat nu in het gekozen dossier.',
+    uploadSuccessDelivery: 'Upload geslaagd: opleverbestand staat nu in het gekozen dossier.',
+    uploadFailedUnexpected: 'Upload mislukt door een onverwachte fout.',
+  },
+
+  /* ── Price form ── */
+  priceForm: {
+    price: 'Prijs',
+    pricePlaceholder: 'Bijv. 350.00',
+    currency: 'Munt',
+    invalidAmount: 'Geef een geldig bedrag in.',
+    errorPrefix: 'Fout',
+    saved: 'Prijs opgeslagen.',
+    saving: 'Opslaan...',
+    savePrice: 'Prijs opslaan',
+  },
+
+  /* ── Payment toggle ── */
+  paymentToggle: {
+    paid: 'Betaald',
+    yes: 'Ja',
+    no: 'Nee',
+    errorPrefix: 'Fout',
+    saved: 'Betaalstatus opgeslagen.',
+    saving: 'Opslaan...',
+    markUnpaid: 'Markeer als niet betaald',
+    markPaid: 'Markeer als betaald',
+  },
+
+  /* ── Status select ── */
+  statusSelect: {
+    changeStatus: 'Status wijzigen',
+    saving: 'Status wordt opgeslagen...',
+    saved: 'Status bijgewerkt.',
+    adminOnly: 'Alleen admins kunnen de status wijzigen.',
+    adminOnlyHint: 'Alleen admins kunnen de projectstatus aanpassen.',
+  },
+
+  /* ── Geocode button ── */
+  geocodeBtn: {
+    fetching: 'Coördinaten ophalen...',
+    fillMissing: 'Ontbrekende coördinaten aanvullen',
+    failed: 'Bulk geocoding mislukt.',
+    done: 'Klaar: {updated} bijgewerkt, {failed} mislukt, {skipped} overgeslagen.',
+    error: 'Er liep iets fout.',
+  },
+
+  /* ── Offertes page ── */
+  offertesPage: {
+    backToAdmin: 'Terug naar adminoverzicht',
+    newOfferte: 'Nieuwe offerte',
+    createOfferte: 'Offerte aanmaken',
+    offertes: 'Offertes',
+    management: 'Offertebeheer',
+    overview: 'Overzicht van alle offertes.',
+    total: 'Totaal',
+    sent: 'Verstuurd',
+    approved: 'Goedgekeurd',
+    conversion: 'Conversie',
+    totalValue: 'Totaalwaarde',
+    outstanding: 'Openstaand',
+    allOffertes: 'Alle offertes',
+    offertesTotal: 'offertes totaal',
+    noOffertes: 'Nog geen offertes',
+    createToStart: 'Maak een nieuwe offerte aan om te beginnen.',
+    unknownCustomer: 'Onbekende klant',
+    statusConcept: 'Concept',
+    statusSent: 'Verstuurd',
+    statusWaiting: 'Wacht op klant',
+    statusApproved: 'Goedgekeurd',
+    statusRejected: 'Afgekeurd',
+    statusExpired: 'Verlopen',
+  },
+
+  /* ── Facturen page ── */
+  facturenPage: {
+    backToAdmin: 'Terug naar adminoverzicht',
+    billing: 'Facturatie',
+    invoices: 'Facturen',
+    overview: 'Overzicht van alle facturen.',
+    total: 'Totaal',
+    sent: 'Verstuurd',
+    paid: 'Betaald',
+    overdue: 'Vervallen',
+    totalInvoiced: 'Totaal gefactureerd',
+    outstanding: 'Openstaand',
+    allInvoices: 'Alle facturen',
+    invoicesTotal: 'facturen totaal',
+    noInvoices: 'Nog geen facturen',
+    createdFromOffertes: 'Facturen worden aangemaakt vanuit goedgekeurde offertes.',
+    unknownCustomer: 'Onbekende klant',
+    statusConcept: 'Concept',
+    statusSent: 'Verstuurd',
+    statusPaid: 'Betaald',
+    statusOverdue: 'Vervallen',
+    statusCredited: 'Gecrediteerd',
+  },
+
+  /* ── Admin dashboard extras ── */
+  adminDashExtra: {
+    noSitesForStatus: 'Geen werven gevonden voor deze status.',
+    priceUndetermined: 'Nog niet bepaald',
   },
 } as const
 

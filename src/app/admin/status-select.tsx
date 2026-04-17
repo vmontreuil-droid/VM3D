@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { getStatusLabel } from '@/lib/status'
+import { useT } from '@/i18n/context'
 import { FileText, Clock, CheckCircle, Check, Loader, Send, Receipt, Mail } from 'lucide-react'
 
 type Props = {
@@ -36,6 +37,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
   const [message, setMessage] = useState('')
   const [canEdit, setCanEdit] = useState(false)
   const router = useRouter()
+  const { t } = useT()
 
   useEffect(() => {
     let active = true
@@ -71,7 +73,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
 
   const handleChange = async (newStatus: string) => {
     if (!canEdit) {
-      setMessage('Alleen admins kunnen de status wijzigen.')
+      setMessage(t.statusSelect.adminOnly)
       return
     }
 
@@ -109,7 +111,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
       return
     }
 
-    setMessage('Status bijgewerkt.')
+    setMessage(t.statusSelect.saved)
     router.refresh()
   }
 
@@ -117,7 +119,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
     <div className="space-y-3">
       <label className="flex items-center gap-2 text-sm font-medium text-[var(--text-soft)]">
         {getStatusIcon(currentStatus)}
-        Status wijzigen
+        {t.statusSelect.changeStatus}
       </label>
 
       <select
@@ -126,14 +128,14 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
         disabled={loading || !canEdit}
         className="w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        <option value="offerte_aangevraagd">{getStatusLabel('offerte_aangevraagd')}</option>
-        <option value="offerte_verstuurd">{getStatusLabel('offerte_verstuurd')}</option>
-        <option value="in_behandeling">{getStatusLabel('in_behandeling')}</option>
-        <option value="facturatie">{getStatusLabel('facturatie')}</option>
+        <option value="offerte_aangevraagd">{getStatusLabel('offerte_aangevraagd', t)}</option>
+        <option value="offerte_verstuurd">{getStatusLabel('offerte_verstuurd', t)}</option>
+        <option value="in_behandeling">{getStatusLabel('in_behandeling', t)}</option>
+        <option value="facturatie">{getStatusLabel('facturatie', t)}</option>
         <option value="factuur_verstuurd">
-          {getStatusLabel('factuur_verstuurd')}
+          {getStatusLabel('factuur_verstuurd', t)}
         </option>
-        <option value="afgerond">{getStatusLabel('afgerond')}</option>
+        <option value="afgerond">{getStatusLabel('afgerond', t)}</option>
       </select>
 
       {loading ? (
@@ -149,7 +151,7 @@ export default function StatusSelect({ projectId, currentStatus }: Props) {
 
       {!canEdit ? (
         <p className="text-xs text-[var(--text-muted)]">
-          Alleen admins kunnen de projectstatus aanpassen.
+          {t.statusSelect.adminOnlyHint}
         </p>
       ) : null}
     </div>

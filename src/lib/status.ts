@@ -1,4 +1,10 @@
-export function getStatusLabel(status: string) {
+import type { Dictionary } from '@/i18n/nl'
+
+export function getStatusLabel(status: string, t?: Dictionary) {
+  if (t) {
+    const key = status as keyof typeof t.status
+    if (key in (t.status || {})) return (t.status as Record<string, string>)[key] ?? status
+  }
   switch (status) {
     case 'offerte_aangevraagd':
       return 'Offerte aangevraagd'

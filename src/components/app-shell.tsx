@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Sidebar from './sidebar'
 import Logo from '@/components/logo'
+import { useT } from '@/i18n/context'
 
 type Props = {
   children: React.ReactNode
@@ -10,6 +11,7 @@ type Props = {
 }
 
 export default function AppShell({ children, isAdmin = false }: Props) {
+  const { t } = useT()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -51,7 +53,7 @@ export default function AppShell({ children, isAdmin = false }: Props) {
           <div className="fixed inset-0 z-50 lg:hidden">
             <button
               type="button"
-              aria-label="Sluit navigatie"
+              aria-label={t.platform.closeNav}
               className="absolute inset-0 bg-black/55 backdrop-blur-[2px]"
               onClick={() => setMobileOpen(false)}
             />
@@ -77,7 +79,7 @@ export default function AppShell({ children, isAdmin = false }: Props) {
                   type="button"
                   onClick={() => setMobileOpen(true)}
                   className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-[var(--text-main)] transition hover:bg-[#223246]"
-                  aria-label="Open navigatie"
+                  aria-label={t.platform.openNav}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

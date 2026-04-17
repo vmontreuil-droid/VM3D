@@ -1,6 +1,9 @@
 import CustomerLogoHeaderBlock from "@/components/customers/customer-logo-header-block"
 import { createAdminClient, getLogoSignedUrl } from '@/lib/supabase/admin'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 type QuickLink = {
   href: string;
@@ -32,30 +35,18 @@ import ProjectsMap from '@/components/projects/projects-map'
 import ProjectList from './project-list'
 import RecentFilesList from './recent-files-list'
 
-function getStatusLabel(status: string | null) {
-  switch (status) {
-    case 'offerte_aangevraagd':
-      return 'Offerte aangevraagd'
-    case 'offerte_verstuurd':
-      return 'Offerte verstuurd'
-    case 'in_behandeling':
-      return 'In behandeling'
-    case 'facturatie':
-      return 'Facturatie'
-    case 'factuur_verstuurd':
-      return 'Factuur verstuurd'
-    case 'afgerond':
-      return 'Afgerond'
-    case 'ingediend':
-      return 'Ingediend'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
-    default:
-      return 'Onbekend'
-  }
+function getStatusLabel(status: string | null, t: ReturnType<typeof getDictionary>) {
+  if (!status) return t.status.onbekend
+  const key = status as keyof typeof t.status
+  return (t.status as Record<string, string>)[key] ?? status
 }
 
 export default async function DashboardPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+
   const supabase = await createClient()
 
   const {
@@ -156,7 +147,7 @@ export default async function DashboardPage() {
               !Number.isNaN(Number(project.longitude))
           )
           .map((project: any) => ({
-            name: project.address || project.name || 'Projectlocatie',
+            name: project.address || project.name || t.map.projectLocation,
             latitude: Number(project.latitude),
             longitude: Number(project.longitude),
           }))
@@ -165,122 +156,122 @@ export default async function DashboardPage() {
   const customerDisplayName = profile?.company_name || ''
 
   const introText = profile?.company_name
-    ? `Welkom in het klantenportaal van ${profile.company_name}. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
-    : `Welkom in je klantenportaal. Hier volg je eenvoudig je lopende dossiers, uploads en opleverbestanden.`
+    ? `${t.portalHeader.welcomeCompany} ${profile.company_name}. ${t.portalHeader.welcomeGeneric.split('.')[1]?.trim() || ''}`
+    : t.portalHeader.welcomeGeneric
 
   const quickLinks: QuickLink[] = isAdmin
     ? [
         {
           href: '/admin/customers',
-          label: 'Klanten',
-          description: 'Open alle klantfiches.',
+          label: t.adminCards.customers,
+          description: t.adminCards.customersDesc,
           icon: Users,
           badge: totalCustomers,
         },
         {
           href: '/admin',
-          label: 'Werven',
-          description: 'Ga naar het werfoverzicht.',
+          label: t.adminCards.sites,
+          description: t.adminCards.sitesDesc,
           icon: FolderOpen,
           badge: totalProjects,
         },
         {
           href: '/admin/customers/new',
-          label: 'Nieuwe klant',
-          description: 'Voeg snel een klant toe.',
+          label: t.adminCards.newCustomer,
+          description: t.adminCards.newCustomerDesc,
           icon: PlusCircle,
         },
         {
           href: '/admin/projects/new',
-          label: 'Nieuwe werf',
-          description: 'Start een nieuwe werf.',
+          label: t.adminCards.newSite,
+          description: t.adminCards.newSiteDesc,
           icon: PlusCircle,
         },
         {
           href: '/dashboard/tickets',
-          label: 'Tickets',
-          description: 'Beheer vragen en opvolgingen.',
+          label: t.adminCards.tickets,
+          description: t.adminCards.ticketsDesc,
           icon: Ticket,
           badge: openTicketCount ?? 0,
         },
         {
           href: '/dashboard/offerte',
-          label: 'Offerte',
-          description: 'Maak of bekijk offertes.',
+          label: t.adminCards.offerte,
+          description: t.adminCards.offerteDesc,
           icon: FilePlus,
         },
         {
           href: '/dashboard/abonnement',
-          label: 'Abonnement',
-          description: 'Bekijk formule en opties.',
+          label: t.adminCards.subscription,
+          description: t.adminCards.subscriptionDesc,
           icon: CreditCard,
         },
         {
           href: '/admin/projects/statistics',
-          label: 'Statistieken',
-          description: 'Bekijk cijfers en voortgang.',
+          label: t.adminCards.statistics,
+          description: t.adminCards.statisticsDesc,
           icon: BarChart3,
         },
         {
           href: '/admin?view=uploads',
-          label: 'Uploads',
-          description: 'Ga naar bestanden en uploads.',
+          label: t.adminCards.uploadsCard,
+          description: t.adminCards.uploadsDesc,
           icon: UploadCloud,
         },
       ]
     : [
         {
           href: '/dashboard',
-          label: 'Mijn werven',
-          description: 'Overzicht van je werven.',
+          label: t.adminCards.mySites,
+          description: t.adminCards.mySitesDesc,
           icon: FolderOpen,
           badge: totalProjects,
         },
         {
           href: '/dashboard/tickets',
-          label: 'Tickets',
-          description: 'Meld een vraag of opvolging.',
+          label: t.adminCards.tickets,
+          description: t.adminCards.ticketReport,
           icon: Ticket,
           badge: openTicketCount ?? 0,
         },
         {
           href: '/dashboard/abonnement',
-          label: 'Abonnement',
-          description: 'Bekijk je formule en opties.',
+          label: t.adminCards.subscription,
+          description: t.adminCards.subscriptionSelf,
           icon: CreditCard,
           badge: 0,
         },
         {
           href: '/dashboard/offerte',
-          label: 'Offerte aanvragen',
-          description: 'Vraag een nieuwe offerte aan.',
+          label: t.adminCards.requestQuote,
+          description: t.adminCards.requestQuoteDesc,
           icon: FilePlus,
         },
         {
           href: '/dashboard/facturatie',
-          label: 'Facturatie',
-          description: 'Bekijk je facturen en betalingen.',
+          label: t.platform.billing,
+          description: t.adminCards.billingSelf,
           icon: FileText,
           badge: 0,
         },
         {
           href: '/dashboard',
-          label: 'Uploads',
-          description: 'Bekijk je aangeleverde bestanden.',
+          label: t.portalHeader.uploads,
+          description: t.adminCards.uploadsSelf,
           icon: UploadCloud,
           badge: uploadsCount,
         },
         {
           href: '/dashboard',
-          label: 'Oplevering',
-          description: 'Open je finale bestanden.',
+          label: t.portalHeader.deliveries,
+          description: t.adminCards.deliverySelf,
           icon: Download,
           badge: finalFilesCount,
         },
         {
           href: '/dashboard/machinetools',
-          label: 'Machinetools',
-          description: 'Beheer en volg je machinetools.',
+          label: t.platform.machinetools,
+          description: t.adminCards.machinetoolsDesc,
           icon: Construction,
           color: 'green',
         },
@@ -303,10 +294,10 @@ export default async function DashboardPage() {
                 </div>
                 <div className="min-w-0 flex flex-col justify-center">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                    Klantenportaal
+                    {t.portalHeader.portal}
                   </p>
                   <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                    Welkom{customerDisplayName ? `, ${customerDisplayName}` : ''}
+                    {t.portalHeader.portal}{customerDisplayName ? `, ${customerDisplayName}` : ''}
                   </h1>
                   <p className="mt-1 max-w-2xl text-xs text-[var(--text-soft)] sm:text-sm">
                     {introText}
@@ -317,7 +308,7 @@ export default async function DashboardPage() {
                 <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.13),rgba(245,140,55,0.04))] px-5 py-4 min-w-[140px]">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">{t.portalHeader.sites}</p>
                       <p className="mt-1 text-2xl font-bold text-[var(--accent)]">{totalProjects}</p>
                     </div>
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent)]/15">
@@ -328,7 +319,7 @@ export default async function DashboardPage() {
                 <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.13),rgba(76,175,80,0.04))] px-5 py-4 min-w-[140px]">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">{t.portalHeader.active}</p>
                       <p className="mt-1 text-2xl font-bold text-green-500">{activeProjects}</p>
                     </div>
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15">
@@ -339,7 +330,7 @@ export default async function DashboardPage() {
                 <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.13),rgba(33,150,243,0.04))] px-5 py-4 min-w-[140px]">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">{t.portalHeader.uploads}</p>
                       <p className="mt-1 text-2xl font-bold text-blue-500">{uploadsCount}</p>
                     </div>
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15">
@@ -350,7 +341,7 @@ export default async function DashboardPage() {
                 <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.13),rgba(156,39,176,0.04))] px-5 py-4 min-w-[140px]">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">{t.portalHeader.deliveries}</p>
                       <p className="mt-1 text-2xl font-bold text-purple-500">{finalFilesCount}</p>
                     </div>
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
@@ -366,23 +357,23 @@ export default async function DashboardPage() {
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-3 py-2.5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Werflocaties
+                  {t.adminCards.siteLocations}
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Kaart van je werven met gekende adressen.
+                  {t.adminCards.siteLocationsDesc}
                 </p>
               </div>
 
               <ProjectsMap
                 locations={projectLocations}
-                title="Werflocaties"
+                title={t.adminCards.siteLocations}
                 height={240}
               />
             </div>
 
             <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                Sneltoetsen
+                {t.adminCards.quickLinks}
               </p>
 
               <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
@@ -434,20 +425,20 @@ export default async function DashboardPage() {
 
         {projectsError && (
           <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            Werven konden niet volledig geladen worden.
+            {t.adminCards.siteLoadError}
           </div>
         )}
 
         <ProjectList
           projects={safeProjects}
           files={recentFiles}
-          title="Mijn werven"
-          description="Sneller overzicht van je werven met status, prijs en bestandsaantallen."
+          title={t.adminCards.mySites}
+          description={t.adminCards.sitesOverviewDesc}
         />
 
         {recentFilesError && (
           <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            Bestanden konden niet volledig geladen worden.
+            {t.adminCards.fileLoadError}
           </div>
         )}
 

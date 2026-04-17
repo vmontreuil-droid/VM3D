@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { AlertCircle, CheckCircle2, FileArchive, FolderOpen, Loader2, UploadCloud } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useT } from '@/i18n/context'
 
 type ProjectItem = {
   id: string | number
@@ -38,14 +39,19 @@ function getCustomerName(project: ProjectItem) {
 }
 
 function getMessageTone(message: string) {
+  // Keep tone detection language-agnostic by checking multiple languages
   const value = message.toLowerCase()
 
-  if (value.includes('succes') || value.includes('geslaagd')) return 'success'
+  if (value.includes('succes') || value.includes('geslaagd') || value.includes('réussi') || value.includes('successful')) return 'success'
   if (
     value.includes('fout') ||
     value.includes('mislukt') ||
     value.includes('kies eerst') ||
-    value.includes('ongeldig')
+    value.includes('ongeldig') ||
+    value.includes('erreur') ||
+    value.includes('échoué') ||
+    value.includes('failed') ||
+    value.includes('invalid')
   ) {
     return 'error'
   }
@@ -54,6 +60,7 @@ function getMessageTone(message: string) {
 }
 
 export default function AdminUploadPanel({ projects }: Props) {
+  const { t } = useT()
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -70,7 +77,7 @@ export default function AdminUploadPanel({ projects }: Props) {
       .filter((project) => project.user_id)
       .map((project) => {
         const customerName = getCustomerName(project)
-        const title = project.name || 'Onbenoemde werf'
+        const title = project.name || t.adminUploadPanel.unnamedSite
         const address = project.address ? ` · ${project.address}` : ''
 
         return {
@@ -123,13 +130,13 @@ export default function AdminUploadPanel({ projects }: Props) {
     setMessage('')
 
     if (!projectId || !file) {
-      setMessage('Kies eerst een dossier en een bestand.')
+      setMessage(t.adminUploadPanel.chooseFirst)
       return
     }
 
     const project = projectMap.get(projectId)
     if (!project?.userId) {
-      setMessage('Ongeldig dossier gekozen.')
+      setMessage(t.adminUploadPanel.invalidDossier)
       return
     }
 
@@ -151,20 +158,20 @@ export default function AdminUploadPanel({ projects }: Props) {
       setLoading(false)
 
       if (!response.ok) {
-        setMessage(result?.error || 'Upload mislukt. Probeer opnieuw.')
+        setMessage(result?.error || t.adminUploadPanel.uploadFailedRetry)
         return
       }
 
       setMessage(
         result?.message ||
           (uploadKind === 'client_upload'
-            ? 'Upload geslaagd: klantbestand staat nu in het gekozen dossier.'
-            : 'Upload geslaagd: opleverbestand staat nu in het gekozen dossier.')
+            ? t.adminUploadPanel.uploadSuccessClient
+            : t.adminUploadPanel.uploadSuccessDelivery)
       )
     } catch (error) {
       console.error('admin upload panel error:', error)
       setLoading(false)
-      setMessage('Upload mislukt door een onverwachte fout.')
+      setMessage(t.adminUploadPanel.uploadFailedUnexpected)
       return
     }
 
@@ -173,7 +180,7 @@ export default function AdminUploadPanel({ projects }: Props) {
     router.refresh()
   }
 
-  const kindLabel = uploadKind === 'client_upload' ? 'klantbestand' : 'opleverbestand'
+  const kindLabel = uploadKind === 'client_upload' ? t.adminUploadPanel.clientFile.toLowerCase() : t.adminUploadPanel.deliveryFile.toLowerCase()
 
   return (
     <section id="uploads" className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
@@ -197,7 +204,7 @@ export default function AdminUploadPanel({ projects }: Props) {
               }`}
             >
               <FolderOpen className="mr-1 inline h-3 w-3" />
-              Klantbestand
+              {t.adminUploadPanel.clientFile}
             </button>
             <button
               type="button"
@@ -209,19 +216,19 @@ export default function AdminUploadPanel({ projects }: Props) {
               }`}
             >
               <FileArchive className="mr-1 inline h-3 w-3" />
-              Opleverbestand
+              {t.adminUploadPanel.deliveryFile}
             </button>
           </div>
 
           {/* Project search */}
           <div className="space-y-0.5">
-            <label className="text-[10px] font-medium text-[var(--text-soft)]">Zoek dossier</label>
+            <label className="text-[10px] font-medium text-[var(--text-soft)]">{t.adminUploadPanel.searchDossier}</label>
             <input
               type="text"
               value={projectQuery}
               onChange={(e) => handleProjectInput(e.target.value)}
               list="upload-project-options"
-              placeholder="Typ klant, werf of adres..."
+              placeholder={t.adminUploadPanel.typePlaceholder}
               className="input-dark h-7 w-full px-2 text-[11px]"
               required
             />
@@ -231,7 +238,7 @@ export default function AdminUploadPanel({ projects }: Props) {
               ))}
             </datalist>
             <p className={`text-[9px] ${projectId ? 'text-emerald-300' : 'text-[var(--text-muted)]'}`}>
-              {projectId ? 'Dossier geselecteerd.' : 'Typ en kies een dossier.'}
+              {projectId ? t.adminUploadPanel.dossierSelected : t.adminUploadPanel.typeThenChoose}
             </p>
           </div>
 
@@ -251,9 +258,9 @@ export default function AdminUploadPanel({ projects }: Props) {
             </div>
             <div className="min-w-0">
               <p className="truncate text-[11px] font-semibold text-[var(--text-main)]">
-                {file ? file.name : 'Sleep bestand hierheen'}
+                {file ? file.name : t.adminUploadPanel.dropFileHere}
               </p>
-              <p className="text-[9px] text-[var(--text-muted)]">of klik om te kiezen</p>
+              <p className="text-[9px] text-[var(--text-muted)]">{t.adminUploadPanel.orClickToChoose}</p>
             </div>
             <input
               ref={fileInputRef}

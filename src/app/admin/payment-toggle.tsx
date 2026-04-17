@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Check, X, Loader } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   projectId: number
@@ -15,6 +16,7 @@ export default function PaymentToggle({ projectId, currentPaid }: Props) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const { t } = useT()
 
   const handleToggle = async () => {
     setLoading(true)
@@ -30,26 +32,26 @@ export default function PaymentToggle({ projectId, currentPaid }: Props) {
     setLoading(false)
 
     if (error) {
-      setMessage(`Fout: ${error.message}`)
+      setMessage(`${t.paymentToggle.errorPrefix}: ${error.message}`)
       return
     }
 
     setPaid(!paid)
-    setMessage('Betaalstatus opgeslagen.')
+    setMessage(t.paymentToggle.saved)
     router.refresh()
   }
 
   return (
     <div className="space-y-3">
       <p className="flex items-center gap-2 text-sm text-[var(--text-soft)]">
-        Betaald:{' '}
+        {t.paymentToggle.paid}:{' '}
         <strong
           className={`flex items-center gap-1 ${
             paid ? 'text-[var(--success-text)]' : 'text-[var(--warning-text)]'
           }`}
         >
           {paid ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-          {paid ? 'Ja' : 'Nee'}
+          {paid ? t.paymentToggle.yes : t.paymentToggle.no}
         </strong>
       </p>
 
@@ -67,10 +69,10 @@ export default function PaymentToggle({ projectId, currentPaid }: Props) {
           <Check className="h-4 w-4" />
         )}
         {loading
-          ? 'Opslaan...'
+          ? t.paymentToggle.saving
           : paid
-            ? 'Markeer als niet betaald'
-            : 'Markeer als betaald'}
+            ? t.paymentToggle.markUnpaid
+            : t.paymentToggle.markPaid}
       </button>
 
       {message ? (

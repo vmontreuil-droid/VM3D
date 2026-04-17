@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { Edit, Eye, PlusCircle, Ticket } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useT } from '@/i18n/context'
+import { getStatusLabel as getStatusLabelLib } from '@/lib/status'
 
 type CustomerItem = {
   id: string
@@ -126,6 +128,7 @@ function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
 }
 
 export default function AdminSearchPanel({ customers, projects }: Props) {
+  const { t } = useT()
   const [customerSearch, setCustomerSearch] = useState('')
   const [projectSearch, setProjectSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -188,17 +191,17 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                Snelle zoekopdracht
+                {t.adminSearchPanel.quickSearch}
               </p>
               <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                Klanten
+                {t.adminSearchPanel.customers}
               </h3>
               <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                Zoek rechtstreeks op klantnaam, btw, stad of e-mail.
+                {t.adminSearchPanel.searchCustomerDesc}
               </p>
             </div>
             <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
-              {customers.length} totaal
+              {customers.length} {t.adminSearchPanel.total}
             </span>
           </div>
 
@@ -207,7 +210,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               type="text"
               value={customerSearch}
               onChange={(e) => setCustomerSearch(e.target.value)}
-              placeholder="Zoek klant, btw, stad, mail..."
+              placeholder={t.adminSearchPanel.searchCustomerPlaceholder}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
@@ -230,17 +233,17 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                Snelle zoekopdracht
+                {t.adminSearchPanel.quickSearch}
               </p>
               <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                Werven
+                {t.adminSearchPanel.sites}
               </h3>
               <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                Zoek en filter op project, klant of locatie.
+                {t.adminSearchPanel.searchSiteDesc}
               </p>
             </div>
             <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
-              {projects.length} totaal
+              {projects.length} {t.adminSearchPanel.total}
             </span>
           </div>
 
@@ -249,7 +252,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               type="text"
               value={projectSearch}
               onChange={(e) => setProjectSearch(e.target.value)}
-              placeholder="Zoek project, klant of locatie..."
+              placeholder={t.adminSearchPanel.searchSitePlaceholder}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
@@ -273,11 +276,11 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             >
-              <option value="">Alle statussen</option>
-              <option value="ingediend">Ingediend</option>
-              <option value="in_behandeling">In behandeling</option>
-              <option value="klaar_voor_betaling">Klaar voor betaling</option>
-              <option value="afgerond">Afgerond</option>
+              <option value="">{t.adminSearchPanel.allStatuses}</option>
+              <option value="ingediend">{getStatusLabelLib('ingediend', t)}</option>
+              <option value="in_behandeling">{getStatusLabelLib('in_behandeling', t)}</option>
+              <option value="klaar_voor_betaling">{getStatusLabelLib('klaar_voor_betaling', t)}</option>
+              <option value="afgerond">{getStatusLabelLib('afgerond', t)}</option>
             </select>
           ) : null}
         </div>
@@ -290,20 +293,20 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                    Resultaten
+                    {t.adminSearchPanel.results}
                   </p>
                   <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
-                    Klanten
+                    {t.adminSearchPanel.customers}
                   </h4>
                 </div>
                 <p className="text-[10px] text-[var(--text-soft)]">
-                  {filteredCustomers.length} gevonden
+                  {filteredCustomers.length} {t.adminSearchPanel.found}
                 </p>
               </div>
 
               {filteredCustomers.length === 0 ? (
                 <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
-                  Geen klanten gevonden voor deze zoekopdracht.
+                  {t.adminSearchPanel.noCustomersFound}
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--border-soft)]">
@@ -319,7 +322,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                         <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                           {[customer.phone, customer.email, customer.city]
                             .filter(Boolean)
-                            .join(' · ') || 'Geen extra gegevens'}
+                            .join(' · ') || t.adminSearchPanel.noExtraData}
                         </p>
                       </div>
 
@@ -331,7 +334,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
                             <Eye className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Open</span>
+                          <span className="pr-1">{t.adminSearchPanel.open}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                         </Link>
                         <Link
@@ -341,7 +344,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
                             <Edit className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Bewerk</span>
+                          <span className="pr-1">{t.adminSearchPanel.edit}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
                         </Link>
                         <Link
@@ -351,7 +354,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-amber-100">
                             <PlusCircle className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Nieuwe werf</span>
+                          <span className="pr-1">{t.adminSearchPanel.newSite}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
                         </Link>
                         <Link
@@ -377,20 +380,20 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                    Resultaten
+                    {t.adminSearchPanel.results}
                   </p>
                   <h4 className="mt-0.5 text-[12px] font-semibold leading-5 text-[var(--text-main)]">
-                    Werven
+                    {t.adminSearchPanel.sites}
                   </h4>
                 </div>
                 <p className="text-[10px] text-[var(--text-soft)]">
-                  {filteredProjects.length} gevonden
+                  {filteredProjects.length} {t.adminSearchPanel.found}
                 </p>
               </div>
 
               {filteredProjects.length === 0 ? (
                 <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
-                  Geen werven gevonden voor deze zoekopdracht.
+                  {t.adminSearchPanel.noSitesFound}
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--border-soft)]">
@@ -414,7 +417,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                               project.status
                             )}`}
                           >
-                            {getStatusLabel(project.status)}
+                            {getStatusLabelLib(project.status ?? '', t)}
                           </span>
                         </div>
                       </div>
@@ -427,7 +430,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/12 text-sky-300">
                             <Eye className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Open</span>
+                          <span className="pr-1">{t.adminSearchPanel.open}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-sky-400/80" />
                         </Link>
                         <Link
@@ -437,7 +440,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/5 text-[var(--text-soft)]">
                             <Edit className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Bewerk</span>
+                          <span className="pr-1">{t.adminSearchPanel.edit}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-white/25" />
                         </Link>
                       </div>

@@ -6,6 +6,9 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
 import { createClient } from '@/lib/supabase/client'
+import { useT } from '@/i18n/context'
+import ThemeToggle from '@/components/theme-toggle'
+import LanguageSwitcher from '@/components/language-switcher'
 import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction } from 'lucide-react'
 
 type Props = {
@@ -46,6 +49,7 @@ export default function Sidebar({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentView = searchParams.get('view')
+  const { t } = useT()
   const supabase = createClient()
   const [openTicketsCount, setOpenTicketsCount] = useState<number | null>(null)
   const [waitingTicketsCount, setWaitingTicketsCount] = useState<number | null>(null)
@@ -143,13 +147,13 @@ export default function Sidebar({
     return () => { active = false; };
   }, [isAdmin]);
 
-  const portalLabel = isAdmin ? 'Adminportaal' : 'Klantenportaal'
+  const portalLabel = isAdmin ? t.platform.adminPortal : t.platform.clientPortal
   const portalInitials = getPortalInitials(isAdmin)
 
   const generalItems: NavItem[] = isAdmin
     ? [
         {
-          label: 'Dashboard',
+          label: t.platform.dashboard,
           href: '/admin',
           match: (pathname) => pathname === '/admin',
           icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
@@ -157,19 +161,19 @@ export default function Sidebar({
       ]
     : [
         {
-          label: 'Home',
+          label: t.platform.home,
           href: '/',
           match: (pathname) => pathname === '/',
           icon: <Home className="h-[17px] w-[17px]" />,
         },
         {
-          label: 'Dashboard',
+          label: t.platform.dashboard,
           href: '/dashboard',
           match: (pathname) => pathname === '/dashboard',
           icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
           children: [
             {
-              label: 'Tickets',
+              label: t.platform.tickets,
               href: '/dashboard/tickets',
               icon: <List className="h-[14px] w-[14px]" />,
               badge: customerTicketCount ?? undefined,
@@ -177,7 +181,7 @@ export default function Sidebar({
             },
             // Offerte knoppen verwijderd
             {
-              label: 'Facturatie',
+              label: t.platform.billing,
               href: '/dashboard/facturatie',
               icon: <FileText className="h-[14px] w-[14px]" />,
               match: (pathname) => pathname === '/dashboard/facturatie',
@@ -185,14 +189,14 @@ export default function Sidebar({
           ],
         },
         {
-          label: 'Mijn Machines',
+          label: t.platform.myMachines,
           href: '/dashboard/machines',
           match: (pathname) => pathname === '/dashboard/machines' || pathname.startsWith('/dashboard/machines/'),
           icon: <Construction className="h-[17px] w-[17px]" />,
           color: 'green',
         },
         {
-          label: 'Machinetools',
+          label: t.platform.machinetools,
           href: '/dashboard/machinetools',
           match: (pathname) => pathname === '/dashboard/machinetools' || pathname.startsWith('/dashboard/machinetools/'),
           icon: <MousePointerClick className="h-[17px] w-[17px]" />,
@@ -202,7 +206,7 @@ export default function Sidebar({
 
   const adminItems: NavItem[] = [
     {
-      label: 'Klanten',
+      label: t.platform.customers,
       href: '/admin/customers',
       match: (pathname) =>
         pathname === '/admin/customers' || pathname.startsWith('/admin/customers/'),
@@ -211,7 +215,7 @@ export default function Sidebar({
     },
         // Offerte knop verwijderd
     {
-      label: 'Werven',
+      label: t.platform.projects,
       href: '/admin/werven',
       match: (pathname) =>
         pathname === '/admin/werven' || pathname.startsWith('/admin/projects'),
@@ -219,35 +223,35 @@ export default function Sidebar({
       badge: projectCount ?? undefined,
     },
     {
-      label: 'Tickets',
+      label: t.platform.tickets,
       href: '/admin/tickets',
       match: (pathname) => pathname === '/admin/tickets' || pathname.startsWith('/admin/tickets/'),
       icon: <Ticket className="h-[17px] w-[17px]" />,
       badge: openTicketsCount ?? undefined,
     },
     {
-      label: 'Offertes',
+      label: t.platform.offertes,
       href: '/admin/offerte',
       match: (pathname) => pathname === '/admin/offerte' || pathname.startsWith('/admin/offerte/'),
       icon: <MousePointerClick className="h-[17px] w-[17px]" />,
       badge: offertesCount ?? undefined,
     },
     {
-      label: 'Facturen',
+      label: t.platform.invoices,
       href: '/admin/facturen',
       match: (pathname) => pathname === '/admin/facturen' || pathname.startsWith('/admin/facturen/'),
       icon: <Receipt className="h-[17px] w-[17px]" />,
       badge: facturenCount ?? undefined,
     },
     {
-      label: 'Machines',
+      label: t.platform.machines,
       href: '/admin/machines',
       match: (pathname) => pathname === '/admin/machines' || pathname.startsWith('/admin/machines/'),
       icon: <Construction className="h-[17px] w-[17px]" />,
       badge: machineCount ?? undefined,
     },
     {
-      label: 'Statistieken',
+      label: t.platform.statistics,
       href: '/admin/statistieken',
       match: (pathname) => pathname === '/admin/statistieken',
       icon: <BarChart3 className="h-[17px] w-[17px]" />,
@@ -394,7 +398,7 @@ export default function Sidebar({
           type="button"
           onClick={onToggle}
           className="absolute -right-[16px] top-4 z-20 hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] shadow-md transition hover:bg-[var(--bg-card-2)] lg:flex"
-          aria-label="Sidebar toggelen"
+          aria-label={t.platform.toggleSidebar}
         >
           {collapsed ? (
             <ChevronRight className="h-3.5 w-3.5" />
@@ -420,7 +424,7 @@ export default function Sidebar({
             {!collapsed && (
               <div className="min-w-0">
                 <p className="truncate text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                  {isAdmin ? 'ADMIN PORTAL' : 'CLIENT PORTAL'}
+                  {isAdmin ? t.platform.adminPortal.toUpperCase() : t.platform.clientPortal.toUpperCase()}
                 </p>
               </div>
             )}
@@ -431,7 +435,7 @@ export default function Sidebar({
               type="button"
               onClick={onCloseMobile}
               className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)]"
-              aria-label="Sluit navigatie"
+              aria-label={t.platform.closeNav}
             >
               <X className="h-4 w-4" />
             </button>
@@ -449,7 +453,7 @@ export default function Sidebar({
                   {portalLabel}
                 </p>
                 <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                  Beveiligd portaal
+                  {t.platform.securedPortal}
                 </p>
               </div>
             </div>
@@ -462,7 +466,7 @@ export default function Sidebar({
           <div>
             {!collapsed && (
               <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                Algemeen
+                {t.platform.general}
               </p>
             )}
             <div className="space-y-1.5">{generalItems.map(renderNavItem)}</div>
@@ -479,6 +483,8 @@ export default function Sidebar({
       <div className="relative z-10 border-t border-[var(--border-soft)] p-3.5">
         {!collapsed ? (
           <div className="space-y-2.5">
+            <ThemeToggle collapsed={false} />
+            <LanguageSwitcher />
             {isAdmin && (
               <Link
                 href={isAdmin ? '/admin' : '/dashboard'}
@@ -495,7 +501,7 @@ export default function Sidebar({
                       {portalLabel}
                     </p>
                     <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                      Startpagina
+                      {t.platform.homepage}
                     </p>
                   </div>
                 </div>
@@ -512,14 +518,17 @@ export default function Sidebar({
                   <path d="M10 17l5-5-5-5v3H3v4h7v3zm9-14H9a2 2 0 00-2 2v3h2V5h10v14H9v-3H7v3a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" />
                 </svg>
               </span>
-              <span>Uitloggen</span>
+              <span>{t.platform.logout}</span>
             </button>
           </div>
         ) : (
-          <button
+          <div className="space-y-2">
+            <ThemeToggle collapsed={true} />
+            <LanguageSwitcher collapsed={true} />
+            <button
             type="button"
             onClick={handleLogout}
-            title="Uitloggen"
+            title={t.platform.logout}
             className="flex w-full justify-center rounded-lg px-3 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--bg-card)] hover:text-white"
           >
             <span className="shrink-0">
@@ -528,6 +537,7 @@ export default function Sidebar({
               </svg>
             </span>
           </button>
+          </div>
         )}
       </div>
     </aside>

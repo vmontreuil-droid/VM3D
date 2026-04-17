@@ -30,6 +30,36 @@
   --danger-text: #fca5a5;
 }
 
+/* ── Light theme ── */
+[data-theme="light"] {
+  --bg-main: #f5f6fa;
+  --bg-sidebar: #ffffff;
+
+  --bg-card: #ffffff;
+  --bg-card-2: #f0f1f5;
+  --bg-card-3: #e8e9ef;
+  --border-soft: #d8dbe3;
+
+  --text-main: #1a1d26;
+  --text-soft: #5a6275;
+  --text-muted: #8891a5;
+
+  --accent: #e8850f;
+  --accent-hover: #d67a0a;
+
+  --success-bg: rgba(34, 197, 94, 0.10);
+  --success-text: #16a34a;
+
+  --warning-bg: rgba(245, 158, 11, 0.10);
+  --warning-text: #d97706;
+
+  --info-bg: rgba(59, 130, 246, 0.10);
+  --info-text: #2563eb;
+
+  --danger-bg: rgba(239, 68, 68, 0.10);
+  --danger-text: #dc2626;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -614,6 +644,51 @@ table td {
   background: #1b2735;
   color: #f5f7fa;
   padding: 12px 12px 10px;
+}
+
+/* ── Light theme overrides ── */
+[data-theme="light"] .btn-secondary {
+  background: var(--bg-card-2);
+  color: var(--text-main);
+  border-color: var(--border-soft);
+}
+[data-theme="light"] .btn-secondary:hover {
+  background: #dddee4;
+  border-color: rgba(232, 133, 15, 0.3);
+}
+[data-theme="light"] .btn-page:hover {
+  background: #dddee4;
+}
+[data-theme="light"] .input-dark {
+  background: #fff;
+  color: var(--text-main);
+  border-color: var(--border-soft);
+}
+[data-theme="light"] .input-dark::placeholder {
+  color: var(--text-muted);
+}
+[data-theme="light"] .card-dark {
+  background: #fff;
+  border-color: var(--border-soft);
+}
+[data-theme="light"] .card-dark-soft {
+  background: var(--bg-card-2);
+  border-color: var(--border-soft);
+}
+[data-theme="light"] .card-dark-hero {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f8fb 100%);
+  border-color: var(--border-soft);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .project-popup-inner {
+  background: #fff;
+  color: #1a1d26;
+}
+[data-theme="light"] .project-popup .leaflet-popup-close-button {
+  color: #8891a5 !important;
+}
+[data-theme="light"] .project-popup .leaflet-popup-close-button:hover {
+  color: #1a1d26 !important;
 }
 
 .project-popup-title {

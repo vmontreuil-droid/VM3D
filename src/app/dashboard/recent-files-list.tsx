@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useT } from '@/i18n/context'
 
 type FileItem = {
   id: number | string
@@ -19,33 +20,15 @@ type Props = {
   files: FileItem[]
 }
 
-function getFileTypeLabel(fileType?: string | null) {
-  if (fileType === 'client_upload') return 'Upload'
-  if (fileType === 'final_file') return 'Oplevering'
-  return 'Bestand'
+function getFileTypeLabel(fileType: string | null | undefined, t: any) {
+  if (fileType === 'client_upload') return t.dash.upload
+  if (fileType === 'final_file') return t.dash.delivery
+  return t.dash.file
 }
 
-function getStatusLabel(status?: string | null) {
-  switch (status) {
-    case 'offerte_aangevraagd':
-      return 'Offerte aangevraagd'
-    case 'offerte_verstuurd':
-      return 'Offerte verstuurd'
-    case 'in_behandeling':
-      return 'In behandeling'
-    case 'facturatie':
-      return 'Facturatie'
-    case 'factuur_verstuurd':
-      return 'Factuur verstuurd'
-    case 'afgerond':
-      return 'Afgerond'
-    case 'ingediend':
-      return 'Ingediend'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
-    default:
-      return 'Onbekend'
-  }
+function getStatusLabel(status: string | null | undefined, t: any) {
+  if (!status) return t.status?.onbekend ?? status
+  return t.status?.[status] ?? status
 }
 
 function getStatusClass(status?: string | null) {
@@ -70,6 +53,7 @@ function getStatusClass(status?: string | null) {
 }
 
 export default function RecentFilesList({ files }: Props) {
+  const { t } = useT()
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest')
 
   let sortedFiles = [...files]
@@ -93,10 +77,10 @@ export default function RecentFilesList({ files }: Props) {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-              Recente activiteit
+              {t.dash.recentActivity}
             </p>
             <h2 className="mt-2 text-lg font-semibold text-[var(--text-main)]">
-              Recente bestanden
+              {t.dash.recentFiles}
             </h2>
           </div>
           <div className="flex items-center gap-3">
@@ -111,13 +95,13 @@ export default function RecentFilesList({ files }: Props) {
                 onClick={() => setSortBy('newest')}
                 className={sortBy === 'newest' ? 'btn-primary btn-sm' : 'btn-secondary btn-sm'}
               >
-                Nieuwst
+                {t.dash.newest}
               </button>
               <button
                 onClick={() => setSortBy('oldest')}
                 className={sortBy === 'oldest' ? 'btn-primary btn-sm' : 'btn-secondary btn-sm'}
               >
-                Oudst
+                {t.dash.oldest}
               </button>
             </div>
           </div>
@@ -126,17 +110,17 @@ export default function RecentFilesList({ files }: Props) {
 
       {sortedFiles.length === 0 ? (
         <div className="px-5 py-8 text-center text-sm text-[var(--text-soft)]">
-          Geen recente bestanden
+          {t.dash.noRecentFiles}
         </div>
       ) : (
         <div className="overflow-x-auto">
           <div className="min-w-[900px] lg:min-w-full">
             <div className="grid border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-5 py-3 gap-4 grid-cols-[2fr_1fr_1fr_1fr_80px] text-[10px] font-semibold uppercase text-[var(--text-muted)]">
-              <div>Bestand</div>
-              <div>Type</div>
-              <div>Status</div>
-              <div>Datum</div>
-              <div className="text-center">Actie</div>
+              <div>{t.dash.file}</div>
+              <div>{t.dash.type}</div>
+              <div>{t.dash.status}</div>
+              <div>{t.dash.date}</div>
+              <div className="text-center">{t.dash.action}</div>
             </div>
 
             {sortedFiles.map((file) => (
@@ -149,12 +133,12 @@ export default function RecentFilesList({ files }: Props) {
                     {file.file_name}
                   </p>
                   <p className="truncate text-xs text-[var(--text-soft)]">
-                    {file.projects?.name || 'Onbekend'}
+                    {file.projects?.name || t.dash.unknown}
                   </p>
                 </div>
 
                 <span className="text-xs font-medium text-[var(--text-soft)]">
-                  {getFileTypeLabel(file.file_type)}
+                  {getFileTypeLabel(file.file_type, t)}
                 </span>
 
                 <span
@@ -162,7 +146,7 @@ export default function RecentFilesList({ files }: Props) {
                     file.projects?.status
                   )}`}
                 >
-                  {getStatusLabel(file.projects?.status)}
+                  {getStatusLabel(file.projects?.status, t)}
                 </span>
 
                 <span className="text-xs text-[var(--text-soft)]">
@@ -176,7 +160,7 @@ export default function RecentFilesList({ files }: Props) {
                     href={`/dashboard/projects/${file.project_id}`}
                     className="btn-secondary btn-sm justify-self-center"
                   >
-                    Open
+                    {t.dash.open}
                   </Link>
                 ) : (
                   <span className="text-center text-xs text-[var(--text-muted)]">—</span>

@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client'
 import { useState } from 'react'
 import { Download, Loader } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   filePath: string
@@ -12,6 +13,7 @@ type Props = {
 export default function AdminDownloadButton({ filePath, fileName }: Props) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const { t } = useT()
 
   const handleDownload = async () => {
     setLoading(true)
@@ -26,7 +28,7 @@ export default function AdminDownloadButton({ filePath, fileName }: Props) {
     setLoading(false)
 
     if (error || !data?.signedUrl) {
-      setMessage('Download mislukt.')
+      setMessage(t.adminFiles.downloadFailed)
       return
     }
 
@@ -46,7 +48,7 @@ export default function AdminDownloadButton({ filePath, fileName }: Props) {
         ) : (
           <Download className="h-4 w-4" />
         )}
-        {loading ? 'Bezig...' : `Download ${fileName}`}
+        {loading ? t.adminFiles.downloading : `${t.dash.download} ${fileName}`}
       </button>
 
       {message && <p className="mt-2 text-xs text-[var(--danger-text)]">{message}</p>}

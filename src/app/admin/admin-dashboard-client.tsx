@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import ProjectMap from '@/components/projects/project-map'
 import AdminProjectSearch from './admin-project-search'
 import GeocodeMissingProjectsButton from './geocode-missing-projects-button'
+import { useT } from '@/i18n/context'
 
 type Props = {
   projects: any[]
@@ -40,6 +41,7 @@ export default function AdminDashboardClient({
   projectFiles,
   adminUserId,
 }: Props) {
+  const { t } = useT()
   const [activeStatus, setActiveStatus] = useState<FilterStatus>('all')
 
   const totalProjects = projects.length
@@ -94,7 +96,7 @@ export default function AdminDashboardClient({
           onClick={() => setActiveStatus('all')}
           className={cardClass('all')}
         >
-          <p className="text-sm font-medium text-[var(--text-muted)]">Totaal</p>
+          <p className="text-sm font-medium text-[var(--text-muted)]">{t.adminDash.total}</p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-main)]">
             {totalProjects}
           </p>
@@ -106,7 +108,7 @@ export default function AdminDashboardClient({
           className={cardClass('offerte_aangevraagd')}
         >
           <p className="text-sm font-medium text-[var(--text-soft)]">
-            Offerte
+            {t.adminDash.offerte}
           </p>
           <p className="mt-2 text-3xl font-bold text-[var(--text-main)]">
             {offerteAangevraagdCount + offerteVerstuurdCount}
@@ -122,7 +124,7 @@ export default function AdminDashboardClient({
           )}
         >
           <p className="text-sm font-medium text-[var(--info-text)]">
-            In behandeling
+            {t.adminDash.inProgress}
           </p>
           <p className="mt-2 text-3xl font-bold text-[var(--info-text)]">
             {inBehandelingCount}
@@ -138,7 +140,7 @@ export default function AdminDashboardClient({
           )}
         >
           <p className="text-sm font-medium text-purple-400">
-            Facturatie
+            {t.adminDash.billing}
           </p>
           <p className="mt-2 text-3xl font-bold text-purple-400">
             {facturatieCount}
@@ -154,7 +156,7 @@ export default function AdminDashboardClient({
           )}
         >
           <p className="text-sm font-medium text-[var(--success-text)]">
-            Afgerond
+            {t.adminDash.completed}
           </p>
           <p className="mt-2 text-3xl font-bold text-[var(--success-text)]">
             {afgerondCount}
@@ -167,26 +169,26 @@ export default function AdminDashboardClient({
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-[var(--text-main)]">
-                Locaties van de werven
+                {t.adminDash.mapTitle}
               </h2>
               <p className="mt-1 text-sm text-[var(--text-soft)]">
-                Overzicht van alle werven op kaart.
+                {t.adminDash.mapDesc}
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <LegendItem label="Ingediend" colorClass="bg-slate-400" />
-                <LegendItem label="In behandeling" colorClass="bg-blue-500" />
+                <LegendItem label={t.status.ingediend} colorClass="bg-slate-400" />
+                <LegendItem label={t.adminDash.inProgress} colorClass="bg-blue-500" />
                 <LegendItem
-                  label="Klaar voor betaling"
+                  label={t.status.klaar_voor_betaling}
                   colorClass="bg-amber-500"
                 />
-                <LegendItem label="Afgerond" colorClass="bg-green-500" />
+                <LegendItem label={t.adminDash.completed} colorClass="bg-green-500" />
               </div>
             </div>
 
             <div className="flex flex-col items-start gap-3 xl:items-end">
               <div className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1 text-sm font-medium text-[var(--text-soft)]">
-                {filteredProjects.length} zichtbaar
+                {filteredProjects.length} {t.adminDash.visible}
               </div>
 
               <GeocodeMissingProjectsButton />
@@ -201,7 +203,7 @@ export default function AdminDashboardClient({
 
       {filteredProjects.length === 0 ? (
         <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-6 text-sm text-[var(--text-soft)] shadow-sm">
-          Geen werven gevonden voor deze status.
+          {t.adminDashExtra.noSitesForStatus}
         </div>
       ) : (
         <AdminProjectSearch

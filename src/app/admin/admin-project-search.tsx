@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { getStatusClass, getStatusLabel, getStatusIcon } from '@/lib/status'
+import { useT } from '@/i18n/context'
 import {
   ArrowUpDown,
   Check,
@@ -75,8 +76,8 @@ function formatDate(value?: string | null) {
   }
 }
 
-function formatPrice(value: number | null, currency?: string | null) {
-  if (value === null || value === undefined) return 'Nog niet bepaald'
+function formatPrice(value: number | null, currency?: string | null, fallback = 'Nog niet bepaald') {
+  if (value === null || value === undefined) return fallback
   return `${value} ${currency || 'EUR'}`
 }
 
@@ -92,6 +93,7 @@ export default function AdminProjectSearch({
   projectFiles,
   hideResultsUntilSearch = false,
 }: Props) {
+  const { t } = useT()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [addressFilter, setAddressFilter] = useState('')
@@ -189,8 +191,8 @@ export default function AdminProjectSearch({
       }
 
       if (sortKey === 'status') {
-        comparison = getStatusLabel(a.status).localeCompare(
-          getStatusLabel(b.status),
+        comparison = getStatusLabel(a.status, t).localeCompare(
+          getStatusLabel(b.status, t),
           'nl',
           { sensitivity: 'base' }
         )
@@ -301,14 +303,13 @@ export default function AdminProjectSearch({
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                Wervenlijst
+                {t.adminSearch.siteList}
               </p>
               <h2 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                Alle werven
+                {t.adminSearch.allSites}
               </h2>
               <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                Zoek, filter en open werfdossiers in dezelfde compacte stijl als
-                het klantenoverzicht.
+                {t.adminSearch.siteListDesc}
               </p>
             </div>
 
@@ -327,7 +328,7 @@ export default function AdminProjectSearch({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Zoek werf, locatie, status..."
+              placeholder={t.adminSearch.searchPlaceholder}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             />
 
@@ -336,11 +337,11 @@ export default function AdminProjectSearch({
               onChange={(e) => handleSort(e.target.value as SortKey)}
               className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
             >
-              <option value="title">Sorteer op naam</option>
-              <option value="address">Sorteer op locatie</option>
-              <option value="status">Sorteer op status</option>
-              <option value="price">Sorteer op prijs</option>
-              <option value="created_at">Sorteer op datum</option>
+              <option value="title">{t.adminSearch.sortName}</option>
+              <option value="address">{t.adminSearch.sortLocation}</option>
+              <option value="status">{t.adminSearch.sortStatus}</option>
+              <option value="price">{t.adminSearch.sortPrice}</option>
+              <option value="created_at">{t.adminSearch.sortDate}</option>
             </select>
 
             <button
@@ -351,7 +352,7 @@ export default function AdminProjectSearch({
               className="btn-secondary btn-sm w-full"
             >
               <ArrowUpDown className="h-3.5 w-3.5" />
-              <span>{sortDirection === 'asc' ? 'Oplopend' : 'Aflopend'}</span>
+              <span>{sortDirection === 'asc' ? t.adminSearch.ascending : t.adminSearch.descending}</span>
             </button>
 
             <button
@@ -385,7 +386,7 @@ export default function AdminProjectSearch({
 
           {paginatedProjects.length === 0 ? (
             <div className="px-3.5 py-4 text-[12px] text-[var(--text-soft)]">
-              Geen werven gevonden voor deze filters.
+              {t.adminSearch.noSitesForFilters}
             </div>
           ) : (
             <div className="divide-y divide-[var(--border-soft)]">
@@ -405,7 +406,7 @@ export default function AdminProjectSearch({
                         )}`}
                       >
                         {getStatusIconComponent(getStatusIcon(project.status))}
-                        {getStatusLabel(project.status)}
+                        {getStatusLabel(project.status, t)}
                       </span>
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
@@ -430,7 +431,7 @@ export default function AdminProjectSearch({
                         Bestanden: {fileCountByProject.get(project.id) || 0}
                       </span>
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                        Prijs: {formatPrice(project.price, project.currency)}
+                        {t.priceForm.price}: {formatPrice(project.price, project.currency, t.adminDashExtra.priceUndetermined)}
                       </span>
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
                         Datum: {formatDate(project.created_at)}

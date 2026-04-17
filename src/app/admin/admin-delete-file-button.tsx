@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Trash2, Loader } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   fileId: number
@@ -14,10 +15,11 @@ export default function AdminDeleteFileButton({ fileId, filePath }: Props) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const { t } = useT()
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      'Ben je zeker dat je dit bestand wilt verwijderen?'
+      t.adminFiles.deleteConfirm
     )
 
     if (!confirmed) return
@@ -33,7 +35,7 @@ export default function AdminDeleteFileButton({ fileId, filePath }: Props) {
 
     if (storageError) {
       setLoading(false)
-      setMessage(`Storage fout: ${storageError.message}`)
+      setMessage(`${t.adminFiles.storageError}: ${storageError.message}`)
       return
     }
 
@@ -45,7 +47,7 @@ export default function AdminDeleteFileButton({ fileId, filePath }: Props) {
     setLoading(false)
 
     if (dbError) {
-      setMessage(`Database fout: ${dbError.message}`)
+      setMessage(`${t.adminFiles.dbError}: ${dbError.message}`)
       return
     }
 
@@ -65,7 +67,7 @@ export default function AdminDeleteFileButton({ fileId, filePath }: Props) {
         ) : (
           <Trash2 className="h-4 w-4" />
         )}
-        {loading ? 'Verwijderen...' : 'Verwijder bestand'}
+        {loading ? t.adminFiles.deleting : t.adminFiles.deleteBtn}
       </button>
 
       {message && <p className="mt-2 text-xs text-[var(--danger-text)]">{message}</p>}

@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { Zap, Loader } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 export default function GeocodeMissingProjectsButton() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const { t } = useT()
 
   async function handleBulkGeocode() {
     try {
@@ -19,18 +21,21 @@ export default function GeocodeMissingProjectsButton() {
       const data = await response.json()
 
       if (!response.ok) {
-        setMessage(data.error || 'Bulk geocoding mislukt.')
+        setMessage(data.error || t.geocodeBtn.failed)
         return
       }
 
       setMessage(
-        `Klaar: ${data.updated} bijgewerkt, ${data.failed} mislukt, ${data.skipped} overgeslagen.`
+        t.geocodeBtn.done
+          .replace('{updated}', String(data.updated))
+          .replace('{failed}', String(data.failed))
+          .replace('{skipped}', String(data.skipped))
       )
 
       window.location.reload()
     } catch (error) {
       console.error(error)
-      setMessage('Er liep iets fout.')
+      setMessage(t.geocodeBtn.error)
     } finally {
       setLoading(false)
     }
@@ -50,8 +55,8 @@ export default function GeocodeMissingProjectsButton() {
           <Zap className="h-4 w-4" />
         )}
         {loading
-          ? 'Coördinaten ophalen...'
-          : 'Ontbrekende coördinaten aanvullen'}
+          ? t.geocodeBtn.fetching
+          : t.geocodeBtn.fillMissing}
       </button>
 
       {message ? (

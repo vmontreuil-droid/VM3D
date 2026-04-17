@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { Download } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   filePath: string
@@ -9,6 +10,7 @@ type Props = {
 }
 
 export default function DownloadButton({ filePath, fileName }: Props) {
+  const { t } = useT()
   const handleDownload = async () => {
     const supabase = createClient()
 
@@ -17,12 +19,12 @@ export default function DownloadButton({ filePath, fileName }: Props) {
       .createSignedUrl(filePath, 60)
 
     if (error) {
-      alert(`Fout bij maken downloadlink: ${error.message}`)
+      alert(`${t.dash.downloadError}: ${error.message}`)
       return
     }
 
     if (!data?.signedUrl) {
-      alert('Geen downloadlink ontvangen.')
+      alert(t.dash.noDownloadLink)
       return
     }
 
@@ -40,7 +42,7 @@ export default function DownloadButton({ filePath, fileName }: Props) {
       className="inline-flex items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-main)] transition hover:bg-[var(--bg-card-2)]"
     >
       <Download className="h-4 w-4" />
-      Download
+      {t.dash.download}
     </button>
   )
 }

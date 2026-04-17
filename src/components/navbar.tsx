@@ -4,12 +4,14 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/logo'
+import { useT } from '@/i18n/context'
 
 type Props = {
   isAdmin?: boolean
 }
 
 export default function Navbar({ isAdmin = false }: Props) {
+  const { t } = useT()
   const pathname = usePathname()
   const router = useRouter()
 
@@ -45,16 +47,16 @@ export default function Navbar({ isAdmin = false }: Props) {
 
           <nav className="hidden items-center gap-1.5 md:flex">
             <Link href="/" className={linkClass('/')}>
-              Home
+              {t.platform.home}
             </Link>
 
             <Link href="/dashboard" className={linkClass('/dashboard')}>
-              Dashboard
+              {t.platform.dashboard}
             </Link>
 
             {isAdmin && (
               <Link href="/admin" className={linkClass('/admin')}>
-                Admin
+                {t.platform.admin}
               </Link>
             )}
           </nav>
@@ -66,7 +68,7 @@ export default function Navbar({ isAdmin = false }: Props) {
             onClick={handleLogout}
             className="rounded-md border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1.5 text-xs font-medium text-[var(--text-main)] transition hover:bg-[#223246]"
           >
-            Uitloggen
+            {t.platform.logout}
           </button>
         </div>
       </div>
