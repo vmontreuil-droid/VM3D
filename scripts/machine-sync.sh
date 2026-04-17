@@ -28,6 +28,17 @@ gps_folder() {
   esac
 }
 
+listing_folder() {
+  case "$1" in
+    UNICONTROL) echo "/sdcard/Unicontrol" ;;
+    TRIMBLE)    echo "/sdcard/Trimble Data" ;;
+    TOPCON)     echo "/sdcard/TopconData" ;;
+    LEICA)      echo "/sdcard/Leica iCON" ;;
+    CHCNAV)     echo "/sdcard/CHCData" ;;
+    *)          echo "/sdcard/MachineFiles" ;;
+  esac
+}
+
 json_escape() {
   local s=$1
   s=${s//\\/\\\\}
@@ -56,23 +67,27 @@ build_listing() {
   printf '%s' "$out"
 }
 
-LAST_TGT="/sdcard/Unicontrol/Projects"
+LAST_GS="UNICONTROL"
 for G in UNICONTROL TRIMBLE TOPCON LEICA CHCNAV; do
-  F=$(gps_folder "$G")
-  if [ -d "$F" ]; then LAST_TGT="$F"; break; fi
+  if [ -d "$(gps_folder "$G")" ] || [ -d "$(listing_folder "$G")" ]; then
+    LAST_GS="$G"; break;
+  fi
 done
+LAST_TGT=$(gps_folder "$LAST_GS")
+LAST_LIST=$(listing_folder "$LAST_GS")
 mkdir -p "$LAST_TGT" 2>/dev/null
 
 LOG "=== VM Machine Sync ==="
 LOG "Code: $CODE | Server: $SERVER"
-LOG "Start-folder: $LAST_TGT"
+LOG "Download-folder: $LAST_TGT"
+LOG "Listing-folder:  $LAST_LIST"
 LOG "Poll interval: ${POLL_INTERVAL}s"
 
 HAS_JQ=0
 command -v jq >/dev/null 2>&1 && HAS_JQ=1
 
 while true; do
-  LISTING=$(build_listing "$LAST_TGT")
+  LISTING=$(build_listing "$LAST_LIST")
   [ -z "$LISTING" ] && LISTING='null'
 
   PAYLOAD="{\"connection_code\":\"$CODE\",\"listing\":$LISTING}"
@@ -94,7 +109,11 @@ while true; do
          | sed 's/.*"\([A-Z][A-Z]*\)"$/\1/')
     N=0
   fi
-  [ -n "$GS" ] && LAST_TGT=$(gps_folder "$GS")
+  if [ -n "$GS" ]; then
+    LAST_GS="$GS"
+    LAST_TGT=$(gps_folder "$GS")
+    LAST_LIST=$(listing_folder "$GS")
+  fi
   mkdir -p "$LAST_TGT" 2>/dev/null
 
   if [ "$HAS_JQ" != "1" ]; then

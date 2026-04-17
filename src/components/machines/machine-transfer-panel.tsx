@@ -596,9 +596,7 @@ function TreeItem({
   depth: number
   selectedWerf: string
 }) {
-  const [open, setOpen] = useState(
-    depth === 0 && (!selectedWerf || node.name === selectedWerf),
-  )
+  const [open, setOpen] = useState(false)
   const indent = { paddingLeft: `${depth * 12 + 6}px` }
 
   if (node.isFile) {
