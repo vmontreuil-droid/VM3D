@@ -105,16 +105,11 @@ while true; do
   if [ -n "$LAST_TGT" ] && [ -d "$LAST_TGT" ]; then
     LISTING=$(
       cd "$LAST_TGT" 2>/dev/null && \
-      find . -maxdepth 2 -type f -printf '%P\\t%s\\n' 2>/dev/null | \
+      find . -type f -printf '%P\\t%s\\n' 2>/dev/null | head -n 5000 | \
       jq -Rsc --arg root "$LAST_TGT" '
         split("\\n") | map(select(length>0)) |
         map(split("\\t") | {path: .[0], size: (.[1]|tonumber? // 0)}) |
-        group_by(.path | split("/") | if length>1 then .[0] else "" end) |
-        map({
-          name: (.[0].path | split("/") | if length>1 then .[0] else "" end),
-          files: map({name: (.path|split("/")|last), size: .size})
-        }) |
-        {root: $root, werven: .}
+        {root: $root, files: .}
       ' 2>/dev/null || echo "null"
     )
     [ -z "$LISTING" ] && LISTING="null"

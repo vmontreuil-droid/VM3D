@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw } from 'lucide-react'
+import { FolderPlus, Upload, CheckCircle2, Clock, AlertCircle, Folder, Tablet, RefreshCw, FileIcon, ChevronRight, ChevronDown } from 'lucide-react'
 
 type Transfer = {
   id: number
@@ -14,7 +14,41 @@ type Transfer = {
 
 type TabletListing = {
   root?: string
+  // New flat format (preferred)
+  files?: { path: string; size: number }[]
+  // Legacy grouped format (kept for backward compat)
   werven?: { name: string; files: { name: string; size: number }[] }[]
+}
+
+type TreeNode = {
+  name: string
+  size?: number
+  isFile: boolean
+  children?: Record<string, TreeNode>
+  fileCount?: number
+}
+
+function buildTree(files: { path: string; size: number }[]): TreeNode {
+  const root: TreeNode = { name: '', isFile: false, children: {}, fileCount: 0 }
+  for (const f of files) {
+    const parts = f.path.split('/').filter(Boolean)
+    let cur = root
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i]
+      const last = i === parts.length - 1
+      cur.children = cur.children || {}
+      if (!cur.children[part]) {
+        cur.children[part] = last
+          ? { name: part, isFile: true, size: f.size }
+          : { name: part, isFile: false, children: {}, fileCount: 0 }
+      }
+      if (!last) {
+        cur = cur.children[part]
+        cur.fileCount = (cur.fileCount || 0) + 1
+      }
+    }
+  }
+  return root
 }
 
 type Props = {
@@ -334,44 +368,45 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
             Nog geen melding ontvangen van de tablet. Dit vult zichzelf na de
             volgende sync (±30s).
           </p>
-        ) : !tabletListing.werven || tabletListing.werven.length === 0 ? (
-          <p className="text-[11px] text-[var(--text-muted)]">
-            De tablet rapporteert geen bestanden in deze map.
-          </p>
-        ) : (
-          <div className="max-h-64 overflow-y-auto rounded border border-[var(--border-soft)] bg-[var(--bg-card)]">
-            {tabletListing.werven.map((w, idx) => (
-              <details
-                key={w.name || `root-${idx}`}
-                className="border-b border-[var(--border-soft)] last:border-0"
-                open={w.name === selectedWerf}
-              >
-                <summary className="flex cursor-pointer items-center gap-1.5 px-2 py-1.5 text-[11px] font-medium text-[var(--text-main)] hover:bg-[var(--bg-card-2)]">
-                  <Folder className="h-3 w-3 text-[var(--accent)]" />
-                  {w.name || '(hoofdmap)'}
-                  <span className="ml-1 rounded bg-[var(--bg-card-2)] px-1.5 py-0.5 text-[9px] text-[var(--text-muted)]">
-                    {w.files.length}
-                  </span>
-                </summary>
-                <ul className="bg-[var(--bg-card-2)] px-2 py-1">
-                  {w.files.map((f) => (
-                    <li
-                      key={f.name}
-                      className="flex items-center justify-between py-0.5 text-[10px]"
-                    >
-                      <span className="truncate text-[var(--text-soft)]">
-                        {f.name}
-                      </span>
-                      <span className="ml-2 shrink-0 text-[var(--text-muted)]">
-                        {formatBytes(f.size)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            ))}
-          </div>
-        )}
+        ) : (() => {
+            // Build tree from either flat files[] or legacy werven[]
+            let flatFiles: { path: string; size: number }[] = []
+            if (tabletListing.files && Array.isArray(tabletListing.files)) {
+              flatFiles = tabletListing.files
+            } else if (tabletListing.werven) {
+              for (const w of tabletListing.werven) {
+                for (const f of w.files || []) {
+                  flatFiles.push({
+                    path: w.name ? `${w.name}/${f.name}` : f.name,
+                    size: f.size,
+                  })
+                }
+              }
+            }
+            if (flatFiles.length === 0) {
+              return (
+                <p className="text-[11px] text-[var(--text-muted)]">
+                  De tablet rapporteert geen bestanden in deze map.
+                </p>
+              )
+            }
+            const tree = buildTree(flatFiles)
+            const totalSize = flatFiles.reduce((a, b) => a + b.size, 0)
+            return (
+              <>
+                <p className="text-[10px] text-[var(--text-muted)]">
+                  {flatFiles.length} bestand(en) — {formatBytes(totalSize)}
+                </p>
+                <div className="max-h-80 overflow-y-auto rounded border border-[var(--border-soft)] bg-[var(--bg-card)]">
+                  <TreeView
+                    node={tree}
+                    depth={0}
+                    selectedWerf={selectedWerf}
+                  />
+                </div>
+              </>
+            )
+          })()}
       </div>
 
       {/* Recent transfers */}
@@ -437,5 +472,98 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
         Vernieuwen
       </button>
     </section>
+  )
+}
+
+function TreeView({
+  node,
+  depth,
+  selectedWerf,
+}: {
+  node: TreeNode
+  depth: number
+  selectedWerf: string
+}) {
+  const children = node.children ? Object.values(node.children) : []
+  // Sort: folders first, then files, alphabetical
+  children.sort((a, b) => {
+    if (a.isFile !== b.isFile) return a.isFile ? 1 : -1
+    return a.name.localeCompare(b.name)
+  })
+  return (
+    <ul className="text-[11px]">
+      {children.map((child) => (
+        <TreeItem
+          key={child.name}
+          node={child}
+          depth={depth}
+          selectedWerf={selectedWerf}
+        />
+      ))}
+    </ul>
+  )
+}
+
+function TreeItem({
+  node,
+  depth,
+  selectedWerf,
+}: {
+  node: TreeNode
+  depth: number
+  selectedWerf: string
+}) {
+  const [open, setOpen] = useState(
+    depth === 0 && (!selectedWerf || node.name === selectedWerf),
+  )
+  const indent = { paddingLeft: `${depth * 12 + 6}px` }
+
+  if (node.isFile) {
+    return (
+      <li
+        className="flex items-center justify-between border-t border-[var(--border-soft)]/50 py-0.5 hover:bg-[var(--bg-card-2)]"
+        style={indent}
+      >
+        <span className="flex min-w-0 items-center gap-1.5">
+          <FileIcon className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
+          <span className="truncate text-[var(--text-soft)]">{node.name}</span>
+        </span>
+        <span className="ml-2 shrink-0 pr-2 text-[10px] text-[var(--text-muted)]">
+          {formatBytes(node.size || 0)}
+        </span>
+      </li>
+    )
+  }
+
+  const childCount = node.children ? Object.keys(node.children).length : 0
+  return (
+    <li className="border-t border-[var(--border-soft)]/50 first:border-t-0">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-1.5 py-1 text-left hover:bg-[var(--bg-card-2)]"
+        style={indent}
+      >
+        {open ? (
+          <ChevronDown className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
+        ) : (
+          <ChevronRight className="h-3 w-3 shrink-0 text-[var(--text-muted)]" />
+        )}
+        <Folder className="h-3 w-3 shrink-0 text-[var(--accent)]" />
+        <span className="truncate font-medium text-[var(--text-main)]">
+          {node.name}
+        </span>
+        <span className="ml-auto mr-2 rounded bg-[var(--bg-card-2)] px-1.5 py-0.5 text-[9px] text-[var(--text-muted)]">
+          {childCount}
+        </span>
+      </button>
+      {open && node.children && (
+        <TreeView
+          node={node}
+          depth={depth + 1}
+          selectedWerf={selectedWerf}
+        />
+      )}
+    </li>
   )
 }
