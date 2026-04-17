@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useT } from '@/i18n/context'
 
 type Location = {
   name: string
@@ -19,6 +20,7 @@ export default function CustomersMapInner({
   title,
   height = 400,
 }: Props) {
+  const { t } = useT()
   const [mounted, setMounted] = useState(false)
   const [LeafletComponents, setLeafletComponents] = useState<any>(null)
   const [markerIcon, setMarkerIcon] = useState<any>(null)
@@ -82,7 +84,7 @@ export default function CustomersMapInner({
         className="flex items-center justify-center text-sm text-[var(--text-soft)]"
         style={{ height: resolvedHeight }}
       >
-        Kaart laden...
+        {t.sharedUI.mapLoading}
       </div>
     )
   }
@@ -93,7 +95,7 @@ export default function CustomersMapInner({
         className="flex items-center justify-center text-sm text-[var(--text-soft)]"
         style={{ height: resolvedHeight }}
       >
-        Geen locaties beschikbaar
+        {t.sharedUI.noLocationsShort}
       </div>
     )
   }

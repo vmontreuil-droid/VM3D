@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Search, Plus } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 export type Customer = {
   id: string
@@ -18,6 +19,8 @@ type Props = {
 }
 
 export default function CustomerSelect({ value, onChange, onCreateNew, label, placeholder, autoFocus }: Props) {
+  const { t } = useT()
+  const tt = t.sharedUI
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Customer[]>([])
   const [loading, setLoading] = useState(false)
@@ -60,7 +63,7 @@ export default function CustomerSelect({ value, onChange, onCreateNew, label, pl
         <input
           type="text"
           className="w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 pr-10 text-sm focus:border-[var(--accent)] focus:outline-none"
-          placeholder={placeholder || 'Zoek klant op naam, bedrijf, e-mail...'}
+          placeholder={placeholder || tt.customerSearchPlaceholder}
           value={selected ? (selected.company_name || selected.full_name || selected.email || '') : query}
           onChange={e => {
             setQuery(e.target.value)
@@ -79,7 +82,7 @@ export default function CustomerSelect({ value, onChange, onCreateNew, label, pl
             onClick={onCreateNew}
             tabIndex={-1}
           >
-            <Plus className="h-4 w-4" /> Nieuwe klant
+            <Plus className="h-4 w-4" /> {tt.newCustomer}
           </button>
         )}
       </div>

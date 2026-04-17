@@ -39,12 +39,12 @@ type Props = {
   projects: ProjectItem[]
 }
 
-function getCustomerName(customer: CustomerItem) {
+function getCustomerName(customer: CustomerItem, fallback: string) {
   return (
     customer.company_name ||
     customer.full_name ||
     customer.email ||
-    'Onbekende klant'
+    fallback
   )
 }
 
@@ -129,6 +129,7 @@ function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
 
 export default function AdminSearchPanel({ customers, projects }: Props) {
   const { t } = useT()
+  const unknownCustomerLabel = t.adminSearchPanel.unknownCustomer
   const [customerSearch, setCustomerSearch] = useState('')
   const [projectSearch, setProjectSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -139,7 +140,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
 
     return customers.filter((customer) => {
       const values = [
-        getCustomerName(customer),
+        getCustomerName(customer, unknownCustomerLabel),
         customer.vat_number || '',
         customer.city || '',
         customer.email || '',
@@ -317,7 +318,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                     >
                       <div className="min-w-0">
                         <p className="truncate text-[13px] font-semibold text-[var(--text-main)]">
-                          {getCustomerName(customer)}
+                          {getCustomerName(customer, unknownCustomerLabel)}
                         </p>
                         <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                           {[customer.phone, customer.email, customer.city]

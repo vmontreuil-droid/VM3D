@@ -5,12 +5,15 @@ import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
 import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter } from 'lucide-react'
 import Link from 'next/link'
+import { useT } from '@/i18n/context'
 
 type MachineWithOwner = Machine & {
   owner?: { company_name?: string; full_name?: string }
 }
 
 export default function AdminMachinesClient({ machines }: { machines: MachineWithOwner[] }) {
+  const { t } = useT()
+  const tt = t.adminMachines
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
   const [filterBrand, setFilterBrand] = useState<string>('all')
@@ -57,18 +60,18 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
           <div className="relative flex flex-wrap items-center justify-between gap-2">
             <Link href="/admin" className="btn-secondary text-xs">
               <ArrowLeft className="inline h-3 w-3 mr-1" />
-              Admin
+              {tt.back}
             </Link>
           </div>
           <div className="relative mt-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-              Machinebeheer
+              {tt.machineManagement}
             </p>
             <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-              Alle machines
+              {tt.allMachines}
             </h1>
             <p className="mt-1 text-xs text-[var(--text-soft)]">
-              Overzicht van alle kranen en bulldozers over alle klanten en werven.
+              {tt.overviewDesc}
             </p>
           </div>
         </div>
@@ -77,19 +80,19 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
           <p className="mt-1 text-2xl font-bold text-emerald-400">{machines.length}</p>
         </div>
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Online</p>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.online}</p>
           <p className="mt-1 text-2xl font-bold text-emerald-400">{onlineCount}</p>
         </div>
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Kranen</p>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.cranes}</p>
           <p className="mt-1 text-2xl font-bold text-[var(--text-main)]">{excavatorCount}</p>
         </div>
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Bulldozers</p>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.bulldozers}</p>
           <p className="mt-1 text-2xl font-bold text-[var(--text-main)]">{bulldozerCount}</p>
         </div>
       </div>
@@ -98,8 +101,8 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
       <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
         <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2 flex items-center gap-2">
           <Filter className="h-4 w-4 text-[var(--text-muted)]" />
-          <span className="text-xs font-semibold text-[var(--text-main)]">Filters</span>
-          <span className="ml-auto text-[10px] text-[var(--text-muted)]">{filtered.length} resultaten</span>
+          <span className="text-xs font-semibold text-[var(--text-main)]">{tt.filters}</span>
+          <span className="ml-auto text-[10px] text-[var(--text-muted)]">{tt.resultsCount.replace('{count}', String(filtered.length))}</span>
         </div>
         <div className="px-4 py-3 flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
@@ -108,7 +111,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Zoek op naam, merk, code, klant, werf..."
+              placeholder={tt.searchPlaceholder}
               className="w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-main)] pl-10 pr-3 py-2 text-sm text-[var(--text-main)] placeholder:text-[var(--text-muted)]"
             />
           </div>
@@ -117,16 +120,16 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             onChange={e => setFilterType(e.target.value)}
             className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2 text-sm text-[var(--text-soft)]"
           >
-            <option value="all">Alle types</option>
-            <option value="excavator">Kranen</option>
-            <option value="bulldozer">Bulldozers</option>
+            <option value="all">{tt.allTypes}</option>
+            <option value="excavator">{tt.cranes}</option>
+            <option value="bulldozer">{tt.bulldozers}</option>
           </select>
           <select
             value={filterBrand}
             onChange={e => setFilterBrand(e.target.value)}
             className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2 text-sm text-[var(--text-soft)]"
           >
-            <option value="all">Alle merken</option>
+            <option value="all">{tt.allBrands}</option>
             {brands.map(b => (
               <option key={b} value={b}>{b}</option>
             ))}
@@ -136,7 +139,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             onChange={e => setFilterGuidance(e.target.value)}
             className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2 text-sm text-[var(--text-soft)]"
           >
-            <option value="all">Alle besturingen</option>
+            <option value="all">{tt.allGuidance}</option>
             {guidanceSystems.map(g => (
               <option key={g} value={g}>{g}</option>
             ))}
@@ -146,9 +149,9 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             onChange={e => setFilterOnline(e.target.value)}
             className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2 text-sm text-[var(--text-soft)]"
           >
-            <option value="all">Online + Offline</option>
-            <option value="online">Alleen online</option>
-            <option value="offline">Alleen offline</option>
+            <option value="all">{tt.onlineOffline}</option>
+            <option value="online">{tt.onlineOnly}</option>
+            <option value="offline">{tt.offlineOnly}</option>
           </select>
         </div>
       </section>
@@ -159,14 +162,14 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)]">
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Machine</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Type</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Tonnage</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Besturing</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Klant</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Werf</th>
-                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Code</th>
-                <th className="px-3 py-2.5 text-center font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">Status</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colMachine}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colType}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colTonnage}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colGuidance}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colCustomer}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colSite}</th>
+                <th className="px-3 py-2.5 text-left font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colCode}</th>
+                <th className="px-3 py-2.5 text-center font-semibold text-[var(--text-muted)] uppercase tracking-wider text-[10px]">{tt.colStatus}</th>
               </tr>
             </thead>
             <tbody>
@@ -195,7 +198,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                       </div>
                     </td>
                     <td className="px-3 py-2.5 text-[var(--text-soft)]">
-                      {m.machine_type === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
+                      {m.machine_type === 'bulldozer' ? tt.typeBulldozer : tt.typeCrane}
                     </td>
                     <td className="px-3 py-2.5 font-medium text-[var(--text-main)]">
                       {formatTonnage(m.tonnage)}
@@ -221,11 +224,11 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                     <td className="px-3 py-2.5 text-center">
                       {m.is_online ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                          <Wifi className="h-3 w-3" /> Online
+                          <Wifi className="h-3 w-3" /> {tt.online}
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
-                          <WifiOff className="h-3 w-3" /> Offline
+                          <WifiOff className="h-3 w-3" /> {tt.offline}
                         </span>
                       )}
                     </td>
@@ -235,7 +238,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-3 py-12 text-center text-[var(--text-muted)]">
-                    Geen machines gevonden
+                    {tt.noMachines}
                   </td>
                 </tr>
               )}

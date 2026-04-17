@@ -29,12 +29,12 @@ type ProjectOption = {
   label: string
 }
 
-function getCustomerName(project: ProjectItem) {
+function getCustomerName(project: ProjectItem, fallback: string) {
   return (
     project.profiles?.company_name ||
     project.profiles?.full_name ||
     project.profiles?.email ||
-    'Onbekende klant'
+    fallback
   )
 }
 
@@ -76,7 +76,7 @@ export default function AdminUploadPanel({ projects }: Props) {
     return projects
       .filter((project) => project.user_id)
       .map((project) => {
-        const customerName = getCustomerName(project)
+        const customerName = getCustomerName(project, t.adminUploadPanel.unknownCustomer)
         const title = project.name || t.adminUploadPanel.unnamedSite
         const address = project.address ? ` · ${project.address}` : ''
 

@@ -413,28 +413,28 @@ export default function AdminProjectSearch({
                           project.paid ? 'badge-success' : 'badge-warning'
                         }`}
                       >
-                        {project.paid ? 'Betaald' : 'Openstaand'}
+                        {project.paid ? t.projectSearchExtra.paid : t.projectSearchExtra.unpaid}
                       </span>
                       <span className="badge-neutral px-2 py-0.5 text-[10px] font-semibold">
-                        {fileCountByProject.get(project.id) || 0} files
+                        {t.projectSearchExtra.filesCount.replace('{count}', String(fileCountByProject.get(project.id) || 0))}
                       </span>
                     </div>
 
                     <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
                       {[project.description, project.address]
                         .filter(Boolean)
-                        .join(' · ') || 'Geen extra gegevens'}
+                        .join(' · ') || t.projectSearchExtra.noExtraData}
                     </p>
 
                     <div className="mt-1.5 flex flex-wrap gap-1.5 text-[10px] text-[var(--text-soft)]">
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                        Bestanden: {fileCountByProject.get(project.id) || 0}
+                        {t.projectSearchExtra.filesLabel}: {fileCountByProject.get(project.id) || 0}
                       </span>
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
                         {t.priceForm.price}: {formatPrice(project.price, project.currency, t.adminDashExtra.priceUndetermined)}
                       </span>
                       <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-0.5">
-                        Datum: {formatDate(project.created_at)}
+                        {t.projectSearchExtra.dateLabel}: {formatDate(project.created_at)}
                       </span>
                     </div>
                   </div>
@@ -447,7 +447,7 @@ export default function AdminProjectSearch({
                       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Eye className="h-3 w-3" />
                       </span>
-                      <span className="pr-1">Open</span>
+                      <span className="pr-1">{t.projectSearchExtra.open}</span>
                       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 
@@ -458,7 +458,7 @@ export default function AdminProjectSearch({
                       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Edit className="h-3 w-3" />
                       </span>
-                      <span className="pr-1">Bewerk</span>
+                      <span className="pr-1">{t.projectSearchExtra.edit}</span>
                       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 
@@ -469,7 +469,7 @@ export default function AdminProjectSearch({
                       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <UploadCloud className="h-3 w-3" />
                       </span>
-                      <span className="pr-1">Bestanden</span>
+                      <span className="pr-1">{t.projectSearchExtra.files}</span>
                       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/85" />
                     </Link>
 
@@ -480,7 +480,7 @@ export default function AdminProjectSearch({
                       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--accent)]/12 text-[var(--accent)]">
                         <Wallet className="h-3 w-3" />
                       </span>
-                      <span className="pr-1">Facturatie</span>
+                      <span className="pr-1">{t.projectSearchExtra.billing}</span>
                       <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                     </Link>
 

@@ -2,12 +2,15 @@
 
 import { useState } from 'react'
 import { FileArchive, FolderOpen } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   children: React.ReactNode
 }
 
 export default function UploadTypeToggle({ children }: Props) {
+  const { t } = useT()
+  const tt = t.sharedUI
   const [kind, setKind] = useState<'client_upload' | 'final_file'>('client_upload')
 
   return (
@@ -24,7 +27,7 @@ export default function UploadTypeToggle({ children }: Props) {
           }`}
         >
           <FolderOpen className="mr-1 inline h-3 w-3" />
-          Klantbestand
+          {tt.clientFileLabel}
         </button>
         <button
           type="button"
@@ -36,7 +39,7 @@ export default function UploadTypeToggle({ children }: Props) {
           }`}
         >
           <FileArchive className="mr-1 inline h-3 w-3" />
-          Opleverbestand
+          {tt.deliveryFileLabel}
         </button>
       </div>
 

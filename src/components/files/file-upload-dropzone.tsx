@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   name?: string
@@ -12,11 +13,15 @@ type Props = {
 
 export default function FileUploadDropzone({
   name = 'file',
-  label = 'Bestand uploaden',
-  description = 'Sleep een bestand hierheen of klik om een bestand te kiezen.',
+  label,
+  description,
   accept,
   required = false,
 }: Props) {
+  const { t } = useT()
+  const tt = t.sharedUI
+  const resolvedLabel = label || tt.uploadFile
+  const resolvedDescription = description || tt.dragDropOrClick
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [selectedFileName, setSelectedFileName] = useState('')
@@ -63,8 +68,8 @@ export default function FileUploadDropzone({
   return (
     <div className="space-y-3">
       <div>
-        <p className="text-sm font-semibold text-[var(--text-main)]">{label}</p>
-        <p className="mt-1 text-xs text-[var(--text-soft)]">{description}</p>
+        <p className="text-sm font-semibold text-[var(--text-main)]">{resolvedLabel}</p>
+        <p className="mt-1 text-xs text-[var(--text-soft)]">{resolvedDescription}</p>
       </div>
 
       <label
@@ -96,15 +101,15 @@ export default function FileUploadDropzone({
         </div>
 
         <p className="mt-4 text-sm font-medium text-[var(--text-main)]">
-          Sleep je bestand hierheen
+          {tt.dropFileHere}
         </p>
         <p className="mt-1 text-xs text-[var(--text-soft)]">
-          of klik om een bestand te kiezen
+          {tt.orClickToSelect}
         </p>
 
         {selectedFileName ? (
           <div className="mt-4 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-xs font-medium text-[var(--text-main)]">
-            Geselecteerd: {selectedFileName}
+            {tt.selected}: {selectedFileName}
           </div>
         ) : null}
 

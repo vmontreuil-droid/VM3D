@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useT } from '@/i18n/context'
 
 type Props = {
   latitude: number | null
@@ -15,11 +16,16 @@ const CustomerMapInner = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex h-[260px] items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-sm text-[var(--text-soft)]">
-        Kaart laden...
+        <MapLoadingLabel />
       </div>
     ),
   }
 )
+
+function MapLoadingLabel() {
+  const { t } = useT()
+  return <>{t.sharedUI.mapLoading}</>
+}
 
 export default function CustomerMap({
   latitude,
@@ -27,6 +33,7 @@ export default function CustomerMap({
   label,
   height = 260,
 }: Props) {
+  const { t } = useT()
   const resolvedHeight = typeof height === 'number' ? `${height}px` : height
 
   if (latitude == null || longitude == null) {
@@ -35,7 +42,7 @@ export default function CustomerMap({
         className="flex items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-sm text-[var(--text-soft)]"
         style={{ height: resolvedHeight }}
       >
-        Nog geen kaartpositie beschikbaar.
+        {t.sharedUI.noMapPosition}
       </div>
     )
   }

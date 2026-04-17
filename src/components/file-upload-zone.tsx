@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { Upload, X, FileText } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Props = {
   name?: string
@@ -15,6 +16,8 @@ function formatSize(bytes: number) {
 }
 
 export default function FileUploadZone({ name = 'files', accept }: Props) {
+  const { t } = useT()
+  const tt = t.sharedUI
   const inputRef = useRef<HTMLInputElement>(null)
   const [files, setFiles] = useState<File[]>([])
 
@@ -52,7 +55,7 @@ export default function FileUploadZone({ name = 'files', accept }: Props) {
   return (
     <div className="grid gap-1.5">
       <label className="text-[11px] font-medium text-[var(--text-soft)]">
-        Bijlagen (optioneel)
+        {tt.attachmentsOptional}
       </label>
 
       <label
@@ -66,10 +69,10 @@ export default function FileUploadZone({ name = 'files', accept }: Props) {
         </div>
         <div>
           <p className="text-[12px] font-medium text-[var(--text-main)]">
-            Klik om bestanden te selecteren
+            {tt.clickToSelectFiles}
           </p>
           <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-            DXF, DWG, XML, PDF, ZIP — max 50MB per bestand
+            {tt.fileFormatHint}
           </p>
         </div>
         <input
@@ -87,7 +90,7 @@ export default function FileUploadZone({ name = 'files', accept }: Props) {
       {files.length > 0 && (
         <div className="mt-1 space-y-1.5">
           <p className="text-[11px] font-medium text-[var(--text-soft)]">
-            {files.length} bestand{files.length !== 1 ? 'en' : ''} geselecteerd
+            {(files.length === 1 ? tt.filesSelected : tt.filesSelectedPlural).replace('{count}', String(files.length))}
           </p>
           {files.map((file, i) => (
             <div
