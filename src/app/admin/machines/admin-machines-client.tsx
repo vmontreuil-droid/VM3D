@@ -51,6 +51,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
   const onlineCount = machines.filter(m => m.is_online).length
   const excavatorCount = machines.filter(m => m.machine_type === 'excavator').length
   const bulldozerCount = machines.filter(m => m.machine_type === 'bulldozer').length
+  const graderCount = machines.filter(m => m.machine_type === 'grader').length
 
   async function handleDelete(m: MachineWithOwner) {
     const label = `${m.brand} ${m.model} (${m.name})`
@@ -141,6 +142,17 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                   </div>
                 </div>
               </div>
+              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.13),rgba(168,85,247,0.04))] px-4 py-3 min-w-[120px]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Graders</p>
+                    <p className="mt-1 text-2xl font-bold text-purple-500">{graderCount}</p>
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/15">
+                    <Construction className="h-6 w-6 text-purple-500" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -178,6 +190,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
             <option value="all">{tt.allTypes}</option>
             <option value="excavator">{tt.cranes}</option>
             <option value="bulldozer">{tt.bulldozers}</option>
+            <option value="grader">Graders</option>
           </select>
           <select
             value={filterBrand}
@@ -254,7 +267,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                       </div>
                     </td>
                     <td className="px-3 py-2.5 text-[var(--text-soft)]">
-                      {m.machine_type === 'bulldozer' ? tt.typeBulldozer : tt.typeCrane}
+                      {m.machine_type === 'bulldozer' ? tt.typeBulldozer : m.machine_type === 'grader' ? 'Grader' : tt.typeCrane}
                     </td>
                     <td className="px-3 py-2.5 font-medium text-[var(--text-main)]">
                       {formatTonnage(m.tonnage)}

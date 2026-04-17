@@ -36,7 +36,7 @@ type Machine = {
   user_id: string
   project_id: number | null
   name: string
-  machine_type: 'excavator' | 'bulldozer'
+  machine_type: 'excavator' | 'bulldozer' | 'grader'
   brand: string
   model: string
   tonnage: number | string | null
@@ -67,7 +67,7 @@ export default function EditMachineForm({
   const [customer, setCustomer] = useState<Customer | null>(owner)
 
   const [name, setName] = useState(machine.name || '')
-  const [machineType, setMachineType] = useState<'excavator' | 'bulldozer'>(machine.machine_type)
+  const [machineType, setMachineType] = useState<'excavator' | 'bulldozer' | 'grader'>(machine.machine_type)
   const [brand, setBrand] = useState((machine.brand || 'CAT').toUpperCase())
   const [model, setModel] = useState(machine.model || '')
   const [tonnage, setTonnage] = useState(
@@ -385,13 +385,14 @@ export default function EditMachineForm({
                       value={machineType}
                       onChange={(e) =>
                         setMachineType(
-                          e.target.value as 'excavator' | 'bulldozer',
+                          e.target.value as 'excavator' | 'bulldozer' | 'grader',
                         )
                       }
                       className={inputCls}
                     >
                       <option value="excavator">Kraan</option>
                       <option value="bulldozer">Bulldozer</option>
+                      <option value="grader">Grader</option>
                     </select>
                   </Field>
                   <Field label="Merk" required>

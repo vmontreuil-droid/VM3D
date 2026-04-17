@@ -455,6 +455,34 @@ export function IconByVariant({ variant, className, size, title }: { variant: Ma
   }
 }
 
+/** Grader (motorgrader) — lang frame + middelste lange blade + 3 assen */
+export function GraderIcon({ className = '', size = 24, title }: IconProps) {
+  return (
+    <svg viewBox="0 0 64 64" width={size} height={size} className={className} role="img" aria-label={title}>
+      {/* Long frame */}
+      <rect x="6" y="36" width="52" height="6" rx="2" fill="currentColor" />
+      {/* Rear engine block */}
+      <rect x="40" y="28" width="18" height="14" rx="2" fill="currentColor" />
+      {/* Cab */}
+      <rect x="28" y="20" width="14" height="16" rx="2" fill="currentColor" />
+      <rect x="30" y="22" width="10" height="9" rx="1" fill="#000" fillOpacity="0.4" />
+      {/* Exhaust */}
+      <rect x="44" y="18" width="3" height="10" rx="1" fill="currentColor" />
+      {/* Front hood */}
+      <path d="M6 40 L6 36 L18 36 L22 32 L22 36" fill="currentColor" />
+      {/* Angled center blade */}
+      <path d="M18 44 L36 48" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      {/* Wheels: 1 front, 2 rear tandem */}
+      <circle cx="12" cy="54" r="5.5" fill="currentColor" />
+      <circle cx="12" cy="54" r="2.2" fill="#000" fillOpacity="0.5" />
+      <circle cx="44" cy="54" r="5.5" fill="currentColor" />
+      <circle cx="44" cy="54" r="2.2" fill="#000" fillOpacity="0.5" />
+      <circle cx="56" cy="54" r="5.5" fill="currentColor" />
+      <circle cx="56" cy="54" r="2.2" fill="#000" fillOpacity="0.5" />
+    </svg>
+  )
+}
+
 /** Backward-compatible default icon picker based on machine_type + tonnage. */
 export function MachineIcon({
   type,
@@ -463,6 +491,9 @@ export function MachineIcon({
   size,
 }: { type: string; tonnage?: number } & IconProps) {
   const t = tonnage ?? 0
+  if (type === 'grader') {
+    return <GraderIcon className={className} size={size} />
+  }
   if (type === 'bulldozer') {
     if (t > 0 && t < 6) return <MiniBulldozerIcon className={className} size={size} />
     if (t >= 35) return <HeavyBulldozerIcon className={className} size={size} />

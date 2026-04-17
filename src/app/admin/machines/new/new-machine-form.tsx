@@ -44,7 +44,7 @@ export default function NewMachineForm() {
   const [showQuickCreate, setShowQuickCreate] = useState(false)
 
   const [name, setName] = useState('')
-  const [machineType, setMachineType] = useState<'excavator' | 'bulldozer'>('excavator')
+  const [machineType, setMachineType] = useState<'excavator' | 'bulldozer' | 'grader'>('excavator')
   const [brand, setBrand] = useState('CAT')
   const [model, setModel] = useState('')
   const [tonnage, setTonnage] = useState('')
@@ -529,12 +529,13 @@ export default function NewMachineForm() {
               <select
                 value={machineType}
                 onChange={(e) =>
-                  setMachineType(e.target.value as 'excavator' | 'bulldozer')
+                  setMachineType(e.target.value as 'excavator' | 'bulldozer' | 'grader')
                 }
                 className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
               >
                 <option value="excavator">Kraan</option>
                 <option value="bulldozer">Bulldozer</option>
+                <option value="grader">Grader</option>
               </select>
             </div>
             <div>

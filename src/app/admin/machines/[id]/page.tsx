@@ -131,7 +131,7 @@ export default async function AdminOpenMachinePage({
                   )}
                 </h1>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  {machine.machine_type === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
+                  {machine.machine_type === 'bulldozer' ? 'Bulldozer' : machine.machine_type === 'grader' ? 'Grader' : 'Kraan'}
                   {machine.tonnage
                     ? ` · ${formatTonnage(Number(machine.tonnage))}`
                     : ''}
