@@ -110,6 +110,8 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
 
   useEffect(() => {
     load()
+    const id = setInterval(load, 15000)
+    return () => clearInterval(id)
   }, [load])
 
   const loadTabletListing = useCallback(async () => {
@@ -130,6 +132,9 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
 
   useEffect(() => {
     loadTabletListing()
+    // Auto-refresh every 15s so the tree appears/updates without manual clicks
+    const id = setInterval(loadTabletListing, 15000)
+    return () => clearInterval(id)
   }, [loadTabletListing])
 
   async function handleCreateWerf() {
