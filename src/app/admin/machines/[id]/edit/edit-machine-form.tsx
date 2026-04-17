@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Trash2, Copy, Check } from 'lucide-react'
 import CustomerSelect, { type Customer } from '@/components/customers/customer-select'
+import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
 
 type Project = { id: number; name: string; address?: string | null }
 
@@ -367,6 +368,11 @@ export default function EditMachineForm({
           </button>
         </div>
       </form>
+
+      <MachineTransferPanel
+        machineId={machine.id}
+        guidanceSystem={guidance || machine.guidance_system}
+      />
     </div>
   )
 }
