@@ -40,7 +40,14 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
       if (res.ok) {
         const data = await res.json()
         setTransfers(data.transfers || [])
-        setWerven(data.werven || [])
+        const wList: string[] = data.werven || []
+        setWerven(wList)
+        // Auto-select latest werf if none selected yet
+        setSelectedWerf((cur) => {
+          if (cur && wList.includes(cur)) return cur
+          if (wList.length > 0) return wList[0]
+          return ''
+        })
       }
     } catch {
       /* ignore */
@@ -201,23 +208,42 @@ export default function MachineTransferPanel({ machineId, guidanceSystem }: Prop
       <div className="space-y-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3">
         <p className="text-[11px] font-semibold text-[var(--text-soft)]">
           Bestanden versturen
-          {selectedWerf ? (
-            <span className="ml-1 text-[var(--accent)]">
-              → naar werf &quot;{selectedWerf}&quot;
-            </span>
-          ) : (
-            <span className="ml-1 text-[var(--text-muted)]">
-              → hoofdprojectmap
-            </span>
-          )}
         </p>
+
+        <div
+          className={`rounded-lg border px-3 py-2 text-[11px] ${
+            selectedWerf
+              ? 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400'
+              : isUnicontrol
+                ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                : 'border-[var(--border-soft)] text-[var(--text-soft)]'
+          }`}
+        >
+          <span className="font-semibold">Doelmap op machine:</span>{' '}
+          {selectedWerf ? (
+            <code className="rounded bg-black/30 px-1 font-mono">
+              {(isUnicontrol ? '/sdcard/Unicontrol/Projects/' : '.../') + selectedWerf + '/'}
+            </code>
+          ) : isUnicontrol ? (
+            <>
+              <span>
+                ⚠ Geen werf geselecteerd — maak eerst een werf aan of kies er
+                één hierboven. Bestanden zouden anders naast de
+                Project.yml-mappen belanden.
+              </span>
+            </>
+          ) : (
+            <code className="rounded bg-black/30 px-1 font-mono">hoofdprojectmap</code>
+          )}
+        </div>
+
         <input
           ref={fileInputRef}
           type="file"
           multiple
           accept={ACCEPTED}
           onChange={(e) => handleUpload(e.target.files)}
-          disabled={uploading}
+          disabled={uploading || (isUnicontrol && !selectedWerf)}
           className="block w-full text-xs text-[var(--text-soft)] file:mr-3 file:rounded-lg file:border-0 file:bg-[var(--accent)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white hover:file:brightness-110 disabled:opacity-50"
         />
         <p className="text-[10px] text-[var(--text-muted)]">
