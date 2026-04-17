@@ -165,6 +165,12 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
           <span className="text-xs font-semibold text-[var(--text-main)]">{tt.filters}</span>
           <span className="ml-auto text-[10px] text-[var(--text-muted)]">{tt.resultsCount.replace('{count}', String(filtered.length))}</span>
           <Link
+            href="/admin/machines/icons"
+            className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1 text-xs font-semibold text-[var(--text-soft)] hover:bg-[var(--bg-card)]"
+          >
+            🎨 Icoon-galerij
+          </Link>
+          <Link
             href="/admin/machines/new"
             className="inline-flex items-center gap-1 rounded-lg bg-[var(--accent)] px-3 py-1 text-xs font-semibold text-white hover:brightness-110"
           >
