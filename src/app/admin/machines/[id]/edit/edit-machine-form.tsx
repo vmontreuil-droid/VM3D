@@ -3,9 +3,31 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Trash2, Copy, Check } from 'lucide-react'
+import {
+  ArrowLeft,
+  Save,
+  Trash2,
+  Copy,
+  Check,
+  Wifi,
+  WifiOff,
+  Radio,
+  Construction,
+  Hash,
+  Calendar,
+  Building2,
+  QrCode,
+  MessageCircle,
+  Mail,
+} from 'lucide-react'
 import CustomerSelect, { type Customer } from '@/components/customers/customer-select'
 import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
+import {
+  MachineIcon,
+  BRAND_COLORS,
+  GUIDANCE_COLORS,
+  formatTonnage,
+} from '@/components/machines/machine-icons'
 
 type Project = { id: number; name: string; address?: string | null }
 
@@ -23,6 +45,8 @@ type Machine = {
   serial_number: string | null
   connection_code: string
   connection_password: string | null
+  is_online?: boolean
+  last_seen_at?: string | null
 }
 
 const BRANDS = [
@@ -163,216 +187,492 @@ export default function EditMachineForm({
     } catch {}
   }
 
+  const brandColor = BRAND_COLORS[brand] || '#888'
+  const guidanceStyle = guidance ? GUIDANCE_COLORS[guidance] : null
+  const lastSeen = machine.last_seen_at ? new Date(machine.last_seen_at) : null
+
+  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(
+    `Installatielink voor ${brand} ${model} (${name}):\n${setupUrl}`,
+  )}`
+  const emailHref = `mailto:${customer?.email || ''}?subject=${encodeURIComponent(
+    `Installatielink voor ${brand} ${model}`,
+  )}&body=${encodeURIComponent(
+    `Hallo,\n\nHier is de installatielink voor ${brand} ${model} (${name}):\n${setupUrl}\n\n— VM Plan & Consult`,
+  )}`
+
   return (
-    <div className="mx-auto max-w-2xl space-y-4">
-      <div className="flex items-center justify-between">
-        <Link
-          href="/admin/machines"
-          className="flex items-center gap-1 text-xs text-[var(--text-soft)] hover:text-[var(--text-main)]"
-        >
-          <ArrowLeft className="h-3 w-3" /> Terug
+    <div className="mx-auto max-w-5xl space-y-4 pb-24">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+        <Link href="/admin" className="hover:text-[var(--text-main)]">
+          Admin
         </Link>
-        <h1 className="text-lg font-semibold text-[var(--text-main)]">
-          Machine bewerken
-        </h1>
-        <span className="w-12" />
+        <span>/</span>
+        <Link href="/admin/machines" className="hover:text-[var(--text-main)]">
+          Machines
+        </Link>
+        <span>/</span>
+        <span className="text-[var(--text-main)]">
+          {brand} {model}
+        </span>
       </div>
 
-      {/* Connection info */}
-      <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 space-y-2">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-          Verbindingsgegevens
-        </p>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-[var(--text-soft)]">Code:</span>
-          <span className="rounded bg-black/40 px-2 py-0.5 font-mono font-bold text-emerald-400">
-            {machine.connection_code}
-          </span>
+      {/* Hero header */}
+      <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div
+          className="relative border-b border-[var(--border-soft)] px-5 py-5"
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${brandColor}22 0%, transparent 60%)`,
+          }}
+        >
+          <div className="flex flex-wrap items-start gap-4">
+            <div
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-sm"
+              style={{ backgroundColor: `${brandColor}22` }}
+            >
+              <MachineIcon type={machineType} size={40} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <span
+                  className="rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                  style={{
+                    backgroundColor: `${brandColor}25`,
+                    color: brandColor,
+                  }}
+                >
+                  {brand}
+                </span>
+                {guidanceStyle && guidance && (
+                  <span
+                    className={`rounded px-2 py-0.5 text-[10px] font-bold ${guidanceStyle.bg} ${guidanceStyle.text}`}
+                  >
+                    {guidance}
+                  </span>
+                )}
+                {machine.is_online ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+                    <Wifi className="h-3 w-3" /> Online
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
+                    <WifiOff className="h-3 w-3" /> Offline
+                  </span>
+                )}
+              </div>
+              <h1 className="mt-1 text-2xl font-semibold text-[var(--text-main)]">
+                {model}{' '}
+                <span className="text-[var(--text-soft)]">· {name}</span>
+              </h1>
+              <p className="mt-0.5 text-xs text-[var(--text-soft)]">
+                {machineType === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
+                {tonnage ? ` · ${formatTonnage(Number(tonnage))}` : ''}
+                {year ? ` · Bouwjaar ${year}` : ''}
+                {lastSeen
+                  ? ` · Laatst gezien ${lastSeen.toLocaleString()}`
+                  : ''}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2">
-          <code className="flex-1 truncate text-xs text-[var(--text-main)]">
-            {setupUrl}
-          </code>
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="flex items-center gap-1 rounded bg-[var(--accent)]/15 px-2 py-1 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
-          >
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-            {copied ? 'Gekopieerd' : 'Kopieer'}
-          </button>
+
+        {/* Quick stats bar */}
+        <div className="grid grid-cols-2 gap-px border-t border-[var(--border-soft)] bg-[var(--border-soft)] sm:grid-cols-4">
+          <StatTile
+            icon={<Hash className="h-3.5 w-3.5" />}
+            label="Code"
+            value={machine.connection_code}
+            mono
+          />
+          <StatTile
+            icon={<Building2 className="h-3.5 w-3.5" />}
+            label="Klant"
+            value={
+              customer?.company_name ||
+              customer?.full_name ||
+              '(geen)'
+            }
+          />
+          <StatTile
+            icon={<Radio className="h-3.5 w-3.5" />}
+            label="Besturing"
+            value={guidance || '—'}
+          />
+          <StatTile
+            icon={<Construction className="h-3.5 w-3.5" />}
+            label="Tonnage"
+            value={tonnage ? formatTonnage(Number(tonnage)) : '—'}
+          />
         </div>
       </section>
 
-      <form onSubmit={handleSave} className="space-y-4">
-        <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 space-y-3">
-          <h2 className="text-sm font-semibold text-[var(--text-main)]">Klant</h2>
-          <CustomerSelect
-            value={customer?.id}
-            onChange={(_, c) => setCustomer(c || null)}
-            placeholder="Zoek klant..."
+      <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+        {/* Main column */}
+        <div className="space-y-4">
+          <form onSubmit={handleSave} className="space-y-4" id="machine-form">
+            {/* Klant */}
+            <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
+              <header className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5">
+                <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-main)]">
+                  <Building2 className="h-4 w-4 text-[var(--accent)]" />
+                  Klant
+                  <span className="ml-auto text-[10px] font-normal text-[var(--text-muted)]">
+                    optioneel
+                  </span>
+                </h2>
+              </header>
+              <div className="space-y-3 p-4">
+                <CustomerSelect
+                  value={customer?.id}
+                  onChange={(_, c) => setCustomer(c || null)}
+                  placeholder="Zoek klant..."
+                />
+                {customer && (
+                  <div className="flex items-start justify-between rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-3 text-xs">
+                    <div>
+                      <p className="font-semibold text-[var(--text-main)]">
+                        {customer.company_name || customer.full_name}
+                      </p>
+                      <p className="text-[var(--text-soft)]">
+                        {customer.email}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCustomer(null)}
+                      className="text-[10px] text-[var(--text-muted)] hover:text-red-400"
+                    >
+                      Ontkoppel
+                    </button>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Machine */}
+            <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
+              <header className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5">
+                <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-main)]">
+                  <Construction className="h-4 w-4 text-[var(--accent)]" />
+                  Machine
+                </h2>
+              </header>
+              <div className="space-y-3 p-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Field label="Naam" required>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Type" required>
+                    <select
+                      value={machineType}
+                      onChange={(e) =>
+                        setMachineType(
+                          e.target.value as 'excavator' | 'bulldozer',
+                        )
+                      }
+                      className={inputCls}
+                    >
+                      <option value="excavator">Kraan</option>
+                      <option value="bulldozer">Bulldozer</option>
+                    </select>
+                  </Field>
+                  <Field label="Merk" required>
+                    <select
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      className={inputCls}
+                    >
+                      {!BRANDS.includes(brand) && brand && (
+                        <option value={brand}>{brand}</option>
+                      )}
+                      {BRANDS.map((b) => (
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Model" required>
+                    <input
+                      type="text"
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      required
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Tonnage" required>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={tonnage}
+                      onChange={(e) => setTonnage(e.target.value)}
+                      required
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Bouwjaar">
+                    <input
+                      type="number"
+                      value={year}
+                      onChange={(e) => setYear(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+                  <Field label="Besturing">
+                    <select
+                      value={guidance}
+                      onChange={(e) => setGuidance(e.target.value)}
+                      className={inputCls}
+                    >
+                      <option value="">— Geen —</option>
+                      {GUIDANCE.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Serienummer">
+                    <input
+                      type="text"
+                      value={serial}
+                      onChange={(e) => setSerial(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+                </div>
+
+                <Field label="Werf (optioneel)">
+                  <select
+                    value={projectId}
+                    onChange={(e) => setProjectId(e.target.value)}
+                    disabled={!customer || loadingProjects}
+                    className={`${inputCls} disabled:opacity-50`}
+                  >
+                    <option value="">
+                      {!customer
+                        ? 'Kies eerst een klant'
+                        : loadingProjects
+                          ? 'Werven laden...'
+                          : projects.length === 0
+                            ? 'Geen werven bij deze klant'
+                            : '— Geen werf gekoppeld —'}
+                    </option>
+                    {projects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                        {p.address ? ` — ${p.address}` : ''}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+
+                {error && (
+                  <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-400">
+                    {error}
+                  </p>
+                )}
+                {saved && !error && (
+                  <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5 text-xs text-emerald-400">
+                    ✓ Opgeslagen
+                  </p>
+                )}
+              </div>
+            </section>
+          </form>
+
+          {/* Werf & bestanden panel */}
+          <MachineTransferPanel
+            machineId={machine.id}
+            guidanceSystem={guidance || machine.guidance_system}
           />
-          {customer && (
-            <div className="rounded-lg bg-[var(--bg-card-2)] border border-[var(--border-soft)] p-2 text-xs">
-              <p className="font-semibold text-[var(--text-main)]">
-                {customer.company_name || customer.full_name}
-              </p>
-              <p className="text-[var(--text-soft)]">{customer.email}</p>
-            </div>
-          )}
-        </section>
+        </div>
 
-        <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 space-y-3">
-          <h2 className="text-sm font-semibold text-[var(--text-main)]">Machine</h2>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Naam *</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              />
+        {/* Sidebar */}
+        <aside className="space-y-4 lg:sticky lg:top-4 lg:h-fit">
+          {/* Installation link */}
+          <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
+            <header className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5">
+              <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-main)]">
+                <QrCode className="h-4 w-4 text-[var(--accent)]" />
+                Tablet-installatie
+              </h2>
+            </header>
+            <div className="space-y-3 p-4 text-xs">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  Code
+                </p>
+                <p className="mt-0.5 rounded bg-black/30 px-2 py-1 font-mono text-sm font-bold text-emerald-400">
+                  {machine.connection_code}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  Setup-URL
+                </p>
+                <div className="mt-0.5 flex items-center gap-1.5 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1.5">
+                  <code className="flex-1 truncate text-[10px]">{setupUrl}</code>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="flex items-center gap-1 rounded bg-[var(--accent)]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
+                  >
+                    {copied ? (
+                      <Check className="h-3 w-3" />
+                    ) : (
+                      <Copy className="h-3 w-3" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-1 rounded-lg bg-emerald-500 px-2 py-1.5 text-[11px] font-semibold text-white hover:bg-emerald-600"
+                >
+                  <MessageCircle className="h-3 w-3" /> WhatsApp
+                </a>
+                <a
+                  href={emailHref}
+                  className="flex items-center justify-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1.5 text-[11px] font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card)]"
+                >
+                  <Mail className="h-3 w-3" /> E-mail
+                </a>
+              </div>
             </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Type *</label>
-              <select
-                value={machineType}
-                onChange={(e) => setMachineType(e.target.value as 'excavator' | 'bulldozer')}
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              >
-                <option value="excavator">Kraan</option>
-                <option value="bulldozer">Bulldozer</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Merk *</label>
-              <select
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              >
-                {!BRANDS.includes(brand) && brand && <option value={brand}>{brand}</option>}
-                {BRANDS.map((b) => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Model *</label>
-              <input
-                type="text"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                required
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Tonnage *</label>
-              <input
-                type="number"
-                step="0.1"
-                value={tonnage}
-                onChange={(e) => setTonnage(e.target.value)}
-                required
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Bouwjaar</label>
-              <input
-                type="number"
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Besturing</label>
-              <select
-                value={guidance}
-                onChange={(e) => setGuidance(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              >
-                <option value="">— Geen —</option>
-                {GUIDANCE.map((g) => (
-                  <option key={g} value={g}>{g}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-[11px] font-medium text-[var(--text-soft)]">Serienummer</label>
-              <input
-                type="text"
-                value={serial}
-                onChange={(e) => setSerial(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm"
-              />
-            </div>
-          </div>
+          </section>
 
-          <div>
-            <label className="text-[11px] font-medium text-[var(--text-soft)]">Werf (optioneel)</label>
-            <select
-              value={projectId}
-              onChange={(e) => setProjectId(e.target.value)}
-              disabled={!customer || loadingProjects}
-              className="mt-1 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm disabled:opacity-50"
-            >
-              <option value="">
-                {loadingProjects
-                  ? 'Werven laden...'
-                  : projects.length === 0
-                    ? 'Geen werven'
-                    : '— Geen werf gekoppeld —'}
-              </option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}{p.address ? ` — ${p.address}` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-        </section>
+          {/* Status card */}
+          <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
+            <header className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5">
+              <h2 className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-main)]">
+                <Calendar className="h-4 w-4 text-[var(--accent)]" />
+                Status
+              </h2>
+            </header>
+            <div className="space-y-2 p-4 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[var(--text-soft)]">Verbinding</span>
+                {machine.is_online ? (
+                  <span className="inline-flex items-center gap-1 text-emerald-400">
+                    <Wifi className="h-3 w-3" /> Online
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-[var(--text-muted)]">
+                    <WifiOff className="h-3 w-3" /> Offline
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[var(--text-soft)]">Laatst gezien</span>
+                <span className="text-[var(--text-main)]">
+                  {lastSeen ? lastSeen.toLocaleString() : 'Nooit'}
+                </span>
+              </div>
+              {serial && (
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--text-soft)]">Serienummer</span>
+                  <span className="font-mono text-[var(--text-main)]">
+                    {serial}
+                  </span>
+                </div>
+              )}
+            </div>
+          </section>
+        </aside>
+      </div>
 
-        {error && (
-          <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
-            {error}
-          </p>
-        )}
-        {saved && !error && (
-          <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-400">
-            ✓ Opgeslagen
-          </p>
-        )}
-
-        <div className="flex gap-2">
+      {/* Sticky action bar */}
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--border-soft)] bg-[var(--bg-main)]/95 px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.15)] backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center gap-2">
+          <Link
+            href="/admin/machines"
+            className="flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-main)] hover:bg-[var(--bg-card-2)]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Terug
+          </Link>
+          <span className="ml-2 text-xs text-[var(--text-muted)]">
+            {saved && !error ? '✓ Opgeslagen' : 'Wijzigingen worden pas opgeslagen bij klik op “Opslaan”.'}
+          </span>
           <button
             type="button"
             onClick={handleDelete}
             disabled={deleting || saving}
-            className="flex items-center gap-1 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+            className="ml-auto flex items-center gap-1 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3.5 w-3.5" />
             {deleting ? 'Verwijderen...' : 'Verwijder'}
           </button>
           <button
             type="submit"
+            form="machine-form"
             disabled={saving || deleting}
-            className="ml-auto flex items-center gap-1 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white hover:brightness-110 disabled:opacity-50"
+            className="flex items-center gap-1 rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-50"
           >
-            <Save className="h-4 w-4" />
+            <Save className="h-3.5 w-3.5" />
             {saving ? 'Opslaan...' : 'Opslaan'}
           </button>
         </div>
-      </form>
+      </div>
+    </div>
+  )
+}
 
-      <MachineTransferPanel
-        machineId={machine.id}
-        guidanceSystem={guidance || machine.guidance_system}
-      />
+const inputCls =
+  'w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2 text-sm text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none'
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string
+  required?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <div>
+      <label className="block text-[11px] font-medium text-[var(--text-soft)]">
+        {label}
+        {required && <span className="ml-0.5 text-red-400">*</span>}
+      </label>
+      <div className="mt-1">{children}</div>
+    </div>
+  )
+}
+
+function StatTile({
+  icon,
+  label,
+  value,
+  mono,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  mono?: boolean
+}) {
+  return (
+    <div className="bg-[var(--bg-card)] px-3 py-2.5">
+      <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+        {icon}
+        {label}
+      </p>
+      <p
+        className={`mt-0.5 truncate text-sm font-semibold text-[var(--text-main)] ${mono ? 'font-mono' : ''}`}
+      >
+        {value}
+      </p>
     </div>
   )
 }
