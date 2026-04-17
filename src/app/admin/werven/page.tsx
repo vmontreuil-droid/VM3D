@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import AdminProjectSearch from '@/app/admin/admin-project-search'
 import ProjectMap from '@/components/projects/project-map'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 import {
   Activity,
   ArrowLeft,
@@ -17,30 +20,13 @@ import {
   Wallet,
 } from 'lucide-react'
 
-function getStatusLabel(status: string | null) {
-  switch (status) {
-    case 'offerte_aangevraagd':
-      return 'Offerte aangevraagd'
-    case 'offerte_verstuurd':
-      return 'Offerte verstuurd'
-    case 'in_behandeling':
-      return 'In behandeling'
-    case 'facturatie':
-      return 'Facturatie'
-    case 'factuur_verstuurd':
-      return 'Factuur verstuurd'
-    case 'afgerond':
-      return 'Afgerond'
-    case 'ingediend':
-      return 'Ingediend'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
-    default:
-      return 'Onbekend'
-  }
-}
-
 export default async function AdminWervenPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminWerven
+  const intlLocale = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
   const supabase = await createClient()
 
   const {
@@ -207,19 +193,19 @@ export default async function AdminWervenPage() {
   const averageProjectValue =
     pricedProjectsCount > 0 ? totalProjectValue / pricedProjectsCount : 0
 
-  const formattedTotalProjectValue = new Intl.NumberFormat('nl-BE', {
+  const formattedTotalProjectValue = new Intl.NumberFormat(intlLocale, {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(totalProjectValue)
 
-  const formattedPaidRevenue = new Intl.NumberFormat('nl-BE', {
+  const formattedPaidRevenue = new Intl.NumberFormat(intlLocale, {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(paidRevenueAmount)
 
-  const formattedAverageProjectValue = new Intl.NumberFormat('nl-BE', {
+  const formattedAverageProjectValue = new Intl.NumberFormat(intlLocale, {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
@@ -229,7 +215,7 @@ export default async function AdminWervenPage() {
   const latestProjectLabel =
     latestProject?.name || latestProject?.address || '—'
   const latestProjectDateLabel = latestProject?.created_at
-    ? new Date(latestProject.created_at).toLocaleDateString('nl-BE')
+    ? new Date(latestProject.created_at).toLocaleDateString(intlLocale)
     : '—'
 
   const highestValueProject =
@@ -247,7 +233,7 @@ export default async function AdminWervenPage() {
 
     return {
       id: project.id,
-      name: project.name || 'Ongetitelde werf',
+      name: project.name || tt.untitledSite,
       description: project.description ?? null,
       address: project.address ?? null,
       status: project.status || 'offerte_aangevraagd',
@@ -281,15 +267,15 @@ export default async function AdminWervenPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
 
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
 
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Wervenbeheer
+                  {tt.title}
                 </h1>
               </div>
 
@@ -298,7 +284,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.sites}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -310,7 +296,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Offerte</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.quote}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -322,7 +308,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.active}</p>
                         <p className="mt-1 text-lg font-semibold text-green-500">{activeProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
@@ -334,7 +320,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.uploads}</p>
                         <p className="mt-1 text-lg font-semibold text-blue-500">{clientFiles}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
@@ -346,7 +332,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.delivery}</p>
                         <p className="mt-1 text-lg font-semibold text-purple-500">{finalFiles}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
@@ -358,7 +344,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Facturatie</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.billing}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{invoiceReadyCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -370,7 +356,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(6,182,212,0.08),rgba(6,182,212,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.unpaid}</p>
                         <p className="mt-1 text-lg font-semibold text-cyan-400">{unpaidProjectsCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-400/10">
@@ -382,7 +368,7 @@ export default async function AdminWervenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(236,72,153,0.08),rgba(236,72,153,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Omzet</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.revenue}</p>
                         <p className="mt-1 text-sm font-semibold text-pink-400">{formattedPaidRevenue}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-400/10">
@@ -399,10 +385,10 @@ export default async function AdminWervenPage() {
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Wervenkaart
+                  {tt.sitesMap}
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Visueel overzicht van alle werven en hun locaties.
+                  {tt.sitesMapDesc}
                 </p>
               </div>
 
@@ -414,10 +400,10 @@ export default async function AdminWervenPage() {
             <div className="flex h-full flex-col rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Sneltoetsen
+                  {tt.shortcuts}
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Snelle toegang tot de belangrijkste werfacties.
+                  {tt.shortcutsDesc}
                 </p>
               </div>
 
@@ -433,10 +419,10 @@ export default async function AdminWervenPage() {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Nieuwe werf
+                        {tt.newSite}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Start meteen een nieuw dossier.
+                        {tt.newSiteDesc}
                       </span>
                     </span>
                   </div>
@@ -453,10 +439,10 @@ export default async function AdminWervenPage() {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Statistieken
+                        {tt.statistics}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk cijfers, voortgang en omzet.
+                        {tt.statisticsDesc}
                       </span>
                     </span>
                   </div>
@@ -473,10 +459,10 @@ export default async function AdminWervenPage() {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Wervenkaart
+                        {tt.sitesMapJump}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Spring direct naar alle zichtbare locaties.
+                        {tt.sitesMapJumpDesc}
                       </span>
                     </span>
                   </div>
@@ -494,7 +480,7 @@ export default async function AdminWervenPage() {
                       </span>
                       <span className="min-w-0">
                         <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Recente werf
+                          {tt.recentSite}
                         </span>
                         <span className="mt-0.5 block truncate text-[11px] leading-4 text-[var(--text-soft)]">
                           {latestProjectLabel}
@@ -514,10 +500,10 @@ export default async function AdminWervenPage() {
                       </span>
                       <span className="min-w-0">
                         <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          Wervenoverzicht
+                          {tt.sitesOverview}
                         </span>
                         <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                          Er zijn nog geen recente werven beschikbaar.
+                          {tt.noRecentSites}
                         </span>
                       </span>
                     </div>
@@ -527,36 +513,36 @@ export default async function AdminWervenPage() {
 
               <div className="mt-2 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3.5 py-2">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  Snelle info
+                  {tt.quickInfo}
                 </p>
                 <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
                   <div>
-                    <p className="text-xs text-[var(--text-muted)]">Laatste werf</p>
+                    <p className="text-xs text-[var(--text-muted)]">{tt.lastSite}</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {latestProjectLabel}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Aangemaakt op {latestProjectDateLabel}
+                      {tt.createdOn} {latestProjectDateLabel}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-xs text-[var(--text-muted)]">Gemiddeld</p>
+                    <p className="text-xs text-[var(--text-muted)]">{tt.average}</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {formattedAverageProjectValue}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Richtprijs per werf
+                      {tt.avgPerSite}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-xs text-[var(--text-muted)]">Hoogste waarde</p>
+                    <p className="text-xs text-[var(--text-muted)]">{tt.highestValue}</p>
                     <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
                       {formattedTotalProjectValue}
                     </p>
                     <p className="mt-1 text-xs text-[var(--text-soft)]">
-                      Topdossier: {highestValueProjectLabel}
+                      {tt.topDossier}: {highestValueProjectLabel}
                     </p>
                   </div>
                 </div>
@@ -567,8 +553,7 @@ export default async function AdminWervenPage() {
 
         {hasLoadError && (
           <section className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-4 text-sm text-red-200 shadow-sm">
-            Werven, klantgegevens of bestanden konden niet volledig geladen
-            worden.
+            {tt.loadError}
           </section>
         )}
 

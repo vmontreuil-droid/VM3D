@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { ArrowLeft, PlusCircle } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function createTicket(formData: FormData) {
   'use server'
@@ -77,6 +80,11 @@ type Props = {
 
 export default async function AdminTicketNewPage({ searchParams }: Props) {
   const resolvedSearchParams = searchParams ? await searchParams : {}
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.newTicket
 
   const supabase = await createClient()
   const {
@@ -121,12 +129,12 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
           <section className="space-y-1">
             {titleError && (
               <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-                Geef een titel op voor het ticket.
+                {tt.titleRequired}
               </div>
             )}
             {saveError && (
               <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-                Het ticket kon niet opgeslagen worden.
+                {tt.saveError}
               </div>
             )}
           </section>
@@ -135,13 +143,13 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-              Adminportaal
+              {tt.adminPortal}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-              Nieuw ticket
+              {tt.title}
             </h1>
             <p className="mt-2 text-sm text-[var(--text-soft)]">
-              Maak een ticket aan en koppel het optioneel aan een klant en werf.
+              {tt.subtitle}
             </p>
 
             <div className="mt-3 max-w-[280px]">
@@ -156,10 +164,10 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                      Dashboard
+                      {tt.dashboard}
                     </span>
                     <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                      Terug naar adminoverzicht
+                      {tt.backToAdmin}
                     </span>
                   </span>
                 </div>
@@ -171,38 +179,38 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="grid gap-2 sm:col-span-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Titel
+                  {tt.titleLabel}
                 </label>
                 <input
                   name="title"
                   type="text"
                   required
                   className="input-dark w-full px-3 py-2.5 text-sm"
-                  placeholder="Bijv. Loginprobleem bij klantportaal"
+                  placeholder={tt.titlePlaceholder}
                 />
               </div>
 
               <div className="grid gap-2 sm:col-span-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Beschrijving
+                  {tt.description}
                 </label>
                 <textarea
                   name="description"
                   className="input-dark min-h-[120px] w-full resize-none px-3 py-2.5 text-sm"
-                  placeholder="Omschrijf het probleem of de vraag"
+                  placeholder={tt.descriptionPlaceholder}
                 />
               </div>
 
               <div className="grid gap-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Klant
+                  {tt.customer}
                 </label>
                 <select
                   name="customer_id"
                   defaultValue={resolvedSearchParams.customer || ''}
                   className="input-dark w-full px-3 py-2.5 text-sm"
                 >
-                  <option value="">Geen klant koppelen</option>
+                  <option value="">{tt.noCustomer}</option>
                   {(customers ?? []).map((customer: any) => (
                     <option key={customer.id} value={customer.id}>
                       {customer.company_name || customer.full_name || customer.email || customer.id}
@@ -213,17 +221,17 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
 
               <div className="grid gap-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Werf
+                  {tt.site}
                 </label>
                 <select
                   name="project_id"
                   defaultValue={resolvedSearchParams.project || ''}
                   className="input-dark w-full px-3 py-2.5 text-sm"
                 >
-                  <option value="">Geen werf koppelen</option>
+                  <option value="">{tt.noSite}</option>
                   {(projects ?? []).map((project: any) => (
                     <option key={project.id} value={project.id}>
-                      #{project.id} · {project.name || project.address || 'Zonder titel'}
+                      #{project.id} · {project.name || project.address || tt.noTitle}
                     </option>
                   ))}
                 </select>
@@ -231,40 +239,40 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
 
               <div className="grid gap-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Prioriteit
+                  {tt.priority}
                 </label>
                 <select
                   name="priority"
                   defaultValue="normaal"
                   className="input-dark w-full px-3 py-2.5 text-sm"
                 >
-                  <option value="laag">Laag</option>
-                  <option value="normaal">Normaal</option>
-                  <option value="hoog">Hoog</option>
-                  <option value="urgent">Urgent</option>
+                  <option value="laag">{tt.priorityLow}</option>
+                  <option value="normaal">{tt.priorityNormal}</option>
+                  <option value="hoog">{tt.priorityHigh}</option>
+                  <option value="urgent">{tt.priorityUrgent}</option>
                 </select>
               </div>
 
               <div className="grid gap-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Status
+                  {tt.status}
                 </label>
                 <select
                   name="status"
                   defaultValue="nieuw"
                   className="input-dark w-full px-3 py-2.5 text-sm"
                 >
-                  <option value="nieuw">Nieuw</option>
-                  <option value="in_behandeling">In behandeling</option>
-                  <option value="wacht_op_klant">Wacht op klant</option>
-                  <option value="afgerond">Afgerond</option>
-                  <option value="gesloten">Gesloten</option>
+                  <option value="nieuw">{tt.statusNew}</option>
+                  <option value="in_behandeling">{tt.statusInProgress}</option>
+                  <option value="wacht_op_klant">{tt.statusWaitingCustomer}</option>
+                  <option value="afgerond">{tt.statusDone}</option>
+                  <option value="gesloten">{tt.statusClosed}</option>
                 </select>
               </div>
 
               <div className="grid gap-2">
                 <label className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Vervaldatum
+                  {tt.dueDate}
                 </label>
                 <input
                   name="due_date"
@@ -277,7 +285,7 @@ export default async function AdminTicketNewPage({ searchParams }: Props) {
             <div className="flex justify-end">
               <button type="submit" className="btn-primary">
                 <PlusCircle className="h-4 w-4" />
-                Ticket aanmaken
+                {tt.submit}
               </button>
             </div>
           </form>

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { FileText, MapPin, TrendingUp, Calendar, Zap, Clock } from 'lucide-react'
 import ProjectsMap from '@/components/projects/projects-map'
 import AppShell from '@/components/app-shell'
+import { useT } from '@/i18n/context'
 
 type ProjectLocation = {
   name: string
@@ -33,6 +34,9 @@ const statusColorMap: Record<string, string> = {
 }
 
 export default function ProjectStatisticsPage() {
+  const { t, locale } = useT()
+  const tt = t.adminStats
+  const intlLocale = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
   const [stats, setStats] = useState<ProjectStats | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
@@ -51,42 +55,42 @@ export default function ProjectStatisticsPage() {
         ).length
 
         const statusLabelMap: Record<string, string> = {
-          offerte_aangevraagd: 'Offerte aangevraagd',
-          offerte_verstuurd: 'Offerte verstuurd',
-          in_behandeling: 'In behandeling',
-          facturatie: 'Facturatie',
-          factuur_verstuurd: 'Factuur verstuurd',
-          afgerond: 'Afgerond',
+          offerte_aangevraagd: t.status.offerte_aangevraagd,
+          offerte_verstuurd: t.status.offerte_verstuurd,
+          in_behandeling: t.status.in_behandeling,
+          facturatie: t.status.facturatie,
+          factuur_verstuurd: t.status.factuur_verstuurd,
+          afgerond: t.status.afgerond,
         }
 
         const projectsByStatus = [
           {
-            status: 'Offerte aangevraagd',
+            status: t.status.offerte_aangevraagd,
             count: projects.filter((p: any) => p.status === 'offerte_aangevraagd').length,
             color: 'bg-slate-500',
           },
           {
-            status: 'Offerte verstuurd',
+            status: t.status.offerte_verstuurd,
             count: projects.filter((p: any) => p.status === 'offerte_verstuurd').length,
             color: 'bg-amber-500',
           },
           {
-            status: 'In behandeling',
+            status: t.status.in_behandeling,
             count: projects.filter((p: any) => p.status === 'in_behandeling').length,
             color: 'bg-blue-500',
           },
           {
-            status: 'Facturatie',
+            status: t.status.facturatie,
             count: projects.filter((p: any) => p.status === 'facturatie').length,
             color: 'bg-purple-500',
           },
           {
-            status: 'Factuur verstuurd',
+            status: t.status.factuur_verstuurd,
             count: projects.filter((p: any) => p.status === 'factuur_verstuurd').length,
             color: 'bg-orange-500',
           },
           {
-            status: 'Afgerond',
+            status: t.status.afgerond,
             count: completed,
             color: 'bg-green-500',
           },
@@ -147,7 +151,7 @@ export default function ProjectStatisticsPage() {
               location: p.location || 'N/A',
               status: p.status || 'Onbekend',
               price: p.price || 0,
-              created: new Date(p.created_at).toLocaleDateString('nl-BE'),
+              created: new Date(p.created_at).toLocaleDateString(intlLocale),
             })),
           averageDuration: 45, // Placeholder
           projectLocations,
@@ -160,14 +164,14 @@ export default function ProjectStatisticsPage() {
     }
 
     fetchStats()
-  }, [])
+  }, [t, intlLocale])
 
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-[var(--border-soft)] border-t-[var(--accent)]"></div>
-          <p className="mt-4 text-sm text-[var(--text-muted)]">Statistieken laden...</p>
+          <p className="mt-4 text-sm text-[var(--text-muted)]">{tt.loading}</p>
         </div>
       </div>
     )
@@ -176,7 +180,7 @@ export default function ProjectStatisticsPage() {
   if (!stats) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-[var(--text-muted)]">Kon statistieken niet laden</p>
+        <p className="text-[var(--text-muted)]">{tt.cantLoad}</p>
       </div>
     )
   }
@@ -187,9 +191,9 @@ export default function ProjectStatisticsPage() {
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text-main)]">Wervenstatistieken</h1>
+          <h1 className="text-3xl font-bold text-[var(--text-main)]">{tt.title}</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">
-            Gedetailleerd overzicht van alle werven en hun prestaties
+            {tt.subtitle}
           </p>
         </div>
 
@@ -199,7 +203,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] p-6 transition hover:border-[var(--accent)]/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Totale Werven</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">{tt.totalSites}</p>
                 <p className="mt-2 text-4xl font-bold text-[var(--accent)]">{stats.totalProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[var(--accent)]/10">
@@ -207,7 +211,7 @@ export default function ProjectStatisticsPage() {
               </div>
             </div>
             <p className="mt-4 text-xs text-[var(--text-muted)]">
-              {Math.round((stats.completedProjects / stats.totalProjects) * 100)}% afgerond
+              {Math.round((stats.completedProjects / stats.totalProjects) * 100)}% {tt.completed}
             </p>
           </div>
 
@@ -215,7 +219,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] p-6 transition hover:border-green-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Actieve Werven</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">{tt.activeSites}</p>
                 <p className="mt-2 text-4xl font-bold text-green-500">{stats.activeProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-green-500/10">
@@ -223,7 +227,7 @@ export default function ProjectStatisticsPage() {
               </div>
             </div>
             <p className="mt-4 text-xs text-[var(--text-muted)]">
-              {Math.round((stats.activeProjects / stats.totalProjects) * 100)}% in voortgang
+              {Math.round((stats.activeProjects / stats.totalProjects) * 100)}% {tt.inProgress}
             </p>
           </div>
 
@@ -231,7 +235,7 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] p-6 transition hover:border-blue-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Afgeronde Werven</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">{tt.completedSites}</p>
                 <p className="mt-2 text-4xl font-bold text-blue-500">{stats.completedProjects}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-blue-500/10">
@@ -239,7 +243,7 @@ export default function ProjectStatisticsPage() {
               </div>
             </div>
             <p className="mt-4 text-xs text-[var(--text-muted)]">
-              Succes rate {Math.round((stats.completedProjects / stats.totalProjects) * 100)}%
+              {tt.successRate} {Math.round((stats.completedProjects / stats.totalProjects) * 100)}%
             </p>
           </div>
 
@@ -247,14 +251,14 @@ export default function ProjectStatisticsPage() {
           <div className="group overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] p-6 transition hover:border-purple-500/50 hover:shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[var(--text-muted)]">Gem. Prijs</p>
+                <p className="text-sm font-medium text-[var(--text-muted)]">{tt.avgPrice}</p>
                 <p className="mt-2 text-3xl font-bold text-purple-500">€{stats.averagePrice.toFixed(0)}</p>
               </div>
               <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-purple-500/10">
                 <TrendingUp className="h-8 w-8 text-purple-500" />
               </div>
             </div>
-            <p className="mt-4 text-xs text-[var(--text-muted)]">Per project</p>
+            <p className="mt-4 text-xs text-[var(--text-muted)]">{tt.perProject}</p>
           </div>
         </div>
 
@@ -264,7 +268,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <Clock className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Werven per Status</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">{tt.sitesByStatus}</h3>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats.projectsByStatus.map((status) => (
@@ -278,7 +282,7 @@ export default function ProjectStatisticsPage() {
                   <div className="mb-1 h-8 w-1 rounded-full bg-gradient-to-t from-[var(--accent)]"></div>
                 </div>
                 <p className="mt-2 text-xs text-[var(--text-muted)]">
-                  {Math.round((status.count / stats.totalProjects) * 100)}% van totaal
+                  {Math.round((status.count / stats.totalProjects) * 100)}% {tt.ofTotal}
                 </p>
               </div>
             ))}
@@ -291,7 +295,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <Calendar className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Nieuwste Werven</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">{tt.newestSites}</h3>
           </div>
           <div className="space-y-3">
             {stats.recentProjects.map((project, idx) => (
@@ -316,7 +320,7 @@ export default function ProjectStatisticsPage() {
                     {project.status}
                   </div>
                   <p className="whitespace-nowrap text-sm font-semibold text-[var(--accent)]">
-                    €{project.price.toLocaleString('nl-BE')}
+                    €{project.price.toLocaleString(intlLocale)}
                   </p>
                 </div>
               </div>
@@ -330,7 +334,7 @@ export default function ProjectStatisticsPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/10">
               <MapPin className="h-5 w-5 text-[var(--accent)]" />
             </div>
-            <h3 className="text-lg font-semibold text-[var(--text-main)]">Werflocaties</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-main)]">{tt.siteLocations}</h3>
           </div>
           <ProjectsMap locations={stats.projectLocations} />
         </div>
@@ -339,20 +343,20 @@ export default function ProjectStatisticsPage() {
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="overflow-hidden rounded-2xl border border-[var(--accent)]/30 bg-[linear-gradient(135deg,rgba(245,140,55,0.1),rgba(245,140,55,0.02))] p-8">
             <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-[var(--accent)]">
-              Totale Waarde
+              {tt.totalValue}
             </h3>
             <p className="text-3xl font-bold text-[var(--text-main)]">
-              €{(stats.averagePrice * stats.totalProjects).toLocaleString('nl-BE')}
+              €{(stats.averagePrice * stats.totalProjects).toLocaleString(intlLocale)}
             </p>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">van alle werven</p>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">{tt.ofAllSites}</p>
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-[var(--accent)]/30 bg-[linear-gradient(135deg,rgba(245,140,55,0.1),rgba(245,140,55,0.02))] p-8">
             <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-[var(--accent)]">
-              Gemiddelde Doorlooptijd
+              {tt.avgDuration}
             </h3>
             <p className="text-3xl font-bold text-[var(--text-main)]">{stats.averageDuration}</p>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">dagen per project</p>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">{tt.daysPerProject}</p>
           </div>
         </div>
       </div>
