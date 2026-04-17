@@ -4,12 +4,16 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen, Trash2, Plus, Activity, HardHat } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen, Trash2, Plus, Activity, HardHat, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
+import MachinesMap, { type MachineMapPoint } from '@/components/machines/machines-map'
 
 type MachineWithOwner = Machine & {
   owner?: { company_name?: string; full_name?: string }
+  latitude?: number | null
+  longitude?: number | null
+  location_updated_at?: string | null
 }
 
 export default function AdminMachinesClient({ machines }: { machines: MachineWithOwner[] }) {
@@ -52,6 +56,20 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
   const excavatorCount = machines.filter(m => m.machine_type === 'excavator').length
   const bulldozerCount = machines.filter(m => m.machine_type === 'bulldozer').length
   const graderCount = machines.filter(m => m.machine_type === 'grader').length
+
+  const mapPoints: MachineMapPoint[] = machines
+    .filter(m => m.latitude != null && m.longitude != null)
+    .map(m => ({
+      id: m.id,
+      name: m.name,
+      brand: m.brand,
+      model: m.model,
+      latitude: Number(m.latitude),
+      longitude: Number(m.longitude),
+      is_online: !!m.is_online,
+      location_updated_at: m.location_updated_at ?? null,
+    }))
+  const locatedCount = mapPoints.length
 
   async function handleDelete(m: MachineWithOwner) {
     const label = `${m.brand} ${m.model} (${m.name})`
@@ -155,6 +173,23 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Map — locaties van alle machines */}
+      <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="flex items-center gap-2 border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2">
+          <MapPin className="h-4 w-4 text-purple-400" />
+          <span className="text-xs font-semibold text-[var(--text-main)]">Locaties</span>
+          <span className="ml-auto flex items-center gap-3 text-[10px] text-[var(--text-muted)]">
+            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500" /> Online</span>
+            <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500" /> Offline</span>
+            <span>·</span>
+            <span>{locatedCount} van {machines.length} machine(s) met GPS</span>
+          </span>
+        </div>
+        <div className="p-3">
+          <MachinesMap points={mapPoints} height={320} />
         </div>
       </section>
 
