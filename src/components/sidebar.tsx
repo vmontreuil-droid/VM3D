@@ -420,14 +420,6 @@ export default function Sidebar({
         >
           <div className="flex min-w-0 items-center gap-3 overflow-hidden">
             <Logo size={collapsed && !mobile ? 'sm' : 'md'} variant="adaptive" showText={!(collapsed && !mobile)} />
-
-            {!collapsed && (
-              <div className="min-w-0">
-                <p className="truncate text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                  {isAdmin ? t.platform.adminPortal.toUpperCase() : t.platform.clientPortal.toUpperCase()}
-                </p>
-              </div>
-            )}
           </div>
 
           {mobile && (
@@ -441,24 +433,6 @@ export default function Sidebar({
             </button>
           )}
         </div>
-
-        {!collapsed && isAdmin && (
-          <div className="mt-3.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/80 p-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-white shadow-sm">
-                {portalInitials}
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-[var(--text-main)]">
-                  {portalLabel}
-                </p>
-                <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                  {t.platform.securedPortal}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="relative z-10 flex-1 overflow-y-auto px-3.5 py-4">

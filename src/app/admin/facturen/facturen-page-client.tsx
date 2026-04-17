@@ -59,25 +59,6 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
   return (
     <AppShell isAdmin>
       <div className="space-y-4">
-        {/* Dashboard + Nieuwe factuur knoppen */}
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href="/admin"
-            className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-          >
-            <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-            <span className="flex items-start gap-2.5 pr-3">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                <ArrowLeft className="h-3.5 w-3.5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">{t.platform.dashboard}</span>
-                <span className="block text-[11px] leading-4 text-[var(--text-soft)]">{t.facturenPage.backToAdmin}</span>
-              </span>
-            </span>
-          </Link>
-        </div>
-
         {/* Banner */}
         <div className={sectionClass}>
           <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
