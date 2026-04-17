@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen, Trash2, Plus, Activity, HardHat, MapPin } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, Trash2, Plus, Activity, HardHat, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
 import MachinesMap, { type MachineMapPoint } from '@/components/machines/machines-map'
@@ -200,16 +200,10 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
           <span className="text-xs font-semibold text-[var(--text-main)]">{tt.filters}</span>
           <span className="ml-auto text-[10px] text-[var(--text-muted)]">{tt.resultsCount.replace('{count}', String(filtered.length))}</span>
           <Link
-            href="/admin/machines/icons"
-            className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-1 text-xs font-semibold text-[var(--text-soft)] hover:bg-[var(--bg-card)]"
-          >
-            🎨 Icoon-galerij
-          </Link>
-          <Link
             href="/admin/machines/new"
-            className="inline-flex items-center gap-1 rounded-lg bg-[var(--accent)] px-3 py-1 text-xs font-semibold text-white hover:brightness-110"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-3 py-1.5 text-[11px] font-semibold text-[var(--accent)] shadow-[0_0_0_1px_rgba(251,146,60,0.05)] transition hover:border-[var(--accent)]/70 hover:bg-[var(--accent)]/15 hover:shadow-[0_0_14px_-4px_rgba(251,146,60,0.55)]"
           >
-            <Plus className="h-3 w-3" /> Nieuwe machine
+            <Plus className="h-3.5 w-3.5" /> Nieuwe machine
           </Link>
         </div>
         <div className="px-4 py-3 flex flex-wrap gap-3">
@@ -287,7 +281,11 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                 const brandColor = BRAND_COLORS[m.brand.toUpperCase()] || '#888'
                 const guidance = m.guidance_system ? GUIDANCE_COLORS[m.guidance_system.toUpperCase()] : null
                 return (
-                  <tr key={m.id} className="border-b border-[var(--border-soft)] hover:bg-[var(--bg-card-2)] transition">
+                  <tr
+                    key={m.id}
+                    onClick={() => router.push(`/admin/machines/${m.id}`)}
+                    className="cursor-pointer border-b border-[var(--border-soft)] hover:bg-[var(--bg-card-2)] transition"
+                  >
                     <td className="px-3 py-2.5">
                       <div className="flex items-center gap-2">
                         <div
@@ -342,14 +340,8 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                         </span>
                       )}
                     </td>
-                    <td className="px-3 py-2.5 text-right">
+                    <td className="px-3 py-2.5 text-right" onClick={e => e.stopPropagation()}>
                       <div className="inline-flex items-center gap-1.5">
-                        <Link
-                          href={`/admin/machines/${m.id}`}
-                          className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                        >
-                          <FolderOpen className="h-3 w-3" /> Openen
-                        </Link>
                         <Link
                           href={`/admin/machines/${m.id}/edit`}
                           className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
