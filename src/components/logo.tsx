@@ -1,6 +1,6 @@
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'dark' | 'light';
+  variant?: 'dark' | 'light' | 'adaptive';
   className?: string;
   showText?: boolean;
 }
@@ -14,8 +14,9 @@ const sizes = {
 
 export default function Logo({ size = 'md', variant = 'dark', className = '', showText = true }: LogoProps) {
   const s = sizes[size];
-  const textColor = variant === 'dark' ? '#ffffff' : '#1a1a2e';
-  const slashColor = variant === 'dark' ? '#ffffff' : '#1a1a2e';
+  const textColor =
+    variant === 'adaptive' ? 'var(--text-main)' : variant === 'dark' ? '#ffffff' : '#1a1a2e';
+  const slashColor = textColor;
 
   // Icon is 44x40 base, scaled to match text height
   const iconW = Math.round(44 * s.iconScale);

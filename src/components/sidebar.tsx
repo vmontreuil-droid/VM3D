@@ -397,7 +397,7 @@ export default function Sidebar({
         <button
           type="button"
           onClick={onToggle}
-          className="absolute -right-[16px] top-4 z-20 hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] shadow-md transition hover:bg-[var(--bg-card-2)] lg:flex"
+          className="absolute -right-[16px] top-4 z-40 hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] shadow-md transition hover:bg-[var(--bg-card-2)] lg:flex"
           aria-label={t.platform.toggleSidebar}
         >
           {collapsed ? (
@@ -419,7 +419,7 @@ export default function Sidebar({
           }`}
         >
           <div className="flex min-w-0 items-center gap-3 overflow-hidden">
-            <Logo size={collapsed && !mobile ? 'sm' : 'md'} variant="dark" showText={!(collapsed && !mobile)} />
+            <Logo size={collapsed && !mobile ? 'sm' : 'md'} variant="adaptive" showText={!(collapsed && !mobile)} />
 
             {!collapsed && (
               <div className="min-w-0">
