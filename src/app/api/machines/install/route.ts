@@ -44,13 +44,21 @@ echo ""
 echo "[1/4] Storage toegang..."
 termux-setup-storage 2>/dev/null || true
 
-# Stap 2: Repos fixen + updaten
-echo "[2/4] Packages updaten (stabiele mirror forceren)..."
-mkdir -p $PREFIX/etc/apt
-# Forceer Cloudflare-mirror; andere zijn soms stuk of gedeeltelijk gesynchroniseerd
+# Stap 2: Mirror forceren op Termux-niveau (overruled nyist/chinese_mainland)
+echo "[2/4] Mirror forceren op Cloudflare..."
+mkdir -p $PREFIX/etc/apt $PREFIX/etc/termux
+# Termux kijkt naar chosen_mirrors (symlink/dir/file) en zet dat als sources.list.
+# Sloop alle bestaande keuzes en zet een vaste mirror.
+rm -rf $PREFIX/etc/termux/chosen_mirrors 2>/dev/null
+cat > $PREFIX/etc/termux/chosen_mirrors << 'CHO'
+deb https://packages-cf.termux.dev/apt/termux-main stable main
+CHO
 cat > $PREFIX/etc/apt/sources.list << 'SRC'
 deb https://packages-cf.termux.dev/apt/termux-main stable main
 SRC
+# sources.list.d opkuisen (anders mixt apt meerdere mirrors)
+rm -f $PREFIX/etc/apt/sources.list.d/*.list 2>/dev/null
+
 # Probeer meerdere mirrors als CF niet wil
 MIRRORS=(
   "https://packages-cf.termux.dev/apt/termux-main"
@@ -59,30 +67,55 @@ MIRRORS=(
 )
 UPDATED=0
 for M in "\${MIRRORS[@]}"; do
+  echo "  -> $M"
   echo "deb $M stable main" > $PREFIX/etc/apt/sources.list
-  if apt update -o Acquire::Retries=2 2>&1 | tail -n 3; then
-    if apt-cache show jq >/dev/null 2>&1; then
-      echo "  OK: mirror werkt -> $M"
+  echo "deb $M stable main" > $PREFIX/etc/termux/chosen_mirrors
+  # Wis caches om oude hash-mismatches te vermijden
+  rm -rf $PREFIX/var/lib/apt/lists/* 2>/dev/null
+  if apt update -o Acquire::Retries=2 -o Acquire::ForceIPv4=true 2>&1 | tail -n 2; then
+    if apt-cache show curl >/dev/null 2>&1; then
+      echo "  OK: mirror werkt"
       UPDATED=1
       break
     fi
   fi
 done
-[ "$UPDATED" = "0" ] && echo "  WAARSCHUWING: geen werkende mirror gevonden"
+[ "$UPDATED" = "0" ] && echo "  WAARSCHUWING: geen werkende mirror gevonden — ga verder met bestaande tools"
 dpkg --configure -a 2>/dev/null
 
 # Stap 3: Dependencies
 echo "[3/4] curl en jq installeren..."
-apt install -y --no-install-recommends curl jq 2>&1 | tail -n 5
+if [ "$UPDATED" = "1" ]; then
+  apt install -y --no-install-recommends curl jq 2>&1 | tail -n 3
+fi
 
 if ! command -v curl &>/dev/null; then
-  echo "FOUT: curl installatie mislukt"
+  echo "FOUT: curl ontbreekt en kan niet geïnstalleerd worden"
+  echo "Probeer handmatig: pkg i curl"
   exit 1
 fi
 echo "  OK: curl werkt"
+
+# jq via apt mislukt? Probeer static binary (aarch64)
 if ! command -v jq &>/dev/null; then
-  echo "  WAARSCHUWING: jq ontbreekt — listing wordt in pure bash gemaakt"
+  echo "  jq ontbreekt, probeer static binary..."
+  ARCH=\$(uname -m)
+  JQ_URL=""
+  case "\$ARCH" in
+    aarch64|arm64) JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-arm64" ;;
+    armv7l|armv8l) JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-armhf" ;;
+    x86_64)        JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64" ;;
+  esac
+  if [ -n "\$JQ_URL" ]; then
+    if curl -fsSL --connect-timeout 15 -o $PREFIX/bin/jq "\$JQ_URL"; then
+      chmod +x $PREFIX/bin/jq
+      echo "  OK: jq static binary geïnstalleerd"
+    else
+      echo "  WAARSCHUWING: jq download mislukt — listing blijft werken, maar server-response parseren valt terug op bash"
+    fi
+  fi
 fi
+command -v jq >/dev/null 2>&1 && echo "  OK: jq beschikbaar" || echo "  LET OP: jq ontbreekt"
 
 # Test verbinding
 echo "  Verbinding testen..."
