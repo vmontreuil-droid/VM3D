@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, FolderOpen, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
 
@@ -14,6 +15,8 @@ type MachineWithOwner = Machine & {
 export default function AdminMachinesClient({ machines }: { machines: MachineWithOwner[] }) {
   const { t } = useT()
   const tt = t.adminMachines
+  const router = useRouter()
+  const [deletingId, setDeletingId] = useState<number | null>(null)
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
   const [filterBrand, setFilterBrand] = useState<string>('all')
@@ -48,6 +51,24 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
   const onlineCount = machines.filter(m => m.is_online).length
   const excavatorCount = machines.filter(m => m.machine_type === 'excavator').length
   const bulldozerCount = machines.filter(m => m.machine_type === 'bulldozer').length
+
+  async function handleDelete(m: MachineWithOwner) {
+    const label = `${m.brand} ${m.model} (${m.name})`
+    if (!confirm(`Machine definitief verwijderen?\n\n${label}\n\nDit verwijdert ook alle werven, bestandsoverdrachten en commands van deze machine.`)) {
+      return
+    }
+    setDeletingId(m.id)
+    try {
+      const res = await fetch(`/api/machines/${m.id}`, { method: 'DELETE' })
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(j.error || 'Verwijderen mislukt')
+      router.refresh()
+    } catch (e) {
+      alert('Fout: ' + (e as Error).message)
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   return (
     <div className="space-y-4">
@@ -253,6 +274,15 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                         >
                           <Pencil className="h-3 w-3" /> Bewerk
                         </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(m)}
+                          disabled={deletingId === m.id}
+                          title="Machine verwijderen"
+                          className="inline-flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+                        >
+                          <Trash2 className="h-3 w-3" /> {deletingId === m.id ? '…' : 'Verwijder'}
+                        </button>
                       </div>
                     </td>
                   </tr>
