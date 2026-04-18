@@ -227,16 +227,16 @@ export default function DashboardNotesWidget() {
           </div>
 
           {pickerOpen && kind && (
-            <div className="absolute left-0 right-0 top-full z-20 mt-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] p-2 shadow-lg">
+            <div className="mt-1.5 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)]/60 p-1.5">
               <input
                 type="text"
                 autoFocus
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t.notesWidget.linkSearch}
-                className="input-dark mb-1.5 w-full px-2 py-1 text-[11px]"
+                className="input-dark mb-1 w-full px-2 py-1 text-[11px]"
               />
-              <div className="max-h-40 overflow-y-auto">
+              <div className="max-h-32 overflow-y-auto">
                 {!targets ? (
                   <div className="flex justify-center py-3">
                     <Loader2 className="h-3 w-3 animate-spin text-[var(--text-muted)]" />
