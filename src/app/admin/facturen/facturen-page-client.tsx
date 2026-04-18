@@ -9,7 +9,6 @@ import {
   Clock,
   XCircle,
   Euro,
-  Plus,
 } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { useT } from '@/i18n/context'
@@ -50,7 +49,6 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
   const { t } = useT()
   const totalCount = facturen.length
   const verstuurdCount = facturen.filter((f) => f.status === 'verstuurd').length
-  const betaaldCount = facturen.filter((f) => f.status === 'betaald').length
   const vervallenCount = facturen.filter((f) => f.status === 'vervallen').length
   const totalBedrag = facturen.reduce((sum, f) => sum + (f.total || 0), 0)
   const betaaldBedrag = facturen.filter((f) => f.status === 'betaald').reduce((sum, f) => sum + (f.total || 0), 0)
@@ -58,54 +56,78 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
 
   return (
     <AppShell isAdmin>
-      <div className="space-y-4">
-        {/* Dashboard + Nieuwe factuur knoppen */}
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href="/admin"
-            className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-          >
-            <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-            <span className="flex items-start gap-2.5 pr-3">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                <ArrowLeft className="h-3.5 w-3.5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">{t.platform.dashboard}</span>
-                <span className="block text-[11px] leading-4 text-[var(--text-soft)]">{t.facturenPage.backToAdmin}</span>
-              </span>
-            </span>
-          </Link>
-        </div>
-
+      <div className="space-y-2 sm:space-y-3">
         {/* Banner */}
-        <div className={sectionClass}>
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
             <div className="absolute inset-0 opacity-30">
-              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%)]" />
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">{t.facturenPage.billing}</p>
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)]">{t.facturenPage.invoices}</h1>
-                <p className="mt-1 text-sm text-[var(--text-soft)]">{t.facturenPage.overview}</p>
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  {t.platform.dashboard}
+                </Link>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  {t.facturenPage.invoices}
+                </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  {t.facturenPage.overview}
+                </p>
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.total}</p>
-                  <p className="mt-1 text-lg font-semibold text-[var(--text-main)]">{totalCount}</p>
-                </div>
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.sent}</p>
-                  <p className="mt-1 text-lg font-semibold text-amber-400">{verstuurdCount}</p>
-                </div>
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.paid}</p>
-                  <p className="mt-1 text-lg font-semibold text-emerald-400">{betaaldCount}</p>
-                </div>
-                <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/60 px-3 py-2.5">
-                  <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.overdue}</p>
-                  <p className="mt-1 text-lg font-semibold text-red-400">{vervallenCount}</p>
+              <div className="w-full xl:ml-auto xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.total}</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <FileText className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.sent}</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{verstuurdCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <Send className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.paid}</p>
+                        <p className="mt-1 text-lg font-semibold text-green-500">€{betaaldBedrag.toFixed(0)}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                        <Euro className="h-4.5 w-4.5 text-green-500" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(239,68,68,0.08),rgba(239,68,68,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.overdue}</p>
+                        <p className="mt-1 text-lg font-semibold text-red-400">{vervallenCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/10">
+                        <XCircle className="h-4.5 w-4.5 text-red-400" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -141,7 +163,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Factuurlijst */}
         <div className={sectionClass}>

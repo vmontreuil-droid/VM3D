@@ -1016,6 +1016,7 @@ const en: Dictionary = {
     dashboard: 'Dashboard',
     adminPortal: 'Admin portal',
     title: 'Site management',
+    titleDesc: 'Complete overview of your sites, status, uploads and revenue.',
     sites: 'Sites',
     quote: 'Quote',
     active: 'Active',

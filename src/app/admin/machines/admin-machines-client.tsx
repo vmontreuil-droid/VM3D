@@ -90,84 +90,76 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 sm:space-y-3">
       {/* Header met stats rechts */}
-      <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-        <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
+      <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
           <div className="absolute inset-0 opacity-30">
-            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
           </div>
-          <div className="relative flex flex-wrap items-center justify-between gap-2">
-            <Link href="/admin" className="btn-secondary text-xs">
-              <ArrowLeft className="inline h-3 w-3 mr-1" />
-              {tt.back}
-            </Link>
-          </div>
-          <div className="relative mt-3 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-                {tt.machineManagement}
+          <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div className="min-w-0 flex-1">
+              <Link
+                href="/admin"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+              >
+                <ArrowLeft className="h-3 w-3" />
+                {tt.back}
+              </Link>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                Adminportaal
               </p>
               <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                 {tt.allMachines}
               </h1>
-              <p className="mt-1 max-w-2xl text-xs text-[var(--text-soft)]">
+              <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
                 {tt.overviewDesc}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.13),rgba(16,185,129,0.04))] px-4 py-3 min-w-[120px]">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
-                    <p className="mt-1 text-2xl font-bold text-emerald-400">{machines.length}</p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15">
-                    <Construction className="h-6 w-6 text-emerald-400" />
-                  </div>
-                </div>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.13),rgba(76,175,80,0.04))] px-4 py-3 min-w-[120px]">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.online}</p>
-                    <p className="mt-1 text-2xl font-bold text-green-500">{onlineCount}</p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/15">
-                    <Activity className="h-6 w-6 text-green-500" />
+            <div className="w-full xl:ml-auto xl:max-w-[820px]">
+              <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
+                      <p className="mt-1 text-lg font-semibold text-emerald-400">{machines.length}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
+                      <Construction className="h-4.5 w-4.5 text-emerald-400" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.13),rgba(245,140,55,0.04))] px-4 py-3 min-w-[120px]">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.cranes}</p>
-                    <p className="mt-1 text-2xl font-bold text-[var(--accent)]">{excavatorCount}</p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15">
-                    <HardHat className="h-6 w-6 text-[var(--accent)]" />
-                  </div>
-                </div>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.13),rgba(33,150,243,0.04))] px-4 py-3 min-w-[120px]">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.bulldozers}</p>
-                    <p className="mt-1 text-2xl font-bold text-blue-500">{bulldozerCount}</p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15">
-                    <Construction className="h-6 w-6 text-blue-500" />
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.10),rgba(76,175,80,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.online}</p>
+                      <p className="mt-1 text-lg font-semibold text-green-500">{onlineCount}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
+                      <Activity className="h-4.5 w-4.5 text-green-500" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.13),rgba(168,85,247,0.04))] px-4 py-3 min-w-[120px]">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{tt.graders}</p>
-                    <p className="mt-1 text-2xl font-bold text-purple-500">{graderCount}</p>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.10),rgba(245,140,55,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.cranes}</p>
+                      <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{excavatorCount}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                      <HardHat className="h-4.5 w-4.5 text-[var(--accent)]" />
+                    </div>
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/15">
-                    <Construction className="h-6 w-6 text-purple-500" />
+                </div>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.10),rgba(33,150,243,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.bulldozers}</p>
+                      <p className="mt-1 text-lg font-semibold text-blue-500">{bulldozerCount + graderCount}</p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                      <Construction className="h-4.5 w-4.5 text-blue-500" />
+                    </div>
                   </div>
                 </div>
               </div>

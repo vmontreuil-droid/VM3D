@@ -1016,6 +1016,7 @@ const fr: Dictionary = {
     dashboard: 'Tableau de bord',
     adminPortal: 'Portail admin',
     title: 'Gestion des chantiers',
+    titleDesc: 'Vue complète de vos chantiers, statut, téléversements et chiffre d’affaires.',
     sites: 'Chantiers',
     quote: 'Devis',
     active: 'Actifs',

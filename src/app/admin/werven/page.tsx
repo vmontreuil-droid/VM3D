@@ -277,6 +277,9 @@ export default async function AdminWervenPage() {
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   {tt.title}
                 </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  {tt.titleDesc}
+                </p>
               </div>
 
               <div className="w-full xl:ml-auto xl:max-w-[820px]">

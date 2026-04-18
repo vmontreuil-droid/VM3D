@@ -244,6 +244,9 @@ export default async function AdminCustomersPage() {
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   Klantenbeheer
                 </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  Volledig overzicht van al je klanten, contacten, werven en facturatiegegevens.
+                </p>
               </div>
 
               <div className="w-full xl:ml-auto xl:max-w-[820px]">

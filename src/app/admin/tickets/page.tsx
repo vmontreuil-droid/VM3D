@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, FolderOpen, PlusCircle, Ticket } from 'lucide-react'
+import { ArrowLeft, FolderOpen, PlusCircle, Ticket, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -273,65 +273,76 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-5 sm:px-5">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
             <div className="absolute inset-0 opacity-30">
               <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
             </div>
 
-            <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
-                <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  {tt.dashboard}
+                </Link>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
                   {tt.adminPortal}
                 </p>
-
-                <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                   {tt.tickets}
                 </h1>
-
-                <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
                   {tt.ticketsDesc}
                 </p>
-
-                <div className="mt-4 max-w-[260px]">
-                  <Link
-                    href="/admin"
-                    className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-                  >
-                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                          {tt.dashboard}
-                        </span>
-                        <span className="block text-[11px] leading-4 text-[var(--text-soft)]">
-                          {tt.backToAdmin}
-                        </span>
-                      </span>
-                    </div>
-                  </Link>
-                </div>
               </div>
 
-              <div className="w-full xl:ml-auto xl:max-w-[640px]">
-                <div className="grid w-full gap-2 sm:grid-cols-4">
-                  <div className="overflow-hidden rounded-xl border border-sky-500/30 bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
-                    <p className="mt-1 text-lg font-semibold text-sky-300">{safeTickets.length}</p>
+              <div className="w-full xl:ml-auto xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.total}</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{safeTickets.length}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                        <Ticket className="h-4.5 w-4.5 text-sky-400" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="overflow-hidden rounded-xl border border-amber-500/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.open}</p>
-                    <p className="mt-1 text-lg font-semibold text-amber-300">{openCount}</p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.open}</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{openCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <AlertTriangle className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="overflow-hidden rounded-xl border border-violet-500/30 bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.waitingCustomer}</p>
-                    <p className="mt-1 text-lg font-semibold text-violet-300">{waitingCount}</p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.08),rgba(168,85,247,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.waitingCustomer}</p>
+                        <p className="mt-1 text-lg font-semibold text-violet-400">{waitingCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
+                        <Clock className="h-4.5 w-4.5 text-violet-400" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="overflow-hidden rounded-xl border border-emerald-500/30 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.03))] px-3 py-2.5">
-                    <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.done}</p>
-                    <p className="mt-1 text-lg font-semibold text-emerald-300">{doneCount}</p>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.done}</p>
+                        <p className="mt-1 text-lg font-semibold text-emerald-400">{doneCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

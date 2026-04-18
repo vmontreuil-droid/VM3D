@@ -1055,6 +1055,7 @@ const nl = {
     dashboard: 'Dashboard',
     adminPortal: 'Adminportaal',
     title: 'Wervenbeheer',
+    titleDesc: 'Volledig overzicht van al je werven, status, uploads en omzet.',
     sites: 'Werven',
     quote: 'Offerte',
     active: 'Actief',
