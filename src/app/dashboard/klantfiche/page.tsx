@@ -55,7 +55,7 @@ export default async function DashboardCustomerProfilePage() {
     .join(', ')
 
   return (
-    <AppShell>
+    <AppShell isAdmin={false}>
       <div className="space-y-4">
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-4 sm:px-5">
