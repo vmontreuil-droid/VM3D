@@ -312,28 +312,20 @@ export default function Sidebar({
           href={item.href}
           onClick={handleNavClick}
           title={collapsed && !mobile ? item.label : undefined}
-          className={`group relative flex items-center overflow-hidden rounded-lg transition ${
+          className={`group relative flex items-center overflow-hidden rounded-xl border transition ${
             collapsed && !mobile
               ? 'justify-center px-3 py-3'
-              : 'gap-3 px-4 py-3'
+              : 'gap-3 px-4 py-2.5'
           } ${
             active
               ? item.color === 'green'
-                ? 'bg-[linear-gradient(90deg,rgba(16,185,129,0.16),rgba(16,185,129,0.03))] text-emerald-400 shadow-sm'
-                : item.label.includes('bewerken')
-                  ? 'bg-[linear-gradient(135deg,rgba(245,140,55,0.18),rgba(245,140,55,0.04))] text-[var(--accent)] shadow-sm'
-                  : 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
+                ? 'border-emerald-500/60 bg-[linear-gradient(90deg,rgba(16,185,129,0.22),rgba(16,185,129,0.06))] text-emerald-400 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_4px_12px_-6px_rgba(16,185,129,0.35)]'
+                : 'border-[var(--accent)]/60 bg-[linear-gradient(90deg,rgba(245,140,55,0.22),rgba(245,140,55,0.06))] text-[var(--accent)] shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_4px_12px_-6px_rgba(245,140,55,0.35)]'
               : item.color === 'green'
-                ? 'text-emerald-400/70 hover:bg-emerald-500/8 hover:text-emerald-400'
-                : 'text-[var(--text-soft)] hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]'
+                ? 'border-transparent text-emerald-400/70 hover:border-emerald-500/30 hover:bg-emerald-500/8 hover:text-emerald-400'
+                : 'border-transparent text-[var(--text-soft)] hover:border-[var(--border)] hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]'
           }`}
         >
-          {active && (
-            <span className={`absolute right-0 top-0 h-full w-[2px] rounded-l-full ${
-              item.color === 'green' ? 'bg-emerald-400' : 'bg-[var(--accent)]'
-            }`} />
-          )}
-
           <span
             className={`shrink-0 transition ${
               active

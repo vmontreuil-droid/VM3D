@@ -675,6 +675,22 @@ const nl = {
     sitesOverviewDesc: 'Sneller overzicht van je werven met status, prijs en bestandsaantallen.',
   },
 
+  onboarding: {
+    eyebrow: 'Klaar om te starten',
+    title: 'Welkom bij je MV3D.cloud portaal',
+    subtitle: 'Hier komen binnenkort al je werven, offertes en facturen samen. Kies hieronder een eerste stap om op gang te komen.',
+    stepQuoteTitle: 'Eerste offerte aanvragen',
+    stepQuoteBody: 'Beschrijf kort je project, wij bezorgen je een voorstel op maat.',
+    stepQuoteCta: 'Offerte aanvragen',
+    stepTicketTitle: 'Een vraag stellen',
+    stepTicketBody: 'Snel contact met ons team via een ticket — wij volgen het op.',
+    stepTicketCta: 'Ticket openen',
+    stepProfileTitle: 'Je klantfiche vervolledigen',
+    stepProfileBody: 'Voeg facturatiegegevens, logo en contactinfo toe voor vlotte dossiers.',
+    stepProfileCta: 'Klantfiche openen',
+    helper: 'Geen zorgen — alles blijft ook later bereikbaar via het menu links.',
+  },
+
   /* ── Admin search / sort ── */
   adminSearch: {
     searchPlaceholder: 'Zoek werf, locatie, status...',

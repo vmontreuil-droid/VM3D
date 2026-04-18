@@ -27,6 +27,9 @@ import {
   FileText,
   FilePlus,
   Construction,
+  Sparkles,
+  UserRound,
+  ArrowRight,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -427,6 +430,83 @@ export default async function DashboardPage() {
           <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             {t.adminCards.siteLoadError}
           </div>
+        )}
+
+        {!isAdmin && totalProjects === 0 && (
+          <section className="relative overflow-hidden rounded-xl border border-[var(--accent)]/30 bg-[linear-gradient(135deg,rgba(247,148,29,0.12),rgba(247,148,29,0.02))] px-4 py-5 sm:px-6 sm:py-6 shadow-sm">
+            <div className="absolute inset-0 pointer-events-none opacity-60 bg-[radial-gradient(circle_at_top_right,rgba(247,148,29,0.15),transparent_45%)]" />
+            <div className="relative">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                    {t.onboarding.eyebrow}
+                  </p>
+                  <h2 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                    {t.onboarding.title}
+                  </h2>
+                  <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                    {t.onboarding.subtitle}
+                  </p>
+                </div>
+                <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] sm:flex">
+                  <Sparkles className="h-6 w-6" />
+                </span>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                {[
+                  {
+                    href: '/dashboard/offerte',
+                    icon: FilePlus,
+                    title: t.onboarding.stepQuoteTitle,
+                    body: t.onboarding.stepQuoteBody,
+                    cta: t.onboarding.stepQuoteCta,
+                  },
+                  {
+                    href: '/dashboard/tickets',
+                    icon: Ticket,
+                    title: t.onboarding.stepTicketTitle,
+                    body: t.onboarding.stepTicketBody,
+                    cta: t.onboarding.stepTicketCta,
+                  },
+                  {
+                    href: '/dashboard/klantfiche',
+                    icon: UserRound,
+                    title: t.onboarding.stepProfileTitle,
+                    body: t.onboarding.stepProfileBody,
+                    cta: t.onboarding.stepProfileCta,
+                  },
+                ].map((step) => {
+                  const Icon = step.icon
+                  return (
+                    <Link
+                      key={step.href}
+                      href={step.href}
+                      className="group flex flex-col rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 transition hover:border-[var(--accent)]/60 hover:bg-[var(--bg-card-2)]"
+                    >
+                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">
+                        {step.title}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-[var(--text-soft)]">
+                        {step.body}
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--accent)] group-hover:gap-2 transition-all">
+                        {step.cta}
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+
+              <p className="mt-4 text-xs text-[var(--text-muted)]">
+                {t.onboarding.helper}
+              </p>
+            </div>
+          </section>
         )}
 
         <ProjectList

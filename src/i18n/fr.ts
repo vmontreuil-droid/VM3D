@@ -656,6 +656,22 @@ const fr: Dictionary = {
     sitesOverviewDesc: 'Aperçu rapide de vos chantiers avec statut, prix et nombres de fichiers.',
   },
 
+  onboarding: {
+    eyebrow: 'Prêt à démarrer',
+    title: 'Bienvenue sur votre espace MV3D.cloud',
+    subtitle: 'Vos chantiers, devis et factures seront bientôt regroupés ici. Choisissez une première étape ci-dessous pour commencer.',
+    stepQuoteTitle: 'Demander un premier devis',
+    stepQuoteBody: 'Décrivez brièvement votre projet, nous vous envoyons une proposition sur mesure.',
+    stepQuoteCta: 'Demander un devis',
+    stepTicketTitle: 'Poser une question',
+    stepTicketBody: 'Contactez notre équipe rapidement via un ticket — nous faisons le suivi.',
+    stepTicketCta: 'Ouvrir un ticket',
+    stepProfileTitle: 'Compléter votre fiche client',
+    stepProfileBody: 'Ajoutez vos coordonnées de facturation, logo et contact pour des dossiers fluides.',
+    stepProfileCta: 'Ouvrir ma fiche',
+    helper: 'Pas de souci — tout reste accessible plus tard depuis le menu de gauche.',
+  },
+
   adminSearch: {
     searchPlaceholder: 'Rechercher chantier, lieu, statut...',
     sortName: 'Trier par nom',

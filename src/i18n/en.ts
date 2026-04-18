@@ -656,6 +656,22 @@ const en: Dictionary = {
     sitesOverviewDesc: 'Quick overview of your projects with status, price and file counts.',
   },
 
+  onboarding: {
+    eyebrow: 'Ready to get started',
+    title: 'Welcome to your MV3D.cloud portal',
+    subtitle: 'Your projects, quotes and invoices will all land here. Pick a first step below to get going.',
+    stepQuoteTitle: 'Request your first quote',
+    stepQuoteBody: 'Describe your project briefly and we\u2019ll send a tailored proposal.',
+    stepQuoteCta: 'Request a quote',
+    stepTicketTitle: 'Ask a question',
+    stepTicketBody: 'Reach our team quickly via a ticket — we\u2019ll follow up.',
+    stepTicketCta: 'Open a ticket',
+    stepProfileTitle: 'Complete your client profile',
+    stepProfileBody: 'Add billing info, logo and contact details for smoother dossiers.',
+    stepProfileCta: 'Open my profile',
+    helper: 'No rush — everything stays reachable later via the left menu.',
+  },
+
   adminSearch: {
     searchPlaceholder: 'Search project, location, status...',
     sortName: 'Sort by name',
