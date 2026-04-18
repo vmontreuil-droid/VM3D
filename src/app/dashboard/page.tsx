@@ -281,7 +281,7 @@ export default async function DashboardPage() {
       ]
 
   return (
-    <AppShell isAdmin={isAdmin}>
+    <AppShell isAdmin={false}>
       <div className="space-y-3 sm:space-y-4 lg:space-y-4">
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">

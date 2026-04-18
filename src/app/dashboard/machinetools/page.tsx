@@ -34,7 +34,7 @@ export default async function MachinetoolsPage() {
     .order('name')
 
   return (
-    <AppShell isAdmin={isAdmin}>
+    <AppShell isAdmin={false}>
       <div className="space-y-4">
         {/* Header */}
         <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
