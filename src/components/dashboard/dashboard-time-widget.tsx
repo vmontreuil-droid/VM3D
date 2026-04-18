@@ -53,7 +53,7 @@ function formatDate(iso: string) {
     ' ' + d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })
 }
 
-export default function DashboardTimeWidget() {
+export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const [entries, setEntries] = useState<TimeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -200,15 +200,22 @@ export default function DashboardTimeWidget() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 border-b border-[var(--border-soft)] px-3 py-2">
-        <Clock className="h-3.5 w-3.5 text-emerald-400" />
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Tijdregistratie</h3>
-        {todaySeconds > 0 && (
-          <span className="ml-auto text-[10px] font-medium text-emerald-400">
-            Vandaag: {formatDuration(todaySeconds)}
-          </span>
-        )}
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center gap-2 border-b border-[var(--border-soft)] px-3 py-2">
+          <Clock className="h-3.5 w-3.5 text-emerald-400" />
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Tijdregistratie</h3>
+          {todaySeconds > 0 && (
+            <span className="ml-auto text-[10px] font-medium text-emerald-400">
+              Vandaag: {formatDuration(todaySeconds)}
+            </span>
+          )}
+        </div>
+      )}
+      {hideHeader && todaySeconds > 0 && (
+        <div className="border-b border-[var(--border-soft)] px-3 py-1 text-right text-[10px] font-medium text-emerald-400">
+          Vandaag: {formatDuration(todaySeconds)}
+        </div>
+      )}
 
       {/* Running timer */}
       {runningEntry && (

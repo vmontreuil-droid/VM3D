@@ -38,7 +38,7 @@ const kindClass: Record<Kind, string> = {
   machine: 'bg-orange-500/15 text-orange-400',
 }
 
-export default function DashboardNotesWidget() {
+export default function DashboardNotesWidget({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const { t, locale } = useT()
   const [notes, setNotes] = useState<Note[]>([])
   const [draft, setDraft] = useState('')
@@ -157,11 +157,13 @@ export default function DashboardNotesWidget() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 border-b border-[var(--border-soft)] px-3 py-2">
-        <StickyNote className="h-3.5 w-3.5 text-amber-400" />
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.notesWidget.title}</h3>
-        <span className="ml-auto text-[10px] text-[var(--text-muted)]">{notes.length}</span>
-      </div>
+      {!hideHeader && (
+        <div className="flex items-center gap-2 border-b border-[var(--border-soft)] px-3 py-2">
+          <StickyNote className="h-3.5 w-3.5 text-amber-400" />
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.notesWidget.title}</h3>
+          <span className="ml-auto text-[10px] text-[var(--text-muted)]">{notes.length}</span>
+        </div>
+      )}
 
       {/* Add note */}
       <div className="space-y-1.5 border-b border-[var(--border-soft)] px-3 py-2">

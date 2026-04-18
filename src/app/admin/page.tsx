@@ -20,7 +20,7 @@ import AppShell from '@/components/app-shell'
 import AdminSearchPanel from '@/app/admin/admin-search-panel'
 import AdminUploadPanel from '@/app/admin/admin-upload-panel'
 import DashboardMap from '@/components/dashboard/dashboard-map'
-import DashboardNotesWidget from '@/components/dashboard/dashboard-notes-widget'
+import DashboardNotesTimeWidget from '@/components/dashboard/dashboard-notes-time-widget'
 import DashboardTimeWidget from '@/components/dashboard/dashboard-time-widget'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
@@ -726,13 +726,8 @@ export default async function AdminPage({ searchParams }: Props) {
         <div className="grid gap-3 xl:grid-cols-[1fr_1fr]">
           <AdminUploadPanel projects={projectsWithProfiles} />
 
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1 xl:grid-rows-2">
-            <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <DashboardNotesWidget />
-            </div>
-            <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <DashboardTimeWidget />
-            </div>
+          <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+            <DashboardNotesTimeWidget />
           </div>
         </div>
       </div>
