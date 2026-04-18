@@ -110,7 +110,7 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                 Adminportaal
               </p>
               <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                {tt.allMachines}
+                {tt.machineManagement}
               </h1>
               <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
                 {tt.overviewDesc}
