@@ -367,7 +367,7 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`relative flex h-dvh flex-col overflow-hidden border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
+      className={`relative flex h-dvh flex-col border-r border-[var(--border-soft)] bg-[var(--bg-main)] ${
         mobile ? 'w-[280px]' : collapsed ? 'w-[82px]' : 'w-[280px]'
       }`}
     >
