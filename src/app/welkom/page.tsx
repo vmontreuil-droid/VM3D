@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
-import { Lock, CheckCircle, Eye, EyeOff, Sparkles, ShieldCheck, MapPin } from 'lucide-react'
+import { Lock, CheckCircle, Eye, EyeOff, Sparkles, ShieldCheck, MapPin, Construction } from 'lucide-react'
 
 type Copy = {
   eyebrow: string
   title: (name: string) => string
   subtitle: string
-  steps: { icon: 'shield' | 'sparkles' | 'pin'; title: string; body: string }[]
+  steps: { icon: 'shield' | 'sparkles' | 'pin' | 'machine'; title: string; body: string }[]
   passwordLabel: string
   passwordPlaceholder: string
   confirmLabel: string
@@ -34,6 +34,7 @@ const COPY_NL: Copy = {
   steps: [
     { icon: 'shield', title: 'Veilig starten', body: 'Minstens 8 tekens. Je wachtwoord is alleen van jou.' },
     { icon: 'sparkles', title: 'Jouw projecten', body: 'Werven, offertes, facturen en tickets op één plek.' },
+    { icon: 'machine', title: 'Jouw machines', body: 'Live status, GPS en werfkoppeling van al je machines.' },
     { icon: 'pin', title: 'Altijd bereikbaar', body: 'Toegang via mv3d.cloud, op desktop, tablet en gsm.' },
   ],
   passwordLabel: 'Nieuw wachtwoord',
@@ -59,6 +60,7 @@ const COPY_FR: Copy = {
   steps: [
     { icon: 'shield', title: 'Démarrage sécurisé', body: 'Minimum 8 caractères. Votre mot de passe reste privé.' },
     { icon: 'sparkles', title: 'Vos projets', body: 'Chantiers, devis, factures et tickets au même endroit.' },
+    { icon: 'machine', title: 'Vos machines', body: 'Statut en direct, GPS et liaison chantier pour chaque machine.' },
     { icon: 'pin', title: 'Toujours accessible', body: 'Accès via mv3d.cloud, sur ordinateur, tablette et mobile.' },
   ],
   passwordLabel: 'Nouveau mot de passe',
@@ -165,9 +167,10 @@ export default function WelkomPage() {
     }
   }
 
-  const iconFor = (key: 'shield' | 'sparkles' | 'pin') => {
+  const iconFor = (key: 'shield' | 'sparkles' | 'pin' | 'machine') => {
     if (key === 'shield') return <ShieldCheck className="h-4 w-4 text-emerald-400" />
     if (key === 'sparkles') return <Sparkles className="h-4 w-4 text-[var(--accent)]" />
+    if (key === 'machine') return <Construction className="h-4 w-4 text-amber-400" />
     return <MapPin className="h-4 w-4 text-sky-400" />
   }
 
