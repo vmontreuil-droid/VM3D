@@ -118,13 +118,14 @@ export default function MachinesMapInner({ points, height = 320 }: Props) {
   function FitBounds() {
     const map = useMap()
     useEffect(() => {
+      map.invalidateSize()
       if (safe.length === 1) {
-        map.setView([safe[0].latitude, safe[0].longitude], 13)
+        map.setView([safe[0].latitude, safe[0].longitude], 15)
       } else {
         const L = require('leaflet')
         map.fitBounds(
           L.latLngBounds(safe.map((p) => [p.latitude, p.longitude])),
-          { padding: [40, 40], maxZoom: 14 },
+          { padding: [8, 8], maxZoom: 14 },
         )
       }
     }, [map])

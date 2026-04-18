@@ -100,14 +100,14 @@ function FitBounds({ points }: { points: [number, number][] }) {
       if (points.length === 1) {
         const [[lat, lng]] = points
         map.fitBounds(
-          [[lat - 0.01, lng - 0.01], [lat + 0.01, lng + 0.01]],
-          { padding: [24, 24], maxZoom: 14, animate: true },
+          [[lat - 0.005, lng - 0.005], [lat + 0.005, lng + 0.005]],
+          { padding: [8, 8], maxZoom: 15, animate: true },
         )
         return
       }
 
-      const bounds = L.latLngBounds(points).pad(0.08)
-      map.fitBounds(bounds, { padding: [24, 24], maxZoom: 10, animate: true })
+      const bounds = L.latLngBounds(points).pad(0.02)
+      map.fitBounds(bounds, { padding: [8, 8], maxZoom: 14, animate: true })
     }, 120)
 
     return () => window.clearTimeout(timer)

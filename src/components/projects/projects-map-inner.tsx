@@ -129,12 +129,12 @@ export default function ProjectsMapInner({
 
           map.fitBounds(
             [
-              [location.latitude - 0.01, location.longitude - 0.01],
-              [location.latitude + 0.01, location.longitude + 0.01],
+              [location.latitude - 0.005, location.longitude - 0.005],
+              [location.latitude + 0.005, location.longitude + 0.005],
             ],
             {
-              padding: [24, 24],
-              maxZoom: 14,
+              padding: [8, 8],
+              maxZoom: 15,
               animate: true,
             }
           )
@@ -147,8 +147,8 @@ export default function ProjectsMapInner({
             location.longitude,
           ] as [number, number]),
           {
-            padding: [24, 24],
-            maxZoom: 10,
+            padding: [8, 8],
+            maxZoom: 14,
             animate: true,
           }
         )
