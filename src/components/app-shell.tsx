@@ -98,7 +98,7 @@ export default function AppShell({ children, isAdmin = false }: Props) {
                 </button>
 
                 <div className="min-w-0 flex-1 flex justify-center">
-                  <Logo size="sm" variant="dark" />
+                  <Logo size="sm" variant="adaptive" />
                 </div>
 
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] text-xs font-bold text-[var(--text-main)]">
