@@ -85,7 +85,13 @@ export default function Sidebar({
         const customersRes = await fetch('/api/admin/customers', { method: 'GET', cache: 'no-store' });
         if (customersRes.ok) {
           const payload = await customersRes.json();
-          const count = Number(payload?.count);
+          const count = Number(
+            typeof payload?.count === 'number'
+              ? payload.count
+              : Array.isArray(payload?.customers)
+                ? payload.customers.length
+                : NaN,
+          );
           if (active && Number.isFinite(count)) setCustomerCount(count);
         }
         // Projects
