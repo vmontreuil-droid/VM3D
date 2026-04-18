@@ -860,6 +860,7 @@ const en: Dictionary = {
     customer: 'Customer',
     sitesLayer: 'Sites',
     customersLayer: 'Customers',
+    machinesLayer: 'Machines',
     loadingMap: 'Loading map...',
     noLocations: 'No locations available',
     noLocationsDot: 'No locations available.',

@@ -23,15 +23,26 @@ export type MapCustomer = {
   project_count?: number
 }
 
+export type MapMachine = {
+  id: number
+  name: string
+  brand: string
+  model: string
+  latitude?: number | null
+  longitude?: number | null
+  is_online?: boolean
+}
+
 type Props = {
   projects: MapProject[]
   customers: MapCustomer[]
+  machines?: MapMachine[]
   height?: number | string
 }
 
 const MapInner = dynamic(() => import('./dashboard-map-inner'), { ssr: false })
 
-export default function DashboardMap({ projects, customers, height = '100%' }: Props) {
+export default function DashboardMap({ projects, customers, machines = [], height = '100%' }: Props) {
   const resolvedHeight = typeof height === 'number' ? `${height}px` : height
-  return <MapInner projects={projects} customers={customers} height={resolvedHeight} />
+  return <MapInner projects={projects} customers={customers} machines={machines} height={resolvedHeight} />
 }

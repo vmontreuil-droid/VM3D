@@ -324,6 +324,21 @@ export default async function AdminPage({ searchParams }: Props) {
     .select('id', { count: 'exact', head: true })
   const machinesCount = machinesCountRaw ?? 0
 
+  const { data: machinesWithLocation } = await adminSupabase
+    .from('machines')
+    .select('id, name, brand, model, latitude, longitude, is_online')
+    .not('latitude', 'is', null)
+    .not('longitude', 'is', null)
+  const machinesForMap = (machinesWithLocation ?? []).map((m: any) => ({
+    id: m.id,
+    name: m.name,
+    brand: m.brand,
+    model: m.model,
+    latitude: m.latitude,
+    longitude: m.longitude,
+    is_online: !!m.is_online,
+  }))
+
   const subscriptionCount = 0
   const ticketMailConfig = getTicketNotificationConfig()
   const ticketMailEnabled = ticketMailConfig.enabled
@@ -518,7 +533,7 @@ export default async function AdminPage({ searchParams }: Props) {
               </div>
 
               <div className="min-h-[250px] flex-1 sm:min-h-[280px] xl:min-h-0">
-                <DashboardMap projects={projectsWithProfiles} customers={customersWithMeta} height="100%" />
+                <DashboardMap projects={projectsWithProfiles} customers={customersWithMeta} machines={machinesForMap} height="100%" />
               </div>
             </div>
 

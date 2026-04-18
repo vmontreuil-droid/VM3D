@@ -895,6 +895,7 @@ const nl = {
     customer: 'Klant',
     sitesLayer: 'Werven',
     customersLayer: 'Klanten',
+    machinesLayer: 'Machines',
     loadingMap: 'Kaart laden...',
     noLocations: 'Geen locaties beschikbaar',
     noLocationsDot: 'Geen locaties beschikbaar.',

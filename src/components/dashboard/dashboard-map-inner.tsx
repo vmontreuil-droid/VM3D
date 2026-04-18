@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { FolderOpen, Users, Construction } from 'lucide-react'
 import {
   MapContainer,
   Marker,
@@ -10,7 +11,7 @@ import {
   useMap,
 } from 'react-leaflet'
 import L, { Marker as LeafletMarker } from 'leaflet'
-import type { MapProject, MapCustomer } from './dashboard-map'
+import type { MapProject, MapCustomer, MapMachine } from './dashboard-map'
 import { useT } from '@/i18n/context'
 
 /* ── status helpers (projects) ── */
@@ -68,6 +69,17 @@ function createCustomerIcon() {
   return L.divIcon({
     className: 'custom-project-marker',
     html: `<div style="width:18px;height:18px;border-radius:9999px;background:#a855f7;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.25)"></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [20, -200],
+  })
+}
+
+function createMachineIcon(online: boolean) {
+  const color = online ? '#22c55e' : '#f97316'
+  return L.divIcon({
+    className: 'custom-project-marker',
+    html: `<div style="width:18px;height:18px;border-radius:9999px;background:${color};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.25)"></div>`,
     iconSize: [18, 18],
     iconAnchor: [9, 9],
     popupAnchor: [20, -200],
@@ -174,15 +186,44 @@ function CustomerMarker({ customer, t }: { customer: MapCustomer; t: ReturnType<
 
 /* ── main component ── */
 
-type Layer = 'werven' | 'klanten'
+type Layer = 'werven' | 'klanten' | 'machines'
+
+function MachineMarker({ machine, t }: { machine: MapMachine; t: ReturnType<typeof useT>['t'] }) {
+  const ref = useRef<LeafletMarker | null>(null)
+  const icon = useMemo(() => createMachineIcon(!!machine.is_online), [machine.is_online])
+  return (
+    <Marker
+      position={[Number(machine.latitude), Number(machine.longitude)]}
+      icon={icon}
+      ref={ref}
+      eventHandlers={{
+        click: () => ref.current?.openPopup(),
+        popupopen: () => ref.current?.getElement()?.classList.add('custom-project-marker--active'),
+        popupclose: () => ref.current?.getElement()?.classList.remove('custom-project-marker--active'),
+      }}
+    >
+      <Popup autoPan className="project-popup">
+        <div className="project-popup-inner">
+          <p className="project-popup-title">{machine.brand} {machine.model}</p>
+          <p className="project-popup-address">{machine.name}</p>
+          <div className="project-popup-actions">
+            <Link href={`/admin/machines/${machine.id}`} className="project-popup-button">{t.adminMachineDetail.edit}</Link>
+          </div>
+        </div>
+      </Popup>
+    </Marker>
+  )
+}
 
 export default function DashboardMapInner({
   projects,
   customers,
+  machines = [],
   height = '100%',
 }: {
   projects: MapProject[]
   customers: MapCustomer[]
+  machines?: MapMachine[]
   height?: string
 }) {
   const [layer, setLayer] = useState<Layer>('werven')
@@ -196,33 +237,39 @@ export default function DashboardMapInner({
     () => customers.filter((c) => c.latitude != null && c.longitude != null),
     [customers],
   )
+  const validMachines = useMemo(
+    () => machines.filter((m) => m.latitude != null && m.longitude != null),
+    [machines],
+  )
 
   const points: [number, number][] = useMemo(() => {
-    const src = layer === 'werven' ? validProjects : validCustomers
+    const src = layer === 'werven' ? validProjects : layer === 'klanten' ? validCustomers : validMachines
     return src.map((item) => [Number(item.latitude), Number(item.longitude)])
-  }, [layer, validProjects, validCustomers])
+  }, [layer, validProjects, validCustomers, validMachines])
 
   const center: [number, number] = points.length > 0 ? points[0] : [50.8503, 4.3517]
 
   const wCount = validProjects.length
   const cCount = validCustomers.length
+  const mCount = validMachines.length
 
   return (
-    <div className="flex h-full flex-col" style={{ height }}>
-      {/* Toggle tabs */}
-      <div className="flex items-center gap-1 border-b border-[var(--border-soft)] px-4 py-2">
+    <div className="relative flex h-full flex-col" style={{ height }}>
+      {/* Toggle tabs — floating top-right overlay */}
+      <div className="pointer-events-none absolute right-3 top-3 z-[500] flex flex-wrap items-center justify-end gap-1.5">
         <button
           type="button"
           onClick={() => setLayer('werven')}
-          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+          className={`pointer-events-auto inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold shadow-sm backdrop-blur transition ${
             layer === 'werven'
-              ? 'bg-[var(--accent)]/15 text-[var(--accent)]'
-              : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
+              ? 'border-[var(--accent)]/40 bg-[var(--accent)]/15 text-[var(--accent)]'
+              : 'border-[var(--border-soft)] bg-[var(--bg-card)]/85 text-[var(--text-soft)] hover:text-[var(--text-main)]'
           }`}
         >
+          <FolderOpen className="h-3.5 w-3.5" />
           {t.mapPopup.sitesLayer}
           <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
-            layer === 'werven' ? 'bg-[var(--accent)]/20 text-[var(--accent)]' : 'bg-white/5 text-[var(--text-muted)]'
+            layer === 'werven' ? 'bg-[var(--accent)]/25 text-[var(--accent)]' : 'bg-white/5 text-[var(--text-muted)]'
           }`}>
             {wCount}
           </span>
@@ -230,17 +277,35 @@ export default function DashboardMapInner({
         <button
           type="button"
           onClick={() => setLayer('klanten')}
-          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+          className={`pointer-events-auto inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold shadow-sm backdrop-blur transition ${
             layer === 'klanten'
-              ? 'bg-purple-500/15 text-purple-400'
-              : 'text-[var(--text-soft)] hover:text-[var(--text-main)]'
+              ? 'border-purple-400/40 bg-purple-500/15 text-purple-400'
+              : 'border-[var(--border-soft)] bg-[var(--bg-card)]/85 text-[var(--text-soft)] hover:text-[var(--text-main)]'
           }`}
         >
+          <Users className="h-3.5 w-3.5" />
           {t.mapPopup.customersLayer}
           <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
-            layer === 'klanten' ? 'bg-purple-500/20 text-purple-400' : 'bg-white/5 text-[var(--text-muted)]'
+            layer === 'klanten' ? 'bg-purple-500/25 text-purple-400' : 'bg-white/5 text-[var(--text-muted)]'
           }`}>
             {cCount}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setLayer('machines')}
+          className={`pointer-events-auto inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold shadow-sm backdrop-blur transition ${
+            layer === 'machines'
+              ? 'border-orange-400/40 bg-orange-500/15 text-orange-400'
+              : 'border-[var(--border-soft)] bg-[var(--bg-card)]/85 text-[var(--text-soft)] hover:text-[var(--text-main)]'
+          }`}
+        >
+          <Construction className="h-3.5 w-3.5" />
+          {t.mapPopup.machinesLayer}
+          <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none ${
+            layer === 'machines' ? 'bg-orange-500/25 text-orange-400' : 'bg-white/5 text-[var(--text-muted)]'
+          }`}>
+            {mCount}
           </span>
         </button>
       </div>
@@ -258,6 +323,9 @@ export default function DashboardMapInner({
           ))}
           {layer === 'klanten' && validCustomers.map((c) => (
             <CustomerMarker key={c.id} customer={c} t={t} />
+          ))}
+          {layer === 'machines' && validMachines.map((m) => (
+            <MachineMarker key={m.id} machine={m} t={t} />
           ))}
         </MapContainer>
       </div>

@@ -860,6 +860,7 @@ const fr: Dictionary = {
     customer: 'Client',
     sitesLayer: 'Chantiers',
     customersLayer: 'Clients',
+    machinesLayer: 'Machines',
     loadingMap: 'Chargement de la carte...',
     noLocations: 'Aucun emplacement disponible',
     noLocationsDot: 'Aucun emplacement disponible.',
