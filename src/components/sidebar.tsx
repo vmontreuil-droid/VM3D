@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -59,6 +59,8 @@ export default function Sidebar({
   const [facturenCount, setFacturenCount] = useState<number | null>(null)
   const [customerTicketCount, setCustomerTicketCount] = useState<number | null>(null)
   const [machineCount, setMachineCount] = useState<number | null>(null)
+  const [notesCount, setNotesCount] = useState<number | null>(null)
+  const [timeEntriesCount, setTimeEntriesCount] = useState<number | null>(null)
 
 
   useEffect(() => {
@@ -121,6 +123,20 @@ export default function Sidebar({
           const payload = await machinesRes.json();
           const count = Number(payload?.count);
           if (active && Number.isFinite(count)) setMachineCount(count);
+        }
+        // Notes
+        const notesRes = await fetch('/api/admin/notes/count', { method: 'GET', cache: 'no-store' });
+        if (notesRes.ok) {
+          const payload = await notesRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setNotesCount(count);
+        }
+        // Time entries
+        const timeRes = await fetch('/api/admin/time-entries/count', { method: 'GET', cache: 'no-store' });
+        if (timeRes.ok) {
+          const payload = await timeRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setTimeEntriesCount(count);
         }
       } catch (error) {
         console.error('sidebar count fetch error:', error);
@@ -255,6 +271,20 @@ export default function Sidebar({
       match: (pathname) => pathname === '/admin/machines' || pathname.startsWith('/admin/machines/'),
       icon: <Construction className="h-[17px] w-[17px]" />,
       badge: machineCount ?? undefined,
+    },
+    {
+      label: 'Tijdsregistratie',
+      href: '/admin/tijdsregistratie',
+      match: (pathname) => pathname === '/admin/tijdsregistratie',
+      icon: <Clock className="h-[17px] w-[17px]" />,
+      badge: timeEntriesCount ?? undefined,
+    },
+    {
+      label: 'Notities',
+      href: '/admin/notities',
+      match: (pathname) => pathname === '/admin/notities',
+      icon: <StickyNote className="h-[17px] w-[17px]" />,
+      badge: notesCount ?? undefined,
     },
     {
       label: t.platform.statistics,

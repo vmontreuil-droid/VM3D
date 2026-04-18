@@ -13,6 +13,8 @@ import {
   Eye,
   Receipt,
   Construction,
+  StickyNote,
+  Clock,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -323,6 +325,16 @@ export default async function AdminPage({ searchParams }: Props) {
     .from('machines')
     .select('id', { count: 'exact', head: true })
   const machinesCount = machinesCountRaw ?? 0
+
+  const { count: notesCountRaw } = await adminSupabase
+    .from('admin_notes')
+    .select('id', { count: 'exact', head: true })
+  const notesCount = notesCountRaw ?? 0
+
+  const { count: timeEntriesCountRaw } = await adminSupabase
+    .from('time_entries')
+    .select('id', { count: 'exact', head: true })
+  const timeEntriesCount = timeEntriesCountRaw ?? 0
 
   const { data: machinesWithLocation } = await adminSupabase
     .from('machines')
@@ -699,6 +711,52 @@ export default async function AdminPage({ searchParams }: Props) {
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
                         Beheer tablets, GPS en werven per machine.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/tijdsregistratie"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-emerald-400/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-emerald-400/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-emerald-400 min-w-[1.8em] h-[1.6em] leading-none">
+                    {timeEntriesCount}
+                  </span>
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-400/12 text-emerald-400">
+                      <Clock className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Tijdsregistratie
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Start, stop en log uren per klant of werf.
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/notities"
+                  className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-amber-400/50 hover:bg-[var(--bg-card)]/80"
+                >
+                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-amber-400/80" />
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-amber-400/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-amber-400 min-w-[1.8em] h-[1.6em] leading-none">
+                    {notesCount}
+                  </span>
+                  <div className="flex items-start gap-2.5 pr-2">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400/12 text-amber-400">
+                      <StickyNote className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+                        Notities
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
+                        Interne memo&apos;s per klant, werf of machine.
                       </span>
                     </span>
                   </div>
