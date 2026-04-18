@@ -906,6 +906,13 @@ const nl = {
     title: 'Notities',
     newNotePlaceholder: 'Nieuwe notitie...',
     noNotes: 'Nog geen notities.',
+    linkLabel: 'Koppel aan',
+    linkNone: 'Geen',
+    linkCustomer: 'Klant',
+    linkProject: 'Werf',
+    linkMachine: 'Machine',
+    linkSelectPlaceholder: 'Kies...',
+    linkSearch: 'Zoeken...',
   },
 
   /* ── Customer logo upload ── */

@@ -870,6 +870,13 @@ const fr: Dictionary = {
     title: 'Notes',
     newNotePlaceholder: 'Nouvelle note...',
     noNotes: 'Aucune note.',
+    linkLabel: 'Lier à',
+    linkNone: 'Aucun',
+    linkCustomer: 'Client',
+    linkProject: 'Chantier',
+    linkMachine: 'Machine',
+    linkSelectPlaceholder: 'Choisir...',
+    linkSearch: 'Rechercher...',
   },
 
   logoUpload: {
