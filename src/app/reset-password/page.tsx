@@ -27,9 +27,9 @@ export default function ResetPasswordPage() {
     const token = searchParams.get('token')
     const type = searchParams.get('type')
     if (token && type === 'recovery') {
-      supabase.auth.exchangeCodeForSession({ authCode: token }).then(({ error }) => {
+      supabase.auth.exchangeCodeForSession(token).then(({ error }) => {
         if (error) {
-          setError(t.resetPassword.invalidLink || 'Link ongeldig of verlopen.')
+          setError('Link ongeldig of verlopen.')
         }
         setSessionChecked(true)
       })
