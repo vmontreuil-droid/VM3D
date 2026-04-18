@@ -183,12 +183,6 @@ export default function Sidebar({
       ]
     : [
         {
-          label: t.platform.home,
-          href: '/',
-          match: (pathname) => pathname === '/',
-          icon: <Home className="h-[17px] w-[17px]" />,
-        },
-        {
           label: t.platform.dashboard,
           href: '/dashboard',
           match: (pathname) => pathname === '/dashboard',
