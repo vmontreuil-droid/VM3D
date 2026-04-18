@@ -419,15 +419,7 @@ export default function Sidebar({
           }`}
         >
           <div className="flex min-w-0 items-center gap-3 overflow-hidden">
-            <Logo size={collapsed && !mobile ? 'sm' : 'md'} variant="adaptive" showText={!(collapsed && !mobile)} />
-
-            {!collapsed && (
-              <div className="min-w-0">
-                <p className="truncate text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                  {isAdmin ? t.platform.adminPortal.toUpperCase() : t.platform.clientPortal.toUpperCase()}
-                </p>
-              </div>
-            )}
+            <Logo size={collapsed && !mobile ? 'sm' : 'lg'} variant="adaptive" showText={!(collapsed && !mobile)} />
           </div>
 
           {mobile && (

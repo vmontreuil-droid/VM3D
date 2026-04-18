@@ -356,7 +356,7 @@ const en: Dictionary = {
   platform: {
     adminPortal: 'Admin portal',
     clientPortal: 'Client portal',
-    securedPortal: 'Secured portal',
+    securedPortal: 'Secured',
     homepage: 'Homepage',
     general: 'General',
     home: 'Home',

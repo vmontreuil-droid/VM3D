@@ -356,7 +356,7 @@ const nl = {
   platform: {
     adminPortal: 'Adminportaal',
     clientPortal: 'Klantenportaal',
-    securedPortal: 'Beveiligd portaal',
+    securedPortal: 'Beveiligd',
     homepage: 'Startpagina',
     general: 'Algemeen',
     home: 'Home',
