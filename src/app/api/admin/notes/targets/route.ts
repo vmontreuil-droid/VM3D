@@ -16,8 +16,8 @@ export async function GET() {
     const [customersRes, projectsRes, machinesRes] = await Promise.all([
       adminSupabase
         .from('profiles')
-        .select('id, company_name, full_name, email')
-        .eq('role', 'customer')
+        .select('id, company_name, full_name, email, role')
+        .neq('role', 'admin')
         .order('company_name', { ascending: true, nullsFirst: false })
         .limit(500),
       adminSupabase
