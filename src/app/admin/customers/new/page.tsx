@@ -1,10 +1,26 @@
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import { ArrowLeft, PlusCircle, Users } from 'lucide-react'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CustomerForm from './customer-form'
+
+function resolveSiteUrl(headerList: Headers) {
+  const envUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
+  if (envUrl) return envUrl.replace(/\/$/, '')
+
+  const forwardedProto = headerList.get('x-forwarded-proto') || 'https'
+  const forwardedHost = headerList.get('x-forwarded-host') || headerList.get('host')
+  if (forwardedHost && !/localhost|127\.0\.0\.1/i.test(forwardedHost)) {
+    return `${forwardedProto}://${forwardedHost}`
+  }
+  return 'https://mv3d.cloud'
+}
 
 async function createCustomer(formData: FormData) {
   'use server'
@@ -203,31 +219,43 @@ async function createCustomer(formData: FormData) {
   }
 
   if (sendInvite && passwordMode !== 'manual') {
-    const baseSiteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      process.env.SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
-    const redirectTo = baseSiteUrl
-      ? `${baseSiteUrl.replace(/\/$/, '')}/auth/callback?next=/reset-password`
-      : undefined
+    const headerList = await headers()
+    const siteUrl = resolveSiteUrl(headerList)
+    const redirectTo = `${siteUrl}/auth/callback?next=/welkom`
 
-    const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(
+    const { error: inviteError } = await adminSupabase.auth.admin.inviteUserByEmail(
       email,
-      redirectTo ? { redirectTo } : undefined
+      {
+        redirectTo,
+        data: {
+          full_name: fullName || null,
+          company_name: companyName || null,
+        },
+      }
     )
 
-    if (resetError) {
-      console.error('resetError:', resetError)
-      const isRateLimited =
-        typeof resetError.message === 'string' &&
-        /rate limit|too many requests/i.test(resetError.message)
-      const inviteWarningParams = new URLSearchParams({
-        warning: isRateLimited ? 'invite_rate_limited' : 'invite_failed',
-      })
-      if (resetError.message) {
-        inviteWarningParams.set('warning_detail', resetError.message)
+    // Als het invite-endpoint faalt (bv. user bestaat al), val terug op een
+    // password-reset zodat de klant toch een link krijgt.
+    if (inviteError) {
+      const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(
+        email,
+        { redirectTo },
+      )
+
+      if (resetError) {
+        console.error('inviteError:', inviteError)
+        console.error('resetError:', resetError)
+        const isRateLimited =
+          typeof resetError.message === 'string' &&
+          /rate limit|too many requests/i.test(resetError.message)
+        const inviteWarningParams = new URLSearchParams({
+          warning: isRateLimited ? 'invite_rate_limited' : 'invite_failed',
+        })
+        if (resetError.message) {
+          inviteWarningParams.set('warning_detail', resetError.message)
+        }
+        redirect(`/admin/customers/${createdUser.id}?${inviteWarningParams.toString()}`)
       }
-      redirect(`/admin/customers/${createdUser.id}?${inviteWarningParams.toString()}`)
     }
 
     redirect(`/admin/customers/${createdUser.id}?created=1&invite=1`)

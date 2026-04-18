@@ -1,4 +1,5 @@
 import { redirect, notFound } from 'next/navigation'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -256,20 +257,34 @@ async function updateCustomer(formData: FormData) {
       redirect(`/admin/customers/${id}/edit?error=missing_email`)
     }
 
-    const baseSiteUrl =
+    const headerList = await headers()
+    const envUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
       process.env.SITE_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
-    const redirectTo = baseSiteUrl
-      ? `${baseSiteUrl.replace(/\/$/, '')}/login`
-      : undefined
+    let siteUrl = envUrl ? envUrl.replace(/\/$/, '') : ''
+    if (!siteUrl) {
+      const proto = headerList.get('x-forwarded-proto') || 'https'
+      const host = headerList.get('x-forwarded-host') || headerList.get('host') || ''
+      siteUrl = !/localhost|127\.0\.0\.1/i.test(host) && host
+        ? `${proto}://${host}`
+        : 'https://mv3d.cloud'
+    }
+    const redirectTo = `${siteUrl}/auth/callback?next=/welkom`
 
-    const { error: resetError } = await adminSupabase.auth.resetPasswordForEmail(
+    const { error: inviteError } = await adminSupabase.auth.admin.inviteUserByEmail(
       email,
-      redirectTo ? { redirectTo } : undefined
+      { redirectTo },
     )
 
-    if (resetError) {
+    let resetError: any = null
+    if (inviteError) {
+      const result = await adminSupabase.auth.resetPasswordForEmail(email, { redirectTo })
+      resetError = result.error
+    }
+
+    if (inviteError && resetError) {
+      console.error('inviteError:', inviteError)
       console.error('resetError:', resetError)
       const isRateLimited =
         typeof resetError.message === 'string' &&
