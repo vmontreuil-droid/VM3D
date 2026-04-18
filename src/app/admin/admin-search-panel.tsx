@@ -130,13 +130,13 @@ function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
 export default function AdminSearchPanel({ customers, projects }: Props) {
   const { t } = useT()
   const unknownCustomerLabel = t.adminSearchPanel.unknownCustomer
-  const [customerSearch, setCustomerSearch] = useState('')
-  const [projectSearch, setProjectSearch] = useState('')
+  const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
 
+  const query = search.trim().toLowerCase()
+
   const filteredCustomers = useMemo(() => {
-    const q = customerSearch.trim().toLowerCase()
-    if (!q) return []
+    if (!query) return []
 
     return customers.filter((customer) => {
       const values = [
@@ -149,13 +149,12 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
         .join(' ')
         .toLowerCase()
 
-      return values.includes(q)
+      return values.includes(query)
     })
-  }, [customers, customerSearch])
+  }, [customers, query, unknownCustomerLabel])
 
   const filteredProjects = useMemo(() => {
-    const q = projectSearch.trim().toLowerCase()
-    if (!q) return []
+    if (!query) return []
 
     return projects.filter((project) => {
       const haystack = [
@@ -169,127 +168,84 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
         .join(' ')
         .toLowerCase()
 
-      const matchesSearch = haystack.includes(q)
+      const matchesSearch = haystack.includes(query)
       const matchesStatus = statusFilter === '' || project.status === statusFilter
 
       return matchesSearch && matchesStatus
     })
-  }, [projects, projectSearch, statusFilter])
+  }, [projects, query, statusFilter])
 
-  function resetCustomerSearch() {
-    setCustomerSearch('')
-  }
-
-  function resetProjectSearch() {
-    setProjectSearch('')
+  function resetSearch() {
+    setSearch('')
     setStatusFilter('')
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-      <div className="grid gap-4 px-4 py-3 sm:px-5 lg:grid-cols-2">
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                {t.adminSearchPanel.quickSearch}
-              </p>
-              <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {t.adminSearchPanel.customers}
-              </h3>
-              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                {t.adminSearchPanel.searchCustomerDesc}
-              </p>
-            </div>
-            <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
-              {customers.length} {t.adminSearchPanel.total}
-            </span>
+    <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+      <div className="space-y-2.5 border-b border-[var(--border-soft)] px-4 py-3 sm:px-5">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+              {t.adminSearchPanel.quickSearch}
+            </p>
+            <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
+              {t.adminSearchPanel.customers} &amp; {t.adminSearchPanel.sites}
+            </h3>
+            <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
+              Zoek klantnaam, btw, stad, e-mail, werf, adres of status.
+            </p>
           </div>
-
-          <div className="grid gap-2 md:grid-cols-[1fr_auto]">
-            <input
-              type="text"
-              value={customerSearch}
-              onChange={(e) => setCustomerSearch(e.target.value)}
-              placeholder={t.adminSearchPanel.searchCustomerPlaceholder}
-              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
-            />
-
-            {customerSearch.trim() ? (
-              <button
-                type="button"
-                onClick={resetCustomerSearch}
-                className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-              >
-                <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                <span className="pr-2">Reset</span>
-              </button>
-            ) : (
-              <div className="hidden md:block" />
-            )}
+          <div className="flex shrink-0 flex-col items-end gap-1">
+            <span className="badge badge-info text-[10px] font-semibold px-2 py-0.5">
+              {customers.length} {t.adminSearchPanel.customers.toLowerCase()}
+            </span>
+            <span className="badge badge-info text-[10px] font-semibold px-2 py-0.5">
+              {projects.length} {t.adminSearchPanel.sites.toLowerCase()}
+            </span>
           </div>
         </div>
 
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-                {t.adminSearchPanel.quickSearch}
-              </p>
-              <h3 className="mt-1 text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                {t.adminSearchPanel.sites}
-              </h3>
-              <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-                {t.adminSearchPanel.searchSiteDesc}
-              </p>
-            </div>
-            <span className="badge badge-info text-xs font-semibold px-2 py-1 ml-2">
-              {projects.length} {t.adminSearchPanel.total}
-            </span>
-          </div>
+        <div className="grid gap-2 md:grid-cols-[1fr_auto]">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Zoek klant, werf, stad, btw, adres..."
+            className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+          />
 
-          <div className="grid gap-2 md:grid-cols-[1fr_auto]">
-            <input
-              type="text"
-              value={projectSearch}
-              onChange={(e) => setProjectSearch(e.target.value)}
-              placeholder={t.adminSearchPanel.searchSitePlaceholder}
-              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
-            />
-
-            {projectSearch.trim() ? (
-              <button
-                type="button"
-                onClick={resetProjectSearch}
-                className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
-              >
-                <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                <span className="pr-2">Reset</span>
-              </button>
-            ) : (
-              <div className="hidden md:block" />
-            )}
-          </div>
-
-          {projectSearch.trim() ? (
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+          {search.trim() ? (
+            <button
+              type="button"
+              onClick={resetSearch}
+              className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
             >
-              <option value="">{t.adminSearchPanel.allStatuses}</option>
-              <option value="ingediend">{getStatusLabelLib('ingediend', t)}</option>
-              <option value="in_behandeling">{getStatusLabelLib('in_behandeling', t)}</option>
-              <option value="klaar_voor_betaling">{getStatusLabelLib('klaar_voor_betaling', t)}</option>
-              <option value="afgerond">{getStatusLabelLib('afgerond', t)}</option>
-            </select>
-          ) : null}
+              <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+              <span className="pr-2">Reset</span>
+            </button>
+          ) : (
+            <div className="hidden md:block" />
+          )}
         </div>
+
+        {query ? (
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
+          >
+            <option value="">{t.adminSearchPanel.allStatuses}</option>
+            <option value="ingediend">{getStatusLabelLib('ingediend', t)}</option>
+            <option value="in_behandeling">{getStatusLabelLib('in_behandeling', t)}</option>
+            <option value="klaar_voor_betaling">{getStatusLabelLib('klaar_voor_betaling', t)}</option>
+            <option value="afgerond">{getStatusLabelLib('afgerond', t)}</option>
+          </select>
+        ) : null}
       </div>
 
-      {(customerSearch.trim() || projectSearch.trim()) ? (
-        <div className="space-y-3 border-t border-[var(--border-soft)] px-4 py-3.5 sm:px-5">
-          {customerSearch.trim() ? (
+      {query ? (
+        <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3.5 sm:px-5">
+          {filteredCustomers.length > 0 || query ? (
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>
@@ -376,7 +332,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
             </div>
           ) : null}
 
-          {projectSearch.trim() ? (
+          {filteredProjects.length > 0 || query ? (
             <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-3.5 py-2.5">
                 <div>

@@ -718,18 +718,18 @@ export default async function AdminPage({ searchParams }: Props) {
           </section>
         )}
 
-        <AdminSearchPanel
-          customers={customersWithMeta}
-          projects={projectsWithProfiles}
-        />
-
         <div className="grid gap-3 xl:grid-cols-[1fr_1fr]">
-          <AdminUploadPanel projects={projectsWithProfiles} />
+          <AdminSearchPanel
+            customers={customersWithMeta}
+            projects={projectsWithProfiles}
+          />
 
           <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <DashboardNotesTimeWidget />
           </div>
         </div>
+
+        <AdminUploadPanel projects={projectsWithProfiles} />
       </div>
     </AppShell>
   )
