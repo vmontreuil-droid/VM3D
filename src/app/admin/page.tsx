@@ -319,6 +319,11 @@ export default async function AdminPage({ searchParams }: Props) {
     .select('id', { count: 'exact', head: true })
   const offertesCount = offertesCountRaw ?? 0
 
+  const { count: machinesCountRaw } = await adminSupabase
+    .from('machines')
+    .select('id', { count: 'exact', head: true })
+  const machinesCount = machinesCountRaw ?? 0
+
   const subscriptionCount = 0
   const ticketMailConfig = getTicketNotificationConfig()
   const ticketMailEnabled = ticketMailConfig.enabled
@@ -666,6 +671,9 @@ export default async function AdminPage({ searchParams }: Props) {
                   className="group relative overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-3 transition hover:border-orange-400/50 hover:bg-[var(--bg-card)]/80"
                 >
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-orange-400/80" />
+                  <span className="absolute right-2 top-2 z-10 flex items-center justify-center rounded-full border border-orange-400/60 bg-[var(--bg-card)] px-2 py-0.5 text-xs font-semibold text-orange-400 min-w-[1.8em] h-[1.6em] leading-none">
+                    {machinesCount}
+                  </span>
                   <div className="flex items-start gap-2.5 pr-2">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-400/12 text-orange-400">
                       <Construction className="h-4 w-4" />
