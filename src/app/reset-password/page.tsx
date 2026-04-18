@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Logo from '@/components/logo'
 import TopoBackground from '@/components/topo-background'
@@ -17,6 +18,26 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [sessionChecked, setSessionChecked] = useState(false)
+
+  useEffect(() => {
+    const token = searchParams.get('token')
+    const type = searchParams.get('type')
+    if (token && type === 'recovery') {
+      supabase.auth.exchangeCodeForSession({ authCode: token }).then(({ error }) => {
+        if (error) {
+          setError(t.resetPassword.invalidLink || 'Link ongeldig of verlopen.')
+        }
+        setSessionChecked(true)
+      })
+    } else {
+      setSessionChecked(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,6 +77,15 @@ export default function ResetPasswordPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (!sessionChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-main)]">
+        <TopoBackground />
+        <div className="z-10 text-[var(--text-soft)]">Even controleren…</div>
+      </div>
+    )
   }
 
   return (
