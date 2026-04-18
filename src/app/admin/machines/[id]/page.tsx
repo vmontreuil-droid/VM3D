@@ -1,22 +1,10 @@
 import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
-import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
-import MachinesMap from '@/components/machines/machines-map'
-import {
-  MachineIcon,
-  BRAND_COLORS,
-  GUIDANCE_COLORS,
-  formatTonnage,
-} from '@/components/machines/machine-icons'
-import { ArrowLeft, Pencil, Wifi, WifiOff, Hash, Building2, Radio, Construction, MapPin } from 'lucide-react'
-import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
-import { getDictionary } from '@/i18n/dictionaries'
+import EditMachineForm from './edit/edit-machine-form'
 
-export default async function AdminOpenMachinePage({
+export default async function AdminMachinePage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -24,11 +12,6 @@ export default async function AdminOpenMachinePage({
   const { id } = await params
   const machineId = parseInt(id, 10)
   if (Number.isNaN(machineId)) notFound()
-
-  const cookieStore = await cookies()
-  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
-  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
-  const t = getDictionary(locale).adminMachineDetail
 
   const supabase = await createClient()
   const {
@@ -57,221 +40,9 @@ export default async function AdminOpenMachinePage({
     .eq('id', machine.user_id)
     .maybeSingle()
 
-  const brand = (machine.brand || '').toUpperCase()
-  const guidance = (machine.guidance_system || '').toUpperCase()
-  const brandColor = BRAND_COLORS[brand] || '#888'
-  const guidanceStyle = guidance ? GUIDANCE_COLORS[guidance] : null
-  const lastSeen = machine.last_seen_at ? new Date(machine.last_seen_at) : null
-
   return (
     <AppShell isAdmin>
-      <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-10">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-          <Link href="/admin" className="hover:text-[var(--text-main)]">
-            {t.breadcrumbAdmin}
-          </Link>
-          <span>/</span>
-          <Link
-            href="/admin/machines"
-            className="hover:text-[var(--text-main)]"
-          >
-            {t.breadcrumbMachines}
-          </Link>
-          <span>/</span>
-          <span className="text-[var(--text-main)]">
-            {brand} {machine.model}
-          </span>
-        </div>
-
-        {/* Hero — uniform dashboard style */}
-        <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
-            <div className="absolute inset-0 opacity-30">
-              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
-            </div>
-            <div className="relative flex flex-wrap items-center justify-between gap-2">
-              <Link
-                href="/admin/machines"
-                className="btn-secondary text-xs"
-              >
-                <ArrowLeft className="inline h-3 w-3 mr-1" /> {t.back}
-              </Link>
-              <Link
-                href={`/admin/machines/${machine.id}/edit`}
-                className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
-              >
-                <Pencil className="h-3 w-3" /> {t.edit}
-              </Link>
-            </div>
-            <div className="relative mt-3 flex flex-wrap items-center gap-3">
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-                style={{ backgroundColor: `${brandColor}22` }}
-              >
-                <MachineIcon type={machine.machine_type} tonnage={machine.tonnage ?? undefined} size={32} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-                  {t.eyebrow}
-                </p>
-                <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  <span>
-                    {brand} {machine.model}
-                  </span>
-                  <span className="font-normal text-[var(--text-soft)]">
-                    · {machine.name}
-                  </span>
-                  {guidanceStyle && guidance && (
-                    <span
-                      className={`rounded px-2 py-0.5 text-[10px] font-bold ${guidanceStyle.bg} ${guidanceStyle.text}`}
-                    >
-                      {guidance}
-                    </span>
-                  )}
-                  {machine.is_online ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                      <Wifi className="h-3 w-3" /> {t.online}
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
-                      <WifiOff className="h-3 w-3" /> {t.offline}
-                    </span>
-                  )}
-                </h1>
-                <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  {machine.machine_type === 'bulldozer' ? t.typeBulldozer : machine.machine_type === 'grader' ? t.typeGrader : t.typeCrane}
-                  {machine.tonnage
-                    ? ` · ${formatTonnage(Number(machine.tonnage))}`
-                    : ''}
-                  {machine.year ? ` · ${t.year.replace('{year}', String(machine.year))}` : ''}
-                  {owner
-                    ? ` · ${t.customer.replace('{name}', String(owner.company_name || owner.full_name || ''))}`
-                    : ` · ${t.noCustomer}`}
-                  {lastSeen
-                    ? ` · ${t.lastSeen.replace('{when}', lastSeen.toLocaleString())}`
-                    : ''}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Hash className="h-3 w-3" /> {t.code}
-            </p>
-            <p className="mt-1 font-mono text-sm font-bold text-emerald-400">
-              {machine.connection_code}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Building2 className="h-3 w-3" /> {t.customerLabel}
-            </p>
-            <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-              {owner?.company_name || owner?.full_name || '—'}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Radio className="h-3 w-3" /> {t.guidance}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-              {guidance || '—'}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-            <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-              <Construction className="h-3 w-3" /> {t.tonnage}
-            </p>
-            <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-              {machine.tonnage ? formatTonnage(Number(machine.tonnage)) : '—'}
-            </p>
-          </div>
-        </div>
-
-        {/* Locatie */}
-        <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 shadow-sm">
-          {(machine.latitude != null && machine.longitude != null) ? (
-          <>
-            <div className="flex flex-wrap items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
-                <MapPin className="h-5 w-5 text-purple-400" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
-                  {t.gpsLocation}
-                </p>
-                <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
-                  {Number(machine.latitude).toFixed(6)}, {Number(machine.longitude).toFixed(6)}
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
-                  {machine.location_accuracy != null && `±${Math.round(Number(machine.location_accuracy))} m · `}
-                  {machine.location_updated_at
-                    ? t.reportedAt.replace('{when}', new Date(machine.location_updated_at).toLocaleString())
-                    : ''}
-                </p>
-              </div>
-              <a
-                href={`https://www.google.com/maps?q=${machine.latitude},${machine.longitude}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 rounded-lg bg-purple-500/15 px-3 py-1.5 text-xs font-semibold text-purple-400 hover:bg-purple-500/25"
-              >
-                <MapPin className="h-3 w-3" /> {t.openInMaps}
-              </a>
-            </div>
-            <div className="mt-3 overflow-hidden rounded-lg border border-[var(--border-soft)]">
-              <MachinesMap
-                points={[{
-                  id: machine.id,
-                  name: machine.name,
-                  brand: machine.brand,
-                  model: machine.model,
-                  latitude: Number(machine.latitude),
-                  longitude: Number(machine.longitude),
-                  is_online: !!machine.is_online,
-                  location_updated_at: machine.location_updated_at ?? null,
-                }]}
-                height={320}
-              />
-            </div>
-          </>
-          ) : (
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
-                <MapPin className="h-5 w-5 text-purple-400" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">
-                  {t.gpsLocation}
-                </p>
-                <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
-                  {t.noLocationYet}
-                </p>
-                <p className="mt-1 text-[11px] leading-relaxed text-[var(--text-soft)]">
-                  {t.gpsIntro}
-                </p>
-                <ul className="mt-1 list-inside list-disc text-[11px] leading-relaxed text-[var(--text-soft)]">
-                  <li>{t.gpsReq1}</li>
-                  <li>{t.gpsReq2Prefix}<code className="rounded bg-[var(--bg-card-2)] px-1">pkg install termux-api</code></li>
-                  <li>{t.gpsReq3}</li>
-                  <li>{t.gpsReq4}</li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Werven & bestanden */}
-        <MachineTransferPanel
-          machineId={machine.id}
-          guidanceSystem={machine.guidance_system}
-        />
-      </div>
+      <EditMachineForm machine={machine} owner={owner || null} />
     </AppShell>
   )
 }

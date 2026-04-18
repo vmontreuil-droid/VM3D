@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { MachineCard, type Machine } from '@/components/machines/machine-card'
 import { MachineIcon, BRAND_COLORS, GUIDANCE_COLORS, formatTonnage } from '@/components/machines/machine-icons'
-import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Pencil, Trash2, Plus, Activity, HardHat, MapPin } from 'lucide-react'
+import { Search, Construction, ArrowLeft, Wifi, WifiOff, Filter, Trash2, Plus, Activity, HardHat, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useT } from '@/i18n/context'
 import MachinesMap, { type MachineMapPoint } from '@/components/machines/machines-map'
@@ -341,23 +341,15 @@ export default function AdminMachinesClient({ machines }: { machines: MachineWit
                       )}
                     </td>
                     <td className="px-3 py-2.5 text-right" onClick={e => e.stopPropagation()}>
-                      <div className="inline-flex items-center gap-1.5">
-                        <Link
-                          href={`/admin/machines/${m.id}/edit`}
-                          className="inline-flex items-center gap-1 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-1 text-[11px] font-semibold text-[var(--text-main)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                        >
-                          <Pencil className="h-3 w-3" /> {tt.actionEdit}
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(m)}
-                          disabled={deletingId === m.id}
-                          title={tt.deleteTitle}
-                          className="inline-flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
-                        >
-                          <Trash2 className="h-3 w-3" /> {deletingId === m.id ? '…' : tt.actionDelete}
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(m)}
+                        disabled={deletingId === m.id}
+                        title={tt.deleteTitle}
+                        className="inline-flex items-center gap-1 rounded-lg border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
+                      >
+                        <Trash2 className="h-3 w-3" /> {deletingId === m.id ? '…' : tt.actionDelete}
+                      </button>
                     </td>
                   </tr>
                 )

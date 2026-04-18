@@ -19,9 +19,11 @@ import {
   QrCode,
   MessageCircle,
   Mail,
+  MapPin,
 } from 'lucide-react'
 import CustomerSelect, { type Customer } from '@/components/customers/customer-select'
 import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
+import MachinesMap from '@/components/machines/machines-map'
 import {
   MachineIcon,
   BRAND_COLORS,
@@ -47,6 +49,10 @@ type Machine = {
   connection_password: string | null
   is_online?: boolean
   last_seen_at?: string | null
+  latitude?: number | string | null
+  longitude?: number | string | null
+  location_accuracy?: number | string | null
+  location_updated_at?: string | null
 }
 
 const BRANDS = [
@@ -227,12 +233,6 @@ export default function EditMachineForm({
             <Link href="/admin/machines" className="btn-secondary text-xs">
               <ArrowLeft className="inline h-3 w-3 mr-1" /> Terug
             </Link>
-            <Link
-              href={`/admin/machines/${machine.id}`}
-              className="ml-auto inline-flex items-center gap-1 rounded-lg bg-[var(--accent)]/15 px-3 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/25"
-            >
-              Openen
-            </Link>
           </div>
           <div className="relative mt-3 flex flex-wrap items-center gap-3">
             <div
@@ -243,7 +243,7 @@ export default function EditMachineForm({
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-                Machine bewerken
+                Machine
               </p>
               <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
                 <span>
@@ -500,6 +500,73 @@ export default function EditMachineForm({
               </div>
             </section>
           </form>
+
+          {/* GPS-locatie */}
+          <section className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-4 shadow-sm">
+            {(machine.latitude != null && machine.longitude != null) ? (
+              <>
+                <div className="flex flex-wrap items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
+                    <MapPin className="h-5 w-5 text-purple-400" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">GPS-locatie</p>
+                    <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">
+                      {Number(machine.latitude).toFixed(6)}, {Number(machine.longitude).toFixed(6)}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
+                      {machine.location_accuracy != null && `±${Math.round(Number(machine.location_accuracy))} m · `}
+                      {machine.location_updated_at
+                        ? `Gerapporteerd ${new Date(machine.location_updated_at).toLocaleString()}`
+                        : ''}
+                    </p>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps?q=${machine.latitude},${machine.longitude}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 rounded-lg bg-purple-500/15 px-3 py-1.5 text-xs font-semibold text-purple-400 hover:bg-purple-500/25"
+                  >
+                    <MapPin className="h-3 w-3" /> Open in Google Maps
+                  </a>
+                </div>
+                <div className="mt-3 overflow-hidden rounded-lg border border-[var(--border-soft)]">
+                  <MachinesMap
+                    points={[{
+                      id: machine.id,
+                      name: machine.name,
+                      brand: machine.brand,
+                      model: machine.model,
+                      latitude: Number(machine.latitude),
+                      longitude: Number(machine.longitude),
+                      is_online: !!machine.is_online,
+                      location_updated_at: machine.location_updated_at ?? null,
+                    }]}
+                    height={320}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/15">
+                  <MapPin className="h-5 w-5 text-purple-400" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-400">GPS-locatie</p>
+                  <p className="mt-0.5 text-sm font-semibold text-[var(--text-main)]">Nog geen locatie ontvangen</p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-[var(--text-soft)]">
+                    De tablet stuurt GPS-coördinaten door zodra <code className="rounded bg-[var(--bg-card-2)] px-1">termux-location</code> werkt. Vereist:
+                  </p>
+                  <ul className="mt-1 list-inside list-disc text-[11px] leading-relaxed text-[var(--text-soft)]">
+                    <li>Termux:API APK geïnstalleerd (F-Droid) naast Termux</li>
+                    <li>Uitvoeren: <code className="rounded bg-[var(--bg-card-2)] px-1">pkg install termux-api</code></li>
+                    <li>Locatie-permissie toegestaan voor Termux:API in Android-instellingen</li>
+                    <li>Herinstalleer het sync-script om de nieuwe GPS-logica op te pikken</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </section>
 
           {/* Werf & bestanden panel */}
           <MachineTransferPanel
