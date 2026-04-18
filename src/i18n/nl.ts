@@ -373,7 +373,7 @@ const nl = {
     tickets: 'Tickets',
     offertes: 'Offertes',
     invoices: 'Facturen',
-    machines: 'Machines',
+    machines: 'Machinebeheer',
     statistics: 'Statistieken',
     billing: 'Facturatie',
     theme: 'Thema',

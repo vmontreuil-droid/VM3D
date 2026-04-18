@@ -373,7 +373,7 @@ const fr: Dictionary = {
     tickets: 'Tickets',
     offertes: 'Devis',
     invoices: 'Factures',
-    machines: 'Machines',
+    machines: 'Gestion des machines',
     statistics: 'Statistiques',
     billing: 'Facturation',
     theme: 'Thème',
