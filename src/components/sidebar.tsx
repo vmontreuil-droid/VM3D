@@ -295,7 +295,7 @@ export default function Sidebar({
                   : 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
               : item.color === 'green'
                 ? 'text-emerald-400/70 hover:bg-emerald-500/8 hover:text-emerald-400'
-                : 'text-[var(--text-soft)] hover:bg-[var(--bg-card)] hover:text-white'
+                : 'text-[var(--text-soft)] hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]'
           }`}
         >
           {active && (
@@ -343,7 +343,7 @@ export default function Sidebar({
                   className={`group relative flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition ${
                     childActive
                       ? 'bg-[linear-gradient(90deg,rgba(245,140,55,0.16),rgba(245,140,55,0.03))] text-[var(--accent)] shadow-sm'
-                      : 'text-[var(--text-muted)] hover:bg-[var(--bg-card)] hover:text-white'
+                      : 'text-[var(--text-muted)] hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]'
                   }`}
                 >
                   {childActive && (
@@ -509,7 +509,7 @@ export default function Sidebar({
             <button
               type="button"
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--bg-card)] hover:text-white"
+              className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]"
             >
               <span className="shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -527,7 +527,7 @@ export default function Sidebar({
             type="button"
             onClick={handleLogout}
             title={t.platform.logout}
-            className="flex w-full justify-center rounded-lg px-3 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--bg-card)] hover:text-white"
+            className="flex w-full justify-center rounded-lg px-3 py-3 text-sm font-medium text-[var(--text-soft)] transition hover:bg-[var(--bg-card-2)] hover:text-[var(--text-main)]"
           >
             <span className="shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
