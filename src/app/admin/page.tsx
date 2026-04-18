@@ -731,14 +731,7 @@ export default async function AdminPage({ searchParams }: Props) {
               <DashboardNotesWidget />
             </div>
             <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-              <DashboardTimeWidget
-                projects={projectsWithProfiles
-                  .filter((p: any) => p.user_id)
-                  .map((p: any) => ({
-                    id: String(p.id),
-                    label: `${p.profiles?.company_name || p.profiles?.full_name || 'Onbekend'} — ${p.name || 'Onbenoemd'}`,
-                  }))}
-              />
+              <DashboardTimeWidget />
             </div>
           </div>
         </div>

@@ -1,6 +1,80 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+
+type EntryRow = {
+  id: number
+  project_id: number | null
+  linked_customer_id: string | null
+  linked_machine_id: number | null
+  description: string
+  started_at: string
+  ended_at: string | null
+  duration_seconds: number | null
+  billable: boolean
+}
+
+async function enrich(entries: EntryRow[]) {
+  if (!entries.length) return []
+  const adminSupabase = createAdminClient()
+
+  const customerIds = Array.from(new Set(entries.map((e) => e.linked_customer_id).filter(Boolean))) as string[]
+  const projectIds = Array.from(new Set(entries.map((e) => e.project_id).filter((v): v is number => v != null)))
+  const machineIds = Array.from(new Set(entries.map((e) => e.linked_machine_id).filter((v): v is number => v != null)))
+
+  const [customersRes, projectsRes, machinesRes] = await Promise.all([
+    customerIds.length
+      ? adminSupabase.from('profiles').select('id, company_name, full_name, email').in('id', customerIds)
+      : Promise.resolve({ data: [] as { id: string; company_name: string | null; full_name: string | null; email: string | null }[] }),
+    projectIds.length
+      ? adminSupabase.from('projects').select('id, name, user_id').in('id', projectIds)
+      : Promise.resolve({ data: [] as { id: number; name: string | null; user_id: string | null }[] }),
+    machineIds.length
+      ? adminSupabase.from('machines').select('id, name, brand, model').in('id', machineIds)
+      : Promise.resolve({ data: [] as { id: number; name: string | null; brand: string | null; model: string | null }[] }),
+  ])
+
+  const projectCustomerIds = Array.from(
+    new Set(((projectsRes.data as { user_id: string | null }[]) ?? []).map((p) => p.user_id).filter(Boolean)),
+  ) as string[]
+
+  const projectCustomersRes = projectCustomerIds.length
+    ? await adminSupabase.from('profiles').select('id, company_name, full_name').in('id', projectCustomerIds)
+    : { data: [] as { id: string; company_name: string | null; full_name: string | null }[] }
+
+  const cMap = new Map(
+    ((customersRes.data as { id: string; company_name: string | null; full_name: string | null; email: string | null }[]) ?? [])
+      .map((c) => [c.id, c.company_name || c.full_name || c.email || 'â€”']),
+  )
+  const pcMap = new Map(
+    ((projectCustomersRes.data as { id: string; company_name: string | null; full_name: string | null }[]) ?? [])
+      .map((c) => [c.id, c.company_name || c.full_name || '']),
+  )
+  const pMap = new Map(
+    ((projectsRes.data as { id: number; name: string | null; user_id: string | null }[]) ?? []).map((p) => {
+      const customer = p.user_id ? pcMap.get(p.user_id) || '' : ''
+      const label = customer && p.name ? `${customer} â€” ${p.name}` : (p.name || customer || 'â€”')
+      return [p.id, label]
+    }),
+  )
+  const mMap = new Map(
+    ((machinesRes.data as { id: number; name: string | null; brand: string | null; model: string | null }[]) ?? [])
+      .map((m) => [m.id, `${m.brand || ''} ${m.model || ''} Â· ${m.name || ''}`.trim()]),
+  )
+
+  return entries.map((e) => {
+    if (e.linked_machine_id != null) {
+      return { ...e, target_kind: 'machine' as const, target_label: mMap.get(e.linked_machine_id) ?? null }
+    }
+    if (e.project_id != null) {
+      return { ...e, target_kind: 'project' as const, target_label: pMap.get(e.project_id) ?? null }
+    }
+    if (e.linked_customer_id) {
+      return { ...e, target_kind: 'customer' as const, target_label: cMap.get(e.linked_customer_id) ?? null }
+    }
+    return { ...e, target_kind: null, target_label: null }
+  })
+}
 
 export async function GET() {
   try {
@@ -14,12 +88,12 @@ export async function GET() {
     const adminSupabase = createAdminClient()
     const { data: entries, error } = await adminSupabase
       .from('time_entries')
-      .select('id, project_id, description, started_at, ended_at, duration_seconds, billable, projects(name, address, profiles(company_name, full_name))')
+      .select('id, project_id, linked_customer_id, linked_machine_id, description, started_at, ended_at, duration_seconds, billable')
       .order('started_at', { ascending: false })
       .limit(15)
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    return NextResponse.json({ entries: entries ?? [] })
+    return NextResponse.json({ entries: await enrich((entries ?? []) as EntryRow[]) })
   } catch {
     return NextResponse.json({ error: 'Onverwachte fout.' }, { status: 500 })
   }
@@ -40,10 +114,28 @@ export async function POST(request: Request) {
     const adminSupabase = createAdminClient()
 
     if (action === 'start') {
-      const projectId = Number(body.project_id)
       const description = String(body.description || '').trim()
-      if (!projectId || !description) {
-        return NextResponse.json({ error: 'Project en beschrijving zijn verplicht.' }, { status: 400 })
+      if (!description) {
+        return NextResponse.json({ error: 'Beschrijving is verplicht.' }, { status: 400 })
+      }
+
+      const kind = String(body.target_kind || '')
+      const targetId = body.target_id
+
+      const insertPayload: Record<string, unknown> = {
+        created_by: user.id,
+        description,
+        started_at: new Date().toISOString(),
+        project_id: null,
+        linked_customer_id: null,
+        linked_machine_id: null,
+      }
+
+      if (kind === 'project' && targetId) insertPayload.project_id = Number(targetId)
+      else if (kind === 'customer' && targetId) insertPayload.linked_customer_id = String(targetId)
+      else if (kind === 'machine' && targetId) insertPayload.linked_machine_id = Number(targetId)
+      else {
+        return NextResponse.json({ error: 'Kies een klant, werf of machine.' }, { status: 400 })
       }
 
       // Stop any running entries first
@@ -61,12 +153,7 @@ export async function POST(request: Request) {
         }).eq('id', entry.id)
       }
 
-      const { error } = await adminSupabase.from('time_entries').insert({
-        project_id: projectId,
-        created_by: user.id,
-        description,
-        started_at: new Date().toISOString(),
-      })
+      const { error } = await adminSupabase.from('time_entries').insert(insertPayload)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
     }
