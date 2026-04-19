@@ -1384,6 +1384,7 @@ export async function generateDXF2010LinesPythagoras(
   const nh = () => (nextH++).toString(16).toUpperCase()
 
   // ── Layer entries (volgen na layer "0" in LAYER table) ──
+  // Match Pythagoras-export structuur exact: 347 = 46 = material reference
   const layerLines: string[] = []
   const layerHandles = new Map<string, string>()
   for (const [name, color] of layers) {
@@ -1401,54 +1402,54 @@ export async function generateDXF2010LinesPythagoras(
       '  6', 'Continuous',
       '370', '     9',
       '390', 'F',
+      '347', '46',
     )
   }
 
-  // ── Entity entries (POLYLINE + VERTEX + SEQEND) ──
+  // ── Entity entries — LINE per segment (Pythagoras-conventie voor breaklines) ──
   const entityLines: string[] = []
   const fmt = (n: number) => {
     if (Number.isInteger(n)) return `${n}.0`
     return n.toString()
   }
   for (const pl of polylines) {
-    const polyH = nh()
-    const flag = (pl.closed ? 1 : 0) | 8 // 8 = 3D polyline
-    entityLines.push(
-      '  0', 'POLYLINE',
-      '  5', polyH,
-      '330', '1F', // owner = BLOCK_RECORD *Model_Space
-      '100', 'AcDbEntity',
-      '  8', pl.layer,
-      '370', '     5',
-      '100', 'AcDb3dPolyline',
-      ' 66', '     1',
-      ' 10', '0.0',
-      ' 20', '0.0',
-      ' 30', '0.0',
-      ' 70', `     ${flag}`,
-    )
-    for (const p of pl.pts) {
+    for (let i = 0; i < pl.pts.length - 1; i++) {
+      const p1 = pl.pts[i]
+      const p2 = pl.pts[i + 1]
       entityLines.push(
-        '  0', 'VERTEX',
+        '  0', 'LINE',
         '  5', nh(),
-        '330', polyH,
+        '330', '1F', // owner = BLOCK_RECORD *Model_Space
         '100', 'AcDbEntity',
         '  8', pl.layer,
-        '100', 'AcDbVertex',
-        '100', 'AcDb3dPolylineVertex',
-        ' 10', fmt(p.x),
-        ' 20', fmt(p.y),
-        ' 30', fmt(p.z),
-        ' 70', '    32',
+        '100', 'AcDbLine',
+        ' 10', fmt(p1.x),
+        ' 20', fmt(p1.y),
+        ' 30', fmt(p1.z),
+        ' 11', fmt(p2.x),
+        ' 21', fmt(p2.y),
+        ' 31', fmt(p2.z),
       )
     }
-    entityLines.push(
-      '  0', 'SEQEND',
-      '  5', nh(),
-      '330', polyH,
-      '100', 'AcDbEntity',
-      '  8', pl.layer,
-    )
+    // Sluit polyline indien closed
+    if (pl.closed && pl.pts.length > 2) {
+      const p1 = pl.pts[pl.pts.length - 1]
+      const p2 = pl.pts[0]
+      entityLines.push(
+        '  0', 'LINE',
+        '  5', nh(),
+        '330', '1F',
+        '100', 'AcDbEntity',
+        '  8', pl.layer,
+        '100', 'AcDbLine',
+        ' 10', fmt(p1.x),
+        ' 20', fmt(p1.y),
+        ' 30', fmt(p1.z),
+        ' 11', fmt(p2.x),
+        ' 21', fmt(p2.y),
+        ' 31', fmt(p2.z),
+      )
+    }
   }
 
   // ── Inject in template ──
