@@ -184,12 +184,12 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-// ─── LandXML lijnen-export — elke lijn als eigen Surface met Breaklines ──────
+// ─── LandXML lijnen-export — elke lijn als eigen Alignment ───────────────────
 //
-// Pythagoras geeft elke <Surface> een aparte layer + kleur. PlanFeatures kwamen
-// allemaal op dezelfde layer terecht. Daarom maken we voor elke ontwerplijn
-// een eigen <Surface> aan met de vertices als Pnts en de lijn zelf als
-// <Breakline> (geen Faces — geen TIN, alleen breakline-visualisatie).
+// <Surface> met Pnts triggerde automatische triangulatie in Pythagoras (en TBC).
+// <Alignment> is het LandXML element specifiek voor lijnwerk: elk Alignment
+// is onafhankelijk en krijgt typisch een eigen laag/kleur. We bouwen één
+// Alignment per ontwerplijn met een keten van 3D <Line> entries.
 
 export function generateLandXMLLines(data: MachineFile): string {
   const now = new Date()
@@ -197,42 +197,35 @@ export function generateLandXMLLines(data: MachineFile): string {
   const time = now.toTimeString().slice(0, 8)
   const ts = now.toISOString().replace('.000Z', '').replace('Z', '')
 
-  const surfacesXml = data.lines.map(pl => {
+  const alignmentsXml = data.lines.map(pl => {
     if (pl.points.length < 2) return ''
     const escName = escapeXml(pl.name)
 
-    const pntsList = pl.points
-      .map((p, i) => `          <P id="${i + 1}">${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}</P>`)
-      .join('\n')
-
-    const elevs = pl.points.map(p => p.z)
-    const elevMax = Math.max(...elevs).toFixed(12)
-    const elevMin = Math.min(...elevs).toFixed(12)
-
-    // Breakline als platte coördinatenlijst (LandXML PntList3D formaat)
-    const allPts = pl.closed && pl.points.length > 2
+    const pts = pl.closed && pl.points.length > 2
       ? [...pl.points, pl.points[0]]
       : pl.points
-    const pntList3D = allPts
-      .map(p => `${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}`)
-      .join(' ')
 
-    return `    <Surface name="${escName}" desc="${escName}">
-      <Definition
-        elevMax="${elevMax}"
-        elevMin="${elevMin}"
-        surfType="TIN"
-      >
-        <Pnts>
-${pntsList}
-        </Pnts>
-        <Breaklines>
-          <Breakline brkType="standard" desc="${escName}">
-            <PntList3D>${pntList3D}</PntList3D>
-          </Breakline>
-        </Breaklines>
-      </Definition>
-    </Surface>`
+    let totalLen = 0
+    const lineEls: string[] = []
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p1 = pts[i]
+      const p2 = pts[i + 1]
+      const dx = p2.x - p1.x, dy = p2.y - p1.y
+      const len = Math.hypot(dx, dy)
+      const dir = Math.atan2(dy, dx) * 180 / Math.PI
+      const dirNorm = ((dir % 360) + 360) % 360
+      lineEls.push(`        <Line dir="${dirNorm.toFixed(8)}" length="${len.toFixed(12)}" staStart="${totalLen.toFixed(12)}">
+          <Start>${p1.x.toFixed(12)} ${p1.y.toFixed(12)} ${p1.z.toFixed(12)}</Start>
+          <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
+        </Line>`)
+      totalLen += len
+    }
+
+    return `    <Alignment name="${escName}" desc="${escName}" length="${totalLen.toFixed(12)}" staStart="0">
+      <CoordGeom name="${escName}">
+${lineEls.join('\n')}
+      </CoordGeom>
+    </Alignment>`
   }).filter(Boolean).join('\n')
 
   return `<?xml version="1.0" standalone="yes"?>
@@ -267,9 +260,9 @@ http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
     timeStamp="${ts}"
     version="1.0"
   />
-  <Surfaces>
-${surfacesXml}
-  </Surfaces>
+  <Alignments name="Lijnen">
+${alignmentsXml}
+  </Alignments>
 </LandXML>`
 }
 
