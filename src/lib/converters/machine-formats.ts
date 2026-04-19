@@ -196,7 +196,6 @@ export function generateLandXMLLines(data: MachineFile): string {
   const time = now.toTimeString().slice(0, 8)
   const ts = now.toISOString().replace('.000Z', '').replace('Z', '')
 
-  // Eén <PlanFeatures> per lijn — Pythagoras gebruikt de parent als layergroep
   const planFeaturesXml = data.lines.map(pl => {
     if (pl.points.length < 2) return ''
     const lineEls: string[] = []
@@ -216,14 +215,11 @@ export function generateLandXMLLines(data: MachineFile): string {
           <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
         </Line>`)
     }
-    const escName = escapeXml(pl.name)
-    return `  <PlanFeatures name="${escName}" desc="${escName}">
-    <PlanFeature name="${escName}" desc="${escName}">
+    return `    <PlanFeature name="${escapeXml(pl.name)}">
       <CoordGeom>
 ${lineEls.join('\n')}
       </CoordGeom>
-    </PlanFeature>
-  </PlanFeatures>`
+    </PlanFeature>`
   }).filter(Boolean).join('\n')
 
   return `<?xml version="1.0" standalone="yes"?>
@@ -258,7 +254,9 @@ http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
     timeStamp="${ts}"
     version="1.0"
   />
+  <PlanFeatures>
 ${planFeaturesXml}
+  </PlanFeatures>
 </LandXML>`
 }
 
