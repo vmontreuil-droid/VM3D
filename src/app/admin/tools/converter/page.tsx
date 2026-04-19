@@ -4,7 +4,7 @@ import { useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/app-shell'
 import { Upload, Download, ArrowRight, FileCode2, Loader2, CheckCircle, AlertCircle, RefreshCw, Scissors } from 'lucide-react'
 import {
-  convert, detectFormat, parseTN3, parseLN3, triangulate,
+  convert, detectFormat, parseTN3, parseLN3, parseTP3, triangulate,
   generateLandXML, generateDXF2010Lines,
   type FileFormat
 } from '@/lib/converters/machine-formats'
@@ -14,6 +14,7 @@ const FORMAT_LABELS: Record<FileFormat, string> = {
   dxf:     'AutoCAD DXF (.dxf)',
   tn3:     'Topcon TN3 (.TN3)',
   ln3:     'Topcon LN3 (.LN3)',
+  tp3:     'Topcon TP3 (.TP3)',
   svl:     'Trimble SVL (.svl)',
   svd:     'Trimble SVD (.svd)',
 }
@@ -23,12 +24,13 @@ const FORMAT_BRANDS: Record<FileFormat, string> = {
   dxf:     'Universeel / CAD',
   tn3:     'Topcon / Unicontrol',
   ln3:     'Topcon / Unicontrol',
+  tp3:     'Topcon / Unicontrol',
   svl:     'Trimble / Leica',
   svd:     'Trimble / Leica',
 }
 
-const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'svl', 'svd']
-const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.svl,.svd,.SVL,.SVD'
+const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'tp3', 'svl', 'svd']
+const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.TP3,.tp3,.svl,.svd,.SVL,.SVD'
 const MAX_MB = 30
 
 type Status =
@@ -70,6 +72,7 @@ export default function ConverterPage() {
         fmt === 'landxml' ? 'dxf' :
         fmt === 'dxf'     ? 'landxml' :
         fmt === 'ln3'     ? 'dxf' :
+        fmt === 'tp3'     ? 'landxml' :
         'landxml'
       )
       setStatus({ type: 'ready', name: f.name, format: fmt })
@@ -182,8 +185,49 @@ export default function ConverterPage() {
     }
   }, [file])
 
+  // TP3 splitsen → XML (oppervlak) + DXF 2010 (lijnen) — gecombineerd projectbestand
+  const handleSplitTP3 = useCallback(async () => {
+    if (!file) return
+    setStatus({ type: 'converting' })
+    try {
+      const arrayBuf = await file.arrayBuffer()
+      const parsed = parseTP3(arrayBuf)
+
+      for (const surf of parsed.surfaces) {
+        if (surf.triangles.length === 0 && surf.points.length >= 3) {
+          surf.triangles = triangulate(surf.points)
+        }
+      }
+
+      const baseName = file.name.replace(/\.[^.]+$/, '')
+
+      // File 1: LandXML — surface only
+      const surfaceOnly = { ...parsed, lines: [] }
+      const xmlStr = generateLandXML(surfaceOnly)
+      downloadBlob(new Blob([xmlStr], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
+
+      await new Promise(r => setTimeout(r, 300))
+
+      // File 2: DXF 2010 — lines only
+      const linesOnly = { ...parsed, surfaces: [] }
+      const dxfStr = generateDXF2010Lines(linesOnly, baseName)
+      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
+
+      const ptCount = parsed.surfaces[0]?.points.length ?? 0
+      const triCount = parsed.surfaces[0]?.triangles.length ?? 0
+      const lnPts = parsed.lines.reduce((s, l) => s + l.points.length, 0)
+      setStatus({ type: 'done', files: [
+        `${baseName}_oppervlak.xml (${ptCount} punten, ${triCount} driehoeken)`,
+        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${lnPts} punten)`,
+      ] })
+    } catch (err) {
+      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
+    }
+  }, [file])
+
   const isTN3 = inputFormat === 'tn3'
   const isLN3 = inputFormat === 'ln3'
+  const isTP3 = inputFormat === 'tp3'
   const selCls = 'w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2.5 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]/50 appearance-none'
   const lblCls = 'block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-soft)] mb-1.5'
 
@@ -257,11 +301,38 @@ export default function ConverterPage() {
                   <Upload className={`h-8 w-8 ${dragging ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">Sleep bestand hier of klik om te kiezen</p>
-                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .svl · .svd — max {MAX_MB} MB</p>
+                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .TP3 · .svl · .svd — max {MAX_MB} MB</p>
                   </div>
                 </>
               )}
             </div>
+
+            {/* TP3 split section — combined surface + lines */}
+            {isTP3 && (
+              <div className="overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/4">
+                <div className="flex items-center gap-3 border-b border-emerald-500/15 px-4 py-3">
+                  <Scissors className="h-4 w-4 shrink-0 text-emerald-400" />
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--text-main)]">TP3 splitsen (gecombineerd project)</p>
+                    <p className="text-[11px] text-[var(--text-soft)]">
+                      Exporteert 2 bestanden tegelijk: <strong>XML oppervlak</strong> voor Pythagoras + <strong>DXF 2010 lijnen</strong> voor AutoCAD
+                    </p>
+                  </div>
+                </div>
+                <div className="px-4 py-3">
+                  <button
+                    onClick={handleSplitTP3}
+                    disabled={!file || status.type === 'converting'}
+                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-emerald-500/40 bg-emerald-500/10 py-2.5 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/18 disabled:pointer-events-none disabled:opacity-50"
+                  >
+                    {status.type === 'converting'
+                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
+                      : <><Scissors className="h-4 w-4" /> Splitsen → XML + DXF 2010</>
+                    }
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* LN3 section */}
             {isLN3 && (
@@ -330,7 +401,7 @@ export default function ConverterPage() {
                   <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
                 </div>
                 <div>
-                  <label className={lblCls}>{(isTN3 || isLN3) ? 'Naar formaat (enkelvoudig)' : 'Naar formaat'}</label>
+                  <label className={lblCls}>{(isTN3 || isLN3 || isTP3) ? 'Naar formaat (enkelvoudig)' : 'Naar formaat'}</label>
                   <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
                     {FORMATS.filter(f => f !== inputFormat).map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
                   </select>
@@ -364,7 +435,7 @@ export default function ConverterPage() {
                 >
                   {status.type === 'converting'
                     ? <><Loader2 className="h-4 w-4 animate-spin text-[var(--accent)]" /> Bezig…</>
-                    : <><Download className="h-4 w-4 text-[var(--accent)]" /> {(isTN3 || isLN3) ? 'Enkelvoudig omzetten' : 'Omzetten & downloaden'}</>
+                    : <><Download className="h-4 w-4 text-[var(--accent)]" /> {(isTN3 || isLN3 || isTP3) ? 'Enkelvoudig omzetten' : 'Omzetten & downloaden'}</>
                   }
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                 </button>
@@ -382,8 +453,8 @@ export default function ConverterPage() {
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             <span className="font-semibold text-[var(--text-soft)]">Let op: </span>
-            SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF, TN3 en LN3 hebben volledige ondersteuning.
-            TN3 splitsen genereert driehoeken via Delaunay triangulatie. LN3 exporteert ontwerplijnen als DXF 2010.
+            SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF, TN3, LN3 en TP3 hebben volledige ondersteuning.
+            TP3 (gecombineerd projectbestand) splitst direct in oppervlak (XML) + lijnen (DXF 2010).
           </p>
         </div>
       </div>

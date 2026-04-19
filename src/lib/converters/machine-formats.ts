@@ -23,7 +23,7 @@ export interface MachineFile {
   lines: Polyline[]
 }
 
-export type FileFormat = 'landxml' | 'dxf' | 'tn3' | 'ln3' | 'svl' | 'svd'
+export type FileFormat = 'landxml' | 'dxf' | 'tn3' | 'ln3' | 'tp3' | 'svl' | 'svd'
 
 // ─── Format detection ─────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ export function detectFormat(filename: string, firstBytes: Uint8Array): FileForm
   if (ext === 'dxf') return 'dxf'
   if (ext === 'tn3') return 'tn3'
   if (ext === 'ln3') return 'ln3'
-  if (ext === 'tp3') return 'tn3' // TP3 combined — parse as TN3 surface
+  if (ext === 'tp3') return 'tp3'
   if (ext === 'svl') return 'svl'
   if (ext === 'svd') return 'svd'
   // Content-based detection
@@ -41,6 +41,7 @@ export function detectFormat(filename: string, firstBytes: Uint8Array): FileForm
   if (txt.includes('<?xml') || txt.includes('<LandXML')) return 'landxml'
   if (txt.startsWith('Topcon TN3')) return 'tn3'
   if (txt.startsWith('Topcon LN3')) return 'ln3'
+  if (txt.startsWith('Topcon TP3')) return 'tp3'
   if (firstBytes[248] === 0x54 && firstBytes[249] === 0x52) return 'svl' // TRMINDEX
   return 'landxml'
 }
@@ -664,6 +665,183 @@ function encodeUtf16LE(s: string): ArrayBuffer {
   return buf
 }
 
+// ─── TP3 parser (combined: surface + lines) ──────────────────────────────────
+//
+// TP3 binary layout:
+//   Offset 0:  "Topcon TP3\0" magic
+//   Offset 28: project name UTF-16LE
+//   18-byte block headers (uint16 type, uint16 hdrSz=18, uint16 rpb, uint16 count,
+//                          uint16 stride, uint32 sentinel=0xFFFFFFFE, uint32 sentinel)
+//
+//  type=2  stride=24  : raw vertices (X, Y, Z float64) — RELATIVE to per-object refX/refY
+//                       (first 4 records are normalization vectors, skip)
+//  type=11 stride=340 : object metadata (name UTF-16LE @+2, refX float64 @+138, refY @+146)
+//                       Surface objects have refX=refY=0; line objects have real refs
+//  type=12 stride=32  : vertex range mapping (start uint16 @+4, count uint32 @+12)
+//                       Records map to line objects in order; extras append to last line
+//                       The first range (start=0, count=4) is the normalization
+//  type=14 stride=24  : surface triangles (uint32×6: 3 vertex indices + 3 neighbors)
+//                       Indices are LOCAL to the surface vertex array
+//  type=17 stride=332 : surface metadata (name UTF-16LE @+30, refX @+160, refY @+168)
+
+export function parseTP3(buf: ArrayBuffer): MachineFile {
+  const view = new DataView(buf)
+  const bytes = new Uint8Array(buf)
+  const N = buf.byteLength
+
+  const magic = new TextDecoder().decode(bytes.slice(0, 10))
+  if (!magic.startsWith('Topcon TP3')) {
+    throw new Error('Geen geldig TP3-bestand')
+  }
+
+  // Project name
+  let nameEnd = 28
+  for (let i = 28; i < Math.min(200, N - 2); i += 2) {
+    if (view.getUint16(i, true) === 0) { nameEnd = i; break }
+  }
+  const projectName = new TextDecoder('utf-16le').decode(bytes.slice(28, nameEnd))
+
+  // Scan 18-byte block headers
+  type Blk = { off: number; type: number; stride: number; count: number; dataOff: number }
+  const blocks: Blk[] = []
+  for (let i = 0; i < N - 18; i += 2) {
+    const t = view.getUint16(i, true)
+    if (t < 1 || t > 30) continue
+    if (view.getUint16(i + 2, true) !== 18) continue
+    const count  = view.getUint16(i + 6, true)
+    const stride = view.getUint16(i + 8, true)
+    if (stride === 0 || stride > 2000) continue
+    if (view.getUint32(i + 10, true) !== 0xFFFFFFFE) continue
+    const dataEnd = i + 18 + count * stride
+    if (dataEnd > N) continue
+    blocks.push({ off: i, type: t, stride, count, dataOff: i + 18 })
+  }
+
+  // type=2: raw RELATIVE vertices
+  type RawVtx = { x: number; y: number; z: number }
+  const rawVerts: RawVtx[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 2 || blk.stride !== 24) continue
+    for (let j = 0; j < blk.count; j++) {
+      const o = blk.dataOff + j * 24
+      rawVerts.push({
+        x: view.getFloat64(o,     true),
+        y: view.getFloat64(o + 8, true),
+        z: view.getFloat64(o + 16, true),
+      })
+    }
+  }
+
+  // type=11: line objects (filter to those with non-zero refX)
+  type LineObj = { name: string; refX: number; refY: number }
+  const lineObjects: LineObj[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 11 || blk.stride < 300) continue
+    for (let j = 0; j < blk.count; j++) {
+      const recOff = blk.dataOff + j * blk.stride
+      const refX = view.getFloat64(recOff + 138, true)
+      if (Math.abs(refX) < 1) continue
+      const refY = view.getFloat64(recOff + 146, true)
+      let nEnd = recOff + blk.stride
+      for (let k = recOff + 2; k < recOff + blk.stride - 1 && k + 1 < N; k += 2) {
+        if (view.getUint16(k, true) === 0) { nEnd = k; break }
+      }
+      const lineName = new TextDecoder('utf-16le').decode(bytes.slice(recOff + 2, nEnd))
+      lineObjects.push({ name: lineName || `Lijn ${lineObjects.length + 1}`, refX, refY })
+    }
+  }
+
+  // type=12: vertex range mapping
+  type Range = { start: number; count: number }
+  const allRanges: Range[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 12 || blk.stride !== 32) continue
+    for (let j = 0; j < blk.count; j++) {
+      const o = blk.dataOff + j * 32
+      allRanges.push({
+        start: view.getUint16(o + 4,  true),
+        count: view.getUint32(o + 12, true),
+      })
+    }
+  }
+
+  // Build line polylines (skip normalization range with start=0)
+  const lineRanges = allRanges.filter(r => r.start >= 4 && r.count > 0 && r.count < 100000)
+  const lines: Polyline[] = []
+  for (let i = 0; i < lineRanges.length; i++) {
+    const r = lineRanges[i]
+    const lineObj = i < lineObjects.length
+      ? lineObjects[i]
+      : lineObjects.length > 0 ? lineObjects[lineObjects.length - 1] : null
+    if (!lineObj) continue
+    const pts: Point3D[] = []
+    for (let j = 0; j < r.count; j++) {
+      const v = rawVerts[r.start + j]
+      if (!v) break
+      pts.push({ x: lineObj.refX + v.x, y: lineObj.refY + v.y, z: v.z })
+    }
+    if (pts.length < 2) continue
+    if (i < lineObjects.length) {
+      lines.push({ name: lineObj.name, points: pts })
+    } else if (lines.length > 0) {
+      lines[lines.length - 1].points.push(...pts)
+    }
+  }
+
+  // type=17: surface metadata
+  let surfaceName = 'Oppervlak'
+  let surfaceRefX = 0
+  let surfaceRefY = 0
+  for (const blk of blocks) {
+    if (blk.type !== 17 || blk.stride < 200 || blk.count < 1) continue
+    const recOff = blk.dataOff
+    surfaceRefX = view.getFloat64(recOff + 160, true)
+    surfaceRefY = view.getFloat64(recOff + 168, true)
+    let nEnd = recOff + blk.stride
+    for (let k = recOff + 30; k < recOff + blk.stride - 1 && k + 1 < N; k += 2) {
+      if (view.getUint16(k, true) === 0) { nEnd = k; break }
+    }
+    const sn = new TextDecoder('utf-16le').decode(bytes.slice(recOff + 30, nEnd))
+    if (sn) surfaceName = sn
+    break
+  }
+
+  // Surface vertices = raw verts not used by any line range, minus first 4 (normalization)
+  const usedIdx = new Set<number>()
+  for (let i = 0; i < 4; i++) usedIdx.add(i)
+  for (const r of allRanges) {
+    if (r.start < 4 || r.count > 100000) continue
+    for (let j = 0; j < r.count; j++) usedIdx.add(r.start + j)
+  }
+  const surfaceVerts: Point3D[] = []
+  for (let i = 0; i < rawVerts.length; i++) {
+    if (usedIdx.has(i)) continue
+    const v = rawVerts[i]
+    surfaceVerts.push({ x: surfaceRefX + v.x, y: surfaceRefY + v.y, z: v.z })
+  }
+
+  // type=14: triangles (local indices into surface vertex array)
+  const triangles: Triangle[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 14 || blk.stride !== 24) continue
+    for (let j = 0; j < blk.count; j++) {
+      const o = blk.dataOff + j * 24
+      const a = view.getUint32(o,     true)
+      const b = view.getUint32(o + 4, true)
+      const c = view.getUint32(o + 8, true)
+      if (a < surfaceVerts.length && b < surfaceVerts.length && c < surfaceVerts.length) {
+        triangles.push([a, b, c])
+      }
+    }
+  }
+
+  return {
+    name: projectName || 'TP3',
+    surfaces: surfaceVerts.length > 0 ? [{ name: surfaceName, points: surfaceVerts, triangles }] : [],
+    lines,
+  }
+}
+
 // ─── SVL parser ───────────────────────────────────────────────────────────────
 
 export function parseSVL(buf: ArrayBuffer): MachineFile {
@@ -903,6 +1081,8 @@ export function convert(
     parsed = parseSVD(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
   } else if (inputFormat === 'ln3') {
     parsed = parseLN3(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
+  } else if (inputFormat === 'tp3') {
+    parsed = parseTP3(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
   } else {
     throw new Error(`Onbekend invoerformaat: ${inputFormat}`)
   }
