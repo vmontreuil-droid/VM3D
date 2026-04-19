@@ -72,7 +72,7 @@ function StatCard({
           <p className={`mt-0.5 text-xl font-bold ${color}`}>{value}</p>
           {sub && <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">{sub}</p>}
         </div>
-        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${color.replace('text-', 'bg-').replace('300', '500/12').replace('400', '500/12')}`}>
+        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${color.includes('var(') ? 'bg-[var(--accent)]/12' : color.replace('text-', 'bg-').replace('300', '500/12').replace('400', '500/12')}`}>
           <Icon className={`h-4 w-4 ${color}`} />
         </div>
       </div>
