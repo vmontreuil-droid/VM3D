@@ -37,6 +37,7 @@ export type DocumentData = {
   created_at: string
   valid_until?: string | null    // offerte
   due_date?: string | null       // factuur
+  sign_link?: string | null      // offerte online handtekening
   payment_terms: string | null
   notes: string | null
   currency: string

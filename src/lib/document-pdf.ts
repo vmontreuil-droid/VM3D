@@ -28,7 +28,7 @@ const P = {
   navy:       [18,  24,  42]  as RGB,   // dark text / nav
   border:     [234, 223, 204] as RGB,   // warm border
   borderSoft: [240, 234, 220] as RGB,
-  tableHdr:   [28,  36,  58]  as RGB,   // table header
+  tableHdr:   [78,  90, 112]  as RGB,   // table header (licht grijs-blauw)
   rowOdd:     [251, 249, 246] as RGB,   // warm off-white
   rowEven:    [255, 255, 255] as RGB,
   textDark:   [22,  28,  46]  as RGB,
@@ -511,6 +511,49 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
       ML + 8, y + 10.5
     )
     y += 18
+  }
+
+  // ── ONLINE GOEDKEURING (offerte met sign_link) ───────────────
+  if (!isFac && doc.sign_link) {
+    y += 4
+    const signQr = await qrDataUrl(doc.sign_link)
+    const SQ = 28
+    const SBH = SQ + 16
+    fill(pdf, P.orangeBg)
+    rule(pdf, P.border)
+    pdf.setLineWidth(0.3)
+    pdf.roundedRect(ML, y, CW, SBH, 3, 3, 'FD')
+    fill(pdf, P.orange)
+    pdf.rect(ML, y, 4, SBH, 'F')
+
+    ink(pdf, P.orange)
+    pdf.setFont('helvetica', 'bold')
+    pdf.setFontSize(8)
+    pdf.text('ONLINE GOEDKEUREN', ML + 8, y + 6.5)
+    rule(pdf, P.border)
+    pdf.setLineWidth(0.2)
+    pdf.line(ML + 8, y + 8.5, MR - 4, y + 8.5)
+
+    if (signQr) {
+      try { pdf.addImage(signQr, 'PNG', ML + 6, y + 11, SQ, SQ) } catch { /* skip */ }
+    }
+    ink(pdf, P.textMuted)
+    pdf.setFont('helvetica', 'normal')
+    pdf.setFontSize(6.5)
+    pdf.text('Scan om te ondertekenen', ML + 6 + SQ / 2, y + 11 + SQ + 3.5, { align: 'center' })
+
+    const lx = ML + SQ + 14
+    ink(pdf, P.textSoft)
+    pdf.setFontSize(8)
+    pdf.text('Scan de QR-code met uw smartphone of klik op de link', lx, y + 14)
+    pdf.text('om de offerte online te lezen en digitaal te ondertekenen.', lx, y + 19)
+    ink(pdf, P.orange)
+    pdf.setFont('helvetica', 'bold')
+    pdf.setFontSize(7.5)
+    const shortUrl = doc.sign_link.replace(/^https?:\/\//, '')
+    pdf.text(shortUrl, lx, y + 26)
+
+    y += SBH + 6
   }
 
   // ── FOOTER (all pages) ───────────────────────────────────────

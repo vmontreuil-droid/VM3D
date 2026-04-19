@@ -99,6 +99,7 @@ export default function OfferteDetailClient({ offerte, lines, customer, company,
       })),
       customer: customer ? { ...emptyCompany, ...customer } : emptyCompany,
       company: company ? { ...emptyCompany, ...company } : emptyCompany,
+      sign_link: signLink,
     }
   }
 
