@@ -47,8 +47,7 @@ export default function OffertePage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setSubmitted(true);
-    }, 1200); // Simuleer verzending
+                className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
   }
 
   return (
@@ -61,8 +60,7 @@ export default function OffertePage() {
         />
         <div className="flex flex-col items-center justify-center py-10">
           {submitted ? (
-            <div className="flex flex-col items-center gap-4 p-8 rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-lg w-full max-w-3xl">
-              <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
               <h2 className="text-2xl font-bold text-[var(--text-main)]">Offerte verzonden!</h2>
               <p className="text-[var(--text-soft)] text-center max-w-md">
                 Bedankt voor uw aanvraag. We nemen zo snel mogelijk contact met u op.
@@ -75,8 +73,7 @@ export default function OffertePage() {
               className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
             >
               {/* Persoonlijke gegevens */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                   <label htmlFor="name" className="font-semibold text-[var(--text-main)]">Volledige naam *</label>
                   <input
                     type="text"
@@ -88,8 +85,7 @@ export default function OffertePage() {
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="Jan Jansen"
-                  />
-                  <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Vul uw volledige naam in.</p>
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                 </div>
                 <div>
                   <label htmlFor="email" className="font-semibold text-[var(--text-main)]">E-mailadres *</label>
@@ -105,7 +101,7 @@ export default function OffertePage() {
                     placeholder="jan@voorbeeld.be"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> We sturen de offerte naar dit adres.</p>
-                </div>
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                 <div>
                   <label htmlFor="phone" className="font-semibold text-[var(--text-main)]">Telefoonnummer</label>
                   <input
@@ -140,8 +136,7 @@ export default function OffertePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="dienst" className="font-semibold text-[var(--text-main)]">Gewenste dienst *</label>
-                  <select
-                    id="dienst"
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     name="dienst"
                     required
                     value={form.dienst}
@@ -153,8 +148,7 @@ export default function OffertePage() {
                       <option key={d} value={d}>{d}</option>
                     ))}
                   </select>
-                  <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Kies de dienst die het beste past.</p>
-                </div>
+                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                 <div className="relative">
                   <label htmlFor="date" className="font-semibold text-[var(--text-main)]">Gewenste uitvoeringsdatum</label>
                   <div className="relative mt-2">
