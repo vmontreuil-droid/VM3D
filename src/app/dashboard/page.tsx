@@ -69,6 +69,11 @@ export default async function DashboardPage() {
     .single()
 
   const isAdmin = profile?.role === 'admin'
+
+  if (isAdmin) {
+    redirect('/admin')
+  }
+
   const logoSignedUrl = await getLogoSignedUrl(adminSupabase, profile?.logo_url)
 
   const { data: projects, error: projectsError } = await adminSupabase
