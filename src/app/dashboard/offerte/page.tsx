@@ -47,7 +47,6 @@ export default function OffertePage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-                className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
   }
 
   return (
@@ -59,8 +58,7 @@ export default function OffertePage() {
           description="Ontvang een offerte op maat voor uw 3D-project. Vul het formulier zorgvuldig in. Elk veld bevat uitleg en tips om u te begeleiden."
         />
         <div className="flex flex-col items-center justify-center py-10">
-          {submitted ? (
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+            {submitted ? (
               <h2 className="text-2xl font-bold text-[var(--text-main)]">Offerte verzonden!</h2>
               <p className="text-[var(--text-soft)] text-center max-w-md">
                 Bedankt voor uw aanvraag. We nemen zo snel mogelijk contact met u op.
@@ -69,7 +67,6 @@ export default function OffertePage() {
           ) : (
             <form
               onSubmit={handleSubmit}
-              className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
               className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
             >
               {/* Persoonlijke gegevens */}
@@ -85,8 +82,7 @@ export default function OffertePage() {
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="Jan Jansen"
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                </div>
+                        </div>
                 <div>
                   <label htmlFor="email" className="font-semibold text-[var(--text-main)]">E-mailadres *</label>
                   <input
