@@ -158,11 +158,14 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
     } catch { /* skip */ }
   }
 
-  // Company name (dark, bold)
-  ink(pdf, P.navy)
+  // Company name: "MV3D." dark + "CLOUD" orange
   pdf.setFont('helvetica', 'bold')
   pdf.setFontSize(12)
-  pdf.text(companyName, logoEndX, STRIPE + 10)
+  ink(pdf, P.navy)
+  pdf.text('MV3D.', logoEndX, STRIPE + 10)
+  const mv3dW = pdf.getTextWidth('MV3D.')
+  ink(pdf, P.orange)
+  pdf.text('CLOUD', logoEndX + mv3dW, STRIPE + 10)
 
   // Company details
   ink(pdf, P.textSoft)
