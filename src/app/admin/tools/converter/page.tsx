@@ -5,7 +5,7 @@ import AppShell from '@/components/app-shell'
 import { Upload, Download, ArrowRight, FileCode2, Loader2, CheckCircle, AlertCircle, RefreshCw, Scissors } from 'lucide-react'
 import {
   convert, detectFormat, parseTN3, parseLN3, parseTP3, triangulate,
-  generateLandXML, generateDXF2010LinesPythagoras,
+  generateLandXML, generateLandXMLLines, generateDXF2010LinesPythagoras,
   type FileFormat
 } from '@/lib/converters/machine-formats'
 
@@ -92,7 +92,7 @@ export default function ConverterPage() {
     if (f) handleFile(f)
   }, [handleFile])
 
-  // Split TN3 → XML (LandXML oppervlak) + DXF 2010 (lijnen)
+  // Split TN3 → XML oppervlak + (optioneel) XML lijnen
   const handleSplitTN3 = useCallback(async () => {
     if (!file) return
     setStatus({ type: 'converting' })
@@ -100,7 +100,6 @@ export default function ConverterPage() {
       const arrayBuf = await file.arrayBuffer()
       const parsed = parseTN3(arrayBuf)
 
-      // Triangulate surface if no faces came from the TN3 (fallback)
       for (const surf of parsed.surfaces) {
         if (surf.triangles.length === 0 && surf.points.length >= 3) {
           surf.triangles = triangulate(surf.points)
@@ -108,29 +107,25 @@ export default function ConverterPage() {
       }
 
       const baseName = file.name.replace(/\.[^.]+$/, '')
+      const downloadedFiles: string[] = []
 
-      // File 1: LandXML — surface only (points + real triangles)
+      // File 1: LandXML oppervlak
       const surfaceOnly = { ...parsed, lines: [] }
-      const xmlStr = generateLandXML(surfaceOnly)
-      downloadBlob(new Blob([xmlStr], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
+      const xmlSurface = generateLandXML(surfaceOnly)
+      downloadBlob(new Blob([xmlSurface], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
+      downloadedFiles.push(`${baseName}_oppervlak.xml (${parsed.surfaces[0]?.points.length ?? 0} punten, ${parsed.surfaces[0]?.triangles.length ?? 0} driehoeken)`)
 
-      await new Promise(r => setTimeout(r, 300))
+      // File 2: LandXML lijnen — alleen als er echte breaklines zijn
+      if (parsed.lines.length > 0) {
+        await new Promise(r => setTimeout(r, 300))
+        const linesOnly = { ...parsed, surfaces: [] }
+        const xmlLines = generateLandXMLLines(linesOnly)
+        downloadBlob(new Blob([xmlLines], { type: 'application/xml' }), `${baseName}_lijnen.xml`)
+        const lnPts = parsed.lines.reduce((s, l) => s + l.points.length, 0)
+        downloadedFiles.push(`${baseName}_lijnen.xml (${parsed.lines.length} lijnen, ${lnPts} punten)`)
+      }
 
-      // File 2: DXF 2010 — real breaklines from the TN3 lines section
-      // If no lines were parsed, fall back to triangle edges
-      const linesData = parsed.lines.length > 0
-        ? { ...parsed, surfaces: [] }   // only lines → polylines in DXF
-        : parsed                        // fallback: triangle edges
-      const dxfStr = await generateDXF2010LinesPythagoras(linesData, baseName)
-      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
-
-      const lineInfo = parsed.lines.length > 0
-        ? `${parsed.lines.length} lijnen`
-        : 'driehoekskanten (geen aparte lijnen gevonden)'
-      setStatus({ type: 'done', files: [
-        `${baseName}_oppervlak.xml (${parsed.surfaces[0]?.points.length ?? 0} punten, ${parsed.surfaces[0]?.triangles.length ?? 0} driehoeken)`,
-        `${baseName}_lijnen.dxf (${lineInfo})`,
-      ] })
+      setStatus({ type: 'done', files: downloadedFiles })
     } catch (err) {
       setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
     }
@@ -167,7 +162,7 @@ export default function ConverterPage() {
     if (inputRef.current) inputRef.current.value = ''
   }
 
-  // LN3 → DXF: export all design lines as LINE entities
+  // LN3 → XML lijnen (PlanFeatures)
   const handleConvertLN3 = useCallback(async () => {
     if (!file) return
     setStatus({ type: 'converting' })
@@ -175,17 +170,17 @@ export default function ConverterPage() {
       const arrayBuf = await file.arrayBuffer()
       const parsed = parseLN3(arrayBuf)
       const baseName = file.name.replace(/\.[^.]+$/, '')
-      const dxfStr = await generateDXF2010LinesPythagoras(parsed, baseName)
-      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
+      const xmlStr = generateLandXMLLines(parsed)
+      downloadBlob(new Blob([xmlStr], { type: 'application/xml' }), `${baseName}_lijnen.xml`)
       setStatus({ type: 'done', files: [
-        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${parsed.lines.reduce((s, l) => s + l.points.length, 0)} punten)`,
+        `${baseName}_lijnen.xml (${parsed.lines.length} lijnen, ${parsed.lines.reduce((s, l) => s + l.points.length, 0)} punten)`,
       ] })
     } catch (err) {
       setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
     }
   }, [file])
 
-  // TP3 splitsen → XML (oppervlak) + DXF 2010 (lijnen) — gecombineerd projectbestand
+  // TP3 splitsen → XML oppervlak + XML lijnen (PlanFeatures) — beide LandXML
   const handleSplitTP3 = useCallback(async () => {
     if (!file) return
     setStatus({ type: 'converting' })
@@ -201,24 +196,24 @@ export default function ConverterPage() {
 
       const baseName = file.name.replace(/\.[^.]+$/, '')
 
-      // File 1: LandXML — surface only
+      // File 1: LandXML — oppervlakte (Surface met Pnts + Faces)
       const surfaceOnly = { ...parsed, lines: [] }
-      const xmlStr = generateLandXML(surfaceOnly)
-      downloadBlob(new Blob([xmlStr], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
+      const xmlSurface = generateLandXML(surfaceOnly)
+      downloadBlob(new Blob([xmlSurface], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
 
       await new Promise(r => setTimeout(r, 300))
 
-      // File 2: DXF 2010 — lines only
+      // File 2: LandXML — lijnen (PlanFeatures met CoordGeom Line entries)
       const linesOnly = { ...parsed, surfaces: [] }
-      const dxfStr = await generateDXF2010LinesPythagoras(linesOnly, baseName)
-      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
+      const xmlLines = generateLandXMLLines(linesOnly)
+      downloadBlob(new Blob([xmlLines], { type: 'application/xml' }), `${baseName}_lijnen.xml`)
 
       const ptCount = parsed.surfaces[0]?.points.length ?? 0
       const triCount = parsed.surfaces[0]?.triangles.length ?? 0
       const lnPts = parsed.lines.reduce((s, l) => s + l.points.length, 0)
       setStatus({ type: 'done', files: [
         `${baseName}_oppervlak.xml (${ptCount} punten, ${triCount} driehoeken)`,
-        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${lnPts} punten)`,
+        `${baseName}_lijnen.xml (${parsed.lines.length} lijnen, ${lnPts} punten)`,
       ] })
     } catch (err) {
       setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
@@ -315,7 +310,7 @@ export default function ConverterPage() {
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">TP3 splitsen (gecombineerd project)</p>
                     <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert 2 bestanden tegelijk: <strong>XML oppervlak</strong> voor Pythagoras + <strong>DXF 2010 lijnen</strong> voor AutoCAD
+                      Exporteert 2 LandXML bestanden voor Pythagoras: <strong>oppervlak</strong> (Surface) + <strong>lijnen</strong> (PlanFeatures)
                     </p>
                   </div>
                 </div>
@@ -327,7 +322,7 @@ export default function ConverterPage() {
                   >
                     {status.type === 'converting'
                       ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Scissors className="h-4 w-4" /> Splitsen → XML + DXF 2010</>
+                      : <><Scissors className="h-4 w-4" /> Splitsen → 2× XML</>
                     }
                   </button>
                 </div>
@@ -342,7 +337,7 @@ export default function ConverterPage() {
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">LN3 naar DXF</p>
                     <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert alle ontwerplijnen als <strong>DXF 2010 LINE-entiteiten</strong>
+                      Exporteert alle ontwerplijnen als <strong>LandXML PlanFeatures</strong>
                     </p>
                   </div>
                 </div>
@@ -354,7 +349,7 @@ export default function ConverterPage() {
                   >
                     {status.type === 'converting'
                       ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Download className="h-4 w-4" /> Exporteren → DXF 2010</>
+                      : <><Download className="h-4 w-4" /> Exporteren → XML</>
                     }
                   </button>
                 </div>
@@ -369,7 +364,7 @@ export default function ConverterPage() {
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">TN3 splitsen</p>
                     <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert 2 bestanden tegelijk: <strong>XML oppervlak</strong> voor Pythagoras + <strong>DXF 2010 lijnen</strong> voor AutoCAD
+                      Exporteert 2 LandXML bestanden voor Pythagoras: <strong>oppervlak</strong> (Surface) + <strong>lijnen</strong> (PlanFeatures)
                     </p>
                   </div>
                 </div>
@@ -381,7 +376,7 @@ export default function ConverterPage() {
                   >
                     {status.type === 'converting'
                       ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Scissors className="h-4 w-4" /> Splitsen → XML + DXF 2010</>
+                      : <><Scissors className="h-4 w-4" /> Splitsen → 2× XML</>
                     }
                   </button>
                 </div>
@@ -454,7 +449,7 @@ export default function ConverterPage() {
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             <span className="font-semibold text-[var(--text-soft)]">Let op: </span>
             SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF, TN3, LN3 en TP3 hebben volledige ondersteuning.
-            TP3 (gecombineerd projectbestand) splitst direct in oppervlak (XML) + lijnen (DXF 2010).
+            TP3 (gecombineerd projectbestand) splitst direct in twee LandXML bestanden: oppervlak en lijnen — beide direct importeerbaar in Pythagoras.
           </p>
         </div>
       </div>

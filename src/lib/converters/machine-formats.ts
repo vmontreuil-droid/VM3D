@@ -184,6 +184,82 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
+// ─── LandXML lijnen-export (PlanFeatures, LandXML 1.2 standaard) ─────────────
+//
+// Pythagoras werkt foutloos met onze Surface XML, dus voor de lijnen gebruiken
+// we hetzelfde LandXML formaat — `<PlanFeatures>` met `<CoordGeom><Line>`
+// entries. Dit is de officiele LandXML 1.2 manier voor 3D ontwerplijnen.
+
+export function generateLandXMLLines(data: MachineFile): string {
+  const now = new Date()
+  const date = now.toISOString().slice(0, 10)
+  const time = now.toTimeString().slice(0, 8)
+  const ts = now.toISOString().replace('.000Z', '').replace('Z', '')
+
+  const planFeaturesXml = data.lines.map(pl => {
+    if (pl.points.length < 2) return ''
+    const lineEls: string[] = []
+    for (let i = 0; i < pl.points.length - 1; i++) {
+      const p1 = pl.points[i]
+      const p2 = pl.points[i + 1]
+      lineEls.push(`        <Line>
+          <Start>${p1.x.toFixed(12)} ${p1.y.toFixed(12)} ${p1.z.toFixed(12)}</Start>
+          <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
+        </Line>`)
+    }
+    if (pl.closed && pl.points.length > 2) {
+      const p1 = pl.points[pl.points.length - 1]
+      const p2 = pl.points[0]
+      lineEls.push(`        <Line>
+          <Start>${p1.x.toFixed(12)} ${p1.y.toFixed(12)} ${p1.z.toFixed(12)}</Start>
+          <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
+        </Line>`)
+    }
+    return `    <PlanFeature name="${escapeXml(pl.name)}">
+      <CoordGeom>
+${lineEls.join('\n')}
+      </CoordGeom>
+    </PlanFeature>`
+  }).filter(Boolean).join('\n')
+
+  return `<?xml version="1.0" standalone="yes"?>
+<LandXML
+  date="${date}"
+  language="English"
+  readOnly="false"
+  time="${time}"
+  version="1.2"
+  xmlns="http://www.landxml.org/schema/LandXML-1.2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation=
+    "http://www.landxml.org/schema/LandXML-1.2
+http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
+>
+  <Units>
+    <Metric
+      angularUnit="decimal degrees"
+      areaUnit="squareMeter"
+      diameterUnit="meter"
+      directionUnit="decimal degrees"
+      linearUnit="meter"
+      pressureUnit="milliBars"
+      temperatureUnit="celsius"
+      volumeUnit="cubicMeter"
+    />
+  </Units>
+  <Application
+    manufacturer="MV3D.cloud"
+    manufacturerURL="mv3d.cloud"
+    name="MV3D Converter"
+    timeStamp="${ts}"
+    version="1.0"
+  />
+  <PlanFeatures>
+${planFeaturesXml}
+  </PlanFeatures>
+</LandXML>`
+}
+
 // ─── DXF generator (surfaces = 3DFACE, lines = POLYLINE) ─────────────────────
 
 export function generateDXF(data: MachineFile, version: 'AC1015' | 'AC1024' = 'AC1015'): string {
