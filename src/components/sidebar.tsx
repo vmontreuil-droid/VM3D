@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -234,6 +234,12 @@ export default function Sidebar({
       href: '/admin/tools',
       match: (pathname) => pathname === '/admin/tools',
       icon: <Zap className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Converter',
+      href: '/admin/tools/converter',
+      match: (pathname) => pathname.startsWith('/admin/tools/converter'),
+      icon: <FileCode2 className="h-[17px] w-[17px]" />,
     },
     {
       label: t.platform.customers,
@@ -520,8 +526,27 @@ export default function Sidebar({
           </div>
 
           {isAdmin && (
-            <div>
-              <div className="space-y-1.5">{adminItems.map(renderNavItem)}</div>
+            <div className="space-y-5">
+              <div>
+                {!collapsed && (
+                  <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
+                    Tools
+                  </p>
+                )}
+                <div className="space-y-1.5">
+                  {adminItems.slice(0, 2).map(renderNavItem)}
+                </div>
+              </div>
+              <div>
+                {!collapsed && (
+                  <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--text-muted)]">
+                    Beheer
+                  </p>
+                )}
+                <div className="space-y-1.5">
+                  {adminItems.slice(2).map(renderNavItem)}
+                </div>
+              </div>
             </div>
           )}
         </nav>

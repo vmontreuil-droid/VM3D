@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {
   UserPlus, FileText, Receipt, FolderPlus, Ticket, Construction,
   UserCog, Users, MousePointerClick, FolderOpen, Bell, BarChart3,
-  Clock, StickyNote, FilePlus, Zap,
+  Clock, StickyNote, FilePlus, Zap, FileCode2,
 } from 'lucide-react'
 
 const sections = [
@@ -40,8 +40,9 @@ const sections = [
     title: 'Acties',
     color: 'green',
     items: [
-      { label: 'Herinneringen',  href: '/admin/herinneringen', icon: Bell,     sub: 'Betalingsherinneringen' },
-      { label: 'Statistieken',   href: '/admin/statistieken',  icon: BarChart3, sub: 'Rapporten & grafieken' },
+      { label: 'Herinneringen',  href: '/admin/herinneringen',         icon: Bell,      sub: 'Betalingsherinneringen' },
+      { label: 'Statistieken',   href: '/admin/statistieken',          icon: BarChart3,  sub: 'Rapporten & grafieken' },
+      { label: 'Bestandsconverter', href: '/admin/tools/converter',    icon: FileCode2,  sub: 'GPS bestanden omzetten' },
     ],
   },
 ]
