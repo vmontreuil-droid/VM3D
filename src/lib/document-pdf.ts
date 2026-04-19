@@ -124,14 +124,12 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
   const isFac = doc.type === 'factuur'
   const label = isFac ? 'FACTUUR' : 'OFFERTE'
 
-  // Company fallbacks
-  const companyName = doc.company.company_name || BRAND.name
+  // Always use MV3D.CLOUD brand — ignore DB company_name / logo_url
+  const companyName  = BRAND.name
   const companyEmail = doc.company.email || BRAND.email
-  const companyVat  = doc.company.vat_number || BRAND.vat
+  const companyVat   = BRAND.vat
 
-  // Logo: use light version for white bg
-  const logoSrc = doc.company.logo_url || '/mv3d-logo-light.svg'
-  const logo    = await loadLogo(logoSrc)
+  const logo = await loadLogo('/mv3d-logo-light.svg')
 
   // ── HEADER (white bg, orange stripe) ────────────────────────
   const STRIPE  = 2.5
@@ -171,7 +169,7 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
   pdf.setFont('helvetica', 'normal')
   pdf.setFontSize(7.5)
   let cy = STRIPE + 15
-  const compLines = addressLines({ ...doc.company, company_name: null })
+  const compLines = addressLines({ ...doc.company, company_name: null, full_name: null })
   if (doc.company.street || doc.company.city) {
     compLines.forEach(l => { pdf.text(l, logoEndX, cy); cy += 3.5 })
   }
