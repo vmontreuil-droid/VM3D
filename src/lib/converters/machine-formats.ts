@@ -349,10 +349,28 @@ export function parseDXF(text: string): MachineFile {
 }
 
 // ─── TN3 parser ───────────────────────────────────────────────────────────────
+//
+// TN3 binary layout (all LE):
+//   Offset 0:  "Topcon TN3\0" magic (11 bytes)
+//   Offset 11: version/flags bytes
+//   Offset 28: filename in UTF-16LE, null-terminated
+//   Offset 0x62: index table — entries of [uint16 sectionType][uint32 0x16][uint32 byteOffset]
+//
+// Sub-sections are stored as self-describing blocks:
+//   [uint16 type][uint32 0x16][uint32 blockSize(128)][uint32 stride]
+//   [uint32 endByteOffset][uint32 0xFFFFFFFE] (22-byte header)
+//   followed by (endByteOffset - (headerOffset+22)) / stride records
+//
+//  type=1, stride=24: XYZ double triples — surface TIN points (128 per block)
+//  type=2, stride=36: triangle faces: 3×(uint16=1, uint16 pad, uint16 vtxIdx) +
+//                     3×(uint16=2, uint16 pad/FFFE, uint16 neighborIdx)
+//  type=3, stride=12: breakline edges: two endpoints (uint16=1, uint16 layerID, uint16 ptIdx)
+//  type=6, stride=4:  attribute table (all 9 — layer attribution, skip)
 
 export function parseTN3(buf: ArrayBuffer): MachineFile {
   const view = new DataView(buf)
   const bytes = new Uint8Array(buf)
+  const N = buf.byteLength
 
   // Verify magic
   const magic = new TextDecoder().decode(bytes.slice(0, 10))
@@ -360,44 +378,112 @@ export function parseTN3(buf: ArrayBuffer): MachineFile {
     throw new Error('Geen geldig TN3-bestand')
   }
 
-  // Read name from UTF-16LE (starts after magic+null at offset 11)
-  let nameEnd = 28 // after version bytes
-  for (let i = 28; i < Math.min(200, buf.byteLength - 2); i += 2) {
+  // Read name from UTF-16LE at offset 28
+  let nameEnd = 28
+  for (let i = 28; i < Math.min(200, N - 2); i += 2) {
     if (view.getUint16(i, true) === 0) { nameEnd = i; break }
   }
-  const nameBytes = bytes.slice(28, nameEnd)
-  const name = new TextDecoder('utf-16le').decode(nameBytes)
+  const name = new TextDecoder('utf-16le').decode(bytes.slice(28, nameEnd))
 
-  // Scan for XYZ coordinate triplets (doubles, stride 24)
-  // Detect coordinate range from first valid triplet
-  const points: Point3D[] = []
-  let firstX: number | null = null
+  // ── Scan for all sub-section headers matching signature: ──
+  //   uint16 type(1-6), uint32 0x16, uint32 0x80, uint32 stride
+  //   uint32 endOffset, uint32 0xFFFFFFFE/0xFFFFFFFF
 
-  for (let i = 0; i < buf.byteLength - 24; i += 8) {
-    const x = view.getFloat64(i, true)
-    const y = view.getFloat64(i + 8, true)
-    const z = view.getFloat64(i + 16, true)
+  type Blk = { off: number; type: number; stride: number; dataOff: number; dataEnd: number }
+  const blocks: Blk[] = []
 
-    if (
-      isFinite(x) && isFinite(y) && isFinite(z) &&
-      x > 10000 && x < 1000000 &&
-      y > 10000 && y < 1000000 &&
-      z > -100 && z < 10000
-    ) {
-      if (firstX === null) firstX = x
-      // Stay within 500% of first X to avoid false positives
-      if (Math.abs(x - firstX) / Math.abs(firstX) < 5) {
-        points.push({ x, y, z })
-        i += 16 // already consumed 3 doubles (16 more bytes after current i+=8)
+  for (let i = 0; i < N - 22; i += 2) {
+    const t = view.getUint16(i, true)
+    if (t < 1 || t > 6) continue
+    if (view.getUint32(i + 2, true) !== 22) continue
+    if (view.getUint32(i + 6, true) !== 128) continue
+    const stride  = view.getUint32(i + 10, true)
+    if (stride !== 24 && stride !== 36 && stride !== 12 && stride !== 4) continue
+    const endOff  = view.getUint32(i + 14, true)
+    const term    = view.getUint32(i + 18, true)
+    // endOff should be a valid in-file offset > header end
+    if (endOff < i + 22 || endOff > N) continue
+    // term is either 0xFFFFFFFE or 0x1ac (parent offset), both fine
+    if (term > N && term !== 0xFFFFFFFE && term !== 0xFFFFFFFF) continue
+    blocks.push({ off: i, type: t, stride, dataOff: i + 22, dataEnd: endOff })
+  }
+
+  // ── Collect all surface points from type=1 blocks ──
+  const allPoints: Point3D[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 1) continue
+    const nPts = Math.floor((blk.dataEnd - blk.dataOff) / 24)
+    for (let j = 0; j < nPts; j++) {
+      const off = blk.dataOff + j * 24
+      allPoints.push({
+        x: view.getFloat64(off,      true),
+        y: view.getFloat64(off +  8, true),
+        z: view.getFloat64(off + 16, true),
+      })
+    }
+  }
+
+  // ── Collect triangles from type=2 blocks ──
+  // Each 36-byte record: 6 × (uint16 flag, uint16 pad, uint16 idx)
+  // Groups 0-2 (flag=1, bytes 0-5, 6-11, 12-17): vertex indices at bytes 4, 10, 16
+  // Groups 3-5 (flag=2, bytes 18-23, 24-29, 30-35): neighbor indices (skip)
+  const allTriangles: Triangle[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 2) continue
+    const nRec = Math.floor((blk.dataEnd - blk.dataOff) / 36)
+    for (let j = 0; j < nRec; j++) {
+      const off = blk.dataOff + j * 36
+      const v0 = view.getUint16(off +  4, true)   // group 0 idx
+      const v1 = view.getUint16(off + 10, true)   // group 1 idx
+      const v2 = view.getUint16(off + 16, true)   // group 2 idx
+      if (v0 < allPoints.length && v1 < allPoints.length && v2 < allPoints.length) {
+        allTriangles.push([v0, v1, v2])
       }
     }
   }
 
+  // ── Collect breaklines from type=3 blocks ──
+  // Each 12-byte record: two endpoints (uint16=1, uint16 blockID, uint16 localPtIdx) × 2
+  // The blockID × 128 + localPtIdx = global index into allPoints.
+  // Consecutive records chain: end of record[i] == start of record[i+1].
+  // Split into separate polylines wherever the chain breaks.
+  const polylines: Polyline[] = []
+  let currentPoly: Polyline | null = null
+  let prevGlobalIdx = -1
+
+  for (const blk of blocks) {
+    if (blk.type !== 3) continue
+    const nRec = Math.floor((blk.dataEnd - blk.dataOff) / 12)
+    for (let j = 0; j < nRec; j++) {
+      const off     = blk.dataOff + j * 12
+      const aBlock  = view.getUint16(off + 2, true)
+      const aLocal  = view.getUint16(off + 4, true)
+      const bBlock  = view.getUint16(off + 8, true)
+      const bLocal  = view.getUint16(off + 10, true)
+      const aGlobal = aBlock * 128 + aLocal
+      const bGlobal = bBlock * 128 + bLocal
+      if (aGlobal >= allPoints.length || bGlobal >= allPoints.length) continue
+
+      // If this edge does NOT continue from the previous one, start a new polyline
+      if (aGlobal !== prevGlobalIdx) {
+        if (currentPoly && currentPoly.points.length >= 2) polylines.push(currentPoly)
+        currentPoly = { name: `BL${polylines.length + 1}`, points: [allPoints[aGlobal]], closed: false }
+      }
+      currentPoly!.points.push(allPoints[bGlobal])
+      prevGlobalIdx = bGlobal
+    }
+  }
+  if (currentPoly && currentPoly.points.length >= 2) polylines.push(currentPoly)
+
   return {
     name: name || 'TN3',
-    surfaces: [{ name: name || 'TN3 Points', points, triangles: [] }],
-    lines: [],
+    surfaces: [{ name: name || 'Oppervlak', points: allPoints, triangles: allTriangles }],
+    lines: polylines,
   }
+}
+
+function samePoint(a: Point3D, b: Point3D): boolean {
+  return Math.abs(a.x - b.x) < 0.001 && Math.abs(a.y - b.y) < 0.001 && Math.abs(a.z - b.z) < 0.001
 }
 
 // ─── TN3 generator ────────────────────────────────────────────────────────────

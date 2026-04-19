@@ -82,7 +82,7 @@ export default function ConverterPage() {
     if (f) handleFile(f)
   }, [handleFile])
 
-  // Split TN3 → XML (LandXML) + DXF 2010 (lines)
+  // Split TN3 → XML (LandXML oppervlak) + DXF 2010 (lijnen)
   const handleSplitTN3 = useCallback(async () => {
     if (!file) return
     setStatus({ type: 'converting' })
@@ -90,7 +90,7 @@ export default function ConverterPage() {
       const arrayBuf = await file.arrayBuffer()
       const parsed = parseTN3(arrayBuf)
 
-      // Ensure triangles exist
+      // Triangulate surface if no faces came from the TN3 (fallback)
       for (const surf of parsed.surfaces) {
         if (surf.triangles.length === 0 && surf.points.length >= 3) {
           surf.triangles = triangulate(surf.points)
@@ -99,16 +99,28 @@ export default function ConverterPage() {
 
       const baseName = file.name.replace(/\.[^.]+$/, '')
 
-      // File 1: LandXML
-      const xmlStr = generateLandXML(parsed)
+      // File 1: LandXML — surface only (points + real triangles)
+      const surfaceOnly = { ...parsed, lines: [] }
+      const xmlStr = generateLandXML(surfaceOnly)
       downloadBlob(new Blob([xmlStr], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
 
-      // File 2: DXF 2010 lines
-      await new Promise(r => setTimeout(r, 300)) // slight delay so both downloads register
-      const dxfStr = generateDXF2010Lines(parsed, baseName)
+      await new Promise(r => setTimeout(r, 300))
+
+      // File 2: DXF 2010 — real breaklines from the TN3 lines section
+      // If no lines were parsed, fall back to triangle edges
+      const linesData = parsed.lines.length > 0
+        ? { ...parsed, surfaces: [] }   // only lines → polylines in DXF
+        : parsed                        // fallback: triangle edges
+      const dxfStr = generateDXF2010Lines(linesData, baseName)
       downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
 
-      setStatus({ type: 'done', files: [`${baseName}_oppervlak.xml`, `${baseName}_lijnen.dxf`] })
+      const lineInfo = parsed.lines.length > 0
+        ? `${parsed.lines.length} lijnen`
+        : 'driehoekskanten (geen aparte lijnen gevonden)'
+      setStatus({ type: 'done', files: [
+        `${baseName}_oppervlak.xml (${parsed.surfaces[0]?.points.length ?? 0} punten, ${parsed.surfaces[0]?.triangles.length ?? 0} driehoeken)`,
+        `${baseName}_lijnen.dxf (${lineInfo})`,
+      ] })
     } catch (err) {
       setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
     }
