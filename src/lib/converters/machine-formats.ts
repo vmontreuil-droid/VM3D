@@ -792,11 +792,8 @@ export function parseLN3(buf: ArrayBuffer): MachineFile {
     }
   }
 
-  // Build polylines: range[i] → lineObjects[i]. Extra ranges horen bij de
-  // laatste line maar worden alleen aaneengeplakt als ze geometrisch aansluiten;
-  // anders aparte polyline op dezelfde layer (voorkomt spookstreep).
+  // Build polylines: range[i] → lineObjects[i], extras appended to last
   const polylines: Polyline[] = []
-  const JOIN_TOL = 0.01
   for (let i = 0; i < realRanges.length; i++) {
     const range = realRanges[i]
     const lineObj = i < lineObjects.length
@@ -814,15 +811,7 @@ export function parseLN3(buf: ArrayBuffer): MachineFile {
     if (i < lineObjects.length) {
       polylines.push({ name: lineObj.name, points: pts })
     } else if (polylines.length > 0) {
-      const last = polylines[polylines.length - 1]
-      const lp = last.points[last.points.length - 1]
-      const fp = pts[0]
-      const dx = lp.x - fp.x, dy = lp.y - fp.y, dz = lp.z - fp.z
-      if (Math.sqrt(dx*dx + dy*dy + dz*dz) < JOIN_TOL) {
-        last.points.push(...pts.slice(1))
-      } else {
-        polylines.push({ name: lineObj.name, points: pts })
-      }
+      polylines[polylines.length - 1].points.push(...pts)
     }
   }
 
@@ -981,12 +970,8 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
   }
 
   // Build line polylines (skip normalization range with start=0)
-  // Extra ranges horen bij de laatste line object, maar alleen ECHT toevoegen
-  // wanneer de eerste vertex aansluit op de vorige (anders aparte polyline op
-  // dezelfde layer, anders krijg je een spookstreep dwars door de tekening).
   const lineRanges = allRanges.filter(r => r.start >= 4 && r.count > 0 && r.count < 100000)
   const lines: Polyline[] = []
-  const JOIN_TOL = 0.01 // meter — punten moeten echt samenvallen
   for (let i = 0; i < lineRanges.length; i++) {
     const r = lineRanges[i]
     const lineObj = i < lineObjects.length
@@ -1003,18 +988,7 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
     if (i < lineObjects.length) {
       lines.push({ name: lineObj.name, points: pts })
     } else if (lines.length > 0) {
-      const last = lines[lines.length - 1]
-      const lastPt = last.points[last.points.length - 1]
-      const firstPt = pts[0]
-      const dx = lastPt.x - firstPt.x, dy = lastPt.y - firstPt.y, dz = lastPt.z - firstPt.z
-      const dist = Math.sqrt(dx*dx + dy*dy + dz*dz)
-      if (dist < JOIN_TOL) {
-        // Aansluitend → append (skip duplicate first point)
-        last.points.push(...pts.slice(1))
-      } else {
-        // Discontinue → aparte polyline op dezelfde layer
-        lines.push({ name: lineObj.name, points: pts })
-      }
+      lines[lines.length - 1].points.push(...pts)
     }
   }
 
