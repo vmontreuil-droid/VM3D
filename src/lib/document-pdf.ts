@@ -374,15 +374,18 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
   pdf.text(`€ ${fmt(doc.vat_amount)}`, MR - 4, y + 10.5, { align: 'right' })
   y += 17
 
-  // TOTAAL pill (orange, rounded, like the button)
-  fill(pdf, P.orange)
-  pdf.roundedRect(TOT_X, y, TOT_W, 12, 6, 6, 'F')
-  ink(pdf, P.white)
+  // TOTAAL pill — lichte stijl: warm bg + oranje rand, label oranje, bedrag donker
+  fill(pdf, P.orangeLight)
+  rule(pdf, P.orange)
+  pdf.setLineWidth(0.5)
+  pdf.roundedRect(TOT_X, y, TOT_W, 13, 6.5, 6.5, 'FD')
+  ink(pdf, P.orange)
   pdf.setFont('helvetica', 'bold')
-  pdf.setFontSize(8.5)
-  pdf.text('TOTAAL (incl. BTW)', TOT_X + 6, y + 7.5)
+  pdf.setFontSize(7.5)
+  pdf.text('TOTAAL (incl. BTW)', TOT_X + 6, y + 8)
+  ink(pdf, P.navy)
   pdf.setFontSize(13)
-  pdf.text(`€ ${fmt(doc.total)}`, MR - 4, y + 7.8, { align: 'right' })
+  pdf.text(`€ ${fmt(doc.total)}`, MR - 5, y + 8.5, { align: 'right' })
   y += 15 + 9
 
   // ── NOTES / PAYMENT TERMS ────────────────────────────────────
