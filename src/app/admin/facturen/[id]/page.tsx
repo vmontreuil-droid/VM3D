@@ -24,6 +24,9 @@ async function updateFactuurStatusAction(factuurId: number, newStatus: string) {
   if (newStatus === 'betaald') {
     updateData.paid_at = new Date().toISOString()
   }
+  if (newStatus === 'gecrediteerd') {
+    updateData.credited_at = new Date().toISOString()
+  }
 
   const { error } = await adminSupabase
     .from('facturen')
