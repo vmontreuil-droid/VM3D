@@ -395,7 +395,7 @@ export default function SignClient({ offerte, lines, customer, company, token, a
               <div className="space-y-4 p-5">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-widest text-slate-400">
-                    Uw naam (optioneel)
+                    Uw naam <span className="text-[#f7941d]">*</span>
                   </label>
                   <input
                     type="text"
@@ -420,7 +420,7 @@ export default function SignClient({ offerte, lines, customer, company, token, a
                 <button
                   type="button"
                   onClick={handleAsk}
-                  disabled={!question.trim() || askStatus === 'sending'}
+                  disabled={!question.trim() || !askName.trim() || askStatus === 'sending'}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-[#f7941d] py-3 text-sm font-bold text-white transition hover:bg-[#e07810] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {askStatus === 'sending' ? (
