@@ -257,29 +257,38 @@ export function generateDXF(data: MachineFile, version: 'AC1015' | 'AC1024' = 'A
 // coördinaten), LTYPE tabel met CONTINUOUS, en één LAYER per polyline zodat
 // elke ontwerplijn los selecteerbaar is.
 
-// ─── DXF lines export (R12 / AC1009 — universeel compatibel) ─────────────────
+// ─── DXF AC1024 (AutoCAD 2010) — volledige structuur voor Pythagoras ─────────
 //
-// R12 spec: layer namen mogen GEEN spaties bevatten. Pythagoras weigert anders
-// de layer, en daarmee elke entiteit erop. Polylijnen worden als POLYLINE/VERTEX
-// geschreven (verbonden lijn) — dat is de gangbare survey-conventie en geeft
-// een echte ontwerplijn ipv losse stukjes.
+// Pythagoras 2024 weigert minimale (R12) DXF stilzwijgend — er moet een
+// complete AC1024 structuur zijn met handles, owner pointers, subclass markers
+// (AcDbEntity / AcDb3dPolyline), én alle verplichte tables (VPORT, LTYPE,
+// LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE, BLOCK_RECORD), BLOCKS sectie met
+// *Model_Space + *Paper_Space, en een OBJECTS sectie met root DICTIONARY.
+//
+// Vaste handles (matchen het Pythagoras-patroon):
+//   1 BLOCK_RECORD table   2 LAYER table    3 STYLE table    5 LTYPE table
+//   6 VIEW    7 UCS    8 VPORT    9 APPID    A DIMSTYLE
+//   C root DICTIONARY    D ACAD_GROUP    E ACAD_PLOTSTYLENAME
+//   10 layer 0    11 STYLE Standard    12 APPID ACAD
+//   14 LTYPE ByBlock    15 LTYPE ByLayer    16 LTYPE Continuous
+//   17 ACAD_MLINESTYLE    1A ACAD_LAYOUT
+//   1B BLOCK_RECORD *Paper_Space    1C BLOCK *Paper_Space    1D ENDBLK
+//   1F BLOCK_RECORD *Model_Space    20 BLOCK *Model_Space    21 ENDBLK
+//   23 VPORT *Active    27 DIMSTYLE Standard
+//   100+ user layers    1000+ entities
 
 function sanitizeLayerName(name: string, fallback: string): string {
-  // R12: alleen letters, cijfers, $ _ -. Geen spaties, geen accenten.
-  const cleaned = name
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip diacritics
-    .replace(/[^A-Za-z0-9_$\-]/g, '_')
-    .replace(/_+/g, '_')
-    .replace(/^_+|_+$/g, '')
-  return (cleaned.slice(0, 31) || fallback).toUpperCase()
+  // AC1024 staat letters/cijfers/spaties/accenten toe, maar geen <>/\:";?*|=,'`
+  const cleaned = name.replace(/[<>/\\:";?*|=,'`]/g, '_').trim()
+  return cleaned.slice(0, 255) || fallback
 }
 
 export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJNEN'): string {
-  // Lines + surface edges, gegroepeerd per polyline (voor POLYLINE entiteit)
+  // Verzamel polylines + surface edges
   type LinePL = { layer: string; pts: Point3D[]; closed: boolean }
   const polylines: LinePL[] = []
   const layers = new Map<string, number>()
-  const palette = [1, 2, 3, 4, 5, 6, 7, 30, 40, 50, 60, 70, 110, 130, 170, 200, 230]
+  const palette = [1, 2, 3, 4, 5, 6, 30, 40, 50, 60, 70, 110, 130, 170, 200, 230]
   let colorIdx = 0
   const addLayer = (name: string) => {
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
@@ -288,12 +297,10 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const layer = sanitizeLayerName(pl.name, `LIJN_${pi + 1}`)
+    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
-
-  // Surface edges → individuele 2-punt polylines (dedup per edge)
   for (const surf of data.surfaces) {
     const pts = surf.points
     const tris = surf.triangles.length > 0 ? surf.triangles : triangulate(pts)
@@ -316,64 +323,204 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
   // Bounding box
   let minX = Infinity, minY = Infinity, minZ = Infinity
   let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity
-  for (const pl of polylines) {
-    for (const p of pl.pts) {
-      if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x
-      if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y
-      if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z
-    }
+  for (const pl of polylines) for (const p of pl.pts) {
+    if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x
+    if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y
+    if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z
   }
   if (!isFinite(minX)) { minX = minY = minZ = 0; maxX = maxY = maxZ = 0 }
 
   const out: string[] = []
-  const sec = (name: string) => { out.push('  0', 'SECTION', '  2', name) }
-  const end = () => { out.push('  0', 'ENDSEC') }
+  const w = (...lines: (string | number)[]) => { for (const l of lines) out.push(String(l)) }
+  const num = (n: number) => Number.isInteger(n) ? `${n}.0` : n.toString()
+  const f = (n: number) => n.toFixed(15).replace(/\.?0+$/, '') || '0.0'
 
-  // ── HEADER ──
-  sec('HEADER')
-  out.push('  9', '$ACADVER',  '  1', 'AC1009')
-  out.push('  9', '$INSBASE',  ' 10', '0.0', ' 20', '0.0', ' 30', '0.0')
-  out.push('  9', '$EXTMIN',   ' 10', minX.toFixed(6), ' 20', minY.toFixed(6), ' 30', minZ.toFixed(6))
-  out.push('  9', '$EXTMAX',   ' 10', maxX.toFixed(6), ' 20', maxY.toFixed(6), ' 30', maxZ.toFixed(6))
-  out.push('  9', '$LIMMIN',   ' 10', minX.toFixed(6), ' 20', minY.toFixed(6))
-  out.push('  9', '$LIMMAX',   ' 10', maxX.toFixed(6), ' 20', maxY.toFixed(6))
-  out.push('  9', '$INSUNITS', ' 70', '6')
-  out.push('  9', '$LUNITS',   ' 70', '2')
-  out.push('  9', '$LUPREC',   ' 70', '6')
-  end()
-
-  // ── TABLES ──
-  sec('TABLES')
-  out.push('  0', 'TABLE', '  2', 'LTYPE', ' 70', '1')
-  out.push('  0', 'LTYPE', '  2', 'CONTINUOUS', ' 70', '0', '  3', 'Solid line', ' 72', '65', ' 73', '0', ' 40', '0.0')
-  out.push('  0', 'ENDTAB')
-  out.push('  0', 'TABLE', '  2', 'LAYER', ' 70', String(layers.size + 1))
-  out.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
-  for (const [name, color] of layers) {
-    out.push('  0', 'LAYER', '  2', name, ' 70', '0', ' 62', String(color), '  6', 'CONTINUOUS')
+  // Handle allocator voor user content (start ruim boven systeem-handles)
+  let nextH = 0x100
+  const layerHandles = new Map<string, string>()
+  for (const name of layers.keys()) {
+    layerHandles.set(name, (nextH++).toString(16).toUpperCase())
   }
-  out.push('  0', 'ENDTAB')
-  end()
-
-  // ── ENTITIES (POLYLINE + VERTEX, 3D met flag 8) ──
-  sec('ENTITIES')
+  const entityHandles: { polyline: string; vertices: string[]; seqend: string }[] = []
   for (const pl of polylines) {
-    // POLYLINE header — flag 8 = 3D polyline, flag 1 = closed
-    const flag = (pl.closed ? 1 : 0) | 8
-    out.push('  0', 'POLYLINE', '  8', pl.layer, ' 66', '1', ' 70', String(flag))
-    out.push(' 10', '0.0', ' 20', '0.0', ' 30', '0.0')
-    for (const p of pl.pts) {
-      out.push('  0', 'VERTEX', '  8', pl.layer)
-      out.push(' 10', p.x.toFixed(6), ' 20', p.y.toFixed(6), ' 30', p.z.toFixed(6))
-      out.push(' 70', '32') // 32 = 3D polyline vertex
-    }
-    out.push('  0', 'SEQEND', '  8', pl.layer)
+    const polyH = (nextH++).toString(16).toUpperCase()
+    const vertH = pl.pts.map(() => (nextH++).toString(16).toUpperCase())
+    const seqH  = (nextH++).toString(16).toUpperCase()
+    entityHandles.push({ polyline: polyH, vertices: vertH, seqend: seqH })
   }
-  end()
+  const handseed = (nextH).toString(16).toUpperCase()
 
-  out.push('  0', 'EOF')
-  // CRLF line endings — DXF op Windows is traditioneel CRLF, sommige parsers
-  // (waaronder oudere Pythagoras versies) lezen LF-only files niet correct
+  // ════ HEADER ════
+  w('  0','SECTION','  2','HEADER')
+  w('  9','$ACADVER','  1','AC1024')
+  w('  9','$ACADMAINTVER',' 70','     6')
+  w('  9','$DWGCODEPAGE','  3','ANSI_1252')
+  w('  9','$INSBASE',' 10','0.0',' 20','0.0',' 30','0.0')
+  w('  9','$EXTMIN',' 10',f(minX),' 20',f(minY),' 30',f(minZ))
+  w('  9','$EXTMAX',' 10',f(maxX),' 20',f(maxY),' 30',f(maxZ))
+  w('  9','$LIMMIN',' 10',f(minX),' 20',f(minY))
+  w('  9','$LIMMAX',' 10',f(maxX),' 20',f(maxY))
+  w('  9','$ORTHOMODE',' 70','     0')
+  w('  9','$REGENMODE',' 70','     1')
+  w('  9','$FILLMODE',' 70','     1')
+  w('  9','$LTSCALE',' 40','1.0')
+  w('  9','$TEXTSIZE',' 40','0.2')
+  w('  9','$TEXTSTYLE','  7','Standard')
+  w('  9','$CLAYER','  8','0')
+  w('  9','$DIMSTYLE','  2','Standard')
+  w('  9','$LUNITS',' 70','     2')
+  w('  9','$LUPREC',' 70','     6')
+  w('  9','$AUNITS',' 70','     0')
+  w('  9','$AUPREC',' 70','     0')
+  w('  9','$INSUNITS',' 70','     6')
+  w('  9','$PSLTSCALE',' 70','     1')
+  w('  9','$TREEDEPTH',' 70','  3020')
+  w('  9','$PROXYGRAPHICS',' 70','     1')
+  w('  9','$MEASUREMENT',' 70','     1')
+  w('  9','$CELWEIGHT',' 370','    -1')
+  w('  9','$ENDCAPS',' 280','     0')
+  w('  9','$JOINSTYLE',' 280','     0')
+  w('  9','$LWDISPLAY',' 290','     0')
+  w('  9','$PSTYLEMODE',' 290','     1')
+  w('  9','$STYLESHEET','  1','')
+  w('  9','$XEDIT',' 290','     1')
+  w('  9','$CEPSNTYPE',' 380','     0')
+  w('  9','$HANDSEED','  5',handseed)
+  w('  0','ENDSEC')
+
+  // ════ CLASSES (leeg) ════
+  w('  0','SECTION','  2','CLASSES','  0','ENDSEC')
+
+  // ════ TABLES ════
+  w('  0','SECTION','  2','TABLES')
+
+  // VPORT
+  w('  0','TABLE','  2','VPORT','  5','8','330','0','100','AcDbSymbolTable',' 70','     1')
+  w('  0','VPORT','  5','23','330','8','100','AcDbSymbolTableRecord','100','AcDbViewportTableRecord')
+  w('  2','*Active',' 70','     0')
+  w(' 10','0.0',' 20','0.0',' 11','1.0',' 21','1.0')
+  w(' 12',f((minX+maxX)/2),' 22',f((minY+maxY)/2))
+  w(' 13','0.0',' 23','0.0',' 14','0.5',' 24','0.5',' 15','0.5',' 25','0.5')
+  w(' 16','0.0',' 26','0.0',' 36','1.0',' 17','0.0',' 27','0.0',' 37','0.0')
+  w(' 40',f(Math.max(maxY-minY, maxX-minX)),' 41','1.0')
+  w(' 42','50.0',' 43','0.0',' 44','0.0',' 50','0.0',' 51','0.0')
+  w(' 71','     0',' 72','  1000',' 73','     1',' 74','     3',' 75','     0',' 76','     0',' 77','     0',' 78','     0')
+  w(' 281','     0',' 65','     1')
+  w(' 110','0.0',' 120','0.0',' 130','0.0')
+  w(' 111','1.0',' 121','0.0',' 131','0.0')
+  w(' 112','0.0',' 122','1.0',' 132','0.0')
+  w(' 79','     0',' 146','0.0')
+  w('  0','ENDTAB')
+
+  // LTYPE
+  w('  0','TABLE','  2','LTYPE','  5','5','330','0','100','AcDbSymbolTable',' 70','     3')
+  w('  0','LTYPE','  5','14','330','5','100','AcDbSymbolTableRecord','100','AcDbLinetypeTableRecord')
+  w('  2','ByBlock',' 70','     0','  3','',' 72','    65',' 73','     0',' 40','0.0')
+  w('  0','LTYPE','  5','15','330','5','100','AcDbSymbolTableRecord','100','AcDbLinetypeTableRecord')
+  w('  2','ByLayer',' 70','     0','  3','',' 72','    65',' 73','     0',' 40','0.0')
+  w('  0','LTYPE','  5','16','330','5','100','AcDbSymbolTableRecord','100','AcDbLinetypeTableRecord')
+  w('  2','Continuous',' 70','     0','  3','Solid line',' 72','    65',' 73','     0',' 40','0.0')
+  w('  0','ENDTAB')
+
+  // LAYER
+  w('  0','TABLE','  2','LAYER','  5','2','330','0','100','AcDbSymbolTable',' 70',`     ${layers.size + 1}`)
+  // Layer "0" (verplicht)
+  w('  0','LAYER','  5','10','330','2','100','AcDbSymbolTableRecord','100','AcDbLayerTableRecord')
+  w('  2','0',' 70','     0',' 62','     7','  6','Continuous','370','    -3','390','F')
+  // User layers
+  for (const [name, color] of layers) {
+    w('  0','LAYER','  5',layerHandles.get(name)!,'330','2','100','AcDbSymbolTableRecord','100','AcDbLayerTableRecord')
+    w('  2',name,' 70','     0',' 62',`     ${color}`,'  6','Continuous','370','     9','390','F')
+  }
+  w('  0','ENDTAB')
+
+  // STYLE
+  w('  0','TABLE','  2','STYLE','  5','3','330','0','100','AcDbSymbolTable',' 70','     1')
+  w('  0','STYLE','  5','11','330','3','100','AcDbSymbolTableRecord','100','AcDbTextStyleTableRecord')
+  w('  2','Standard',' 70','     0',' 40','0.0',' 41','1.0',' 50','0.0',' 71','     0',' 42','0.2','  3','txt','  4','')
+  w('  0','ENDTAB')
+
+  // VIEW (leeg)
+  w('  0','TABLE','  2','VIEW','  5','6','330','0','100','AcDbSymbolTable',' 70','     0','  0','ENDTAB')
+  // UCS (leeg)
+  w('  0','TABLE','  2','UCS','  5','7','330','0','100','AcDbSymbolTable',' 70','     0','  0','ENDTAB')
+
+  // APPID
+  w('  0','TABLE','  2','APPID','  5','9','330','0','100','AcDbSymbolTable',' 70','     1')
+  w('  0','APPID','  5','12','330','9','100','AcDbSymbolTableRecord','100','AcDbRegAppTableRecord')
+  w('  2','ACAD',' 70','     0')
+  w('  0','ENDTAB')
+
+  // DIMSTYLE
+  w('  0','TABLE','  2','DIMSTYLE','  5','A','330','0','100','AcDbSymbolTable',' 70','     1','100','AcDbDimStyleTable')
+  w('  0','DIMSTYLE','105','27','330','A','100','AcDbSymbolTableRecord','100','AcDbDimStyleTableRecord')
+  w('  2','Standard',' 70','     0','178','     0','340','11')
+  w('  0','ENDTAB')
+
+  // BLOCK_RECORD
+  w('  0','TABLE','  2','BLOCK_RECORD','  5','1','330','0','100','AcDbSymbolTable',' 70','     2')
+  w('  0','BLOCK_RECORD','  5','1F','330','1','100','AcDbSymbolTableRecord','100','AcDbBlockTableRecord')
+  w('  2','*Model_Space','340','22',' 70','     0','280','     1','281','     0')
+  w('  0','BLOCK_RECORD','  5','1B','330','1','100','AcDbSymbolTableRecord','100','AcDbBlockTableRecord')
+  w('  2','*Paper_Space','340','1E',' 70','     0','280','     1','281','     0')
+  w('  0','ENDTAB')
+
+  w('  0','ENDSEC')
+
+  // ════ BLOCKS ════
+  w('  0','SECTION','  2','BLOCKS')
+  // *Model_Space
+  w('  0','BLOCK','  5','20','330','1F','100','AcDbEntity','  8','0','100','AcDbBlockBegin')
+  w('  2','*Model_Space',' 70','     0',' 10','0.0',' 20','0.0',' 30','0.0','  3','*Model_Space','  1','')
+  w('  0','ENDBLK','  5','21','330','1F','100','AcDbEntity','  8','0','100','AcDbBlockEnd')
+  // *Paper_Space
+  w('  0','BLOCK','  5','1C','330','1B','100','AcDbEntity',' 67','     1','  8','0','100','AcDbBlockBegin')
+  w('  2','*Paper_Space',' 70','     0',' 10','0.0',' 20','0.0',' 30','0.0','  3','*Paper_Space','  1','')
+  w('  0','ENDBLK','  5','1D','330','1B','100','AcDbEntity',' 67','     1','  8','0','100','AcDbBlockEnd')
+  w('  0','ENDSEC')
+
+  // ════ ENTITIES ════
+  w('  0','SECTION','  2','ENTITIES')
+  for (let i = 0; i < polylines.length; i++) {
+    const pl = polylines[i]
+    const eh = entityHandles[i]
+    const flag = (pl.closed ? 1 : 0) | 8 // 8 = 3D polyline
+    // POLYLINE header
+    w('  0','POLYLINE','  5',eh.polyline,'330','1F','100','AcDbEntity','  8',pl.layer)
+    w('100','AcDb3dPolyline',' 66','     1')
+    w(' 10','0.0',' 20','0.0',' 30','0.0',' 70',`     ${flag}`)
+    // VERTEX records
+    for (let v = 0; v < pl.pts.length; v++) {
+      const p = pl.pts[v]
+      w('  0','VERTEX','  5',eh.vertices[v],'330',eh.polyline,'100','AcDbEntity','  8',pl.layer)
+      w('100','AcDbVertex','100','AcDb3dPolylineVertex')
+      w(' 10',num(p.x),' 20',num(p.y),' 30',num(p.z),' 70','    32')
+    }
+    // SEQEND
+    w('  0','SEQEND','  5',eh.seqend,'330',eh.polyline,'100','AcDbEntity','  8',pl.layer)
+  }
+  w('  0','ENDSEC')
+
+  // ════ OBJECTS ════
+  w('  0','SECTION','  2','OBJECTS')
+  // Root DICTIONARY
+  w('  0','DICTIONARY','  5','C','330','0','100','AcDbDictionary','281','     1')
+  w('  3','ACAD_GROUP','350','D')
+  w('  3','ACAD_LAYOUT','350','1A')
+  w('  3','ACAD_MLINESTYLE','350','17')
+  w('  3','ACAD_PLOTSTYLENAME','350','E')
+  // ACAD_GROUP dict
+  w('  0','DICTIONARY','  5','D','330','C','100','AcDbDictionary','281','     1')
+  // ACAD_LAYOUT dict
+  w('  0','DICTIONARY','  5','1A','330','C','100','AcDbDictionary','281','     1')
+  // ACAD_MLINESTYLE dict
+  w('  0','DICTIONARY','  5','17','330','C','100','AcDbDictionary','281','     1')
+  // ACAD_PLOTSTYLENAME dict (acdbplaceholder voor Normal)
+  w('  0','ACDBDICTIONARYWDFLT','  5','E','330','C','100','AcDbDictionary','281','     1','  3','Normal','350','F','100','AcDbDictionaryWithDefault','340','F')
+  w('  0','ACDBPLACEHOLDER','  5','F','330','E')
+  w('  0','ENDSEC')
+
+  w('  0','EOF')
   return out.join('\r\n') + '\r\n'
 }
 
