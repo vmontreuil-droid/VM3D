@@ -61,6 +61,7 @@ export default function Sidebar({
   const [machineCount, setMachineCount] = useState<number | null>(null)
   const [notesCount, setNotesCount] = useState<number | null>(null)
   const [timeEntriesCount, setTimeEntriesCount] = useState<number | null>(null)
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(0)
 
 
   useEffect(() => {
@@ -137,6 +138,13 @@ export default function Sidebar({
           const payload = await timeRes.json();
           const count = Number(payload?.count);
           if (active && Number.isFinite(count)) setTimeEntriesCount(count);
+        }
+        // Ongelezen offerte berichten
+        const unreadRes = await fetch('/api/admin/offertes/unread-messages-count', { method: 'GET', cache: 'no-store' });
+        if (unreadRes.ok) {
+          const payload = await unreadRes.json();
+          const count = Number(payload?.count);
+          if (active && Number.isFinite(count)) setUnreadMessagesCount(count);
         }
       } catch (error) {
         console.error('sidebar count fetch error:', error);
@@ -249,7 +257,14 @@ export default function Sidebar({
       label: t.platform.offertes,
       href: '/admin/offerte',
       match: (pathname) => pathname === '/admin/offerte' || pathname.startsWith('/admin/offerte/'),
-      icon: <MousePointerClick className="h-[17px] w-[17px]" />,
+      icon: (
+        <span className="relative">
+          <MousePointerClick className="h-[17px] w-[17px]" />
+          {unreadMessagesCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-2 w-2 items-center justify-center rounded-full bg-blue-500" />
+          )}
+        </span>
+      ),
       badge: offertesCount ?? undefined,
     },
     {

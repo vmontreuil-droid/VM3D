@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { CheckCircle2, PenLine, RotateCcw, Send } from 'lucide-react'
+import { CheckCircle2, MessageCircle, PenLine, RotateCcw, Send } from 'lucide-react'
 
 type Props = {
   offerte: any
@@ -24,12 +24,16 @@ function fmtDate(d: string | null | undefined) {
 }
 
 export default function SignClient({ offerte, lines, customer, company, token, alreadySigned, signerNameDefault, signedAt }: Props) {
-  const canvasRef  = useRef<HTMLCanvasElement>(null)
-  const [drawing, setDrawing]     = useState(false)
-  const [hasSig,  setHasSig]      = useState(false)
-  const [name,    setName]        = useState('')
-  const [agreed,  setAgreed]      = useState(false)
-  const [status,  setStatus]      = useState<'idle'|'submitting'|'done'|'error'>(alreadySigned ? 'done' : 'idle')
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [tab, setTab]           = useState<'sign' | 'ask'>('sign')
+  const [drawing, setDrawing]   = useState(false)
+  const [hasSig, setHasSig]     = useState(false)
+  const [name, setName]         = useState('')
+  const [agreed, setAgreed]     = useState(false)
+  const [status, setStatus]     = useState<'idle'|'submitting'|'done'|'error'>(alreadySigned ? 'done' : 'idle')
+  const [question, setQuestion] = useState('')
+  const [askName, setAskName]   = useState('')
+  const [askStatus, setAskStatus] = useState<'idle'|'sending'|'sent'|'error'>('idle')
 
   function getPos(e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) {
     const cv   = canvasRef.current!
@@ -95,6 +99,26 @@ export default function SignClient({ offerte, lines, customer, company, token, a
     }
   }
 
+  async function handleAsk() {
+    if (!question.trim()) return
+    setAskStatus('sending')
+    try {
+      const res = await fetch('/api/offerte/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, senderName: askName.trim() || null, message: question.trim() }),
+      })
+      if (res.ok) {
+        setAskStatus('sent')
+        setQuestion('')
+      } else {
+        setAskStatus('error')
+      }
+    } catch {
+      setAskStatus('error')
+    }
+  }
+
   // ── Success screen ──────────────────────────────────────────
   if (status === 'done') {
     return (
@@ -127,15 +151,12 @@ export default function SignClient({ offerte, lines, customer, company, token, a
 
   const companyName = company?.company_name || 'MV3D.CLOUD'
 
-  // ── Signing page ────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#fffaf5]">
       {/* Header */}
       <div className="border-b border-[#f7941d]/20 bg-white px-4 py-4 shadow-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-base font-bold text-[#f7941d]">MV3D<span className="text-slate-800">.CLOUD</span></span>
-          </div>
+          <span className="text-base font-bold text-[#f7941d]">MV3D<span className="text-slate-800">.CLOUD</span></span>
           <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
             Ter goedkeuring
           </span>
@@ -200,119 +221,229 @@ export default function SignClient({ offerte, lines, customer, company, token, a
               <div className="flex justify-between text-sm text-slate-500">
                 <span>BTW</span><span>€ {fmt(Number(offerte.vat_amount) || 0)}</span>
               </div>
-              <div className="flex justify-between rounded-full bg-[#f7941d] px-4 py-2 text-sm font-bold text-white">
+              <div className="flex justify-between rounded-full border border-[#f7941d]/40 bg-[#fff9f0] px-4 py-2 text-sm font-bold text-[#f7941d]">
                 <span>Totaal</span><span>€ {fmt(Number(offerte.total) || 0)}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Signature */}
-        <div className="overflow-hidden rounded-2xl border border-[#f7941d]/20 bg-white shadow-sm">
-          <div className="border-b border-[#f7941d]/15 bg-[#fff9f0] px-5 py-3.5">
-            <div className="flex items-center gap-2">
-              <PenLine className="h-4 w-4 text-[#f7941d]" />
-              <h2 className="text-sm font-semibold text-slate-800">Ondertekening</h2>
-            </div>
-            <p className="mt-0.5 text-xs text-slate-500">
-              Door te ondertekenen gaat u akkoord met bovenstaande offerte.
-            </p>
-          </div>
+        {/* Tab selector */}
+        <div className="flex gap-2 rounded-2xl border border-[#f7941d]/20 bg-white p-1.5 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setTab('sign')}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition ${
+              tab === 'sign'
+                ? 'bg-[#f7941d] text-white shadow-sm'
+                : 'text-slate-500 hover:bg-slate-50'
+            }`}
+          >
+            <PenLine className="h-4 w-4" />
+            Ondertekenen
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab('ask')}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition ${
+              tab === 'ask'
+                ? 'bg-[#f7941d] text-white shadow-sm'
+                : 'text-slate-500 hover:bg-slate-50'
+            }`}
+          >
+            <MessageCircle className="h-4 w-4" />
+            Vraag stellen
+          </button>
+        </div>
 
-          <div className="space-y-4 p-5">
-            {/* Name */}
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Uw naam
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Voornaam Achternaam"
-                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#f7941d] focus:ring-2 focus:ring-[#f7941d]/15"
-              />
+        {/* Sign tab */}
+        {tab === 'sign' && (
+          <div className="overflow-hidden rounded-2xl border border-[#f7941d]/20 bg-white shadow-sm">
+            <div className="border-b border-[#f7941d]/15 bg-[#fff9f0] px-5 py-3.5">
+              <div className="flex items-center gap-2">
+                <PenLine className="h-4 w-4 text-[#f7941d]" />
+                <h2 className="text-sm font-semibold text-slate-800">Ondertekening</h2>
+              </div>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Door te ondertekenen gaat u akkoord met bovenstaande offerte.
+              </p>
             </div>
 
-            {/* Canvas */}
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <label className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                  Handtekening
+            <div className="space-y-4 p-5">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-widest text-slate-400">
+                  Uw naam
                 </label>
-                {hasSig && (
-                  <button
-                    type="button"
-                    onClick={clear}
-                    className="flex items-center gap-1 text-xs text-slate-400 hover:text-[#f7941d]"
-                  >
-                    <RotateCcw className="h-3 w-3" /> Wis
-                  </button>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Voornaam Achternaam"
+                  className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#f7941d] focus:ring-2 focus:ring-[#f7941d]/15"
+                />
+              </div>
+
+              <div>
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                    Handtekening
+                  </label>
+                  {hasSig && (
+                    <button
+                      type="button"
+                      onClick={clear}
+                      className="flex items-center gap-1 text-xs text-slate-400 hover:text-[#f7941d]"
+                    >
+                      <RotateCcw className="h-3 w-3" /> Wis
+                    </button>
+                  )}
+                </div>
+                <canvas
+                  ref={canvasRef}
+                  width={680}
+                  height={180}
+                  className={`w-full touch-none rounded-xl border-2 bg-white transition ${
+                    drawing ? 'border-[#f7941d]' : hasSig ? 'border-[#f7941d]/40' : 'border-dashed border-slate-300'
+                  }`}
+                  style={{ cursor: 'crosshair' }}
+                  onMouseDown={startDraw}
+                  onMouseMove={draw}
+                  onMouseUp={stopDraw}
+                  onMouseLeave={stopDraw}
+                  onTouchStart={startDraw}
+                  onTouchMove={draw}
+                  onTouchEnd={stopDraw}
+                />
+                {!hasSig && (
+                  <p className="mt-1 text-center text-xs text-slate-400">Teken hier uw handtekening</p>
                 )}
               </div>
-              <canvas
-                ref={canvasRef}
-                width={680}
-                height={180}
-                className={`w-full touch-none rounded-xl border-2 bg-white transition ${
-                  drawing ? 'border-[#f7941d]' : hasSig ? 'border-[#f7941d]/40' : 'border-dashed border-slate-300'
-                }`}
-                style={{ cursor: 'crosshair' }}
-                onMouseDown={startDraw}
-                onMouseMove={draw}
-                onMouseUp={stopDraw}
-                onMouseLeave={stopDraw}
-                onTouchStart={startDraw}
-                onTouchMove={draw}
-                onTouchEnd={stopDraw}
-              />
-              {!hasSig && (
-                <p className="mt-1 text-center text-xs text-slate-400">Teken hier uw handtekening</p>
+
+              <label className="flex cursor-pointer items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={e => setAgreed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded accent-[#f7941d]"
+                />
+                <span className="text-xs text-slate-500">
+                  Ik ga akkoord met de offerte van <strong>{companyName}</strong> voor een totaal bedrag
+                  van <strong>€ {fmt(Number(offerte.total) || 0)}</strong> en bevestig dat ik bevoegd ben
+                  om deze te ondertekenen.
+                </span>
+              </label>
+
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!hasSig || !name.trim() || !agreed || status === 'submitting'}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[#f7941d] py-3 text-sm font-bold text-white transition hover:bg-[#e07810] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {status === 'submitting' ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    Bezig met ondertekenen…
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Offerte goedkeuren &amp; ondertekenen
+                  </>
+                )}
+              </button>
+
+              {status === 'error' && (
+                <p className="text-center text-xs text-red-500">
+                  Er ging iets mis. Probeer opnieuw of contacteer {company?.email || 'facturatie@mv3d.be'}.
+                </p>
               )}
             </div>
+          </div>
+        )}
 
-            {/* Agree */}
-            <label className="flex cursor-pointer items-start gap-3">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={e => setAgreed(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded accent-[#f7941d]"
-              />
-              <span className="text-xs text-slate-500">
-                Ik ga akkoord met de offerte van <strong>{companyName}</strong> voor een totaal bedrag
-                van <strong>€ {fmt(Number(offerte.total) || 0)}</strong> en bevestig dat ik bevoegd ben
-                om deze te ondertekenen.
-              </span>
-            </label>
-
-            {/* Submit */}
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={!hasSig || !name.trim() || !agreed || status === 'submitting'}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#f7941d] py-3 text-sm font-bold text-white transition hover:bg-[#e07810] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {status === 'submitting' ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  Bezig met ondertekenen…
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4" />
-                  Offerte goedkeuren & ondertekenen
-                </>
-              )}
-            </button>
-
-            {status === 'error' && (
-              <p className="text-center text-xs text-red-500">
-                Er ging iets mis. Probeer opnieuw of contacteer {company?.email || 'facturatie@mv3d.be'}.
+        {/* Ask tab */}
+        {tab === 'ask' && (
+          <div className="overflow-hidden rounded-2xl border border-[#f7941d]/20 bg-white shadow-sm">
+            <div className="border-b border-[#f7941d]/15 bg-[#fff9f0] px-5 py-3.5">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4 text-[#f7941d]" />
+                <h2 className="text-sm font-semibold text-slate-800">Vraag stellen</h2>
+              </div>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Heeft u een vraag over deze offerte? Wij antwoorden zo snel mogelijk.
               </p>
+            </div>
+
+            {askStatus === 'sent' ? (
+              <div className="flex flex-col items-center px-5 py-10 text-center">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+                </div>
+                <p className="text-sm font-semibold text-slate-800">Vraag verstuurd!</p>
+                <p className="mt-1 text-xs text-slate-500">
+                  We hebben uw vraag ontvangen en antwoorden zo snel mogelijk.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => { setAskStatus('idle'); setQuestion('') }}
+                  className="mt-4 text-xs text-[#f7941d] hover:underline"
+                >
+                  Nog een vraag stellen
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4 p-5">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-slate-400">
+                    Uw naam (optioneel)
+                  </label>
+                  <input
+                    type="text"
+                    value={askName}
+                    onChange={e => setAskName(e.target.value)}
+                    placeholder="Voornaam Achternaam"
+                    className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#f7941d] focus:ring-2 focus:ring-[#f7941d]/15"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-widest text-slate-400">
+                    Uw vraag
+                  </label>
+                  <textarea
+                    value={question}
+                    onChange={e => setQuestion(e.target.value)}
+                    rows={4}
+                    placeholder="Stel hier uw vraag over de offerte…"
+                    className="mt-1.5 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-[#f7941d] focus:ring-2 focus:ring-[#f7941d]/15"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAsk}
+                  disabled={!question.trim() || askStatus === 'sending'}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#f7941d] py-3 text-sm font-bold text-white transition hover:bg-[#e07810] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {askStatus === 'sending' ? (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      Versturen…
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Vraag versturen
+                    </>
+                  )}
+                </button>
+                {askStatus === 'error' && (
+                  <p className="text-center text-xs text-red-500">
+                    Er ging iets mis. Probeer opnieuw of contacteer {company?.email || 'facturatie@mv3d.be'}.
+                  </p>
+                )}
+              </div>
             )}
           </div>
-        </div>
+        )}
 
         <p className="text-center text-[10px] text-slate-400">
           MV3D.CLOUD · facturatie@mv3d.be · BTW: BE0672960066

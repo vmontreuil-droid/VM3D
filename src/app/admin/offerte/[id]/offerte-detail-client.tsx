@@ -13,8 +13,9 @@ import {
   Link2,
   Copy,
   PenLine,
+  MessageCircle,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import AppShell from '@/components/app-shell'
 import { downloadPDF } from '@/lib/document-pdf'
 import { downloadUBL } from '@/lib/document-ubl'
@@ -55,12 +56,25 @@ type Props = {
   customer: any
   company: any
   signLink: string | null
+  messages: any[]
   onStatusChange: (newStatus: string) => Promise<void>
   onGenerateSignLink: () => Promise<void>
+  onReplyMessage: (message: string) => Promise<void>
 }
 
-export default function OfferteDetailClient({ offerte, lines, customer, company, signLink, onStatusChange, onGenerateSignLink }: Props) {
+export default function OfferteDetailClient({ offerte, lines, customer, company, signLink, messages, onStatusChange, onGenerateSignLink, onReplyMessage }: Props) {
   const [copied, setCopied] = useState(false)
+  const [reply, setReply]   = useState('')
+  const [sending, setSending] = useState(false)
+  const replyRef = useRef<HTMLTextAreaElement>(null)
+
+  async function handleReply() {
+    if (!reply.trim()) return
+    setSending(true)
+    await onReplyMessage(reply.trim())
+    setReply('')
+    setSending(false)
+  }
 
   async function copySignLink() {
     if (!signLink) return
@@ -317,6 +331,84 @@ export default function OfferteDetailClient({ offerte, lines, customer, company,
               )}
             </div>
           )}
+        </div>
+
+        {/* Q&A berichten */}
+        <div className="overflow-hidden rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 shadow-sm">
+          <div className="flex items-center gap-3 border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--accent)]/12 text-[var(--accent)]">
+              <MessageCircle className="h-4 w-4" />
+            </span>
+            <div>
+              <h2 className="text-sm font-semibold text-[var(--text-main)]">Berichten</h2>
+              <p className="text-xs text-[var(--text-soft)]">
+                {messages.length === 0 ? 'Nog geen berichten' : `${messages.length} bericht${messages.length !== 1 ? 'en' : ''}`}
+              </p>
+            </div>
+          </div>
+
+          {messages.length > 0 && (
+            <div className="divide-y divide-[var(--border-soft)]">
+              {messages.map((msg: any) => {
+                const isAdmin = msg.sender_type === 'admin'
+                return (
+                  <div key={msg.id} className={`px-4 py-3 sm:px-5 ${isAdmin ? 'bg-[var(--accent)]/4' : ''}`}>
+                    <div className="flex items-start gap-3">
+                      <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                        isAdmin
+                          ? 'bg-[var(--accent)]/15 text-[var(--accent)]'
+                          : 'bg-blue-500/12 text-blue-400'
+                      }`}>
+                        {isAdmin ? 'AD' : 'KL'}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-[var(--text-main)]">
+                            {msg.sender_name || (isAdmin ? 'MV3D.CLOUD' : 'Klant')}
+                          </span>
+                          <span className="text-[10px] text-[var(--text-muted)]">
+                            {new Date(msg.created_at).toLocaleDateString('nl-BE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          {!isAdmin && !msg.read_at && (
+                            <span className="rounded-full bg-blue-500/12 px-1.5 py-0.5 text-[9px] font-semibold text-blue-400">Nieuw</span>
+                          )}
+                        </div>
+                        <p className="mt-0.5 whitespace-pre-wrap text-sm text-[var(--text-soft)]">{msg.message}</p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Reply form */}
+          <div className="border-t border-[var(--border-soft)] p-4 sm:p-5">
+            <p className="mb-2 text-xs font-semibold text-[var(--text-muted)]">Antwoord versturen naar klant</p>
+            <textarea
+              ref={replyRef}
+              value={reply}
+              onChange={e => setReply(e.target.value)}
+              rows={3}
+              placeholder="Typ uw antwoord…"
+              className="w-full resize-none rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--accent)]/50 focus:ring-2 focus:ring-[var(--accent)]/10 placeholder:text-[var(--text-muted)]"
+            />
+            <div className="mt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={handleReply}
+                disabled={!reply.trim() || sending}
+                className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {sending ? (
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                ) : (
+                  <Send className="h-3.5 w-3.5" />
+                )}
+                Verstuur antwoord
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </AppShell>
