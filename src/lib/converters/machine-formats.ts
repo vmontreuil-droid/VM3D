@@ -1406,35 +1406,26 @@ export async function generateDXF2010LinesPythagoras(
     )
   }
 
-  // ── Entity entries — LINE per segment (Pythagoras-conventie voor breaklines) ──
+  // ── Entity entries — LINE per segment (Pythagoras-conventie) ──
+  // Topcon TP3/LN3 voegt soms een afsluitende vertex-range toe die geometrisch
+  // losstaat van de hoofdlijn. Sla LINE-segmenten over waarvan de XY-sprong
+  // groter is dan 5× de mediaan-spacing van de polyline (en > 1m absoluut).
   const entityLines: string[] = []
-  const fmt = (n: number) => {
-    if (Number.isInteger(n)) return `${n}.0`
-    return n.toString()
-  }
+  const fmt = (n: number) => Number.isInteger(n) ? `${n}.0` : n.toString()
   for (const pl of polylines) {
+    const dists: number[] = []
     for (let i = 0; i < pl.pts.length - 1; i++) {
+      const a = pl.pts[i], b = pl.pts[i + 1]
+      dists.push(Math.hypot(a.x - b.x, a.y - b.y))
+    }
+    const sorted = [...dists].sort((a, b) => a - b)
+    const median = sorted.length > 0 ? sorted[Math.floor(sorted.length / 2)] : 0
+    const jumpThreshold = Math.max(1.0, median * 5)
+
+    for (let i = 0; i < pl.pts.length - 1; i++) {
+      if (dists[i] > jumpThreshold) continue
       const p1 = pl.pts[i]
       const p2 = pl.pts[i + 1]
-      entityLines.push(
-        '  0', 'LINE',
-        '  5', nh(),
-        '330', '1F', // owner = BLOCK_RECORD *Model_Space
-        '100', 'AcDbEntity',
-        '  8', pl.layer,
-        '100', 'AcDbLine',
-        ' 10', fmt(p1.x),
-        ' 20', fmt(p1.y),
-        ' 30', fmt(p1.z),
-        ' 11', fmt(p2.x),
-        ' 21', fmt(p2.y),
-        ' 31', fmt(p2.z),
-      )
-    }
-    // Sluit polyline indien closed
-    if (pl.closed && pl.pts.length > 2) {
-      const p1 = pl.pts[pl.pts.length - 1]
-      const p2 = pl.pts[0]
       entityLines.push(
         '  0', 'LINE',
         '  5', nh(),
@@ -1442,13 +1433,26 @@ export async function generateDXF2010LinesPythagoras(
         '100', 'AcDbEntity',
         '  8', pl.layer,
         '100', 'AcDbLine',
-        ' 10', fmt(p1.x),
-        ' 20', fmt(p1.y),
-        ' 30', fmt(p1.z),
-        ' 11', fmt(p2.x),
-        ' 21', fmt(p2.y),
-        ' 31', fmt(p2.z),
+        ' 10', fmt(p1.x), ' 20', fmt(p1.y), ' 30', fmt(p1.z),
+        ' 11', fmt(p2.x), ' 21', fmt(p2.y), ' 31', fmt(p2.z),
       )
+    }
+    if (pl.closed && pl.pts.length > 2) {
+      const p1 = pl.pts[pl.pts.length - 1]
+      const p2 = pl.pts[0]
+      const closingDist = Math.hypot(p1.x - p2.x, p1.y - p2.y)
+      if (closingDist <= jumpThreshold) {
+        entityLines.push(
+          '  0', 'LINE',
+          '  5', nh(),
+          '330', '1F',
+          '100', 'AcDbEntity',
+          '  8', pl.layer,
+          '100', 'AcDbLine',
+          ' 10', fmt(p1.x), ' 20', fmt(p1.y), ' 30', fmt(p1.z),
+          ' 11', fmt(p2.x), ' 21', fmt(p2.y), ' 31', fmt(p2.z),
+        )
+      }
     }
   }
 
