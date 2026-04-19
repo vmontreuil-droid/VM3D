@@ -156,9 +156,9 @@ export default function WelkomPage() {
         return
       }
       setDone(true)
-      setTimeout(() => {
-        window.location.href = '/dashboard'
-      }, 1600)
+      const { data: roleData } = await supabase.from('profiles').select('role').eq('id', (await supabase.auth.getUser()).data.user?.id ?? '').single()
+      const dest = roleData?.role === 'admin' ? '/admin' : roleData?.role === 'agent' ? '/agent' : '/dashboard'
+      setTimeout(() => { window.location.href = dest }, 1600)
     } catch (err) {
       console.error('Welkom error:', err)
       setError('Er ging iets mis. Probeer het opnieuw.')
