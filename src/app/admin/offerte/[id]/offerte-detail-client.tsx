@@ -10,7 +10,11 @@ import {
   Send,
   CheckCircle2,
   XCircle,
+  Link2,
+  Copy,
+  PenLine,
 } from 'lucide-react'
+import { useState } from 'react'
 import AppShell from '@/components/app-shell'
 import { downloadPDF } from '@/lib/document-pdf'
 import { downloadUBL } from '@/lib/document-ubl'
@@ -50,10 +54,20 @@ type Props = {
   lines: any[]
   customer: any
   company: any
+  signLink: string | null
   onStatusChange: (newStatus: string) => Promise<void>
+  onGenerateSignLink: () => Promise<void>
 }
 
-export default function OfferteDetailClient({ offerte, lines, customer, company, onStatusChange }: Props) {
+export default function OfferteDetailClient({ offerte, lines, customer, company, signLink, onStatusChange, onGenerateSignLink }: Props) {
+  const [copied, setCopied] = useState(false)
+
+  async function copySignLink() {
+    if (!signLink) return
+    await navigator.clipboard.writeText(signLink)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
   function buildDocData(): DocumentData {
     const emptyCompany: CompanyInfo = {
       company_name: null, full_name: null, email: null, phone: null,
@@ -143,6 +157,32 @@ export default function OfferteDetailClient({ offerte, lines, customer, company,
                   <FileCode2 className="h-3.5 w-3.5" />
                   UBL / Peppol XML
                 </button>
+                {/* Sign link */}
+                {!offerte.signed_at && !['afgekeurd', 'verlopen', 'goedgekeurd'].includes(offerte.status) && (
+                  signLink ? (
+                    <button
+                      onClick={copySignLink}
+                      className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3.5 py-2 text-xs font-semibold text-purple-400 transition hover:bg-purple-500/20"
+                    >
+                      {copied ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                      {copied ? 'Gekopieerd!' : 'Kopieer signeerlink'}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => onGenerateSignLink()}
+                      className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3.5 py-2 text-xs font-semibold text-purple-400 transition hover:bg-purple-500/20"
+                    >
+                      <Link2 className="h-3.5 w-3.5" />
+                      Genereer signeerlink
+                    </button>
+                  )
+                )}
+                {offerte.signed_at && (
+                  <span className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-400">
+                    <PenLine className="h-3.5 w-3.5" />
+                    Ondertekend door {offerte.signer_name || 'klant'}
+                  </span>
+                )}
                 {offerte.status === 'goedgekeurd' && (
                   <Link
                     href={`/admin/facturen/from-offerte/${offerte.id}`}

@@ -1,43 +1,52 @@
 'use client'
 
 import jsPDF from 'jspdf'
+import QRCode from 'qrcode'
 import type { DocumentData, DocumentLine } from './document-types'
 import { generateOGM } from './ogm'
 
-// ── Page geometry ──────────────────────────────────────────────────────────────
-const ML = 15        // margin left
-const MR = 195       // margin right
-const CW = MR - ML   // content width = 180 mm
-const PW = 210       // page width A4
+// ── Page geometry ───────────────────────────────────────────────
+const ML = 15
+const MR = 195
+const CW = MR - ML
+const PW = 210
 
-// ── Brand palette ──────────────────────────────────────────────────────────────
+// ── MV3D.CLOUD brand defaults ───────────────────────────────────
+const BRAND = {
+  name:  'MV3D.CLOUD',
+  email: 'facturatie@mv3d.be',
+  vat:   'BE0672960066',
+  web:   'www.mv3d.cloud',
+}
+
+// ── Palette (light / warm white + orange) ──────────────────────
 type RGB = [number, number, number]
 const P = {
-  headerBg:   [13, 18, 33]   as RGB,   // deep navy header
-  accent:     [247, 148, 29] as RGB,   // MV3D orange #f7941d
-  tableHdr:   [20, 28, 50]   as RGB,   // table header dark
-  accentPale: [255, 248, 235] as RGB,  // very light orange tint
-  rowOdd:     [248, 250, 252] as RGB,
+  orange:     [247, 148, 29]  as RGB,   // #f7941d
+  orangeLight:[255, 244, 225] as RGB,   // very light orange tint
+  orangeBg:   [255, 249, 238] as RGB,   // softer warm bg
+  navy:       [18,  24,  42]  as RGB,   // dark text / nav
+  border:     [234, 223, 204] as RGB,   // warm border
+  borderSoft: [240, 234, 220] as RGB,
+  tableHdr:   [28,  36,  58]  as RGB,   // table header
+  rowOdd:     [251, 249, 246] as RGB,   // warm off-white
   rowEven:    [255, 255, 255] as RGB,
-  border:     [218, 228, 242] as RGB,
-  textDark:   [15, 23, 42]   as RGB,
-  textSoft:   [80, 100, 130]  as RGB,
-  textMuted:  [150, 165, 190] as RGB,
-  headerText: [200, 215, 235] as RGB,
+  textDark:   [22,  28,  46]  as RGB,
+  textSoft:   [90,  100, 120] as RGB,
+  textMuted:  [155, 165, 182] as RGB,
+  green:      [34,  160, 80]  as RGB,
   white:      [255, 255, 255] as RGB,
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────
 function fmt(n: number): string {
-  const [int, dec] = n.toFixed(2).split('.')
-  return `${int.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${dec}`
+  const [i, d] = n.toFixed(2).split('.')
+  return `${i.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${d}`
 }
-
-function fmtDate(d: string | null | undefined): string {
+function fmtDate(d: string | null | undefined) {
   if (!d) return '—'
   return new Date(d).toLocaleDateString('nl-BE')
 }
-
 function fill(pdf: jsPDF, c: RGB) { pdf.setFillColor(c[0], c[1], c[2]) }
 function ink(pdf: jsPDF, c: RGB)  { pdf.setTextColor(c[0], c[1], c[2]) }
 function rule(pdf: jsPDF, c: RGB) { pdf.setDrawColor(c[0], c[1], c[2]) }
@@ -66,14 +75,12 @@ async function loadLogo(url: string): Promise<{ data: string; w: number; h: numb
     if (!res.ok) return null
     const blob = await res.blob()
     const isSvg = blob.type.includes('svg') || url.toLowerCase().endsWith('.svg')
-
     const rawUrl: string = await new Promise((resolve, reject) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result as string)
       reader.onerror = reject
       reader.readAsDataURL(blob)
     })
-
     return new Promise(resolve => {
       const img = new Image()
       img.onload = () => {
@@ -85,13 +92,8 @@ async function loadLogo(url: string): Promise<{ data: string; w: number; h: numb
           cv.width  = w * scale
           cv.height = h * scale
           const ctx = cv.getContext('2d')
-          if (ctx) {
-            ctx.scale(scale, scale)
-            ctx.drawImage(img, 0, 0)
-            resolve({ data: cv.toDataURL('image/png'), w, h })
-          } else {
-            resolve({ data: rawUrl, w, h })
-          }
+          if (ctx) { ctx.scale(scale, scale); ctx.drawImage(img, 0, 0) }
+          resolve({ data: cv.toDataURL('image/png'), w, h })
         } else {
           resolve({ data: rawUrl, w, h })
         }
@@ -99,37 +101,54 @@ async function loadLogo(url: string): Promise<{ data: string; w: number; h: numb
       img.onerror = () => resolve(null)
       img.src = rawUrl
     })
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
-// ── Main generator ─────────────────────────────────────────────────────────────
+function buildEpcString(iban: string, bic: string | null, name: string, amount: number, ref: string): string {
+  return ['BCD', '002', '1', 'SCT', bic || '', name, iban.replace(/\s/g, ''), `EUR${amount.toFixed(2)}`, '', ref, ''].join('\n')
+}
+
+async function qrDataUrl(data: string): Promise<string | null> {
+  try {
+    return await QRCode.toDataURL(data, {
+      width: 220, margin: 1,
+      color: { dark: '#121826', light: '#ffffff' },
+      errorCorrectionLevel: 'M',
+    })
+  } catch { return null }
+}
+
+// ── Main ────────────────────────────────────────────────────────
 export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
   const pdf   = new jsPDF({ unit: 'mm', format: 'a4' })
   const isFac = doc.type === 'factuur'
   const label = isFac ? 'FACTUUR' : 'OFFERTE'
 
-  // Load logo (prefer company logo_url, fall back to MV3D asset)
-  const logoSrc = doc.company.logo_url || '/mv3d-logo.svg'
+  // Company fallbacks
+  const companyName = doc.company.company_name || BRAND.name
+  const companyEmail = doc.company.email || BRAND.email
+  const companyVat  = doc.company.vat_number || BRAND.vat
+
+  // Logo: use light version for white bg
+  const logoSrc = doc.company.logo_url || '/mv3d-logo-light.svg'
   const logo    = await loadLogo(logoSrc)
 
-  // ── HEADER ──────────────────────────────────────────────────────────────────
-  const STRIPE = 2.5   // accent stripe height
-  const HDR_H  = 42    // dark header height
+  // ── HEADER (white bg, orange stripe) ────────────────────────
+  const STRIPE  = 2.5
+  const HDR_H   = 38
 
-  // Orange accent stripe at very top
-  fill(pdf, P.accent)
+  // White header bg (full page)
+  fill(pdf, P.white)
+  pdf.rect(0, 0, PW, STRIPE + HDR_H, 'F')
+
+  // Orange stripe at very top
+  fill(pdf, P.orange)
   pdf.rect(0, 0, PW, STRIPE, 'F')
 
-  // Dark navy header body
-  fill(pdf, P.headerBg)
-  pdf.rect(0, STRIPE, PW, HDR_H, 'F')
-
-  // Logo (left, vertically centered in header)
+  // Logo (left, within white area)
   let logoEndX = ML
-  const LOGO_MAX_H = 20
-  const LOGO_MAX_W = 48
+  const LOGO_MAX_H = 18
+  const LOGO_MAX_W = 42
   if (logo) {
     try {
       const asp = logo.w / logo.h
@@ -138,42 +157,44 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
       const ly = STRIPE + (HDR_H - lh) / 2
       pdf.addImage(logo.data, 'PNG', ML, ly, lw, lh)
       logoEndX = ML + lw + 5
-    } catch { /* skip on error */ }
+    } catch { /* skip */ }
   }
 
-  // Company name
-  ink(pdf, P.white)
+  // Company name (dark, bold)
+  ink(pdf, P.navy)
   pdf.setFont('helvetica', 'bold')
-  pdf.setFontSize(13)
-  pdf.text(doc.company.company_name || 'MV3D.CLOUD', logoEndX, STRIPE + 10)
+  pdf.setFontSize(12)
+  pdf.text(companyName, logoEndX, STRIPE + 10)
 
-  // Company address details
-  ink(pdf, P.headerText)
+  // Company details
+  ink(pdf, P.textSoft)
   pdf.setFont('helvetica', 'normal')
   pdf.setFontSize(7.5)
-  let cy = STRIPE + 15.5
-  const compLines = addressLines(doc.company)
-  compLines.forEach(l => { pdf.text(l, logoEndX, cy); cy += 3.6 })
-  if (doc.company.email) { pdf.text(doc.company.email, logoEndX, cy); cy += 3.6 }
-  if (doc.company.phone) { pdf.text(doc.company.phone, logoEndX, cy); cy += 3.6 }
+  let cy = STRIPE + 15
+  const compLines = addressLines({ ...doc.company, company_name: null })
+  if (doc.company.street || doc.company.city) {
+    compLines.forEach(l => { pdf.text(l, logoEndX, cy); cy += 3.5 })
+  }
+  pdf.text(companyEmail, logoEndX, cy); cy += 3.5
+  pdf.text(`BTW: ${companyVat}`, logoEndX, cy)
 
-  // Document type label (right, accent orange)
-  ink(pdf, P.accent)
+  // Document type (right, large orange)
+  ink(pdf, P.orange)
   pdf.setFont('helvetica', 'bold')
-  pdf.setFontSize(28)
-  pdf.text(label, MR, STRIPE + 16, { align: 'right' })
+  pdf.setFontSize(30)
+  pdf.text(label, MR, STRIPE + 17, { align: 'right' })
 
-  // Document number (white)
-  ink(pdf, P.white)
+  // Document number (dark, right)
+  ink(pdf, P.navy)
   pdf.setFont('helvetica', 'bold')
-  pdf.setFontSize(9)
-  pdf.text(doc.number, MR, STRIPE + 24, { align: 'right' })
+  pdf.setFontSize(9.5)
+  pdf.text(doc.number, MR, STRIPE + 25, { align: 'right' })
 
-  // Dates (soft header text)
-  ink(pdf, P.headerText)
+  // Dates (soft, right)
+  ink(pdf, P.textSoft)
   pdf.setFont('helvetica', 'normal')
   pdf.setFontSize(8)
-  let ry = STRIPE + 29.5
+  let ry = STRIPE + 30
   pdf.text(`Datum: ${fmtDate(doc.created_at)}`, MR, ry, { align: 'right' })
   ry += 4.5
   if (isFac && doc.due_date) {
@@ -182,48 +203,46 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
     pdf.text(`Geldig tot: ${fmtDate(doc.valid_until)}`, MR, ry, { align: 'right' })
   }
 
-  // ── BODY ────────────────────────────────────────────────────────────────────
-  let y = STRIPE + HDR_H + 8  // ≈ 52.5
+  // Header bottom border (warm orange line)
+  fill(pdf, P.orange)
+  pdf.rect(0, STRIPE + HDR_H, PW, 0.7, 'F')
 
-  // ── CLIENT BOX ──────────────────────────────────────────────────────────────
+  // ── BODY ────────────────────────────────────────────────────
+  let y = STRIPE + HDR_H + 8
+
+  // ── CLIENT BOX ──────────────────────────────────────────────
   const custLines = addressLines(doc.customer)
   if (doc.customer.email) custLines.push(doc.customer.email)
   if (doc.customer.phone) custLines.push(doc.customer.phone)
 
-  const BOX_PAD = 4
-  const BOX_LH  = 4.0
-  const BOX_HDR = 7
-  const BOX_W   = 83
-  const clientH = BOX_PAD + BOX_HDR + custLines.length * BOX_LH + BOX_PAD + 1
+  const BOX_PAD = 4, BOX_LH = 4.0, BOX_HDR_H = 7, BOX_W = 80
+  const clientH = BOX_PAD + BOX_HDR_H + custLines.length * BOX_LH + BOX_PAD
 
-  fill(pdf, [251, 252, 255] as RGB)
+  fill(pdf, P.orangeBg)
   rule(pdf, P.border)
-  pdf.setLineWidth(0.25)
+  pdf.setLineWidth(0.3)
   pdf.rect(ML, y, BOX_W, clientH, 'FD')
+  fill(pdf, P.orange)
+  pdf.rect(ML, y, 3.5, clientH, 'F')
 
-  // Orange left accent bar
-  fill(pdf, P.accent)
-  pdf.rect(ML, y, 3, clientH, 'F')
-
-  ink(pdf, P.accent)
+  ink(pdf, P.orange)
   pdf.setFont('helvetica', 'bold')
   pdf.setFontSize(6.5)
-  pdf.text('GEFACTUREERD AAN', ML + 6, y + BOX_PAD + 2)
+  pdf.text('GEFACTUREERD AAN', ML + 7, y + BOX_PAD + 2)
 
-  let by = y + BOX_PAD + BOX_HDR
+  let by = y + BOX_PAD + BOX_HDR_H
   if (custLines[0]) {
     ink(pdf, P.textDark)
     pdf.setFont('helvetica', 'bold')
     pdf.setFontSize(9.5)
-    pdf.text(custLines[0], ML + 6, by)
-    by += BOX_LH + 1
+    pdf.text(custLines[0], ML + 7, by); by += BOX_LH + 1
   }
   ink(pdf, P.textSoft)
   pdf.setFont('helvetica', 'normal')
   pdf.setFontSize(8)
-  custLines.slice(1).forEach(l => { pdf.text(l, ML + 6, by); by += BOX_LH })
+  custLines.slice(1).forEach(l => { pdf.text(l, ML + 7, by); by += BOX_LH })
 
-  // ── SUBJECT / DESCRIPTION (right column) ─────────────────────────────────
+  // Subject / description (right of client box)
   const subX = ML + BOX_W + 8
   const subW = CW - BOX_W - 8
   let subBottom = y
@@ -235,7 +254,6 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
     const subLines = pdf.splitTextToSize(doc.subject, subW)
     pdf.text(subLines, subX, y + 6)
     subBottom = y + 6 + subLines.length * 5.5
-
     if (doc.description) {
       ink(pdf, P.textSoft)
       pdf.setFont('helvetica', 'normal')
@@ -255,12 +273,12 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
 
   y = Math.max(y + clientH, subBottom) + 9
 
-  // ── ORANGE DIVIDER ────────────────────────────────────────────────────────
-  fill(pdf, P.accent)
+  // Warm orange divider line
+  fill(pdf, P.orange)
   pdf.rect(ML, y, CW, 0.6, 'F')
   y += 7
 
-  // ── LINE ITEMS TABLE ─────────────────────────────────────────────────────────
+  // ── TABLE ────────────────────────────────────────────────────
   const C_NUM   = ML + 2
   const C_DESC  = ML + 11
   const C_QTY   = 112
@@ -301,8 +319,8 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
 
     fill(pdf, i % 2 === 0 ? P.rowOdd : P.rowEven)
     pdf.rect(ML, y, CW, dynH, 'F')
-
     const ty = y + 4.2
+
     ink(pdf, P.textMuted)
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(7.5)
@@ -314,61 +332,59 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
 
     ink(pdf, P.textSoft)
     pdf.setFontSize(8)
-    pdf.text(String(line.quantity),          C_QTY,   ty, { align: 'right' })
-    pdf.text(line.unit || 'stuk',            C_UNIT,  ty)
-    pdf.text(`€ ${fmt(line.unit_price)}`,    C_PRICE, ty, { align: 'right' })
-    pdf.text(line.vat_rate || '21%',         C_VAT,   ty, { align: 'right' })
+    pdf.text(String(line.quantity),       C_QTY,   ty, { align: 'right' })
+    pdf.text(line.unit || 'stuk',         C_UNIT,  ty)
+    pdf.text(`€ ${fmt(line.unit_price)}`, C_PRICE, ty, { align: 'right' })
+    pdf.text(line.vat_rate || '21%',      C_VAT,   ty, { align: 'right' })
 
     ink(pdf, P.textDark)
     pdf.setFont('helvetica', 'bold')
-    pdf.text(`€ ${fmt(line.line_total)}`,    C_TOTAL, ty, { align: 'right' })
+    pdf.text(`€ ${fmt(line.line_total)}`, C_TOTAL, ty, { align: 'right' })
     pdf.setFont('helvetica', 'normal')
-
     y += dynH
   })
 
-  // Table bottom rule
+  // Table bottom border
   rule(pdf, P.border)
   pdf.setLineWidth(0.3)
   pdf.line(ML, y, MR, y)
   y += 8
 
-  // ── TOTALS ───────────────────────────────────────────────────────────────────
+  // ── TOTALS ───────────────────────────────────────────────────
   const TOT_X = 128
   const TOT_W = MR - TOT_X
+
+  // Subtotaal + BTW box (bordered)
+  fill(pdf, P.orangeBg)
+  rule(pdf, P.borderSoft)
+  pdf.setLineWidth(0.25)
+  pdf.roundedRect(TOT_X, y, TOT_W, 14, 2, 2, 'FD')
 
   ink(pdf, P.textSoft)
   pdf.setFont('helvetica', 'normal')
   pdf.setFontSize(8.5)
-  pdf.text('Subtotaal excl. BTW', TOT_X, y)
+  pdf.text('Subtotaal excl. BTW', TOT_X + 4, y + 5.5)
   ink(pdf, P.textDark)
-  pdf.text(`€ ${fmt(doc.subtotal)}`, MR, y, { align: 'right' })
-  y += 5.5
+  pdf.text(`€ ${fmt(doc.subtotal)}`, MR - 4, y + 5.5, { align: 'right' })
 
   ink(pdf, P.textSoft)
-  pdf.text('BTW', TOT_X, y)
+  pdf.text('BTW', TOT_X + 4, y + 10.5)
   ink(pdf, P.textDark)
-  pdf.text(`€ ${fmt(doc.vat_amount)}`, MR, y, { align: 'right' })
-  y += 5
+  pdf.text(`€ ${fmt(doc.vat_amount)}`, MR - 4, y + 10.5, { align: 'right' })
+  y += 17
 
-  rule(pdf, P.border)
-  pdf.setLineWidth(0.2)
-  pdf.line(TOT_X, y, MR, y)
-  y += 3
-
-  // Total box with orange accent background
-  const TOT_H = 10
-  fill(pdf, P.accent)
-  pdf.roundedRect(TOT_X, y, TOT_W, TOT_H, 2, 2, 'F')
+  // TOTAAL pill (orange, rounded, like the button)
+  fill(pdf, P.orange)
+  pdf.roundedRect(TOT_X, y, TOT_W, 12, 6, 6, 'F')
   ink(pdf, P.white)
   pdf.setFont('helvetica', 'bold')
   pdf.setFontSize(8.5)
-  pdf.text('TOTAAL (incl. BTW)', TOT_X + 4, y + 6.3)
-  pdf.setFontSize(12)
-  pdf.text(`€ ${fmt(doc.total)}`, MR - 3, y + 6.8, { align: 'right' })
-  y += TOT_H + 10
+  pdf.text('TOTAAL (incl. BTW)', TOT_X + 6, y + 7.5)
+  pdf.setFontSize(13)
+  pdf.text(`€ ${fmt(doc.total)}`, MR - 4, y + 7.8, { align: 'right' })
+  y += 15 + 9
 
-  // ── NOTES / PAYMENT TERMS ────────────────────────────────────────────────────
+  // ── NOTES / PAYMENT TERMS ────────────────────────────────────
   if (doc.payment_terms) {
     ink(pdf, P.textMuted)
     pdf.setFont('helvetica', 'italic')
@@ -380,8 +396,7 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
     ink(pdf, P.textMuted)
     pdf.setFont('helvetica', 'bold')
     pdf.setFontSize(7)
-    pdf.text('Opmerkingen', ML, y)
-    y += 4
+    pdf.text('Opmerkingen', ML, y); y += 4
     ink(pdf, P.textSoft)
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(8)
@@ -390,114 +405,127 @@ export async function generatePDF(doc: DocumentData): Promise<jsPDF> {
     y += noteLines.length * 3.8 + 5
   }
 
-  // ── PAYMENT INFO BOX (factuur only) ──────────────────────────────────────────
-  if (isFac && (doc.company.iban || doc.due_date)) {
+  // ── PAYMENT + QR CODE (factuur) ──────────────────────────────
+  if (isFac && doc.company.iban) {
     y += 2
     const ogm = doc.id ? generateOGM(doc.id) : null
+    const iban = doc.company.iban
+    const bic  = doc.company.bic
+    const ref  = ogm ?? doc.number
 
-    type PayRow = { label: string; value: string; big?: boolean }
-    const rows: PayRow[] = []
-    if (doc.company.iban) {
-      rows.push({ label: 'IBAN', value: doc.company.iban })
-      if (doc.company.bic) rows.push({ label: 'BIC', value: doc.company.bic })
-    }
-    rows.push({ label: 'Gestructureerde mededeling', value: ogm ?? doc.number, big: !!ogm })
-    if (doc.due_date) rows.push({ label: 'Te betalen voor', value: fmtDate(doc.due_date) })
+    // Generate EPC QR code
+    const epc = buildEpcString(iban, bic ?? null, companyName, doc.total, ref)
+    const qrImg = await qrDataUrl(epc)
 
-    const PAY_PAD   = 5
-    const PAY_HDR_H = 8
-    const PAY_ROW_H = 5.5
-    const extraH    = rows.filter(r => r.big).length * 4
-    const payH      = PAY_PAD + PAY_HDR_H + rows.length * PAY_ROW_H + extraH + PAY_PAD
+    const QR_SIZE = 32  // mm
+    const BOX_H   = QR_SIZE + 12
+    const INFO_X  = ML + QR_SIZE + 14
 
-    fill(pdf, P.accentPale)
-    rule(pdf, [240, 210, 170] as RGB)
+    fill(pdf, P.orangeBg)
+    rule(pdf, P.border)
     pdf.setLineWidth(0.3)
-    pdf.roundedRect(ML, y, CW, payH, 2.5, 2.5, 'FD')
+    pdf.roundedRect(ML, y, CW, BOX_H, 3, 3, 'FD')
+    fill(pdf, P.orange)
+    pdf.rect(ML, y, 4, BOX_H, 'F')
 
-    // Orange left accent bar
-    fill(pdf, P.accent)
-    pdf.rect(ML, y, 4, payH, 'F')
-
-    ink(pdf, P.accent)
+    // Header
+    ink(pdf, P.orange)
     pdf.setFont('helvetica', 'bold')
     pdf.setFontSize(8)
-    pdf.text('BETAALINSTRUCTIES', ML + 9, y + PAY_PAD + 2.5)
+    pdf.text('BETAALINSTRUCTIES', ML + 8, y + 6)
 
-    rule(pdf, [240, 210, 170] as RGB)
+    rule(pdf, P.border)
     pdf.setLineWidth(0.2)
-    pdf.line(ML + 9, y + PAY_PAD + 4.5, MR - 4, y + PAY_PAD + 4.5)
+    pdf.line(ML + 8, y + 8, MR - 4, y + 8)
 
-    let py = y + PAY_PAD + PAY_HDR_H
-    rows.forEach(row => {
+    // QR code image
+    if (qrImg) {
+      try {
+        pdf.addImage(qrImg, 'PNG', ML + 6, y + 11, QR_SIZE, QR_SIZE)
+      } catch { /* skip */ }
+    }
+
+    // QR label
+    ink(pdf, P.textMuted)
+    pdf.setFont('helvetica', 'normal')
+    pdf.setFontSize(6.5)
+    pdf.text('Scan met uw bankapp', ML + 6 + QR_SIZE / 2, y + 11 + QR_SIZE + 3.5, { align: 'center' })
+
+    // Payment details (right of QR)
+    let py = y + 14
+    const payRows: Array<{ label: string; value: string; big?: boolean }> = [
+      { label: 'IBAN', value: iban },
+      ...(bic ? [{ label: 'BIC', value: bic }] : []),
+      { label: 'Mededeling', value: ref, big: true },
+      ...(doc.due_date ? [{ label: 'Te betalen voor', value: fmtDate(doc.due_date) }] : []),
+    ]
+
+    payRows.forEach(row => {
       ink(pdf, P.textMuted)
       pdf.setFont('helvetica', 'normal')
       pdf.setFontSize(7)
-      pdf.text(`${row.label}:`, ML + 9, py)
+      pdf.text(`${row.label}:`, INFO_X, py)
 
       if (row.big) {
-        ink(pdf, P.textDark)
+        ink(pdf, P.navy)
         pdf.setFont('helvetica', 'bold')
-        pdf.setFontSize(11)
-        pdf.text(row.value, ML + 9, py + 5)
-        py += PAY_ROW_H + 4
+        pdf.setFontSize(10)
+        pdf.text(row.value, INFO_X + 32, py)
+        pdf.setFontSize(7)
+        pdf.setFont('helvetica', 'normal')
+        py += 7
       } else {
         ink(pdf, P.textDark)
         pdf.setFont('helvetica', 'normal')
         pdf.setFontSize(8.5)
-        pdf.text(row.value, ML + 52, py)
-        py += PAY_ROW_H
+        pdf.text(row.value, INFO_X + 32, py)
+        py += 5
       }
     })
 
-    y += payH
+    y += BOX_H + 6
   }
 
-  // ── VALIDITY NOTE (offerte only) ─────────────────────────────────────────────
+  // ── VALIDITY NOTE (offerte) ──────────────────────────────────
   if (!isFac && doc.valid_until) {
     y += 4
-    fill(pdf, [248, 252, 248] as RGB)
-    rule(pdf, [180, 220, 180] as RGB)
+    fill(pdf, [246, 252, 246] as RGB)
+    rule(pdf, [190, 225, 195] as RGB)
     pdf.setLineWidth(0.3)
     pdf.roundedRect(ML, y, CW, 14, 2, 2, 'FD')
-    fill(pdf, [80, 180, 100] as RGB)
+    fill(pdf, P.green)
     pdf.rect(ML, y, 4, 14, 'F')
-    ink(pdf, [50, 140, 70] as RGB)
+    ink(pdf, P.green)
     pdf.setFont('helvetica', 'bold')
     pdf.setFontSize(7.5)
-    pdf.text('GELDIGHEID', ML + 9, y + 5)
+    pdf.text('GELDIGHEID', ML + 8, y + 5.5)
     ink(pdf, P.textSoft)
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(8)
     pdf.text(
-      `Deze offerte is geldig tot ${fmtDate(doc.valid_until)}. Ondertekening geldt als aanvaarding.`,
-      ML + 9, y + 10
+      `Geldig tot ${fmtDate(doc.valid_until)}. Ondertekening of schriftelijke bevestiging geldt als aanvaarding.`,
+      ML + 8, y + 10.5
     )
     y += 18
   }
 
-  // ── FOOTER (all pages) ────────────────────────────────────────────────────────
+  // ── FOOTER (all pages) ───────────────────────────────────────
   const pageCount = pdf.getNumberOfPages()
   for (let p = 1; p <= pageCount; p++) {
     pdf.setPage(p)
+    fill(pdf, P.orange)
+    pdf.rect(0, 286, PW, 0.7, 'F')
+    fill(pdf, [250, 248, 244] as RGB)
+    pdf.rect(0, 286.7, PW, 10.3, 'F')
 
-    // Thin orange line
-    fill(pdf, P.accent)
-    pdf.rect(0, 287, PW, 0.8, 'F')
+    const footerLeft  = `${BRAND.name}  ·  ${companyEmail}  ·  BTW: ${companyVat}`
+    const footerRight = `${doc.number}  ·  Pagina ${p} van ${pageCount}`
 
-    // Dark footer band
-    fill(pdf, P.headerBg)
-    pdf.rect(0, 287.8, PW, 9.2, 'F')
-
-    const co  = doc.company.company_name || 'MV3D.CLOUD'
-    const em  = doc.company.email ? ` · ${doc.company.email}` : ''
-    const vat = doc.company.vat_number ? ` · BTW: ${doc.company.vat_number}` : ''
-
-    ink(pdf, P.headerText)
+    ink(pdf, P.textMuted)
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(6.5)
-    pdf.text(`${co}${em}${vat}`, ML, 293)
-    pdf.text(`${doc.number}  ·  Pagina ${p} van ${pageCount}`, MR, 293, { align: 'right' })
+    pdf.text(footerLeft,  ML, 292.5)
+    pdf.text(footerRight, MR, 292.5, { align: 'right' })
   }
 
   pdf.setTextColor(0, 0, 0)
