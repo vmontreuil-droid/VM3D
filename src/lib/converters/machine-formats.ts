@@ -184,12 +184,11 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-// ─── LandXML lijnen-export — elke lijn als eigen Surface met Breaklines ──────
+// ─── LandXML lijnen-export (PlanFeatures, LandXML 1.2 standaard) ─────────────
 //
-// Pythagoras geeft elke <Surface> een aparte layer + kleur. PlanFeatures kwamen
-// allemaal op dezelfde layer terecht. Daarom maken we voor elke ontwerplijn
-// een eigen <Surface> aan met de vertices als Pnts en de lijn zelf als
-// <Breakline> (geen Faces — geen TIN, alleen breakline-visualisatie).
+// Pythagoras werkt foutloos met onze Surface XML, dus voor de lijnen gebruiken
+// we hetzelfde LandXML formaat — `<PlanFeatures>` met `<CoordGeom><Line>`
+// entries. Dit is de officiele LandXML 1.2 manier voor 3D ontwerplijnen.
 
 export function generateLandXMLLines(data: MachineFile): string {
   const now = new Date()
@@ -197,42 +196,34 @@ export function generateLandXMLLines(data: MachineFile): string {
   const time = now.toTimeString().slice(0, 8)
   const ts = now.toISOString().replace('.000Z', '').replace('Z', '')
 
-  const surfacesXml = data.lines.map(pl => {
+  // Eén <PlanFeatures> per lijn — Pythagoras gebruikt de parent als layergroep
+  const planFeaturesXml = data.lines.map(pl => {
     if (pl.points.length < 2) return ''
+    const lineEls: string[] = []
+    for (let i = 0; i < pl.points.length - 1; i++) {
+      const p1 = pl.points[i]
+      const p2 = pl.points[i + 1]
+      lineEls.push(`        <Line>
+          <Start>${p1.x.toFixed(12)} ${p1.y.toFixed(12)} ${p1.z.toFixed(12)}</Start>
+          <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
+        </Line>`)
+    }
+    if (pl.closed && pl.points.length > 2) {
+      const p1 = pl.points[pl.points.length - 1]
+      const p2 = pl.points[0]
+      lineEls.push(`        <Line>
+          <Start>${p1.x.toFixed(12)} ${p1.y.toFixed(12)} ${p1.z.toFixed(12)}</Start>
+          <End>${p2.x.toFixed(12)} ${p2.y.toFixed(12)} ${p2.z.toFixed(12)}</End>
+        </Line>`)
+    }
     const escName = escapeXml(pl.name)
-
-    const pntsList = pl.points
-      .map((p, i) => `          <P id="${i + 1}">${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}</P>`)
-      .join('\n')
-
-    const elevs = pl.points.map(p => p.z)
-    const elevMax = Math.max(...elevs).toFixed(12)
-    const elevMin = Math.min(...elevs).toFixed(12)
-
-    // Breakline als platte coördinatenlijst (LandXML PntList3D formaat)
-    const allPts = pl.closed && pl.points.length > 2
-      ? [...pl.points, pl.points[0]]
-      : pl.points
-    const pntList3D = allPts
-      .map(p => `${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}`)
-      .join(' ')
-
-    return `    <Surface name="${escName}" desc="${escName}">
-      <Definition
-        elevMax="${elevMax}"
-        elevMin="${elevMin}"
-        surfType="TIN"
-      >
-        <Pnts>
-${pntsList}
-        </Pnts>
-        <Breaklines>
-          <Breakline brkType="standard" desc="${escName}">
-            <PntList3D>${pntList3D}</PntList3D>
-          </Breakline>
-        </Breaklines>
-      </Definition>
-    </Surface>`
+    return `  <PlanFeatures name="${escName}" desc="${escName}">
+    <PlanFeature name="${escName}" desc="${escName}">
+      <CoordGeom>
+${lineEls.join('\n')}
+      </CoordGeom>
+    </PlanFeature>
+  </PlanFeatures>`
   }).filter(Boolean).join('\n')
 
   return `<?xml version="1.0" standalone="yes"?>
@@ -267,9 +258,7 @@ http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
     timeStamp="${ts}"
     version="1.0"
   />
-  <Surfaces>
-${surfacesXml}
-  </Surfaces>
+${planFeaturesXml}
 </LandXML>`
 }
 
