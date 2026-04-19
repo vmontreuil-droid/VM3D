@@ -180,32 +180,32 @@ function escapeXml(s: string) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-// ─── DXF generator ────────────────────────────────────────────────────────────
+// ─── DXF generator (surfaces = 3DFACE, lines = POLYLINE) ─────────────────────
 
-export function generateDXF(data: MachineFile): string {
-  const lines: string[] = []
+export function generateDXF(data: MachineFile, version: 'AC1015' | 'AC1024' = 'AC1015'): string {
+  const out: string[] = []
 
-  const sec = (name: string) => { lines.push('  0', 'SECTION', '  2', name) }
-  const end = () => { lines.push('  0', 'ENDSEC') }
-  const eof = () => { lines.push('  0', 'EOF') }
+  const sec = (name: string) => { out.push('  0', 'SECTION', '  2', name) }
+  const end = () => { out.push('  0', 'ENDSEC') }
+  const eof = () => { out.push('  0', 'EOF') }
 
   // HEADER
   sec('HEADER')
-  lines.push('  9', '$ACADVER', '  1', 'AC1015')
-  lines.push('  9', '$INSUNITS', ' 70', '6')
+  out.push('  9', '$ACADVER', '  1', version)
+  out.push('  9', '$INSUNITS', ' 70', '6')
   end()
 
   // TABLES
   sec('TABLES')
-  lines.push('  0', 'TABLE', '  2', 'LAYER', ' 70', String(data.surfaces.length + data.lines.length + 1))
-  lines.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
+  out.push('  0', 'TABLE', '  2', 'LAYER', ' 70', String(data.surfaces.length + data.lines.length + 1))
+  out.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
   for (const surf of data.surfaces) {
-    lines.push('  0', 'LAYER', '  2', surf.name, ' 70', '0', ' 62', '3', '  6', 'CONTINUOUS')
+    out.push('  0', 'LAYER', '  2', surf.name, ' 70', '0', ' 62', '3', '  6', 'CONTINUOUS')
   }
   for (const line of data.lines) {
-    lines.push('  0', 'LAYER', '  2', line.name, ' 70', '0', ' 62', '5', '  6', 'CONTINUOUS')
+    out.push('  0', 'LAYER', '  2', line.name, ' 70', '0', ' 62', '5', '  6', 'CONTINUOUS')
   }
-  lines.push('  0', 'ENDTAB')
+  out.push('  0', 'ENDTAB')
   end()
 
   // ENTITIES
@@ -215,42 +215,95 @@ export function generateDXF(data: MachineFile): string {
     const pts = surf.points
     for (const [a, b, c] of surf.triangles) {
       if (!pts[a] || !pts[b] || !pts[c]) continue
-      lines.push('  0', '3DFACE')
-      lines.push('  8', surf.name)
-      lines.push(' 10', pts[a].x.toFixed(6), ' 20', pts[a].y.toFixed(6), ' 30', pts[a].z.toFixed(6))
-      lines.push(' 11', pts[b].x.toFixed(6), ' 21', pts[b].y.toFixed(6), ' 31', pts[b].z.toFixed(6))
-      lines.push(' 12', pts[c].x.toFixed(6), ' 22', pts[c].y.toFixed(6), ' 32', pts[c].z.toFixed(6))
-      lines.push(' 13', pts[c].x.toFixed(6), ' 23', pts[c].y.toFixed(6), ' 33', pts[c].z.toFixed(6))
+      out.push('  0', '3DFACE')
+      out.push('  8', surf.name)
+      out.push(' 10', pts[a].x.toFixed(6), ' 20', pts[a].y.toFixed(6), ' 30', pts[a].z.toFixed(6))
+      out.push(' 11', pts[b].x.toFixed(6), ' 21', pts[b].y.toFixed(6), ' 31', pts[b].z.toFixed(6))
+      out.push(' 12', pts[c].x.toFixed(6), ' 22', pts[c].y.toFixed(6), ' 32', pts[c].z.toFixed(6))
+      out.push(' 13', pts[c].x.toFixed(6), ' 23', pts[c].y.toFixed(6), ' 33', pts[c].z.toFixed(6))
     }
-    // If no triangles, write points as POINTs
     if (surf.triangles.length === 0) {
       for (const pt of pts) {
-        lines.push('  0', 'POINT')
-        lines.push('  8', surf.name)
-        lines.push(' 10', pt.x.toFixed(6), ' 20', pt.y.toFixed(6), ' 30', pt.z.toFixed(6))
+        out.push('  0', 'POINT', '  8', surf.name)
+        out.push(' 10', pt.x.toFixed(6), ' 20', pt.y.toFixed(6), ' 30', pt.z.toFixed(6))
       }
     }
   }
 
   for (const pl of data.lines) {
     if (pl.points.length < 2) continue
-    lines.push('  0', 'POLYLINE')
-    lines.push('  8', pl.name)
-    lines.push(' 66', '1')
-    lines.push(' 70', pl.closed ? '1' : '8')
-    lines.push(' 10', '0.0', ' 20', '0.0', ' 30', '0.0')
+    out.push('  0', 'POLYLINE', '  8', pl.name, ' 66', '1', ' 70', pl.closed ? '1' : '8')
+    out.push(' 10', '0.0', ' 20', '0.0', ' 30', '0.0')
     for (const pt of pl.points) {
-      lines.push('  0', 'VERTEX')
-      lines.push('  8', pl.name)
-      lines.push(' 10', pt.x.toFixed(6), ' 20', pt.y.toFixed(6), ' 30', pt.z.toFixed(6))
-      lines.push(' 70', '32')
+      out.push('  0', 'VERTEX', '  8', pl.name)
+      out.push(' 10', pt.x.toFixed(6), ' 20', pt.y.toFixed(6), ' 30', pt.z.toFixed(6))
+      out.push(' 70', '32')
     }
-    lines.push('  0', 'SEQEND')
+    out.push('  0', 'SEQEND')
   }
 
   end()
   eof()
-  return lines.join('\n')
+  return out.join('\n')
+}
+
+// ─── DXF 2010 — edges only (LINE entities from triangle edges) ────────────────
+
+export function generateDXF2010Lines(data: MachineFile, layerName = 'LIJNEN'): string {
+  const out: string[] = []
+  const sec = (name: string) => { out.push('  0', 'SECTION', '  2', name) }
+  const end = () => { out.push('  0', 'ENDSEC') }
+
+  sec('HEADER')
+  out.push('  9', '$ACADVER', '  1', 'AC1024')  // AutoCAD 2010
+  out.push('  9', '$INSUNITS', ' 70', '6')
+  end()
+
+  sec('TABLES')
+  out.push('  0', 'TABLE', '  2', 'LAYER', ' 70', '2')
+  out.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
+  out.push('  0', 'LAYER', '  2', layerName, ' 70', '0', ' 62', '1', '  6', 'CONTINUOUS')
+  out.push('  0', 'ENDTAB')
+  end()
+
+  sec('ENTITIES')
+
+  for (const surf of data.surfaces) {
+    const pts = surf.points
+    const tris = surf.triangles.length > 0 ? surf.triangles : triangulate(pts)
+
+    // Deduplicate edges: store as "minIdx-maxIdx" set
+    const edgeSet = new Set<string>()
+    for (const [a, b, c] of tris) {
+      edgeSet.add(`${Math.min(a,b)}-${Math.max(a,b)}`)
+      edgeSet.add(`${Math.min(b,c)}-${Math.max(b,c)}`)
+      edgeSet.add(`${Math.min(a,c)}-${Math.max(a,c)}`)
+    }
+
+    for (const edge of edgeSet) {
+      const [i, j] = edge.split('-').map(Number)
+      const p1 = pts[i], p2 = pts[j]
+      if (!p1 || !p2) continue
+      out.push('  0', 'LINE', '  8', layerName)
+      out.push(' 10', p1.x.toFixed(6), ' 20', p1.y.toFixed(6), ' 30', p1.z.toFixed(6))
+      out.push(' 11', p2.x.toFixed(6), ' 21', p2.y.toFixed(6), ' 31', p2.z.toFixed(6))
+    }
+  }
+
+  // Also write explicit polylines
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    for (let i = 0; i < pl.points.length - 1; i++) {
+      const p1 = pl.points[i], p2 = pl.points[i + 1]
+      out.push('  0', 'LINE', '  8', layerName)
+      out.push(' 10', p1.x.toFixed(6), ' 20', p1.y.toFixed(6), ' 30', p1.z.toFixed(6))
+      out.push(' 11', p2.x.toFixed(6), ' 21', p2.y.toFixed(6), ' 31', p2.z.toFixed(6))
+    }
+  }
+
+  end()
+  out.push('  0', 'EOF')
+  return out.join('\n')
 }
 
 // ─── DXF parser ───────────────────────────────────────────────────────────────
