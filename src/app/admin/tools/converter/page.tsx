@@ -4,7 +4,7 @@ import { useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/app-shell'
 import { Upload, Download, ArrowRight, FileCode2, Loader2, CheckCircle, AlertCircle, RefreshCw, Scissors } from 'lucide-react'
 import {
-  convert, detectFormat, parseTN3, triangulate,
+  convert, detectFormat, parseTN3, parseLN3, triangulate,
   generateLandXML, generateDXF2010Lines,
   type FileFormat
 } from '@/lib/converters/machine-formats'
@@ -13,6 +13,7 @@ const FORMAT_LABELS: Record<FileFormat, string> = {
   landxml: 'LandXML (.xml)',
   dxf:     'AutoCAD DXF (.dxf)',
   tn3:     'Topcon TN3 (.TN3)',
+  ln3:     'Topcon LN3 (.LN3)',
   svl:     'Trimble SVL (.svl)',
   svd:     'Trimble SVD (.svd)',
 }
@@ -21,12 +22,13 @@ const FORMAT_BRANDS: Record<FileFormat, string> = {
   landxml: 'Universeel',
   dxf:     'Universeel / CAD',
   tn3:     'Topcon / Unicontrol',
+  ln3:     'Topcon / Unicontrol',
   svl:     'Trimble / Leica',
   svd:     'Trimble / Leica',
 }
 
-const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'svl', 'svd']
-const ACCEPT = '.xml,.dxf,.TN3,.tn3,.svl,.svd,.SVL,.SVD'
+const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'svl', 'svd']
+const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.svl,.svd,.SVL,.SVD'
 const MAX_MB = 30
 
 type Status =
@@ -64,7 +66,12 @@ export default function ConverterPage() {
       const bytes = new Uint8Array(e.target!.result as ArrayBuffer)
       const fmt = detectFormat(f.name, bytes)
       setInputFormat(fmt)
-      setOutputFormat(fmt === 'landxml' ? 'dxf' : fmt === 'dxf' ? 'landxml' : 'landxml')
+      setOutputFormat(
+        fmt === 'landxml' ? 'dxf' :
+        fmt === 'dxf'     ? 'landxml' :
+        fmt === 'ln3'     ? 'dxf' :
+        'landxml'
+      )
       setStatus({ type: 'ready', name: f.name, format: fmt })
     }
     reader.readAsArrayBuffer(f.slice(0, 512))
@@ -157,7 +164,26 @@ export default function ConverterPage() {
     if (inputRef.current) inputRef.current.value = ''
   }
 
+  // LN3 → DXF: export all design lines as LINE entities
+  const handleConvertLN3 = useCallback(async () => {
+    if (!file) return
+    setStatus({ type: 'converting' })
+    try {
+      const arrayBuf = await file.arrayBuffer()
+      const parsed = parseLN3(arrayBuf)
+      const baseName = file.name.replace(/\.[^.]+$/, '')
+      const dxfStr = generateDXF2010Lines(parsed, baseName)
+      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
+      setStatus({ type: 'done', files: [
+        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${parsed.lines.reduce((s, l) => s + l.points.length, 0)} punten)`,
+      ] })
+    } catch (err) {
+      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
+    }
+  }, [file])
+
   const isTN3 = inputFormat === 'tn3'
+  const isLN3 = inputFormat === 'ln3'
   const selCls = 'w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2.5 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]/50 appearance-none'
   const lblCls = 'block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-soft)] mb-1.5'
 
@@ -231,11 +257,38 @@ export default function ConverterPage() {
                   <Upload className={`h-8 w-8 ${dragging ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">Sleep bestand hier of klik om te kiezen</p>
-                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .svl · .svd — max {MAX_MB} MB</p>
+                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .svl · .svd — max {MAX_MB} MB</p>
                   </div>
                 </>
               )}
             </div>
+
+            {/* LN3 section */}
+            {isLN3 && (
+              <div className="overflow-hidden rounded-xl border border-blue-500/20 bg-blue-500/4">
+                <div className="flex items-center gap-3 border-b border-blue-500/15 px-4 py-3">
+                  <Download className="h-4 w-4 shrink-0 text-blue-400" />
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--text-main)]">LN3 naar DXF</p>
+                    <p className="text-[11px] text-[var(--text-soft)]">
+                      Exporteert alle ontwerplijnen als <strong>DXF 2010 LINE-entiteiten</strong>
+                    </p>
+                  </div>
+                </div>
+                <div className="px-4 py-3">
+                  <button
+                    onClick={handleConvertLN3}
+                    disabled={!file || status.type === 'converting'}
+                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-400 transition hover:bg-blue-500/18 disabled:pointer-events-none disabled:opacity-50"
+                  >
+                    {status.type === 'converting'
+                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
+                      : <><Download className="h-4 w-4" /> Exporteren → DXF 2010</>
+                    }
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* TN3 split section */}
             {isTN3 && (
@@ -266,45 +319,23 @@ export default function ConverterPage() {
 
             {/* Normal conversion */}
             <div className="space-y-4">
-              {!isTN3 && (
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
-                  <div>
-                    <label className={lblCls}>Van formaat</label>
-                    <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
-                      {FORMATS.map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                    </select>
-                  </div>
-                  <div className="flex items-end pb-3">
-                    <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
-                  </div>
-                  <div>
-                    <label className={lblCls}>Naar formaat</label>
-                    <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
-                      {FORMATS.filter(f => f !== inputFormat).map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                    </select>
-                  </div>
+              <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
+                <div>
+                  <label className={lblCls}>Van formaat</label>
+                  <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
+                    {FORMATS.map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
+                  </select>
                 </div>
-              )}
-
-              {isTN3 && (
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
-                  <div>
-                    <label className={lblCls}>Van formaat</label>
-                    <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
-                      {FORMATS.map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                    </select>
-                  </div>
-                  <div className="flex items-end pb-3">
-                    <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
-                  </div>
-                  <div>
-                    <label className={lblCls}>Naar formaat (enkelvoudig)</label>
-                    <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
-                      {FORMATS.filter(f => f !== inputFormat).map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                    </select>
-                  </div>
+                <div className="flex items-end pb-3">
+                  <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
                 </div>
-              )}
+                <div>
+                  <label className={lblCls}>{(isTN3 || isLN3) ? 'Naar formaat (enkelvoudig)' : 'Naar formaat'}</label>
+                  <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
+                    {FORMATS.filter(f => f !== inputFormat).map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
+                  </select>
+                </div>
+              </div>
 
               {/* Status */}
               {status.type === 'error' && (
@@ -333,7 +364,7 @@ export default function ConverterPage() {
                 >
                   {status.type === 'converting'
                     ? <><Loader2 className="h-4 w-4 animate-spin text-[var(--accent)]" /> Bezig…</>
-                    : <><Download className="h-4 w-4 text-[var(--accent)]" /> {isTN3 ? 'Enkelvoudig omzetten' : 'Omzetten & downloaden'}</>
+                    : <><Download className="h-4 w-4 text-[var(--accent)]" /> {(isTN3 || isLN3) ? 'Enkelvoudig omzetten' : 'Omzetten & downloaden'}</>
                   }
                   <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
                 </button>
@@ -351,8 +382,8 @@ export default function ConverterPage() {
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             <span className="font-semibold text-[var(--text-soft)]">Let op: </span>
-            SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF en TN3 hebben volledige ondersteuning.
-            TN3 splitsen genereert driehoeken via Delaunay triangulatie op basis van de XY-coördinaten.
+            SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF, TN3 en LN3 hebben volledige ondersteuning.
+            TN3 splitsen genereert driehoeken via Delaunay triangulatie. LN3 exporteert ontwerplijnen als DXF 2010.
           </p>
         </div>
       </div>

@@ -23,7 +23,7 @@ export interface MachineFile {
   lines: Polyline[]
 }
 
-export type FileFormat = 'landxml' | 'dxf' | 'tn3' | 'svl' | 'svd'
+export type FileFormat = 'landxml' | 'dxf' | 'tn3' | 'ln3' | 'svl' | 'svd'
 
 // ─── Format detection ─────────────────────────────────────────────────────────
 
@@ -32,12 +32,15 @@ export function detectFormat(filename: string, firstBytes: Uint8Array): FileForm
   if (ext === 'xml') return 'landxml'
   if (ext === 'dxf') return 'dxf'
   if (ext === 'tn3') return 'tn3'
+  if (ext === 'ln3') return 'ln3'
+  if (ext === 'tp3') return 'tn3' // TP3 combined — parse as TN3 surface
   if (ext === 'svl') return 'svl'
   if (ext === 'svd') return 'svd'
   // Content-based detection
   const txt = new TextDecoder('ascii', { fatal: false }).decode(firstBytes.slice(0, 20))
   if (txt.includes('<?xml') || txt.includes('<LandXML')) return 'landxml'
   if (txt.startsWith('Topcon TN3')) return 'tn3'
+  if (txt.startsWith('Topcon LN3')) return 'ln3'
   if (firstBytes[248] === 0x54 && firstBytes[249] === 0x52) return 'svl' // TRMINDEX
   return 'landxml'
 }
@@ -396,16 +399,21 @@ export function parseTN3(buf: ArrayBuffer): MachineFile {
     const t = view.getUint16(i, true)
     if (t < 1 || t > 6) continue
     if (view.getUint32(i + 2, true) !== 22) continue
-    if (view.getUint32(i + 6, true) !== 128) continue
-    const stride  = view.getUint32(i + 10, true)
+    const countOrRpb = view.getUint32(i + 6, true)
+    const stride = view.getUint32(i + 10, true)
     if (stride !== 24 && stride !== 36 && stride !== 12 && stride !== 4) continue
-    const endOff  = view.getUint32(i + 14, true)
-    const term    = view.getUint32(i + 18, true)
-    // endOff should be a valid in-file offset > header end
-    if (endOff < i + 22 || endOff > N) continue
-    // term is either 0xFFFFFFFE or 0x1ac (parent offset), both fine
-    if (term > N && term !== 0xFFFFFFFE && term !== 0xFFFFFFFF) continue
-    blocks.push({ off: i, type: t, stride, dataOff: i + 22, dataEnd: endOff })
+    const field5 = view.getUint32(i + 14, true)
+    let dataEnd: number
+    if (field5 === 0xFFFFFFFE || field5 === 0xFFFFFFFF) {
+      // NEW format: count at bytes +6, sentinel at +14
+      if (countOrRpb === 0 || countOrRpb > 100000) continue
+      dataEnd = i + 22 + countOrRpb * stride
+      if (dataEnd > N) continue
+    } else if (countOrRpb === 128 && field5 >= i + 22 && field5 <= N) {
+      // OLD format: recPerBlk=128 at +6, endOffset at +14
+      dataEnd = field5
+    } else { continue }
+    blocks.push({ off: i, type: t, stride, dataOff: i + 22, dataEnd })
   }
 
   // ── Collect all surface points from type=1 blocks ──
@@ -484,6 +492,125 @@ export function parseTN3(buf: ArrayBuffer): MachineFile {
 
 function samePoint(a: Point3D, b: Point3D): boolean {
   return Math.abs(a.x - b.x) < 0.001 && Math.abs(a.y - b.y) < 0.001 && Math.abs(a.z - b.z) < 0.001
+}
+
+// ─── LN3 parser ───────────────────────────────────────────────────────────────
+//
+// LN3 binary layout (all LE):
+//   Offset 0: "Topcon LN3\0" magic
+//   Offset 28: filename in UTF-16LE, null-terminated
+//
+// 18-byte block headers:
+//   uint16 type | uint16 hdrSz=18 | uint16 rpb | uint16 count | uint16 stride
+//   uint32 sentinel1=0xFFFFFFFE | uint32 sentinel2=0xFFFFFFFE
+//
+//  type=1, stride=12:  relative vertices — float32 dX, dY, dZ
+//  type=5, stride=154: line objects — UTF-16LE name at rec+2, refX float64 at rec+138, refY float64 at rec+146
+//  type=6, stride=21:  vertex ranges — start=uint16 at rec+4, count=uint16 at rec+12, flag=uint8 at rec+14 (1=real)
+
+export function parseLN3(buf: ArrayBuffer): MachineFile {
+  const view = new DataView(buf)
+  const bytes = new Uint8Array(buf)
+  const N = buf.byteLength
+
+  const magic = new TextDecoder().decode(bytes.slice(0, 10))
+  if (!magic.startsWith('Topcon LN3')) {
+    throw new Error('Geen geldig LN3-bestand')
+  }
+
+  // Read name from UTF-16LE at offset 28
+  let nameEnd = 28
+  for (let i = 28; i < Math.min(200, N - 2); i += 2) {
+    if (view.getUint16(i, true) === 0) { nameEnd = i; break }
+  }
+  const name = new TextDecoder('utf-16le').decode(bytes.slice(28, nameEnd))
+
+  type Blk = { off: number; type: number; stride: number; count: number; dataOff: number }
+  const blocks: Blk[] = []
+
+  for (let i = 0; i < N - 18; i += 2) {
+    const t = view.getUint16(i, true)
+    if (t < 1 || t > 20) continue
+    if (view.getUint16(i + 2, true) !== 18) continue
+    const count  = view.getUint16(i + 6, true)
+    const stride = view.getUint16(i + 8, true)
+    if (stride === 0 || stride > 2000) continue
+    if (view.getUint32(i + 10, true) !== 0xFFFFFFFE) continue
+    const dataEnd = i + 18 + count * stride
+    if (dataEnd > N) continue
+    blocks.push({ off: i, type: t, stride, count, dataOff: i + 18 })
+  }
+
+  // All relative vertices from type=1, stride=12 blocks (dX, dY, dZ as float32)
+  const allVerts: { dx: number; dy: number; dz: number }[] = []
+  for (const blk of blocks) {
+    if (blk.type !== 1 || blk.stride !== 12) continue
+    for (let j = 0; j < blk.count; j++) {
+      const off = blk.dataOff + j * 12
+      allVerts.push({
+        dx: view.getFloat32(off,     true),
+        dy: view.getFloat32(off + 4, true),
+        dz: view.getFloat32(off + 8, true),
+      })
+    }
+  }
+
+  // Line objects: any block with stride >= 100 (type=5, stride=154 typically)
+  const lineObjects: { name: string; refX: number; refY: number }[] = []
+  for (const blk of blocks) {
+    if (blk.stride < 100) continue
+    for (let j = 0; j < blk.count; j++) {
+      const recOff = blk.dataOff + j * blk.stride
+      let nEnd = recOff + blk.stride
+      for (let k = recOff + 2; k < recOff + blk.stride - 1 && k + 1 < N; k += 2) {
+        if (view.getUint16(k, true) === 0) { nEnd = k; break }
+      }
+      const lineName = new TextDecoder('utf-16le').decode(bytes.slice(recOff + 2, nEnd))
+      const refX = view.getFloat64(recOff + 138, true)
+      const refY = view.getFloat64(recOff + 146, true)
+      lineObjects.push({ name: lineName || `Lijn ${lineObjects.length + 1}`, refX, refY })
+    }
+  }
+
+  // Vertex ranges: stride=21, flag=1 means real range
+  const realRanges: { start: number; count: number }[] = []
+  for (const blk of blocks) {
+    if (blk.stride !== 21) continue
+    for (let j = 0; j < blk.count; j++) {
+      const recOff = blk.dataOff + j * 21
+      if (recOff + 15 > N) continue
+      const flag = view.getUint8(recOff + 14)
+      if (flag !== 1) continue
+      const start = view.getUint16(recOff + 4, true)
+      const cnt   = view.getUint16(recOff + 12, true)
+      realRanges.push({ start, count: cnt })
+    }
+  }
+
+  // Build polylines: range[i] → lineObjects[i], extras appended to last
+  const polylines: Polyline[] = []
+  for (let i = 0; i < realRanges.length; i++) {
+    const range = realRanges[i]
+    const lineObj = i < lineObjects.length
+      ? lineObjects[i]
+      : lineObjects.length > 0 ? lineObjects[lineObjects.length - 1] : null
+    if (!lineObj) continue
+    const pts: Point3D[] = []
+    for (let j = 0; j < range.count; j++) {
+      const idx = range.start + j
+      if (idx >= allVerts.length) break
+      const v = allVerts[idx]
+      pts.push({ x: lineObj.refX + v.dx, y: lineObj.refY + v.dy, z: v.dz })
+    }
+    if (pts.length < 2) continue
+    if (i < lineObjects.length) {
+      polylines.push({ name: lineObj.name, points: pts })
+    } else if (polylines.length > 0) {
+      polylines[polylines.length - 1].points.push(...pts)
+    }
+  }
+
+  return { name: name || 'LN3', surfaces: [], lines: polylines }
 }
 
 // ─── TN3 generator ────────────────────────────────────────────────────────────
@@ -774,6 +901,8 @@ export function convert(
     parsed = parseSVL(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
   } else if (inputFormat === 'svd') {
     parsed = parseSVD(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
+  } else if (inputFormat === 'ln3') {
+    parsed = parseLN3(typeof input === 'string' ? new TextEncoder().encode(input).buffer : input as ArrayBuffer)
   } else {
     throw new Error(`Onbekend invoerformaat: ${inputFormat}`)
   }
