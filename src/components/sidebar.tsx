@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog } from 'lucide-react'
+import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -229,6 +229,12 @@ export default function Sidebar({
       ]
 
   const adminItems: NavItem[] = [
+    {
+      label: 'Snelstart',
+      href: '/admin/tools',
+      match: (pathname) => pathname === '/admin/tools',
+      icon: <Zap className="h-[17px] w-[17px]" />,
+    },
     {
       label: t.platform.customers,
       href: '/admin/customers',
