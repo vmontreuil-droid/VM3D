@@ -257,32 +257,22 @@ export function generateDXF(data: MachineFile, version: 'AC1015' | 'AC1024' = 'A
 // coördinaten), LTYPE tabel met CONTINUOUS, en één LAYER per polyline zodat
 // elke ontwerplijn los selecteerbaar is.
 
-// ─── DXF AC1024 (AutoCAD 2010) — volledige structuur voor Pythagoras ─────────
+// ─── DXF AC1024 export — skeleton-based voor Pythagoras 2024 ─────────────────
 //
-// Pythagoras 2024 weigert minimale (R12) DXF stilzwijgend — er moet een
-// complete AC1024 structuur zijn met handles, owner pointers, subclass markers
-// (AcDbEntity / AcDb3dPolyline), én alle verplichte tables (VPORT, LTYPE,
-// LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE, BLOCK_RECORD), BLOCKS sectie met
-// *Model_Space + *Paper_Space, en een OBJECTS sectie met root DICTIONARY.
-//
-// Vaste handles (matchen het Pythagoras-patroon):
-//   1 BLOCK_RECORD table   2 LAYER table    3 STYLE table    5 LTYPE table
-//   6 VIEW    7 UCS    8 VPORT    9 APPID    A DIMSTYLE
-//   C root DICTIONARY    D ACAD_GROUP    E ACAD_PLOTSTYLENAME
-//   10 layer 0    11 STYLE Standard    12 APPID ACAD
-//   14 LTYPE ByBlock    15 LTYPE ByLayer    16 LTYPE Continuous
-//   17 ACAD_MLINESTYLE    1A ACAD_LAYOUT
-//   1B BLOCK_RECORD *Paper_Space    1C BLOCK *Paper_Space    1D ENDBLK
-//   1F BLOCK_RECORD *Model_Space    20 BLOCK *Model_Space    21 ENDBLK
-//   23 VPORT *Active    27 DIMSTYLE Standard
-//   100+ user layers    1000+ entities
+// Pythagoras 2024 is zeer streng over DXF structuur. Een handgemaakte AC1024
+// werd stilzwijgend geweigerd. We hergebruiken nu een werkend Pythagoras-export
+// als template (public/converter/dxf-skeleton.txt) en injecteren onze layers
+// en entiteiten op de #USER_LAYERS# / #USER_ENTITIES# markers. Zo zijn alle
+// vereiste OBJECTS/LAYOUTs/handles gegarandeerd correct.
 
 function sanitizeLayerName(name: string, fallback: string): string {
-  // AC1024 staat letters/cijfers/spaties/accenten toe, maar geen <>/\:";?*|=,'`
   const cleaned = name.replace(/[<>/\\:";?*|=,'`]/g, '_').trim()
   return cleaned.slice(0, 255) || fallback
 }
 
+// Synchrone fallback (zonder template) — wordt door de UI niet meer gebruikt
+// maar blijft voor convert() consistent. De Pythagoras-compatibele variant is
+// generateDXF2010LinesFromTemplate hieronder.
 export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJNEN'): string {
   // Verzamel polylines + surface edges
   type LinePL = { layer: string; pts: Point3D[]; closed: boolean }
@@ -1317,4 +1307,171 @@ export function convert(
   } else {
     throw new Error(`Onbekend uitvoerformaat: ${outputFormat}`)
   }
+}
+
+// ─── DXF AC1024 export via Pythagoras-skeleton template ──────────────────────
+//
+// Laadt een echt door Pythagoras geëxporteerd DXF bestand (zonder eigen layers
+// en zonder eigen entiteiten) als template, en injecteert onze layers + onze
+// 3D-polylines op de #USER_LAYERS# / #USER_ENTITIES# markers. De rest van de
+// structuur (HEADER, CLASSES, alle TABLES, BLOCKS, OBJECTS, LAYOUTs) blijft
+// onaangeroerd zodat Pythagoras het bestand altijd accepteert.
+
+let dxfSkeletonCache: string | null = null
+
+async function loadDxfSkeleton(): Promise<string> {
+  if (dxfSkeletonCache) return dxfSkeletonCache
+  const res = await fetch('/converter/dxf-skeleton.txt')
+  if (!res.ok) throw new Error('DXF skeleton kon niet geladen worden')
+  dxfSkeletonCache = await res.text()
+  return dxfSkeletonCache
+}
+
+export async function generateDXF2010LinesPythagoras(
+  data: MachineFile,
+  defaultLayerName = 'LIJNEN',
+): Promise<string> {
+  const skel = await loadDxfSkeleton()
+
+  // Verzamel polylines + surface edges
+  type LinePL = { layer: string; pts: Point3D[]; closed: boolean }
+  const polylines: LinePL[] = []
+  const layers = new Map<string, number>()
+  const palette = [1, 2, 3, 4, 5, 6, 30, 40, 50, 60, 70, 110, 130, 170, 200, 230]
+  let colorIdx = 0
+  const addLayer = (name: string) => {
+    if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
+  }
+
+  for (let pi = 0; pi < data.lines.length; pi++) {
+    const pl = data.lines[pi]
+    if (pl.points.length < 2) continue
+    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    addLayer(layer)
+    polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
+  }
+  for (const surf of data.surfaces) {
+    const pts = surf.points
+    const tris = surf.triangles.length > 0 ? surf.triangles : triangulate(pts)
+    const layer = sanitizeLayerName(surf.name, defaultLayerName)
+    addLayer(layer)
+    const edgeSet = new Set<string>()
+    for (const [a, b, c] of tris) {
+      edgeSet.add(`${Math.min(a,b)}-${Math.max(a,b)}`)
+      edgeSet.add(`${Math.min(b,c)}-${Math.max(b,c)}`)
+      edgeSet.add(`${Math.min(a,c)}-${Math.max(a,c)}`)
+    }
+    for (const edge of edgeSet) {
+      const [i, j] = edge.split('-').map(Number)
+      const p1 = pts[i], p2 = pts[j]
+      if (!p1 || !p2) continue
+      polylines.push({ layer, pts: [p1, p2], closed: false })
+    }
+  }
+
+  // Bounding box voor $EXTMIN/$EXTMAX update
+  let minX = Infinity, minY = Infinity, minZ = Infinity
+  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity
+  for (const pl of polylines) for (const p of pl.pts) {
+    if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x
+    if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y
+    if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z
+  }
+  if (!isFinite(minX)) { minX = minY = minZ = 0; maxX = maxY = maxZ = 0 }
+
+  // Handle allocator — gebruik hex starting bij 0x10000 om buiten Pythagoras' range te blijven
+  let nextH = 0x10000
+  const nh = () => (nextH++).toString(16).toUpperCase()
+
+  // ── Layer entries (volgen na layer "0" in LAYER table) ──
+  const layerLines: string[] = []
+  const layerHandles = new Map<string, string>()
+  for (const [name, color] of layers) {
+    const h = nh()
+    layerHandles.set(name, h)
+    layerLines.push(
+      '  0', 'LAYER',
+      '  5', h,
+      '330', '2',
+      '100', 'AcDbSymbolTableRecord',
+      '100', 'AcDbLayerTableRecord',
+      '  2', name,
+      ' 70', '     0',
+      ' 62', `     ${color}`,
+      '  6', 'Continuous',
+      '370', '     9',
+      '390', 'F',
+    )
+  }
+
+  // ── Entity entries (POLYLINE + VERTEX + SEQEND) ──
+  const entityLines: string[] = []
+  const fmt = (n: number) => {
+    if (Number.isInteger(n)) return `${n}.0`
+    return n.toString()
+  }
+  for (const pl of polylines) {
+    const polyH = nh()
+    const flag = (pl.closed ? 1 : 0) | 8 // 8 = 3D polyline
+    entityLines.push(
+      '  0', 'POLYLINE',
+      '  5', polyH,
+      '330', '1F', // owner = BLOCK_RECORD *Model_Space
+      '100', 'AcDbEntity',
+      '  8', pl.layer,
+      '370', '     5',
+      '100', 'AcDb3dPolyline',
+      ' 66', '     1',
+      ' 10', '0.0',
+      ' 20', '0.0',
+      ' 30', '0.0',
+      ' 70', `     ${flag}`,
+    )
+    for (const p of pl.pts) {
+      entityLines.push(
+        '  0', 'VERTEX',
+        '  5', nh(),
+        '330', polyH,
+        '100', 'AcDbEntity',
+        '  8', pl.layer,
+        '100', 'AcDbVertex',
+        '100', 'AcDb3dPolylineVertex',
+        ' 10', fmt(p.x),
+        ' 20', fmt(p.y),
+        ' 30', fmt(p.z),
+        ' 70', '    32',
+      )
+    }
+    entityLines.push(
+      '  0', 'SEQEND',
+      '  5', nh(),
+      '330', polyH,
+      '100', 'AcDbEntity',
+      '  8', pl.layer,
+    )
+  }
+
+  // ── Inject in template ──
+  let dxf = skel
+    .replace('##USER_LAYERS##', layerLines.join('\n'))
+    .replace('##USER_ENTITIES##', entityLines.join('\n'))
+
+  // Update LAYER table count: was "     6" (1 layer "0" + 5 user layers)
+  // → wordt "     {1 + layers.size}"
+  // Match na "TABLE\n  2\nLAYER\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n"
+  dxf = dxf.replace(
+    /(TABLE\n  2\nLAYER\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n)\s*\d+/,
+    `$1${String(1 + layers.size).padStart(6)}`
+  )
+
+  // Update $EXTMIN / $EXTMAX / $LIMMIN / $LIMMAX in HEADER
+  const f = (n: number) => n.toFixed(15).replace(/\.?0+$/, '') || '0.0'
+  dxf = dxf
+    .replace(/(\$EXTMIN\n 10\n)[^\n]+\n( 20\n)[^\n]+\n( 30\n)[^\n]+/, `$1${f(minX)}\n$2${f(minY)}\n$3${f(minZ)}`)
+    .replace(/(\$EXTMAX\n 10\n)[^\n]+\n( 20\n)[^\n]+\n( 30\n)[^\n]+/, `$1${f(maxX)}\n$2${f(maxY)}\n$3${f(maxZ)}`)
+    .replace(/(\$LIMMIN\n 10\n)[^\n]+\n( 20\n)[^\n]+/, `$1${f(minX)}\n$2${f(minY)}`)
+    .replace(/(\$LIMMAX\n 10\n)[^\n]+\n( 20\n)[^\n]+/, `$1${f(maxX)}\n$2${f(maxY)}`)
+
+  // Output met CRLF (DXF Windows conventie)
+  return dxf.replace(/\r?\n/g, '\r\n')
 }

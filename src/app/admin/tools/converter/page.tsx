@@ -5,7 +5,7 @@ import AppShell from '@/components/app-shell'
 import { Upload, Download, ArrowRight, FileCode2, Loader2, CheckCircle, AlertCircle, RefreshCw, Scissors } from 'lucide-react'
 import {
   convert, detectFormat, parseTN3, parseLN3, parseTP3, triangulate,
-  generateLandXML, generateDXF2010Lines,
+  generateLandXML, generateDXF2010LinesPythagoras,
   type FileFormat
 } from '@/lib/converters/machine-formats'
 
@@ -121,7 +121,7 @@ export default function ConverterPage() {
       const linesData = parsed.lines.length > 0
         ? { ...parsed, surfaces: [] }   // only lines → polylines in DXF
         : parsed                        // fallback: triangle edges
-      const dxfStr = generateDXF2010Lines(linesData, baseName)
+      const dxfStr = await generateDXF2010LinesPythagoras(linesData, baseName)
       downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
 
       const lineInfo = parsed.lines.length > 0
@@ -175,7 +175,7 @@ export default function ConverterPage() {
       const arrayBuf = await file.arrayBuffer()
       const parsed = parseLN3(arrayBuf)
       const baseName = file.name.replace(/\.[^.]+$/, '')
-      const dxfStr = generateDXF2010Lines(parsed, baseName)
+      const dxfStr = await generateDXF2010LinesPythagoras(parsed, baseName)
       downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
       setStatus({ type: 'done', files: [
         `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${parsed.lines.reduce((s, l) => s + l.points.length, 0)} punten)`,
@@ -210,7 +210,7 @@ export default function ConverterPage() {
 
       // File 2: DXF 2010 — lines only
       const linesOnly = { ...parsed, surfaces: [] }
-      const dxfStr = generateDXF2010Lines(linesOnly, baseName)
+      const dxfStr = await generateDXF2010LinesPythagoras(linesOnly, baseName)
       downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
 
       const ptCount = parsed.surfaces[0]?.points.length ?? 0
