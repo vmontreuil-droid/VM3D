@@ -1,11 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 40">
-  <!-- Bracket icon, scaled 0.91x -->
-  <g transform="scale(0.91)">
-    <rect x="0" y="2" width="44" height="36" rx="6" fill="#f7941d" opacity="0.12"/>
-    <path d="M14,4 L6,4 Q2,4 2,8 L2,32 Q2,36 6,36 L14,36" fill="none" stroke="#f7941d" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M30,4 L38,4 Q42,4 42,8 L42,32 Q42,36 38,36 L30,36" fill="none" stroke="#f7941d" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="26" y1="8" x2="18" y2="32" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
-  </g>
-  <!-- MV3D.CLOUD text -->
-  <text x="50" y="29" font-family="'Segoe UI', system-ui, sans-serif" font-weight="800" font-size="28" fill="#1a1a2e">MV3D<tspan fill="#f7941d">.CLOUD</tspan></text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 40">
+  <rect x="0" y="2" width="44" height="36" rx="6" fill="#f7941d" opacity="0.12"/>
+  <path d="M14,4 L6,4 Q2,4 2,8 L2,32 Q2,36 6,36 L14,36" fill="none" stroke="#f7941d" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M30,4 L38,4 Q42,4 42,8 L42,32 Q42,36 38,36 L30,36" fill="none" stroke="#f7941d" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="26" y1="8" x2="18" y2="32" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
 </svg>
