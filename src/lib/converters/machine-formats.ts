@@ -1458,11 +1458,15 @@ export async function generateDXF2010LinesPythagoras(
 
   // Update LAYER table count: was "     6" (1 layer "0" + 5 user layers)
   // → wordt "     {1 + layers.size}"
-  // Match na "TABLE\n  2\nLAYER\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n"
   dxf = dxf.replace(
     /(TABLE\n  2\nLAYER\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n)\s*\d+/,
     `$1${String(1 + layers.size).padStart(6)}`
   )
+
+  // Update $HANDSEED — moet > grootste gebruikte handle zijn, anders zien
+  // sommige parsers (Pythagoras) onze entiteiten als "ongeldig toegekend"
+  const handSeed = nextH.toString(16).toUpperCase()
+  dxf = dxf.replace(/(\$HANDSEED\n  5\n)[0-9A-Fa-f]+/, `$1${handSeed}`)
 
   // Update $EXTMIN / $EXTMAX / $LIMMIN / $LIMMAX in HEADER
   const f = (n: number) => n.toFixed(15).replace(/\.?0+$/, '') || '0.0'
