@@ -251,61 +251,114 @@ export function generateDXF(data: MachineFile, version: 'AC1015' | 'AC1024' = 'A
   return out.join('\n')
 }
 
-// ─── DXF 2010 — edges only (LINE entities from triangle edges) ────────────────
+// ─── DXF lines export (R12 / AC1009 — universeel compatibel) ─────────────────
+//
+// Volledige DXF met $EXTMIN/$EXTMAX (anders ziet Pythagoras niets bij Lambert
+// coördinaten), LTYPE tabel met CONTINUOUS, en één LAYER per polyline zodat
+// elke ontwerplijn los selecteerbaar is.
 
-export function generateDXF2010Lines(data: MachineFile, layerName = 'LIJNEN'): string {
+function sanitizeLayerName(name: string, fallback: string): string {
+  // DXF R12 layer names: max 31 chars, no <>/\\":;?*|=' or control chars
+  const cleaned = name.replace(/[<>/\\":;?*|='\x00-\x1f]/g, '_').trim()
+  return (cleaned.slice(0, 31) || fallback).toUpperCase()
+}
+
+export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJNEN'): string {
   const out: string[] = []
   const sec = (name: string) => { out.push('  0', 'SECTION', '  2', name) }
   const end = () => { out.push('  0', 'ENDSEC') }
 
-  sec('HEADER')
-  out.push('  9', '$ACADVER', '  1', 'AC1024')  // AutoCAD 2010
-  out.push('  9', '$INSUNITS', ' 70', '6')
-  end()
+  // Collect all line segments (per polyline + triangle edges from any surface)
+  type Seg = { layer: string; p1: Point3D; p2: Point3D }
+  const segments: Seg[] = []
+  const layers = new Map<string, number>() // name → ACI color
+  const layerColors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 30, 40, 50, 60, 70, 110, 130, 170, 200, 230]
+  let colorIdx = 0
+  const addLayer = (name: string) => {
+    if (!layers.has(name)) layers.set(name, layerColors[colorIdx++ % layerColors.length])
+  }
 
-  sec('TABLES')
-  out.push('  0', 'TABLE', '  2', 'LAYER', ' 70', '2')
-  out.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
-  out.push('  0', 'LAYER', '  2', layerName, ' 70', '0', ' 62', '1', '  6', 'CONTINUOUS')
-  out.push('  0', 'ENDTAB')
-  end()
-
-  sec('ENTITIES')
+  for (let pi = 0; pi < data.lines.length; pi++) {
+    const pl = data.lines[pi]
+    if (pl.points.length < 2) continue
+    const layer = sanitizeLayerName(pl.name, `LIJN_${pi + 1}`)
+    addLayer(layer)
+    for (let i = 0; i < pl.points.length - 1; i++) {
+      segments.push({ layer, p1: pl.points[i], p2: pl.points[i + 1] })
+    }
+  }
 
   for (const surf of data.surfaces) {
     const pts = surf.points
     const tris = surf.triangles.length > 0 ? surf.triangles : triangulate(pts)
-
-    // Deduplicate edges: store as "minIdx-maxIdx" set
+    const layer = sanitizeLayerName(surf.name, defaultLayerName)
+    addLayer(layer)
     const edgeSet = new Set<string>()
     for (const [a, b, c] of tris) {
       edgeSet.add(`${Math.min(a,b)}-${Math.max(a,b)}`)
       edgeSet.add(`${Math.min(b,c)}-${Math.max(b,c)}`)
       edgeSet.add(`${Math.min(a,c)}-${Math.max(a,c)}`)
     }
-
     for (const edge of edgeSet) {
       const [i, j] = edge.split('-').map(Number)
       const p1 = pts[i], p2 = pts[j]
       if (!p1 || !p2) continue
-      out.push('  0', 'LINE', '  8', layerName)
-      out.push(' 10', p1.x.toFixed(6), ' 20', p1.y.toFixed(6), ' 30', p1.z.toFixed(6))
-      out.push(' 11', p2.x.toFixed(6), ' 21', p2.y.toFixed(6), ' 31', p2.z.toFixed(6))
+      segments.push({ layer, p1, p2 })
     }
   }
 
-  // Also write explicit polylines
-  for (const pl of data.lines) {
-    if (pl.points.length < 2) continue
-    for (let i = 0; i < pl.points.length - 1; i++) {
-      const p1 = pl.points[i], p2 = pl.points[i + 1]
-      out.push('  0', 'LINE', '  8', layerName)
-      out.push(' 10', p1.x.toFixed(6), ' 20', p1.y.toFixed(6), ' 30', p1.z.toFixed(6))
-      out.push(' 11', p2.x.toFixed(6), ' 21', p2.y.toFixed(6), ' 31', p2.z.toFixed(6))
+  // Compute bounding box for $EXTMIN/$EXTMAX
+  let minX = Infinity, minY = Infinity, minZ = Infinity
+  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity
+  for (const s of segments) {
+    for (const p of [s.p1, s.p2]) {
+      if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x
+      if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y
+      if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z
     }
   }
+  if (!isFinite(minX)) { minX = minY = minZ = 0; maxX = maxY = maxZ = 0 }
+
+  // ── HEADER ──
+  sec('HEADER')
+  out.push('  9', '$ACADVER',  '  1', 'AC1009') // R12 — meest compatibel
+  out.push('  9', '$INSBASE',  ' 10', '0.0', ' 20', '0.0', ' 30', '0.0')
+  out.push('  9', '$EXTMIN',   ' 10', minX.toFixed(6), ' 20', minY.toFixed(6), ' 30', minZ.toFixed(6))
+  out.push('  9', '$EXTMAX',   ' 10', maxX.toFixed(6), ' 20', maxY.toFixed(6), ' 30', maxZ.toFixed(6))
+  out.push('  9', '$LIMMIN',   ' 10', minX.toFixed(6), ' 20', minY.toFixed(6))
+  out.push('  9', '$LIMMAX',   ' 10', maxX.toFixed(6), ' 20', maxY.toFixed(6))
+  out.push('  9', '$INSUNITS', ' 70', '6') // 6 = meters
+  out.push('  9', '$LUNITS',   ' 70', '2') // decimal
+  out.push('  9', '$LUPREC',   ' 70', '6')
+  end()
+
+  // ── TABLES (LTYPE + LAYER) ──
+  sec('TABLES')
+
+  // LTYPE table — CONTINUOUS is verplicht voor de LAYERs die ernaar verwijzen
+  out.push('  0', 'TABLE', '  2', 'LTYPE', ' 70', '1')
+  out.push('  0', 'LTYPE', '  2', 'CONTINUOUS', ' 70', '0', '  3', 'Solid line', ' 72', '65', ' 73', '0', ' 40', '0.0')
+  out.push('  0', 'ENDTAB')
+
+  // LAYER table — één entry per lijn
+  out.push('  0', 'TABLE', '  2', 'LAYER', ' 70', String(layers.size + 1))
+  out.push('  0', 'LAYER', '  2', '0', ' 70', '0', ' 62', '7', '  6', 'CONTINUOUS')
+  for (const [name, color] of layers) {
+    out.push('  0', 'LAYER', '  2', name, ' 70', '0', ' 62', String(color), '  6', 'CONTINUOUS')
+  }
+  out.push('  0', 'ENDTAB')
 
   end()
+
+  // ── ENTITIES ──
+  sec('ENTITIES')
+  for (const s of segments) {
+    out.push('  0', 'LINE', '  8', s.layer, ' 62', '256') // color BYLAYER
+    out.push(' 10', s.p1.x.toFixed(6), ' 20', s.p1.y.toFixed(6), ' 30', s.p1.z.toFixed(6))
+    out.push(' 11', s.p2.x.toFixed(6), ' 21', s.p2.y.toFixed(6), ' 31', s.p2.z.toFixed(6))
+  }
+  end()
+
   out.push('  0', 'EOF')
   return out.join('\n')
 }
