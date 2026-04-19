@@ -1,5 +1,6 @@
 // Machine control file converter
 // Supports: LandXML, DXF, TN3 (Topcon), SVL/SVD (Trimble)
+import Delaunator from 'delaunator'
 
 export type Point3D = { x: number; y: number; z: number }
 export type Triangle = [number, number, number] // 0-based indices into points
@@ -81,23 +82,43 @@ export function parseLandXML(text: string): MachineFile {
   return { name: 'LandXML', surfaces, lines: [] }
 }
 
+// ─── Delaunay triangulation ───────────────────────────────────────────────────
+
+export function triangulate(points: Point3D[]): Triangle[] {
+  if (points.length < 3) return []
+  const coords = points.flatMap(p => [p.x, p.y])
+  const d = new Delaunator(coords)
+  const triangles: Triangle[] = []
+  for (let i = 0; i < d.triangles.length; i += 3) {
+    triangles.push([d.triangles[i], d.triangles[i + 1], d.triangles[i + 2]])
+  }
+  return triangles
+}
+
 // ─── LandXML generator ────────────────────────────────────────────────────────
 
 export function generateLandXML(data: MachineFile): string {
   const now = new Date()
   const date = now.toISOString().slice(0, 10)
   const time = now.toTimeString().slice(0, 8)
+  const ts = now.toISOString().replace('.000Z', '').replace('Z', '')
 
   const surfacesXml = data.surfaces.map(surf => {
-    const elevs = surf.points.map(p => p.z)
-    const elevMax = Math.max(...elevs).toFixed(6)
-    const elevMin = Math.min(...elevs).toFixed(6)
+    const pts = surf.points
+    if (pts.length === 0) return ''
 
-    const pnts = surf.points
-      .map((p, i) => `          <P id="${i + 1}">${p.x.toFixed(6)} ${p.y.toFixed(6)} ${p.z.toFixed(6)}</P>`)
+    // Triangulate if no faces present
+    const tris = surf.triangles.length > 0 ? surf.triangles : triangulate(pts)
+
+    const elevs = pts.map(p => p.z)
+    const elevMax = Math.max(...elevs).toFixed(12)
+    const elevMin = Math.min(...elevs).toFixed(12)
+
+    const pnts = pts
+      .map((p, i) => `          <P id="${i + 1}">${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}</P>`)
       .join('\n')
 
-    const faces = surf.triangles
+    const faces = tris
       .map(t => `          <F n="0 0 0">${t[0] + 1} ${t[1] + 1} ${t[2] + 1}</F>`)
       .join('\n')
 
@@ -115,7 +136,7 @@ ${faces}
         </Faces>
       </Definition>
     </Surface>`
-  }).join('\n')
+  }).filter(Boolean).join('\n')
 
   return `<?xml version="1.0" standalone="yes"?>
 <LandXML
@@ -126,20 +147,27 @@ ${faces}
   version="1.2"
   xmlns="http://www.landxml.org/schema/LandXML-1.2"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.landxml.org/schema/LandXML-1.2 http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
+  xsi:schemaLocation=
+    "http://www.landxml.org/schema/LandXML-1.2
+http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd"
 >
   <Units>
     <Metric
       angularUnit="decimal degrees"
       areaUnit="squareMeter"
       diameterUnit="meter"
+      directionUnit="decimal degrees"
       linearUnit="meter"
+      pressureUnit="milliBars"
+      temperatureUnit="celsius"
       volumeUnit="cubicMeter"
     />
   </Units>
   <Application
     manufacturer="MV3D.cloud"
+    manufacturerURL="mv3d.cloud"
     name="MV3D Converter"
+    timeStamp="${ts}"
     version="1.0"
   />
   <Surfaces>
