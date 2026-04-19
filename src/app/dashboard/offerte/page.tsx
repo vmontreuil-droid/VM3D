@@ -70,7 +70,6 @@ export default function OffertePage() {
               className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
             >
               {/* Persoonlijke gegevens */}
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                   <label htmlFor="name" className="font-semibold text-[var(--text-main)]">Volledige naam *</label>
                   <input
                     type="text"
@@ -97,7 +96,6 @@ export default function OffertePage() {
                     placeholder="jan@voorbeeld.be"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> We sturen de offerte naar dit adres.</p>
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                 <div>
                   <label htmlFor="phone" className="font-semibold text-[var(--text-main)]">Telefoonnummer</label>
                   <input
