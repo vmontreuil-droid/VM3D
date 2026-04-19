@@ -397,7 +397,7 @@ const en: Dictionary = {
     downloadError: 'Error creating download link',
     noDownloadLink: 'No download link received.',
     deleteConfirm: 'Are you sure you want to delete this file?',
-    deleting: 'Loading...',
+    deleting: 'Deleting...',
     delete: 'Delete',
     deleteFailed: 'Could not delete the file.',
     openFailed: 'Could not open the file.',
@@ -560,7 +560,7 @@ const en: Dictionary = {
     deleteBtn: 'Delete file',
     storageError: 'Storage error',
     dbError: 'Database error',
-    downloading: 'Loading...',
+    downloading: 'Downloading...',
     downloadFailed: 'Download failed.',
   },
 

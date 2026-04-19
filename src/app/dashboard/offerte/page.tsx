@@ -2,11 +2,7 @@
 import { useState, useRef } from "react";
 import AppShell from '@/components/app-shell';
 import PageBanner from '@/components/page-banner';
-import { FileText, CheckCircle2, UploadCloud, Info } from 'lucide-react';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { FileText, UploadCloud, Info, CheckCircle2 } from 'lucide-react';
 
 const DIENSTEN = [
   "3D scanning",
@@ -16,6 +12,8 @@ const DIENSTEN = [
   "As-built plannen",
   "Overig (specificeer in omschrijving)",
 ];
+
+const INPUT_CLASS = "mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition";
 
 export default function OffertePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -47,6 +45,8 @@ export default function OffertePage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      setSubmitted(true);
+    }, 800);
   }
 
   return (
@@ -58,9 +58,11 @@ export default function OffertePage() {
           description="Ontvang een offerte op maat voor uw 3D-project. Vul het formulier zorgvuldig in. Elk veld bevat uitleg en tips om u te begeleiden."
         />
         <div className="flex flex-col items-center justify-center py-10">
-            {submitted ? (
+          {submitted ? (
+            <div className="flex flex-col items-center gap-4 text-center max-w-md">
+              <CheckCircle2 className="h-12 w-12 text-emerald-400" />
               <h2 className="text-2xl font-bold text-[var(--text-main)]">Offerte verzonden!</h2>
-              <p className="text-[var(--text-soft)] text-center max-w-md">
+              <p className="text-[var(--text-soft)]">
                 Bedankt voor uw aanvraag. We nemen zo snel mogelijk contact met u op.
               </p>
             </div>
@@ -70,6 +72,8 @@ export default function OffertePage() {
               className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
             >
               {/* Persoonlijke gegevens */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
                   <label htmlFor="name" className="font-semibold text-[var(--text-main)]">Volledige naam *</label>
                   <input
                     type="text"
@@ -78,10 +82,10 @@ export default function OffertePage() {
                     required
                     value={form.name}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                     placeholder="Jan Jansen"
-                        </div>
+                  />
+                </div>
                 <div>
                   <label htmlFor="email" className="font-semibold text-[var(--text-main)]">E-mailadres *</label>
                   <input
@@ -91,11 +95,11 @@ export default function OffertePage() {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                     placeholder="jan@voorbeeld.be"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> We sturen de offerte naar dit adres.</p>
+                </div>
                 <div>
                   <label htmlFor="phone" className="font-semibold text-[var(--text-main)]">Telefoonnummer</label>
                   <input
@@ -104,8 +108,7 @@ export default function OffertePage() {
                     name="phone"
                     value={form.phone}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                     placeholder="+32 470 12 34 56"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Optioneel, handig voor snelle opvolging.</p>
@@ -118,8 +121,7 @@ export default function OffertePage() {
                     name="vat"
                     value={form.vat}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                     placeholder="BE 0123.456.789"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Optioneel, voor zakelijke klanten.</p>
@@ -130,34 +132,30 @@ export default function OffertePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="dienst" className="font-semibold text-[var(--text-main)]">Gewenste dienst *</label>
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                  <select
+                    id="dienst"
                     name="dienst"
                     required
                     value={form.dienst}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                   >
                     <option value="">Selecteer een dienst...</option>
                     {DIENSTEN.map((d) => (
                       <option key={d} value={d}>{d}</option>
                     ))}
                   </select>
-                      className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                <div className="relative">
+                </div>
+                <div>
                   <label htmlFor="date" className="font-semibold text-[var(--text-main)]">Gewenste uitvoeringsdatum</label>
-                  <div className="relative mt-2">
-                    <input
-                      type="date"
-                      id="date"
-                      name="date"
-                      value={form.date}
-                      onChange={handleChange}
-                      className="w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 pr-12 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--accent)] pointer-events-none">
-                      <FileText className="h-5 w-5 opacity-70" />
-                    </span>
-                  </div>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={form.date}
+                    onChange={handleChange}
+                    className={INPUT_CLASS}
+                  />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Vroeger bestellen = voordeliger tarief.</p>
                 </div>
                 <div className="md:col-span-2">
@@ -169,8 +167,7 @@ export default function OffertePage() {
                     required
                     value={form.title}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS}
                     placeholder="Offerteaanvraag werf Antwerpen"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Geef een korte, duidelijke titel.</p>
@@ -183,8 +180,7 @@ export default function OffertePage() {
                     required
                     value={form.description}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
-                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className={INPUT_CLASS + " min-h-[100px]"}
                     placeholder="Beschrijf uw project of aanvraag in meer detail..."
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Hoe meer info, hoe beter onze offerte aansluit.</p>
@@ -192,9 +188,8 @@ export default function OffertePage() {
               </div>
 
               {/* Bijlagen */}
-              <div className="mt-6">
+              <div>
                 <label htmlFor="file" className="font-semibold text-[var(--text-main)]">Bijlagen (optioneel)</label>
-                <div className="flex flex-col items-center justify-center border-2 border-dashed border-[var(--accent)] rounded-xl bg-[#202b38] py-8 px-4 mt-2">
                 <div className="flex flex-col items-center justify-center border-2 border-dashed border-[var(--accent)] rounded-xl bg-white dark:bg-[#202b38] py-8 px-4 mt-2">
                   <button
                     type="button"
@@ -218,25 +213,24 @@ export default function OffertePage() {
                       type="button"
                       className="mt-2 text-xs text-red-500 hover:underline"
                       onClick={() => setForm((f) => ({ ...f, file: undefined }))}
-                    >Verwijder bestand</button>
+                    >
+                      Verwijder bestand
+                    </button>
                   )}
                 </div>
               </div>
 
-              <div className="flex justify-end mt-10">
+              <div className="flex justify-end">
                 <button
                   type="submit"
-                  className={classNames(
-                    "btn-primary flex justify-center items-center gap-2 px-10 py-3 text-base font-semibold rounded-lg shadow-lg",
-                    loading ? "opacity-60 cursor-not-allowed" : ""
-                  )}
                   disabled={loading}
+                  className="inline-flex items-center gap-2 px-10 py-3 text-base font-semibold rounded-lg bg-[var(--accent)] text-white shadow-lg hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <FileText className="h-5 w-5" />
                   {loading ? "Verzenden..." : "Aanvraag Versturen"}
                 </button>
               </div>
-              <p className="text-xs text-[var(--text-soft)] mt-4">* Verplichte velden</p>
+              <p className="text-xs text-[var(--text-soft)]">* Verplichte velden</p>
             </form>
           )}
         </div>
