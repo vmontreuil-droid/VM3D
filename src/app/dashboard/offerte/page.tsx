@@ -72,6 +72,7 @@ export default function OffertePage() {
             <form
               onSubmit={handleSubmit}
               className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
+              className="w-full max-w-3xl space-y-10 p-10 rounded-3xl border border-[var(--border-soft)] bg-white dark:bg-[linear-gradient(120deg,#1b2633_80%,#222f3d_100%)] shadow-2xl"
             >
               {/* Persoonlijke gegevens */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -85,6 +86,7 @@ export default function OffertePage() {
                     value={form.name}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="Jan Jansen"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Vul uw volledige naam in.</p>
@@ -99,6 +101,7 @@ export default function OffertePage() {
                     value={form.email}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="jan@voorbeeld.be"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> We sturen de offerte naar dit adres.</p>
@@ -112,6 +115,7 @@ export default function OffertePage() {
                     value={form.phone}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="+32 470 12 34 56"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Optioneel, handig voor snelle opvolging.</p>
@@ -125,6 +129,7 @@ export default function OffertePage() {
                     value={form.vat}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="BE 0123.456.789"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Optioneel, voor zakelijke klanten.</p>
@@ -177,6 +182,7 @@ export default function OffertePage() {
                     value={form.title}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="Offerteaanvraag werf Antwerpen"
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Geef een korte, duidelijke titel.</p>
@@ -190,6 +196,7 @@ export default function OffertePage() {
                     value={form.description}
                     onChange={handleChange}
                     className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-soft)] bg-white dark:bg-[#202b38] px-4 py-3 min-h-[100px] text-[var(--text-main)] dark:text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition"
                     placeholder="Beschrijf uw project of aanvraag in meer detail..."
                   />
                   <p className="text-xs text-[var(--text-soft)] mt-2 flex items-center gap-1"><Info className="inline h-3 w-3" /> Hoe meer info, hoe beter onze offerte aansluit.</p>
@@ -200,6 +207,7 @@ export default function OffertePage() {
               <div className="mt-6">
                 <label htmlFor="file" className="font-semibold text-[var(--text-main)]">Bijlagen (optioneel)</label>
                 <div className="flex flex-col items-center justify-center border-2 border-dashed border-[var(--accent)] rounded-xl bg-[#202b38] py-8 px-4 mt-2">
+                <div className="flex flex-col items-center justify-center border-2 border-dashed border-[var(--accent)] rounded-xl bg-white dark:bg-[#202b38] py-8 px-4 mt-2">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
