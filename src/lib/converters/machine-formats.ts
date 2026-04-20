@@ -1251,11 +1251,12 @@ async function loadTp3Asset(name: string): Promise<ArrayBuffer> {
 }
 
 function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: number): number {
-  const bytes = Math.min(str.length * 2, maxBytes - 2)
-  for (let i = 0; i < bytes / 2; i++) {
+  const maxChars = Math.floor(maxBytes / 2)
+  const chars = Math.min(str.length, maxChars)
+  for (let i = 0; i < chars; i++) {
     view.setUint16(offset + i * 2, str.charCodeAt(i), true)
   }
-  return bytes
+  return chars * 2
 }
 
 export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
@@ -1382,9 +1383,11 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block11 = concatBuffers(makeBlockHeader(11, numLineRecs, 340), block11Data)
 
-  // type=13 (per-vertex attributes, all zeros)
-  const block13Data = new ArrayBuffer(rawVerts.length * 4)
-  const block13 = concatBuffers(makeBlockHeader(13, rawVerts.length, 4), block13Data)
+  // type=13 (per-vertex attributes, all zeros). Alleen voor normalisatie + line
+  // vertices, NIET voor surface vertices. Aantal = surfaceVertStart.
+  const t13Count = surfaceVertStart
+  const block13Data = new ArrayBuffer(t13Count * 4)
+  const block13 = concatBuffers(makeBlockHeader(13, t13Count, 4), block13Data)
 
   // type=12 (vertex ranges) — start vanaf template per record (preserveert
   // timestamp op +24-31), patch start (+4), count (+12), code (+22).
