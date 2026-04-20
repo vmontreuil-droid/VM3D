@@ -1285,23 +1285,11 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     { x: -0.178, y: -0.418, z: 0 },
   ]
 
-  // EEN globale reference voor ALLE vertices (lines + surface). Topcon lijkt
-  // de surface refX/refY uit type=17 als globale offset te gebruiken voor het
-  // hele type=2 block, niet per-lijn refs uit type=11.
-  // Bereken globale ref als min(X), min(Y) van alle absolute punten.
-  let globalRefX = Infinity, globalRefY = Infinity
+  // Per-line refs (type=17 refX volgt triangulatie; type=11 line refs sturen
+  // de bounding-box rendering). Elke layer krijgt eigen ref = centroid van
+  // zijn eerste polyline. Surface ref = centroid van surface punten.
   const surface = data.surfaces[0] ?? { name: 'Oppervlak', points: [], triangles: [] }
-  for (const pl of data.lines) for (const p of pl.points) {
-    if (p.x < globalRefX) globalRefX = p.x
-    if (p.y < globalRefY) globalRefY = p.y
-  }
-  for (const p of surface.points) {
-    if (p.x < globalRefX) globalRefX = p.x
-    if (p.y < globalRefY) globalRefY = p.y
-  }
-  if (!isFinite(globalRefX)) { globalRefX = 0; globalRefY = 0 }
 
-  // Group polylines by layer name
   const linesByName = new Map<string, Polyline[]>()
   for (const pl of data.lines) {
     if (pl.points.length < 2) continue
@@ -1310,34 +1298,41 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     linesByName.set(pl.name, arr)
   }
 
-  // Per layer: één lineObject (type=11), N vertex-ranges (type=12)
-  // Alle line objects krijgen de globale ref zodat type=2 vertices uniform geinterpreteerd worden
   type LineObject = { name: string; refX: number; refY: number }
   const lineObjects: LineObject[] = []
   type VertexRange = { start: number; count: number; code: number }
   const vertexRanges: VertexRange[] = [
-    { start: 0, count: 4, code: 1 }, // normalisatie (code 1 zoals origineel TEST CONVERT)
+    { start: 0, count: 4, code: 1 }, // normalisatie
   ]
 
   let layerCode = 1
   for (const [name, pls] of linesByName) {
-    lineObjects.push({ name, refX: globalRefX, refY: globalRefY })
+    // Centroid van eerste polyline = layer ref
+    const refPt = pls[0].points[0]
+    const refX = refPt.x
+    const refY = refPt.y
+    lineObjects.push({ name, refX, refY })
     for (const pl of pls) {
       const startIdx = rawVerts.length
       for (const p of pl.points) {
-        rawVerts.push({ x: p.x - globalRefX, y: p.y - globalRefY, z: p.z })
+        rawVerts.push({ x: p.x - refX, y: p.y - refY, z: p.z })
       }
       vertexRanges.push({ start: startIdx, count: pl.points.length, code: layerCode })
     }
     layerCode++
   }
 
-  // Surface: vertices na alle line vertices, met dezelfde globale ref
+  // Surface ref = centroid van surface vertices
   const surfaceVertStart = rawVerts.length
-  const surfaceRefX = globalRefX
-  const surfaceRefY = globalRefY
-  for (const p of surface.points) {
-    rawVerts.push({ x: p.x - globalRefX, y: p.y - globalRefY, z: p.z })
+  let surfaceRefX = 0, surfaceRefY = 0
+  if (surface.points.length > 0) {
+    let sx = 0, sy = 0
+    for (const p of surface.points) { sx += p.x; sy += p.y }
+    surfaceRefX = sx / surface.points.length
+    surfaceRefY = sy / surface.points.length
+    for (const p of surface.points) {
+      rawVerts.push({ x: p.x - surfaceRefX, y: p.y - surfaceRefY, z: p.z })
+    }
   }
 
   // ── Bouw blocks (per type) ──
