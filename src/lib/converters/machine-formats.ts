@@ -1227,6 +1227,256 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
   }
 }
 
+// ─── TP3 generator ───────────────────────────────────────────────────────────
+//
+// Schrijft een Topcon TP3 binary file vanaf een MachineFile (oppervlak + lijnen).
+// Gebruikt een 1822-byte binary template (public/converter/tp3-header.bin) voor
+// de file-header met cleared project naam (offset 28) en index tabel (offset
+// 200). De generator vult deze in en schrijft daarna de blocks:
+//   type=2 stride=24  : raw vertices RELATIVE to per-line refX/refY (4 norm + N data)
+//   type=11 stride=340: line objects (name, refX, refY)
+//   type=13 stride=4  : per-vertex attributes (zeros)
+//   type=12 stride=32 : vertex range mapping (start, count, code)
+//   type=14 stride=24 : surface triangles (uint32 indices)
+//   type=17 stride=332: surface metadata (name, refX, refY)
+
+let tp3HeaderCache: ArrayBuffer | null = null
+
+async function loadTp3Header(): Promise<ArrayBuffer> {
+  if (tp3HeaderCache) return tp3HeaderCache
+  const res = await fetch('/converter/tp3-header.bin')
+  if (!res.ok) throw new Error('TP3 header template kon niet geladen worden')
+  tp3HeaderCache = await res.arrayBuffer()
+  return tp3HeaderCache
+}
+
+function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: number): number {
+  const bytes = Math.min(str.length * 2, maxBytes - 2)
+  for (let i = 0; i < bytes / 2; i++) {
+    view.setUint16(offset + i * 2, str.charCodeAt(i), true)
+  }
+  return bytes
+}
+
+export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
+  const headerTpl = await loadTp3Header()
+  const HEADER_SIZE = 1822
+
+  // ── Bereken referentiepunt voor RELATIVE vertices ──
+  // Gebruik centroid van alle vertices als globale ref. Lijnen krijgen elk
+  // een eigen ref (centroid van die lijn) zodat dx/dy klein blijven.
+  const allLineNames = new Set(data.lines.map(l => l.name))
+  type LineRef = { name: string; refX: number; refY: number; pointStart: number; pointCount: number; code: number }
+  const lineRefs: LineRef[] = []
+
+  // ── Bouw rawVertices (relative) ──
+  // Layout: [4 normalization vectors at indices 0-3] + [line vertices] + [surface vertices]
+  type RawV = { x: number; y: number; z: number }
+  const rawVerts: RawV[] = [
+    { x: -0.418, y: 0.178, z: 0 }, // standaard normalisatie-vectoren uit TEST CONVERT
+    { x: 0.179,  y: 0.418, z: 0 },
+    { x: 0.418,  y: -0.178, z: 0 },
+    { x: -0.178, y: -0.418, z: 0 },
+  ]
+
+  // Voeg LINE vertices toe (per layer, met eigen refX/refY)
+  // Polylines met dezelfde naam delen één layer en krijgen aparte vertex-ranges
+  // Group polylines by layer name
+  const linesByName = new Map<string, Polyline[]>()
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    const arr = linesByName.get(pl.name) ?? []
+    arr.push(pl)
+    linesByName.set(pl.name, arr)
+  }
+
+  // Per layer: één lineObject (type=11), N vertex-ranges (type=12)
+  type LineObject = { name: string; refX: number; refY: number }
+  const lineObjects: LineObject[] = []
+  type VertexRange = { start: number; count: number; code: number }
+  const vertexRanges: VertexRange[] = [
+    // Eerste range = normalisatie (start=0, count=4)
+    { start: 0, count: 4, code: 2 },
+  ]
+
+  let layerCode = 1
+  for (const [name, pls] of linesByName) {
+    // Compute layer reference (centroid of first polyline)
+    const refPt = pls[0].points[0]
+    const refX = refPt.x
+    const refY = refPt.y
+    lineObjects.push({ name, refX, refY })
+
+    for (const pl of pls) {
+      const startIdx = rawVerts.length
+      for (const p of pl.points) {
+        rawVerts.push({ x: p.x - refX, y: p.y - refY, z: p.z })
+      }
+      vertexRanges.push({ start: startIdx, count: pl.points.length, code: layerCode })
+    }
+    layerCode++
+  }
+
+  // Surface: vertices na alle line vertices, RELATIVE to surface ref
+  const surface = data.surfaces[0] ?? { name: 'Oppervlak', points: [], triangles: [] }
+  const surfaceVertStart = rawVerts.length
+  let surfaceRefX = 0, surfaceRefY = 0
+  if (surface.points.length > 0) {
+    surfaceRefX = surface.points[0].x
+    surfaceRefY = surface.points[0].y
+    for (const p of surface.points) {
+      rawVerts.push({ x: p.x - surfaceRefX, y: p.y - surfaceRefY, z: p.z })
+    }
+  }
+
+  // ── Bouw blocks (per type) ──
+  function makeBlockHeader(type: number, count: number, stride: number): ArrayBuffer {
+    const buf = new ArrayBuffer(18)
+    const dv = new DataView(buf)
+    dv.setUint16(0, type, true)
+    dv.setUint16(2, 18, true)
+    dv.setUint16(4, 1024, true) // recPerBlk hint
+    dv.setUint16(6, count, true)
+    dv.setUint16(8, stride, true)
+    dv.setUint32(10, 0xFFFFFFFE, true)
+    dv.setUint32(14, 0xFFFFFFFE, true)
+    return buf
+  }
+
+  // type=2 (vertices, RELATIVE)
+  const block2Data = new ArrayBuffer(rawVerts.length * 24)
+  const dv2 = new DataView(block2Data)
+  for (let i = 0; i < rawVerts.length; i++) {
+    dv2.setFloat64(i * 24,      rawVerts[i].x, true)
+    dv2.setFloat64(i * 24 + 8,  rawVerts[i].y, true)
+    dv2.setFloat64(i * 24 + 16, rawVerts[i].z, true)
+  }
+  const block2 = concatBuffers(makeBlockHeader(2, rawVerts.length, 24), block2Data)
+
+  // type=11 (line objects + 1 placeholder + 1 surface entry)
+  // Volgens TEST CONVERT: rec[0]="0" placeholder, rec[1]=surface name, rec[2..]=lines
+  const numLineRecs = 2 + lineObjects.length // placeholder + surface + N lines
+  const block11Data = new ArrayBuffer(numLineRecs * 340)
+  const dv11 = new DataView(block11Data)
+  // rec[0] = placeholder "0"
+  writeUtf16LE(dv11, 2, '0', 100)
+  // rec[1] = surface (refX=refY=0 in TEST CONVERT)
+  writeUtf16LE(dv11, 1 * 340 + 2, surface.name, 100)
+  // rec[2..] = lines
+  for (let i = 0; i < lineObjects.length; i++) {
+    const off = (2 + i) * 340
+    writeUtf16LE(dv11, off + 2, lineObjects[i].name, 100)
+    dv11.setFloat64(off + 138, lineObjects[i].refX, true)
+    dv11.setFloat64(off + 146, lineObjects[i].refY, true)
+  }
+  const block11 = concatBuffers(makeBlockHeader(11, numLineRecs, 340), block11Data)
+
+  // type=13 (per-vertex attributes, all zeros)
+  const block13Data = new ArrayBuffer(rawVerts.length * 4)
+  const block13 = concatBuffers(makeBlockHeader(13, rawVerts.length, 4), block13Data)
+
+  // type=12 (vertex ranges)
+  const block12Data = new ArrayBuffer(vertexRanges.length * 32)
+  const dv12 = new DataView(block12Data)
+  for (let i = 0; i < vertexRanges.length; i++) {
+    const o = i * 32
+    const r = vertexRanges[i]
+    dv12.setUint16(o,      2, true)         // type-marker (always 2)
+    dv12.setUint16(o + 4,  r.start, true)   // start vertex index
+    dv12.setUint16(o + 6,  13, true)        // const 13
+    dv12.setUint32(o + 12, r.count, true)   // count
+    dv12.setUint16(o + 18, 0xFFFE, true)    // sentinel
+    dv12.setUint16(o + 22, r.code, true)    // feature code
+  }
+  const block12 = concatBuffers(makeBlockHeader(12, vertexRanges.length, 32), block12Data)
+
+  // type=14 (surface triangles, indices LOCAL to surface)
+  const block14Data = new ArrayBuffer(surface.triangles.length * 24)
+  const dv14 = new DataView(block14Data)
+  for (let i = 0; i < surface.triangles.length; i++) {
+    const o = i * 24
+    const [a, b, c] = surface.triangles[i]
+    dv14.setUint32(o,      a, true)
+    dv14.setUint32(o + 4,  b, true)
+    dv14.setUint32(o + 8,  c, true)
+    dv14.setUint32(o + 12, 0xFFFFFFFF, true) // neighbor placeholders
+    dv14.setUint32(o + 16, 0xFFFFFFFF, true)
+    dv14.setUint32(o + 20, 0xFFFFFFFF, true)
+  }
+  const block14 = concatBuffers(makeBlockHeader(14, surface.triangles.length, 24), block14Data)
+
+  // type=17 (surface metadata, 1 record)
+  const block17Data = new ArrayBuffer(332)
+  const dv17 = new DataView(block17Data)
+  // Voorste 30 bytes: kopiëren uit template (header bytes 7544+18 = 7562 in originele TP3),
+  // we hebben die niet bij ons → fill met zeros + name op +30
+  dv17.setUint32(0, 0xC0, true) // matching value seen in template
+  dv17.setUint16(4, 0x40, true)
+  dv17.setUint32(6, 0x057a, true)
+  writeUtf16LE(dv17, 30, surface.name, 100)
+  dv17.setFloat64(160, surfaceRefX, true)
+  dv17.setFloat64(168, surfaceRefY, true)
+  const block17 = concatBuffers(makeBlockHeader(17, 1, 332), block17Data)
+
+  // ── Compute final offsets ──
+  let off = HEADER_SIZE
+  const blocks = [
+    { type: 2,  buf: block2,  off: 0 },
+    { type: 11, buf: block11, off: 0 },
+    { type: 13, buf: block13, off: 0 },
+    { type: 12, buf: block12, off: 0 },
+    { type: 14, buf: block14, off: 0 },
+    { type: 17, buf: block17, off: 0 },
+  ]
+  for (const b of blocks) {
+    b.off = off
+    off += b.buf.byteLength
+  }
+  const totalSize = off
+
+  // ── Build final buffer ──
+  const out = new ArrayBuffer(totalSize)
+  new Uint8Array(out).set(new Uint8Array(headerTpl)) // copy template header
+  const dvOut = new DataView(out)
+
+  // Patch project name at offset 28 (UTF-16LE, max 24 chars = 48 bytes)
+  const pname = projectName ?? data.name ?? 'MV3D Project'
+  writeUtf16LE(dvOut, 28, pname, 48)
+
+  // Patch first-block hint at offset 192-199 (uint16 first_type=2 @+194, uint32 hdrSz=18 @+196)
+  dvOut.setUint16(192, 30, true)
+  dvOut.setUint16(194, blocks[0].type, true)
+  dvOut.setUint32(196, 18, true)
+
+  // Patch index table at offset 200 (10 bytes per entry)
+  for (let i = 0; i < blocks.length; i++) {
+    const o = 200 + i * 10
+    dvOut.setUint32(o,     blocks[i].off, true)
+    const nextType = i + 1 < blocks.length ? blocks[i + 1].type : 0
+    dvOut.setUint16(o + 4, nextType, true)
+    dvOut.setUint32(o + 6, nextType !== 0 ? 18 : 0, true)
+  }
+
+  // Write blocks
+  const u8 = new Uint8Array(out)
+  for (const b of blocks) {
+    u8.set(new Uint8Array(b.buf), b.off)
+  }
+
+  return out
+}
+
+function concatBuffers(...bufs: ArrayBuffer[]): ArrayBuffer {
+  const total = bufs.reduce((s, b) => s + b.byteLength, 0)
+  const out = new Uint8Array(total)
+  let off = 0
+  for (const b of bufs) {
+    out.set(new Uint8Array(b), off)
+    off += b.byteLength
+  }
+  return out.buffer
+}
+
 // ─── SVL parser ───────────────────────────────────────────────────────────────
 
 export function parseSVL(buf: ArrayBuffer): MachineFile {
