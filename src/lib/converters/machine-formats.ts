@@ -1240,23 +1240,14 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
 //   type=14 stride=24 : surface triangles (uint32 indices)
 //   type=17 stride=332: surface metadata (name, refX, refY)
 
-let tp3HeaderCache: ArrayBuffer | null = null
-let tp3Type17Cache: ArrayBuffer | null = null
+const tp3Cache: { [key: string]: ArrayBuffer } = {}
 
-async function loadTp3Header(): Promise<ArrayBuffer> {
-  if (tp3HeaderCache) return tp3HeaderCache
-  const res = await fetch('/converter/tp3-header.bin')
-  if (!res.ok) throw new Error('TP3 header template kon niet geladen worden')
-  tp3HeaderCache = await res.arrayBuffer()
-  return tp3HeaderCache
-}
-
-async function loadTp3Type17(): Promise<ArrayBuffer> {
-  if (tp3Type17Cache) return tp3Type17Cache
-  const res = await fetch('/converter/tp3-type17.bin')
-  if (!res.ok) throw new Error('TP3 type=17 template kon niet geladen worden')
-  tp3Type17Cache = await res.arrayBuffer()
-  return tp3Type17Cache
+async function loadTp3Asset(name: string): Promise<ArrayBuffer> {
+  if (tp3Cache[name]) return tp3Cache[name]
+  const res = await fetch(`/converter/${name}`)
+  if (!res.ok) throw new Error(`TP3 asset ${name} kon niet geladen worden`)
+  tp3Cache[name] = await res.arrayBuffer()
+  return tp3Cache[name]
 }
 
 function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: number): number {
@@ -1268,8 +1259,12 @@ function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: num
 }
 
 export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
-  const headerTpl = await loadTp3Header()
-  const type17Tpl = await loadTp3Type17()
+  const [headerTpl, type11Tpl, type12Tpl, type17Tpl] = await Promise.all([
+    loadTp3Asset('tp3-header.bin'),
+    loadTp3Asset('tp3-type11.bin'),
+    loadTp3Asset('tp3-type12.bin'),
+    loadTp3Asset('tp3-type17.bin'),
+  ])
   const HEADER_SIZE = 1822
 
   // ── Bereken referentiepunt voor RELATIVE vertices ──
@@ -1363,21 +1358,27 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block2 = concatBuffers(makeBlockHeader(2, rawVerts.length, 24), block2Data)
 
-  // type=11 (line objects + 1 placeholder + 1 surface entry)
-  // Volgens TEST CONVERT: rec[0]="0" placeholder, rec[1]=surface name, rec[2..]=lines
-  const numLineRecs = 2 + lineObjects.length // placeholder + surface + N lines
+  // type=11 (line objects: rec[0]="0" placeholder, rec[1]=surface, rec[2..]=lines)
+  // Elk record start vanaf template (preserveert alle onbekende metadata),
+  // patch alleen name (offset +2), refX (+138) en refY (+146).
+  const numLineRecs = 2 + lineObjects.length
   const block11Data = new ArrayBuffer(numLineRecs * 340)
+  const u11 = new Uint8Array(block11Data)
   const dv11 = new DataView(block11Data)
-  // rec[0] = placeholder "0"
-  writeUtf16LE(dv11, 2, '0', 100)
-  // rec[1] = surface (refX=refY=0 in TEST CONVERT)
-  writeUtf16LE(dv11, 1 * 340 + 2, surface.name, 100)
-  // rec[2..] = lines
-  for (let i = 0; i < lineObjects.length; i++) {
-    const off = (2 + i) * 340
-    writeUtf16LE(dv11, off + 2, lineObjects[i].name, 100)
-    dv11.setFloat64(off + 138, lineObjects[i].refX, true)
-    dv11.setFloat64(off + 146, lineObjects[i].refY, true)
+  for (let i = 0; i < numLineRecs; i++) {
+    u11.set(new Uint8Array(type11Tpl), i * 340) // template per record
+    const off = i * 340
+    if (i === 0) {
+      writeUtf16LE(dv11, off + 2, '0', 100)
+    } else if (i === 1) {
+      writeUtf16LE(dv11, off + 2, surface.name, 100)
+      // surface object: refX/refY = 0
+    } else {
+      const lo = lineObjects[i - 2]
+      writeUtf16LE(dv11, off + 2, lo.name, 100)
+      dv11.setFloat64(off + 138, lo.refX, true)
+      dv11.setFloat64(off + 146, lo.refY, true)
+    }
   }
   const block11 = concatBuffers(makeBlockHeader(11, numLineRecs, 340), block11Data)
 
@@ -1385,18 +1386,18 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   const block13Data = new ArrayBuffer(rawVerts.length * 4)
   const block13 = concatBuffers(makeBlockHeader(13, rawVerts.length, 4), block13Data)
 
-  // type=12 (vertex ranges)
+  // type=12 (vertex ranges) — start vanaf template per record (preserveert
+  // timestamp op +24-31), patch start (+4), count (+12), code (+22).
   const block12Data = new ArrayBuffer(vertexRanges.length * 32)
+  const u12 = new Uint8Array(block12Data)
   const dv12 = new DataView(block12Data)
   for (let i = 0; i < vertexRanges.length; i++) {
+    u12.set(new Uint8Array(type12Tpl), i * 32)
     const o = i * 32
     const r = vertexRanges[i]
-    dv12.setUint16(o,      2, true)         // type-marker (always 2)
-    dv12.setUint16(o + 4,  r.start, true)   // start vertex index
-    dv12.setUint16(o + 6,  13, true)        // const 13
-    dv12.setUint32(o + 12, r.count, true)   // count
-    dv12.setUint16(o + 18, 0xFFFE, true)    // sentinel
-    dv12.setUint16(o + 22, r.code, true)    // feature code
+    dv12.setUint16(o + 4,  r.start, true)
+    dv12.setUint32(o + 12, r.count, true)
+    dv12.setUint16(o + 22, r.code,  true)
   }
   const block12 = concatBuffers(makeBlockHeader(12, vertexRanges.length, 32), block12Data)
 
