@@ -15,6 +15,7 @@ export interface Polyline {
   name: string
   points: Point3D[]
   closed?: boolean
+  code?: number  // optionele Pythagoras feature code (TP3)
 }
 
 export interface MachineFile {
@@ -362,13 +363,31 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
-  // Polylines met dezelfde naam delen dezelfde layer/kleur. De parser bepaalt
-  // de naam (kan een feature-code-suffix bevatten zoals 'Velddata 1' om
-  // polylines per Pythagoras-feature te groeperen).
+  // Layer = naam + (rang van pl.code) wanneer dezelfde naam meerdere codes heeft.
+  // Zo blijft kleurgroepering per Pythagoras feature-code behouden.
+  const codesByName = new Map<string, Set<number>>()
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    if (pl.code === undefined) continue
+    if (!codesByName.has(pl.name)) codesByName.set(pl.name, new Set())
+    codesByName.get(pl.name)!.add(pl.code)
+  }
+  const rankByNameCode = new Map<string, number>()
+  for (const [name, codes] of codesByName) {
+    const sorted = [...codes].sort((a, b) => a - b)
+    sorted.forEach((c, i) => rankByNameCode.set(`${name}|${c}`, i + 1))
+  }
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const baseName = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const codes = codesByName.get(pl.name)
+    let layer: string
+    if (pl.code !== undefined && codes && codes.size > 1) {
+      layer = `${baseName} ${rankByNameCode.get(`${pl.name}|${pl.code}`)}`
+    } else {
+      layer = baseName
+    }
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
@@ -1141,17 +1160,11 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
   }
 
   // Build line polylines: ELKE vertex-range = aparte polyline. Voorkomt dat
-  // 234 losse 2-punts segmenten samenklitten tot één spaghetti-polyline.
-  // Polyline-naam = lineObj.name + (rang van code) zodat polylines met
-  // dezelfde code in dezelfde layer komen → dezelfde kleur in Pythagoras.
+  // losse 2-punts segmenten samenklitten tot één spaghetti-polyline. Polyline
+  // naam blijft origineel (uit type=11), code wordt apart bewaard zodat zowel
+  // round-trip naar TP3 (1 line object per naam) als DXF export (1 layer per
+  // code) blijft werken.
   const lineRanges = allRanges.filter(r => r.start >= 4 && r.count > 0 && r.count < 100000)
-
-  // Bouw rang-mapping voor codes (1, 2, 3, ... in volgorde van eerste voorkomen)
-  const codeRank = new Map<number, number>()
-  for (const r of lineRanges) {
-    if (!codeRank.has(r.code)) codeRank.set(r.code, codeRank.size + 1)
-  }
-  const codeVaries = codeRank.size > 1
 
   const lines: Polyline[] = []
   for (let i = 0; i < lineRanges.length; i++) {
@@ -1167,10 +1180,7 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
       pts.push({ x: lineObj.refX + v.x, y: lineObj.refY + v.y, z: v.z })
     }
     if (pts.length < 2) continue
-    const layerName = codeVaries
-      ? `${lineObj.name} ${codeRank.get(r.code)}`
-      : lineObj.name
-    lines.push({ name: layerName, points: pts })
+    lines.push({ name: lineObj.name, points: pts, code: r.code })
   }
 
   // type=17: surface metadata
@@ -1311,9 +1321,10 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     { start: 0, count: 4, code: 1 }, // normalisatie
   ]
 
+  // 1 line object per unieke naam. Code per polyline = pl.code (uit TP3 parse)
+  // of fallback layerCode (oplopend per layer) als input geen code heeft.
   let layerCode = 1
   for (const [name, pls] of linesByName) {
-    // Centroid van eerste polyline = layer ref
     const refPt = pls[0].points[0]
     const refX = refPt.x
     const refY = refPt.y
@@ -1323,7 +1334,11 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
       for (const p of pl.points) {
         rawVerts.push({ x: p.x - refX, y: p.y - refY, z: p.z })
       }
-      vertexRanges.push({ start: startIdx, count: pl.points.length, code: layerCode })
+      vertexRanges.push({
+        start: startIdx,
+        count: pl.points.length,
+        code: pl.code ?? layerCode,
+      })
     }
     layerCode++
   }
@@ -1830,13 +1845,31 @@ export async function generateDXF2010LinesPythagoras(
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
-  // Polylines met dezelfde naam delen dezelfde layer/kleur. De parser bepaalt
-  // de naam (kan een feature-code-suffix bevatten zoals 'Velddata 1' om
-  // polylines per Pythagoras-feature te groeperen).
+  // Layer = naam + (rang van pl.code) wanneer dezelfde naam meerdere codes heeft.
+  // Zo blijft kleurgroepering per Pythagoras feature-code behouden.
+  const codesByName = new Map<string, Set<number>>()
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    if (pl.code === undefined) continue
+    if (!codesByName.has(pl.name)) codesByName.set(pl.name, new Set())
+    codesByName.get(pl.name)!.add(pl.code)
+  }
+  const rankByNameCode = new Map<string, number>()
+  for (const [name, codes] of codesByName) {
+    const sorted = [...codes].sort((a, b) => a - b)
+    sorted.forEach((c, i) => rankByNameCode.set(`${name}|${c}`, i + 1))
+  }
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const baseName = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const codes = codesByName.get(pl.name)
+    let layer: string
+    if (pl.code !== undefined && codes && codes.size > 1) {
+      layer = `${baseName} ${rankByNameCode.get(`${pl.name}|${pl.code}`)}`
+    } else {
+      layer = baseName
+    }
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
