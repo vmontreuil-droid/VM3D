@@ -1642,17 +1642,19 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     break
   }
 
-  // PATCH 1: surface vertices in type=2. Patch alleen wat past binnen template;
-  // bij size-mismatch laten we de template-bytes onaangeroerd (best-effort).
+  // PATCH 1: surface vertices in type=2. Bounds-checked tegen type=2 block size.
   const surface = data.surfaces[0]
   if (surface && surface.points.length > 0 && surfaceVertCount > 0) {
-    let t2 = -1
-    for (const b of blocks) if (b.type === 2 && b.stride === 24) { t2 = b.off + 18; break }
-    if (t2 >= 0) {
+    const t2Block = blocks.find(b => b.type === 2 && b.stride === 24)
+    if (t2Block) {
+      const t2 = t2Block.off + 18
+      const t2MaxIdx = t2Block.count - 1
       const n = Math.min(surface.points.length, surfaceVertCount)
       for (let i = 0; i < n; i++) {
+        const idx = surfaceVertStart + i
+        if (idx > t2MaxIdx) break // bounds check — geen overflow naar volgende block
         const p = surface.points[i]
-        const o = t2 + (surfaceVertStart + i) * 24
+        const o = t2 + idx * 24
         dv.setFloat64(o,      p.x - surfaceRefX, true)
         dv.setFloat64(o + 8,  p.y - surfaceRefY, true)
         dv.setFloat64(o + 16, p.z, true)
@@ -1660,14 +1662,14 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     }
   }
 
-  // PATCH 2: line vertices in type=2 (per-range, relative to per-line ref)
-  // Map input lines → ranges by ORDER (assume same structure as template)
+  // PATCH 2: line vertices in type=2 (per-range, relative to per-line ref).
+  // Bounds-checked tegen type=2 block size.
   const lineRanges = ranges
   if (lineRefs.length > 0 && data.lines.length > 0) {
-    let t2 = -1
-    for (const b of blocks) if (b.type === 2 && b.stride === 24) { t2 = b.off + 18; break }
-    if (t2 >= 0) {
-      // Group input data.lines by name → polylines per layer
+    const t2Block = blocks.find(b => b.type === 2 && b.stride === 24)
+    if (t2Block) {
+      const t2 = t2Block.off + 18
+      const t2MaxIdx = t2Block.count - 1
       const byName = new Map<string, Polyline[]>()
       for (const pl of data.lines) {
         if (pl.points.length < 2) continue
@@ -1675,10 +1677,7 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
         arr.push(pl)
         byName.set(pl.name, arr)
       }
-      // Iterate ranges and lines in parallel using template structure
       let layerIdx = 0
-      let plIdxInLayer = 0
-      let pInLayerCount = 0
       const linesArr = [...byName.values()]
       const refsArr = lineRefs
       let rangeIdx = 0
@@ -1687,10 +1686,11 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
         for (const pl of layer) {
           if (rangeIdx >= lineRanges.length) break
           const r = lineRanges[rangeIdx]
-          // Patch this range with polyline coords
           for (let j = 0; j < Math.min(r.count, pl.points.length); j++) {
+            const idx = r.start + j
+            if (idx > t2MaxIdx) break // bounds check
             const p = pl.points[j]
-            const o = t2 + (r.start + j) * 24
+            const o = t2 + idx * 24
             dv.setFloat64(o,      p.x - ref.refX, true)
             dv.setFloat64(o + 8,  p.y - ref.refY, true)
             dv.setFloat64(o + 16, p.z, true)
