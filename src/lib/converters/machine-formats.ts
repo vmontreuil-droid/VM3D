@@ -1186,13 +1186,17 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
     lines.push({ name: lineObj.name, points: pts, code: r.code })
   }
 
-  // type=17: surface metadata
+  // type=17: surface metadata (authoritative voor surface positie/grootte)
   let surfaceName = 'Oppervlak'
   let surfaceRefX = 0
   let surfaceRefY = 0
+  let surfaceVertStart = -1
+  let surfaceVertCount = -1
   for (const blk of blocks) {
     if (blk.type !== 17 || blk.stride < 200 || blk.count < 1) continue
     const recOff = blk.dataOff
+    surfaceVertStart = view.getUint16(recOff + 4, true)
+    surfaceVertCount = view.getUint16(recOff + 18, true)
     surfaceRefX = view.getFloat64(recOff + 160, true)
     surfaceRefY = view.getFloat64(recOff + 168, true)
     let nEnd = recOff + blk.stride
@@ -1204,18 +1208,28 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
     break
   }
 
-  // Surface vertices = raw verts not used by any line range, minus first 4 (normalization)
-  const usedIdx = new Set<number>()
-  for (let i = 0; i < 4; i++) usedIdx.add(i)
-  for (const r of allRanges) {
-    if (r.start < 4 || r.count > 100000) continue
-    for (let j = 0; j < r.count; j++) usedIdx.add(r.start + j)
-  }
+  // Surface vertices: gebruik AUTHORITATIVE info uit type=17 (start + count) als
+  // beschikbaar, anders fallback "alle indices niet gebruikt door line ranges".
   const surfaceVerts: Point3D[] = []
-  for (let i = 0; i < rawVerts.length; i++) {
-    if (usedIdx.has(i)) continue
-    const v = rawVerts[i]
-    surfaceVerts.push({ x: surfaceRefX + v.x, y: surfaceRefY + v.y, z: v.z })
+  if (surfaceVertStart >= 0 && surfaceVertCount > 0) {
+    for (let i = 0; i < surfaceVertCount; i++) {
+      const idx = surfaceVertStart + i
+      if (idx >= rawVerts.length) break
+      const v = rawVerts[idx]
+      surfaceVerts.push({ x: surfaceRefX + v.x, y: surfaceRefY + v.y, z: v.z })
+    }
+  } else {
+    const usedIdx = new Set<number>()
+    for (let i = 0; i < 4; i++) usedIdx.add(i)
+    for (const r of allRanges) {
+      if (r.start < 4 || r.count > 100000) continue
+      for (let j = 0; j < r.count; j++) usedIdx.add(r.start + j)
+    }
+    for (let i = 0; i < rawVerts.length; i++) {
+      if (usedIdx.has(i)) continue
+      const v = rawVerts[i]
+      surfaceVerts.push({ x: surfaceRefX + v.x, y: surfaceRefY + v.y, z: v.z })
+    }
   }
 
   // type=14: triangles (local indices into surface vertex array)
@@ -1628,14 +1642,15 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     break
   }
 
-  // PATCH 1: surface vertices in type=2 (overschrijven met nieuwe coords, dx/dy
-  // relatief aan template's surfaceRefX/refY zodat absolute matcht).
+  // PATCH 1: surface vertices in type=2. Patch alleen wat past binnen template;
+  // bij size-mismatch laten we de template-bytes onaangeroerd (best-effort).
   const surface = data.surfaces[0]
-  if (surface && surface.points.length === surfaceVertCount) {
+  if (surface && surface.points.length > 0 && surfaceVertCount > 0) {
     let t2 = -1
     for (const b of blocks) if (b.type === 2 && b.stride === 24) { t2 = b.off + 18; break }
     if (t2 >= 0) {
-      for (let i = 0; i < surfaceVertCount; i++) {
+      const n = Math.min(surface.points.length, surfaceVertCount)
+      for (let i = 0; i < n; i++) {
         const p = surface.points[i]
         const o = t2 + (surfaceVertStart + i) * 24
         dv.setFloat64(o,      p.x - surfaceRefX, true)
@@ -1643,8 +1658,6 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
         dv.setFloat64(o + 16, p.z, true)
       }
     }
-  } else if (surface) {
-    throw new Error(`Surface vertex count mismatch: input=${surface.points.length}, template=${surfaceVertCount}`)
   }
 
   // PATCH 2: line vertices in type=2 (per-range, relative to per-line ref)
