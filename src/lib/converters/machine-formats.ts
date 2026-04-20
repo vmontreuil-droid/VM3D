@@ -22,6 +22,9 @@ export interface MachineFile {
   name: string
   surfaces: Surface[]
   lines: Polyline[]
+  /** Originele TP3 binary (alleen bij parseTP3 input). Generator kan dit
+   *  gebruiken als template voor exacte round-trip preservation van metadata. */
+  tp3Source?: ArrayBuffer
 }
 
 export type FileFormat = 'landxml' | 'dxf' | 'tn3' | 'ln3' | 'tp3' | 'svl' | 'svd'
@@ -1234,6 +1237,7 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
     name: projectName || 'TP3',
     surfaces: surfaceVerts.length > 0 ? [{ name: surfaceName, points: surfaceVerts, triangles }] : [],
     lines,
+    tp3Source: buf, // bewaar originele bytes voor template-based round-trip
   }
 }
 
@@ -1547,6 +1551,152 @@ function concatBuffers(...bufs: ArrayBuffer[]): ArrayBuffer {
     out.set(new Uint8Array(b), off)
     off += b.byteLength
   }
+  return out.buffer
+}
+
+// ─── TP3 generator via TEMPLATE (round-trip optimaal) ───────────────────────
+//
+// Voor round-trip cases: gebruik de originele TP3 als binary template en
+// PATCH ALLEEN de wijzigingen. Geen blokken herbouwen, geen counts wijzigen,
+// geen unbekende metadata corrumperen. Werkt alleen wanneer:
+//   - data.tp3Source aanwezig (= origineel TP3 bytes)
+//   - shape ongewijzigd (zelfde aantal lijn-verts, surface-verts, triangles)
+// Anders: throw en val terug op generateTP3 (from-scratch generator).
+
+export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
+  if (!data.tp3Source) throw new Error('Geen tp3Source aanwezig — gebruik generateTP3 ipv template')
+  const out = new Uint8Array(data.tp3Source.byteLength)
+  out.set(new Uint8Array(data.tp3Source))
+  const dv = new DataView(out.buffer)
+
+  // Vind blokken
+  const blocks: { type: number; off: number; count: number; stride: number }[] = []
+  for (let i = 16; i < out.length - 18; i += 2) {
+    if (dv.getUint16(i + 2, true) !== 18) continue
+    if (dv.getUint32(i + 10, true) !== 0xFFFFFFFE) continue
+    const t = dv.getUint16(i, true)
+    if (t < 1 || t > 30) continue
+    const stride = dv.getUint16(i + 8, true)
+    if (stride === 0 || stride > 2000) continue
+    const count = dv.getUint16(i + 6, true)
+    if (i + 18 + count * stride > out.length) continue
+    blocks.push({ type: t, off: i, count, stride })
+  }
+
+  // Surface ref + line refs uit template (NIET wijzigen)
+  let surfaceRefX = 0, surfaceRefY = 0, surfaceVertStart = 0, surfaceVertCount = 0
+  for (const b of blocks) {
+    if (b.type !== 17) continue
+    const r = b.off + 18
+    surfaceVertStart = dv.getUint16(r + 4, true)
+    surfaceVertCount = dv.getUint16(r + 18, true)
+    surfaceRefX = dv.getFloat64(r + 160, true)
+    surfaceRefY = dv.getFloat64(r + 168, true)
+    break
+  }
+
+  // Per-line refs uit type=11
+  type LineRef = { name: string; refX: number; refY: number; recOff: number }
+  const lineRefs: LineRef[] = []
+  for (const b of blocks) {
+    if (b.type !== 11) continue
+    for (let j = 0; j < b.count; j++) {
+      const o = b.off + 18 + j * b.stride
+      const refX = dv.getFloat64(o + 138, true)
+      if (Math.abs(refX) < 1) continue // skip placeholder/surface
+      lineRefs.push({
+        name: '',
+        refX,
+        refY: dv.getFloat64(o + 146, true),
+        recOff: o,
+      })
+    }
+    break
+  }
+
+  // type=12 ranges (uit template) — preserved as-is
+  type Range = { start: number; count: number }
+  const ranges: Range[] = []
+  for (const b of blocks) {
+    if (b.type !== 12) continue
+    for (let j = 0; j < b.count; j++) {
+      const o = b.off + 18 + j * 32
+      const start = dv.getUint16(o + 4, true)
+      const cnt = dv.getUint32(o + 12, true)
+      if (start >= 4 && cnt > 0 && cnt < 100000) ranges.push({ start, count: cnt })
+    }
+    break
+  }
+
+  // PATCH 1: surface vertices in type=2 (overschrijven met nieuwe coords, dx/dy
+  // relatief aan template's surfaceRefX/refY zodat absolute matcht).
+  const surface = data.surfaces[0]
+  if (surface && surface.points.length === surfaceVertCount) {
+    let t2 = -1
+    for (const b of blocks) if (b.type === 2 && b.stride === 24) { t2 = b.off + 18; break }
+    if (t2 >= 0) {
+      for (let i = 0; i < surfaceVertCount; i++) {
+        const p = surface.points[i]
+        const o = t2 + (surfaceVertStart + i) * 24
+        dv.setFloat64(o,      p.x - surfaceRefX, true)
+        dv.setFloat64(o + 8,  p.y - surfaceRefY, true)
+        dv.setFloat64(o + 16, p.z, true)
+      }
+    }
+  } else if (surface) {
+    throw new Error(`Surface vertex count mismatch: input=${surface.points.length}, template=${surfaceVertCount}`)
+  }
+
+  // PATCH 2: line vertices in type=2 (per-range, relative to per-line ref)
+  // Map input lines → ranges by ORDER (assume same structure as template)
+  const lineRanges = ranges
+  if (lineRefs.length > 0 && data.lines.length > 0) {
+    let t2 = -1
+    for (const b of blocks) if (b.type === 2 && b.stride === 24) { t2 = b.off + 18; break }
+    if (t2 >= 0) {
+      // Group input data.lines by name → polylines per layer
+      const byName = new Map<string, Polyline[]>()
+      for (const pl of data.lines) {
+        if (pl.points.length < 2) continue
+        const arr = byName.get(pl.name) ?? []
+        arr.push(pl)
+        byName.set(pl.name, arr)
+      }
+      // Iterate ranges and lines in parallel using template structure
+      let layerIdx = 0
+      let plIdxInLayer = 0
+      let pInLayerCount = 0
+      const linesArr = [...byName.values()]
+      const refsArr = lineRefs
+      let rangeIdx = 0
+      for (const layer of linesArr) {
+        const ref = refsArr[layerIdx] ?? refsArr[refsArr.length - 1]
+        for (const pl of layer) {
+          if (rangeIdx >= lineRanges.length) break
+          const r = lineRanges[rangeIdx]
+          // Patch this range with polyline coords
+          for (let j = 0; j < Math.min(r.count, pl.points.length); j++) {
+            const p = pl.points[j]
+            const o = t2 + (r.start + j) * 24
+            dv.setFloat64(o,      p.x - ref.refX, true)
+            dv.setFloat64(o + 8,  p.y - ref.refY, true)
+            dv.setFloat64(o + 16, p.z, true)
+          }
+          rangeIdx++
+        }
+        layerIdx++
+      }
+    }
+  }
+
+  // PATCH 3: project name in header (offset 28, max 48 bytes UTF-16LE)
+  const pname = data.name || 'MV3D'
+  // Clear name area first
+  for (let i = 28; i < 76; i++) out[i] = 0
+  for (let i = 0; i < Math.min(pname.length, 24); i++) {
+    dv.setUint16(28 + i * 2, pname.charCodeAt(i), true)
+  }
+
   return out.buffer
 }
 
