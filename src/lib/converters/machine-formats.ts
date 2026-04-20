@@ -1336,12 +1336,16 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
 
   // ── Bouw blocks (per type) ──
+  // recPerBlk waarde verschilt per block type (constant uit echte TP3s):
+  const RPB_BY_TYPE: Record<number, number> = {
+    2: 1024, 11: 128, 12: 1024, 13: 128, 14: 1024, 17: 32,
+  }
   function makeBlockHeader(type: number, count: number, stride: number): ArrayBuffer {
     const buf = new ArrayBuffer(18)
     const dv = new DataView(buf)
     dv.setUint16(0, type, true)
     dv.setUint16(2, 18, true)
-    dv.setUint16(4, 1024, true) // recPerBlk hint
+    dv.setUint16(4, RPB_BY_TYPE[type] ?? 1024, true)
     dv.setUint16(6, count, true)
     dv.setUint16(8, stride, true)
     dv.setUint32(10, 0xFFFFFFFE, true)
@@ -1404,20 +1408,40 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block12 = concatBuffers(makeBlockHeader(12, vertexRanges.length, 32), block12Data)
 
-  // type=14 (surface triangles, indices LOCAL to surface)
-  const block14Data = new ArrayBuffer(surface.triangles.length * 24)
+  // type=14 (surface triangles, 6 × uint32: 3 vertex indices LOCAL to surface
+  // + 3 NEIGHBOR triangle indices). Topcon vereist valide neighbor-info om de
+  // mesh te renderen (anders 0 sommets ondanks juiste structuur).
+  // Neighbor[k] = triangle index die de edge (vertex[k], vertex[k+1]) deelt.
+  const tris = surface.triangles
+  // Bouw edge → triangle index map (key = "min-max")
+  const edgeMap = new Map<string, number[]>()
+  for (let i = 0; i < tris.length; i++) {
+    const [a, b, c] = tris[i]
+    for (const [u, v] of [[a, b], [b, c], [c, a]]) {
+      const key = u < v ? `${u}-${v}` : `${v}-${u}`
+      const arr = edgeMap.get(key) ?? []
+      arr.push(i)
+      edgeMap.set(key, arr)
+    }
+  }
+  const block14Data = new ArrayBuffer(tris.length * 24)
   const dv14 = new DataView(block14Data)
-  for (let i = 0; i < surface.triangles.length; i++) {
+  for (let i = 0; i < tris.length; i++) {
     const o = i * 24
-    const [a, b, c] = surface.triangles[i]
+    const [a, b, c] = tris[i]
     dv14.setUint32(o,      a, true)
     dv14.setUint32(o + 4,  b, true)
     dv14.setUint32(o + 8,  c, true)
-    dv14.setUint32(o + 12, 0xFFFFFFFF, true) // neighbor placeholders
-    dv14.setUint32(o + 16, 0xFFFFFFFF, true)
-    dv14.setUint32(o + 20, 0xFFFFFFFF, true)
+    // Neighbors per edge (zelfde volgorde): (a,b), (b,c), (c,a)
+    for (let k = 0; k < 3; k++) {
+      const [u, v] = k === 0 ? [a, b] : k === 1 ? [b, c] : [c, a]
+      const key = u < v ? `${u}-${v}` : `${v}-${u}`
+      const ts = edgeMap.get(key) ?? []
+      const neighbor = ts.find(t => t !== i)
+      dv14.setUint32(o + 12 + k * 4, neighbor !== undefined ? neighbor : 0xFFFFFFFF, true)
+    }
   }
-  const block14 = concatBuffers(makeBlockHeader(14, surface.triangles.length, 24), block14Data)
+  const block14 = concatBuffers(makeBlockHeader(14, tris.length, 24), block14Data)
 
   // type=17 (surface metadata, 1 record). Start van TEST CONVERT template
   // (alle constanten + onbekende metadata blijven), patch alleen variabele velden:
