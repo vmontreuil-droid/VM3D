@@ -1375,17 +1375,16 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   const block2 = concatBuffers(makeBlockHeader(2, rawVerts.length, 24), block2Data)
 
   // type=11 (line objects: rec[0]="0" placeholder, rec[1]=surface, rec[2..]=lines)
-  // Elke record krijgt zijn eigen template (uit echte TP3) met per-record flags
-  // en IDs. rec[0] = placeholder, rec[1] = surface (refs=0), rec[2+] = lines.
+  // Per-record template + ID byte 0 = record index
   const numLineRecs = 2 + lineObjects.length
   const block11Data = new ArrayBuffer(numLineRecs * 340)
   const u11 = new Uint8Array(block11Data)
   const dv11 = new DataView(block11Data)
   for (let i = 0; i < numLineRecs; i++) {
-    // Use rec-specific template for first 4, then fallback to rec[3] (line) template
     const tpl = t11Templates[Math.min(i, 3)]
     u11.set(new Uint8Array(tpl), i * 340)
     const off = i * 340
+    dv11.setUint16(off, i, true) // ID = record index
     if (i === 0) {
       writeUtf16LE(dv11, off + 2, '0', 100)
     } else if (i === 1) {
@@ -1406,7 +1405,7 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   const block13 = concatBuffers(makeBlockHeader(13, t13Count, 4), block13Data)
 
   // type=12 (vertex ranges) — start vanaf template per record (preserveert
-  // timestamp op +24-31), patch start (+4), count (+12), code (+22).
+  // timestamp). Patch start (+4 én duplicate +10), count (+12), code (+22).
   const block12Data = new ArrayBuffer(vertexRanges.length * 32)
   const u12 = new Uint8Array(block12Data)
   const dv12 = new DataView(block12Data)
@@ -1415,6 +1414,7 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     const o = i * 32
     const r = vertexRanges[i]
     dv12.setUint16(o + 4,  r.start, true)
+    dv12.setUint16(o + 10, r.start, true) // duplicate van start
     dv12.setUint32(o + 12, r.count, true)
     dv12.setUint16(o + 22, r.code,  true)
   }
