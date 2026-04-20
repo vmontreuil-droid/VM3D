@@ -1063,7 +1063,9 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
     }
   }
 
-  // Build line polylines (skip normalization range with start=0)
+  // Build line polylines: ELKE vertex-range = aparte polyline. Voorkomt dat
+  // 234 losse 2-punts segmenten samenklitten tot één spaghetti-polyline. Bij
+  // duplicate namen geeft de DXF generator automatisch unieke layer-suffixen.
   const lineRanges = allRanges.filter(r => r.start >= 4 && r.count > 0 && r.count < 100000)
   const lines: Polyline[] = []
   for (let i = 0; i < lineRanges.length; i++) {
@@ -1079,11 +1081,7 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
       pts.push({ x: lineObj.refX + v.x, y: lineObj.refY + v.y, z: v.z })
     }
     if (pts.length < 2) continue
-    if (i < lineObjects.length) {
-      lines.push({ name: lineObj.name, points: pts })
-    } else if (lines.length > 0) {
-      lines[lines.length - 1].points.push(...pts)
-    }
+    lines.push({ name: lineObj.name, points: pts })
   }
 
   // type=17: surface metadata
