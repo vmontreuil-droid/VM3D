@@ -1321,8 +1321,10 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     { start: 0, count: 4, code: 1 }, // normalisatie
   ]
 
-  // 1 line object per unieke naam. Code per polyline = pl.code (uit TP3 parse)
-  // of fallback layerCode (oplopend per layer) als input geen code heeft.
+  // 1 line object per unieke naam. Topcon vereist DISTINCTE codes per layer
+  // (gebleken: zelfde codes voor alle ranges veroorzaakt offset). Daarom
+  // sequentiele codes per layer (1, 2, 3, ...). DXF generator gebruikt
+  // pl.code voor kleurgroepering binnen layer.
   let layerCode = 1
   for (const [name, pls] of linesByName) {
     const refPt = pls[0].points[0]
@@ -1337,7 +1339,7 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
       vertexRanges.push({
         start: startIdx,
         count: pl.points.length,
-        code: pl.code ?? layerCode,
+        code: layerCode,
       })
     }
     layerCode++
