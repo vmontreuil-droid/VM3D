@@ -1405,14 +1405,22 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block14 = concatBuffers(makeBlockHeader(14, surface.triangles.length, 24), block14Data)
 
-  // type=17 (surface metadata, 1 record)
+  // type=17 (surface metadata, 1 record). Velden gedecodeerd uit echte TP3:
+  //   +0  uint16 = 0xC0 (192, constant)
+  //   +4  uint16 = surface vertex START in type=2 (na 4 norm + alle line vertices)
+  //   +6  uint16 = 0x057A (1402, constant)
+  //   +18 uint16 = vertex count
+  //   +22 uint16 = triangle count
+  //   +30 UTF-16LE = surface name (~100 chars)
+  //   +160 float64 = surface refX
+  //   +168 float64 = surface refY
   const block17Data = new ArrayBuffer(332)
   const dv17 = new DataView(block17Data)
-  // Voorste 30 bytes: kopiëren uit template (header bytes 7544+18 = 7562 in originele TP3),
-  // we hebben die niet bij ons → fill met zeros + name op +30
-  dv17.setUint32(0, 0xC0, true) // matching value seen in template
-  dv17.setUint16(4, 0x40, true)
-  dv17.setUint32(6, 0x057a, true)
+  dv17.setUint16(0,  0xC0,             true)
+  dv17.setUint16(4,  surfaceVertStart, true)
+  dv17.setUint16(6,  0x057A,           true)
+  dv17.setUint16(18, surface.points.length,    true)
+  dv17.setUint16(22, surface.triangles.length, true)
   writeUtf16LE(dv17, 30, surface.name, 100)
   dv17.setFloat64(160, surfaceRefX, true)
   dv17.setFloat64(168, surfaceRefY, true)
