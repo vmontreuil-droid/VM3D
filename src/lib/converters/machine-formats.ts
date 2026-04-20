@@ -1276,13 +1276,15 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   const lineRefs: LineRef[] = []
 
   // ── Bouw rawVertices (relative) ──
-  // Layout: [4 normalization vectors at indices 0-3] + [line vertices] + [surface vertices]
+  // Eerste 4 vertices: in TEST CONVERT zijn het 4 unit-vectoren op 90° intervallen
+  // (mag ~0.45m, z=0), in xxx zijn het surface-corners met elevatie. Functie
+  // nog niet vol decoded. Match TEST CONVERT exact (juiste decimalen 0.1785).
   type RawV = { x: number; y: number; z: number }
   const rawVerts: RawV[] = [
-    { x: -0.418, y: 0.178, z: 0 }, // standaard normalisatie-vectoren uit TEST CONVERT
-    { x: 0.179,  y: 0.418, z: 0 },
-    { x: 0.418,  y: -0.178, z: 0 },
-    { x: -0.178, y: -0.418, z: 0 },
+    { x: -0.418,  y:  0.1785, z: 0 },
+    { x:  0.1785, y:  0.418,  z: 0 },
+    { x:  0.418,  y: -0.1785, z: 0 },
+    { x: -0.1785, y: -0.418,  z: 0 },
   ]
 
   // Per-line refs (type=17 refX volgt triangulatie; type=11 line refs sturen
