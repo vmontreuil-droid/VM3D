@@ -1241,6 +1241,7 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
 //   type=17 stride=332: surface metadata (name, refX, refY)
 
 let tp3HeaderCache: ArrayBuffer | null = null
+let tp3Type17Cache: ArrayBuffer | null = null
 
 async function loadTp3Header(): Promise<ArrayBuffer> {
   if (tp3HeaderCache) return tp3HeaderCache
@@ -1248,6 +1249,14 @@ async function loadTp3Header(): Promise<ArrayBuffer> {
   if (!res.ok) throw new Error('TP3 header template kon niet geladen worden')
   tp3HeaderCache = await res.arrayBuffer()
   return tp3HeaderCache
+}
+
+async function loadTp3Type17(): Promise<ArrayBuffer> {
+  if (tp3Type17Cache) return tp3Type17Cache
+  const res = await fetch('/converter/tp3-type17.bin')
+  if (!res.ok) throw new Error('TP3 type=17 template kon niet geladen worden')
+  tp3Type17Cache = await res.arrayBuffer()
+  return tp3Type17Cache
 }
 
 function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: number): number {
@@ -1260,6 +1269,7 @@ function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: num
 
 export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
   const headerTpl = await loadTp3Header()
+  const type17Tpl = await loadTp3Type17()
   const HEADER_SIZE = 1822
 
   // ── Bereken referentiepunt voor RELATIVE vertices ──
@@ -1405,20 +1415,18 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block14 = concatBuffers(makeBlockHeader(14, surface.triangles.length, 24), block14Data)
 
-  // type=17 (surface metadata, 1 record). Velden gedecodeerd uit echte TP3:
-  //   +0  uint16 = 0xC0 (192, constant)
-  //   +4  uint16 = surface vertex START in type=2 (na 4 norm + alle line vertices)
-  //   +6  uint16 = 0x057A (1402, constant)
+  // type=17 (surface metadata, 1 record). Start van TEST CONVERT template
+  // (alle constanten + onbekende metadata blijven), patch alleen variabele velden:
+  //   +4  uint16 = surface vertex START in type=2
   //   +18 uint16 = vertex count
   //   +22 uint16 = triangle count
-  //   +30 UTF-16LE = surface name (~100 chars)
+  //   +30 UTF-16LE = surface name
   //   +160 float64 = surface refX
   //   +168 float64 = surface refY
   const block17Data = new ArrayBuffer(332)
+  new Uint8Array(block17Data).set(new Uint8Array(type17Tpl)) // copy template
   const dv17 = new DataView(block17Data)
-  dv17.setUint16(0,  0xC0,             true)
   dv17.setUint16(4,  surfaceVertStart, true)
-  dv17.setUint16(6,  0x057A,           true)
   dv17.setUint16(18, surface.points.length,    true)
   dv17.setUint16(22, surface.triangles.length, true)
   writeUtf16LE(dv17, 30, surface.name, 100)
