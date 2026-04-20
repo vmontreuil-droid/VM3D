@@ -1655,7 +1655,7 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     break
   }
 
-  // PATCH 1: surface vertices in type=2. Bounds-checked tegen type=2 block size.
+  // PATCH 1: surface vertices in type=2. Skip bytes-overwrite als geen echte wijziging.
   const surface = data.surfaces[0]
   if (surface && surface.points.length > 0 && surfaceVertCount > 0) {
     const t2Block = blocks.find(b => b.type === 2 && b.stride === 24)
@@ -1665,9 +1665,14 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
       const n = Math.min(surface.points.length, surfaceVertCount)
       for (let i = 0; i < n; i++) {
         const idx = surfaceVertStart + i
-        if (idx > t2MaxIdx) break // bounds check — geen overflow naar volgende block
+        if (idx > t2MaxIdx) break
         const p = surface.points[i]
         const o = t2 + idx * 24
+        const oldDx = dv.getFloat64(o, true)
+        const oldDy = dv.getFloat64(o + 8, true)
+        const oldZ  = dv.getFloat64(o + 16, true)
+        const reconstructed = { x: surfaceRefX + oldDx, y: surfaceRefY + oldDy, z: oldZ }
+        if (reconstructed.x === p.x && reconstructed.y === p.y && reconstructed.z === p.z) continue
         dv.setFloat64(o,      p.x - surfaceRefX, true)
         dv.setFloat64(o + 8,  p.y - surfaceRefY, true)
         dv.setFloat64(o + 16, p.z, true)
@@ -1685,7 +1690,9 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
       const t2MaxIdx = t2Block.count - 1
       // Sorteer polylines op _tp3RangeStart om in juiste volgorde te patchen
       const linesWithMeta = data.lines.filter(pl => pl.points.length >= 2 && pl._tp3RangeStart !== undefined)
-      // Eerst: gebruik metadata-pad voor polylines met round-trip info
+      // Eerst: gebruik metadata-pad voor polylines met round-trip info.
+      // Alleen overschrijven als waarde ECHT verschilt van origineel (voorkomt
+      // float64 precision noise van round-trip arithmetic).
       for (const pl of linesWithMeta) {
         const refX = pl._tp3RefX ?? 0
         const refY = pl._tp3RefY ?? 0
@@ -1695,6 +1702,12 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
           if (idx > t2MaxIdx) break
           const p = pl.points[j]
           const o = t2 + idx * 24
+          const oldDx = dv.getFloat64(o, true)
+          const oldDy = dv.getFloat64(o + 8, true)
+          const oldZ  = dv.getFloat64(o + 16, true)
+          // Wat parser uit originele bytes zou hebben gehaald
+          const reconstructed = { x: refX + oldDx, y: refY + oldDy, z: oldZ }
+          if (reconstructed.x === p.x && reconstructed.y === p.y && reconstructed.z === p.z) continue
           dv.setFloat64(o,      p.x - refX, true)
           dv.setFloat64(o + 8,  p.y - refY, true)
           dv.setFloat64(o + 16, p.z, true)
