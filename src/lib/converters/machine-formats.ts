@@ -362,26 +362,13 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
-  // Bij duplicate namen: voeg index-suffix toe zodat elke polyline EIGEN layer krijgt
-  const nameCounts = new Map<string, number>()
-  for (const pl of data.lines) {
-    if (pl.points.length < 2) continue
-    const base = sanitizeLayerName(pl.name, 'Lijn')
-    nameCounts.set(base, (nameCounts.get(base) ?? 0) + 1)
-  }
-  const nameSeq = new Map<string, number>()
+  // Polylines met dezelfde naam delen dezelfde layer/kleur. De parser bepaalt
+  // de naam (kan een feature-code-suffix bevatten zoals 'Velddata 1' om
+  // polylines per Pythagoras-feature te groeperen).
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const base = sanitizeLayerName(pl.name, 'Lijn')
-    let layer: string
-    if ((nameCounts.get(base) ?? 0) > 1) {
-      const idx = (nameSeq.get(base) ?? 0) + 1
-      nameSeq.set(base, idx)
-      layer = `${base} ${idx}`
-    } else {
-      layer = base
-    }
+    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
@@ -1050,7 +1037,10 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
   }
 
   // type=12: vertex range mapping
-  type Range = { start: number; count: number }
+  // Range bevat ook een feature-code (uint16 op offset +22) die Pythagoras
+  // gebruikt voor layer/kleur-groepering. Polylines met dezelfde code horen
+  // bij dezelfde feature-categorie en moeten dezelfde kleur krijgen.
+  type Range = { start: number; count: number; code: number }
   const allRanges: Range[] = []
   for (const blk of blocks) {
     if (blk.type !== 12 || blk.stride !== 32) continue
@@ -1059,14 +1049,24 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
       allRanges.push({
         start: view.getUint16(o + 4,  true),
         count: view.getUint32(o + 12, true),
+        code:  view.getUint16(o + 22, true),
       })
     }
   }
 
   // Build line polylines: ELKE vertex-range = aparte polyline. Voorkomt dat
-  // 234 losse 2-punts segmenten samenklitten tot één spaghetti-polyline. Bij
-  // duplicate namen geeft de DXF generator automatisch unieke layer-suffixen.
+  // 234 losse 2-punts segmenten samenklitten tot één spaghetti-polyline.
+  // Polyline-naam = lineObj.name + (rang van code) zodat polylines met
+  // dezelfde code in dezelfde layer komen → dezelfde kleur in Pythagoras.
   const lineRanges = allRanges.filter(r => r.start >= 4 && r.count > 0 && r.count < 100000)
+
+  // Bouw rang-mapping voor codes (1, 2, 3, ... in volgorde van eerste voorkomen)
+  const codeRank = new Map<number, number>()
+  for (const r of lineRanges) {
+    if (!codeRank.has(r.code)) codeRank.set(r.code, codeRank.size + 1)
+  }
+  const codeVaries = codeRank.size > 1
+
   const lines: Polyline[] = []
   for (let i = 0; i < lineRanges.length; i++) {
     const r = lineRanges[i]
@@ -1081,7 +1081,10 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
       pts.push({ x: lineObj.refX + v.x, y: lineObj.refY + v.y, z: v.z })
     }
     if (pts.length < 2) continue
-    lines.push({ name: lineObj.name, points: pts })
+    const layerName = codeVaries
+      ? `${lineObj.name} ${codeRank.get(r.code)}`
+      : lineObj.name
+    lines.push({ name: layerName, points: pts })
   }
 
   // type=17: surface metadata
@@ -1435,26 +1438,13 @@ export async function generateDXF2010LinesPythagoras(
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
-  // Bij duplicate namen: voeg index-suffix toe zodat elke polyline EIGEN layer krijgt
-  const nameCounts = new Map<string, number>()
-  for (const pl of data.lines) {
-    if (pl.points.length < 2) continue
-    const base = sanitizeLayerName(pl.name, 'Lijn')
-    nameCounts.set(base, (nameCounts.get(base) ?? 0) + 1)
-  }
-  const nameSeq = new Map<string, number>()
+  // Polylines met dezelfde naam delen dezelfde layer/kleur. De parser bepaalt
+  // de naam (kan een feature-code-suffix bevatten zoals 'Velddata 1' om
+  // polylines per Pythagoras-feature te groeperen).
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const base = sanitizeLayerName(pl.name, 'Lijn')
-    let layer: string
-    if ((nameCounts.get(base) ?? 0) > 1) {
-      const idx = (nameSeq.get(base) ?? 0) + 1
-      nameSeq.set(base, idx)
-      layer = `${base} ${idx}`
-    } else {
-      layer = base
-    }
+    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
