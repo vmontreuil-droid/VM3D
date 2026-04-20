@@ -1322,17 +1322,22 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
     layerCode++
   }
 
-  // Surface ref = centroid van surface vertices
+  // Surface ref = ref van EERSTE line object (in TEST CONVERT was dit zo).
+  // Topcon lijkt surface ref te koppelen aan een line ref voor consistentie.
+  // Fallback: centroid van surface punten als geen lijnen.
   const surfaceVertStart = rawVerts.length
   let surfaceRefX = 0, surfaceRefY = 0
-  if (surface.points.length > 0) {
+  if (lineObjects.length > 0) {
+    surfaceRefX = lineObjects[0].refX
+    surfaceRefY = lineObjects[0].refY
+  } else if (surface.points.length > 0) {
     let sx = 0, sy = 0
     for (const p of surface.points) { sx += p.x; sy += p.y }
     surfaceRefX = sx / surface.points.length
     surfaceRefY = sy / surface.points.length
-    for (const p of surface.points) {
-      rawVerts.push({ x: p.x - surfaceRefX, y: p.y - surfaceRefY, z: p.z })
-    }
+  }
+  for (const p of surface.points) {
+    rawVerts.push({ x: p.x - surfaceRefX, y: p.y - surfaceRefY, z: p.z })
   }
 
   // ── Bouw blocks (per type) ──
