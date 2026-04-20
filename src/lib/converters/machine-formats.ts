@@ -597,44 +597,130 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
 
 // ─── DXF parser ───────────────────────────────────────────────────────────────
 
+// Robuuste DXF-parser: tokenizeert (group code, value) pairs en walkt entiteiten.
+// Ondersteunt 3DFACE (oppervlak), LINE/LWPOLYLINE/POLYLINE+VERTEX (lijnen),
+// allemaal gegroepeerd per layer.
+
+type DxfToken = { code: number; val: string }
+
+function tokenizeDXF(text: string): DxfToken[] {
+  // DXF format: even lines = code (3-char right-justified int), odd lines = value
+  const ls = text.split(/\r?\n/)
+  const tokens: DxfToken[] = []
+  for (let i = 0; i + 1 < ls.length; i += 2) {
+    const code = parseInt(ls[i].trim(), 10)
+    if (Number.isFinite(code)) tokens.push({ code, val: ls[i + 1] ?? '' })
+  }
+  return tokens
+}
+
 export function parseDXF(text: string): MachineFile {
-  const surfaces: Surface[] = []
-  const lines: Polyline[] = []
+  const tokens = tokenizeDXF(text)
 
-  // Parse 3DFACE entities grouped by layer
-  const facesByLayer: Record<string, { points: Point3D[]; triangles: Triangle[] }> = {}
-  const entSection = text.match(/ENTITIES[\s\S]*?(?=ENDSEC)/)
-  if (!entSection) return { name: 'DXF', surfaces, lines }
+  // Find ENTITIES section
+  let entStart = -1, entEnd = -1
+  for (let i = 0; i < tokens.length - 1; i++) {
+    if (tokens[i].code === 0 && tokens[i].val.trim() === 'SECTION'
+        && tokens[i + 1]?.code === 2 && tokens[i + 1].val.trim() === 'ENTITIES') {
+      entStart = i + 2; break
+    }
+  }
+  if (entStart < 0) return { name: 'DXF', surfaces: [], lines: [] }
+  for (let i = entStart; i < tokens.length; i++) {
+    if (tokens[i].code === 0 && tokens[i].val.trim() === 'ENDSEC') { entEnd = i; break }
+  }
+  if (entEnd < 0) entEnd = tokens.length
 
-  const entities = entSection[0].split(/(?=\s+0\s*\n\s*3DFACE|\s+0\s*\n\s*POINT|\s+0\s*\n\s*POLYLINE|\s+0\s*\n\s*LINE)/)
-  for (const ent of entities) {
-    const layerM = ent.match(/\s+8\s*\n\s*(.+)/)
-    const layer = layerM ? layerM[1].trim() : '0'
+  // Splits in entities (elke entity start met code 0)
+  type Entity = { type: string; codes: Map<number, string[]> }
+  const entities: Entity[] = []
+  let cur: Entity | null = null
+  for (let i = entStart; i < entEnd; i++) {
+    const t = tokens[i]
+    if (t.code === 0) {
+      if (cur) entities.push(cur)
+      cur = { type: t.val.trim(), codes: new Map() }
+    } else if (cur) {
+      const arr = cur.codes.get(t.code) ?? []
+      arr.push(t.val)
+      cur.codes.set(t.code, arr)
+    }
+  }
+  if (cur) entities.push(cur)
 
-    if (ent.includes('3DFACE')) {
-      if (!facesByLayer[layer]) facesByLayer[layer] = { points: [], triangles: [] }
-      const grp = facesByLayer[layer]
-      const coords: number[] = []
-      const codes: Record<number, number> = {}
-      for (const [c, v] of [...ent.matchAll(/\s+(\d+)\s*\n\s*([\d\-.e+]+)/g)].map(m => [+m[1], +m[2]] as [number, number])) {
-        codes[c] = v
-      }
-      const pts3d: Point3D[] = [
-        { x: codes[10] ?? 0, y: codes[20] ?? 0, z: codes[30] ?? 0 },
-        { x: codes[11] ?? 0, y: codes[21] ?? 0, z: codes[31] ?? 0 },
-        { x: codes[12] ?? 0, y: codes[22] ?? 0, z: codes[32] ?? 0 },
-      ]
+  // Helpers
+  const getStr = (e: Entity, code: number, def = '') => e.codes.get(code)?.[0]?.trim() ?? def
+  const getNum = (e: Entity, code: number, def = 0) => {
+    const v = e.codes.get(code)?.[0]
+    return v != null ? parseFloat(v) : def
+  }
+  const getNums = (e: Entity, code: number) => (e.codes.get(code) ?? []).map(parseFloat)
+
+  // Verzamel: surfaces per layer (3DFACE), polylines per layer (LINE / LWPOLYLINE / POLYLINE+VERTEX)
+  const surfacesByLayer = new Map<string, { points: Point3D[]; triangles: Triangle[] }>()
+  const polylines: Polyline[] = []
+
+  // POLYLINE+VERTEX: process group-by-group
+  for (let i = 0; i < entities.length; i++) {
+    const e = entities[i]
+    const layer = getStr(e, 8, '0')
+
+    if (e.type === '3DFACE') {
+      const grp = surfacesByLayer.get(layer) ?? { points: [] as Point3D[], triangles: [] as Triangle[] }
+      const p1 = { x: getNum(e, 10), y: getNum(e, 20), z: getNum(e, 30) }
+      const p2 = { x: getNum(e, 11), y: getNum(e, 21), z: getNum(e, 31) }
+      const p3 = { x: getNum(e, 12), y: getNum(e, 22), z: getNum(e, 32) }
+      const p4 = { x: getNum(e, 13), y: getNum(e, 23), z: getNum(e, 33) }
       const base = grp.points.length
-      grp.points.push(...pts3d)
+      grp.points.push(p1, p2, p3)
       grp.triangles.push([base, base + 1, base + 2])
+      // Als 4e punt verschilt van 3e: tweede driehoek voor quad
+      if (Math.hypot(p4.x - p3.x, p4.y - p3.y, p4.z - p3.z) > 1e-9) {
+        grp.points.push(p4)
+        grp.triangles.push([base, base + 2, base + 3])
+      }
+      surfacesByLayer.set(layer, grp)
+
+    } else if (e.type === 'LINE') {
+      const p1 = { x: getNum(e, 10), y: getNum(e, 20), z: getNum(e, 30) }
+      const p2 = { x: getNum(e, 11), y: getNum(e, 21), z: getNum(e, 31) }
+      polylines.push({ name: layer, points: [p1, p2] })
+
+    } else if (e.type === 'LWPOLYLINE') {
+      // 2D polyline met optionele elevation (38) en optioneel constant Z. XY paren in 10/20.
+      const xs = getNums(e, 10)
+      const ys = getNums(e, 20)
+      const elev = getNum(e, 38, 0)
+      const closed = (getNum(e, 70, 0) & 1) === 1
+      const pts: Point3D[] = []
+      for (let k = 0; k < Math.min(xs.length, ys.length); k++) {
+        pts.push({ x: xs[k], y: ys[k], z: elev })
+      }
+      if (pts.length >= 2) polylines.push({ name: layer, points: pts, closed })
+
+    } else if (e.type === 'POLYLINE') {
+      // Verzamel volgende VERTEX entiteiten tot SEQEND
+      const closed = (getNum(e, 70, 0) & 1) === 1
+      const pts: Point3D[] = []
+      let j = i + 1
+      while (j < entities.length && entities[j].type !== 'SEQEND') {
+        if (entities[j].type === 'VERTEX') {
+          const v = entities[j]
+          pts.push({ x: getNum(v, 10), y: getNum(v, 20), z: getNum(v, 30) })
+        }
+        j++
+      }
+      if (pts.length >= 2) polylines.push({ name: layer, points: pts, closed })
+      i = j // skip verbruikte VERTEX/SEQEND
     }
   }
 
-  for (const [name, data] of Object.entries(facesByLayer)) {
+  const surfaces: Surface[] = []
+  for (const [name, data] of surfacesByLayer) {
     surfaces.push({ name, points: data.points, triangles: data.triangles })
   }
 
-  return { name: 'DXF', surfaces, lines }
+  return { name: 'DXF', surfaces, lines: polylines }
 }
 
 // ─── TN3 parser ───────────────────────────────────────────────────────────────
