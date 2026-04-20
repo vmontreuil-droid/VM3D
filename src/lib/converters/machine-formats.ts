@@ -16,6 +16,12 @@ export interface Polyline {
   points: Point3D[]
   closed?: boolean
   code?: number  // optionele Pythagoras feature code (TP3)
+  /** TP3 round-trip metadata: vertex range start in type=2 block */
+  _tp3RangeStart?: number
+  /** TP3 round-trip metadata: line object ref X (uit type=11) */
+  _tp3RefX?: number
+  /** TP3 round-trip metadata: line object ref Y (uit type=11) */
+  _tp3RefY?: number
 }
 
 export interface MachineFile {
@@ -1183,7 +1189,14 @@ export function parseTP3(buf: ArrayBuffer): MachineFile {
       pts.push({ x: lineObj.refX + v.x, y: lineObj.refY + v.y, z: v.z })
     }
     if (pts.length < 2) continue
-    lines.push({ name: lineObj.name, points: pts, code: r.code })
+    lines.push({
+      name: lineObj.name,
+      points: pts,
+      code: r.code,
+      _tp3RangeStart: r.start,
+      _tp3RefX: lineObj.refX,
+      _tp3RefY: lineObj.refY,
+    })
   }
 
   // type=17: surface metadata (authoritative voor surface positie/grootte)
@@ -1662,42 +1675,69 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     }
   }
 
-  // PATCH 2: line vertices in type=2 (per-range, relative to per-line ref).
-  // Bounds-checked tegen type=2 block size.
-  const lineRanges = ranges
-  if (lineRefs.length > 0 && data.lines.length > 0) {
+  // PATCH 2: line vertices in type=2. Gebruik per-polyline metadata
+  // (_tp3RangeStart, _tp3RefX/Y) die parser opslaat zodat patch EXACT match maakt
+  // met origineel — geen volgorde/grouping problemen meer.
+  if (data.lines.length > 0) {
     const t2Block = blocks.find(b => b.type === 2 && b.stride === 24)
     if (t2Block) {
       const t2 = t2Block.off + 18
       const t2MaxIdx = t2Block.count - 1
-      const byName = new Map<string, Polyline[]>()
-      for (const pl of data.lines) {
-        if (pl.points.length < 2) continue
-        const arr = byName.get(pl.name) ?? []
-        arr.push(pl)
-        byName.set(pl.name, arr)
-      }
-      let layerIdx = 0
-      const linesArr = [...byName.values()]
-      const refsArr = lineRefs
-      let rangeIdx = 0
-      for (const layer of linesArr) {
-        const ref = refsArr[layerIdx] ?? refsArr[refsArr.length - 1]
-        for (const pl of layer) {
-          if (rangeIdx >= lineRanges.length) break
-          const r = lineRanges[rangeIdx]
-          for (let j = 0; j < Math.min(r.count, pl.points.length); j++) {
-            const idx = r.start + j
-            if (idx > t2MaxIdx) break // bounds check
-            const p = pl.points[j]
-            const o = t2 + idx * 24
-            dv.setFloat64(o,      p.x - ref.refX, true)
-            dv.setFloat64(o + 8,  p.y - ref.refY, true)
-            dv.setFloat64(o + 16, p.z, true)
-          }
-          rangeIdx++
+      // Sorteer polylines op _tp3RangeStart om in juiste volgorde te patchen
+      const linesWithMeta = data.lines.filter(pl => pl.points.length >= 2 && pl._tp3RangeStart !== undefined)
+      // Eerst: gebruik metadata-pad voor polylines met round-trip info
+      for (const pl of linesWithMeta) {
+        const refX = pl._tp3RefX ?? 0
+        const refY = pl._tp3RefY ?? 0
+        const start = pl._tp3RangeStart!
+        for (let j = 0; j < pl.points.length; j++) {
+          const idx = start + j
+          if (idx > t2MaxIdx) break
+          const p = pl.points[j]
+          const o = t2 + idx * 24
+          dv.setFloat64(o,      p.x - refX, true)
+          dv.setFloat64(o + 8,  p.y - refY, true)
+          dv.setFloat64(o + 16, p.z, true)
         }
-        layerIdx++
+      }
+      // Fallback voor polylines zonder metadata (DXF→TP3 zonder TP3 source):
+      // gebruik oude logica met layer grouping en lineRefs in volgorde
+      const linesWithoutMeta = data.lines.filter(pl => pl.points.length >= 2 && pl._tp3RangeStart === undefined)
+      if (linesWithoutMeta.length > 0 && lineRefs.length > 0) {
+        const lineRanges = ranges
+        const usedRanges = new Set<number>()
+        for (const pl of linesWithMeta) {
+          for (let i = 0; i < lineRanges.length; i++) {
+            if (lineRanges[i].start === pl._tp3RangeStart) usedRanges.add(i)
+          }
+        }
+        const byName = new Map<string, Polyline[]>()
+        for (const pl of linesWithoutMeta) {
+          const arr = byName.get(pl.name) ?? []
+          arr.push(pl)
+          byName.set(pl.name, arr)
+        }
+        let layerIdx = 0
+        let rangeIdx = 0
+        for (const layer of byName.values()) {
+          const ref = lineRefs[layerIdx] ?? lineRefs[lineRefs.length - 1]
+          for (const pl of layer) {
+            while (rangeIdx < lineRanges.length && usedRanges.has(rangeIdx)) rangeIdx++
+            if (rangeIdx >= lineRanges.length) break
+            const r = lineRanges[rangeIdx]
+            for (let j = 0; j < Math.min(r.count, pl.points.length); j++) {
+              const idx = r.start + j
+              if (idx > t2MaxIdx) break
+              const p = pl.points[j]
+              const o = t2 + idx * 24
+              dv.setFloat64(o,      p.x - ref.refX, true)
+              dv.setFloat64(o + 8,  p.y - ref.refY, true)
+              dv.setFloat64(o + 16, p.z, true)
+            }
+            rangeIdx++
+          }
+          layerIdx++
+        }
       }
     }
   }
