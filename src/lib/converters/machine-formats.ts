@@ -1260,12 +1260,16 @@ function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: num
 }
 
 export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
-  const [headerTpl, type11Tpl, type12Tpl, type17Tpl] = await Promise.all([
+  const [headerTpl, type12Tpl, type17Tpl, t11r0, t11r1, t11r2, t11r3] = await Promise.all([
     loadTp3Asset('tp3-header.bin'),
-    loadTp3Asset('tp3-type11.bin'),
     loadTp3Asset('tp3-type12.bin'),
     loadTp3Asset('tp3-type17.bin'),
+    loadTp3Asset('tp3-type11-rec0.bin'),
+    loadTp3Asset('tp3-type11-rec1.bin'),
+    loadTp3Asset('tp3-type11-rec2.bin'),
+    loadTp3Asset('tp3-type11-rec3.bin'),
   ])
+  const t11Templates = [t11r0, t11r1, t11r2, t11r3]
   const HEADER_SIZE = 1822
 
   // ── Bereken referentiepunt voor RELATIVE vertices ──
@@ -1371,20 +1375,21 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   const block2 = concatBuffers(makeBlockHeader(2, rawVerts.length, 24), block2Data)
 
   // type=11 (line objects: rec[0]="0" placeholder, rec[1]=surface, rec[2..]=lines)
-  // Elk record start vanaf template (preserveert alle onbekende metadata),
-  // patch alleen name (offset +2), refX (+138) en refY (+146).
+  // Elke record krijgt zijn eigen template (uit echte TP3) met per-record flags
+  // en IDs. rec[0] = placeholder, rec[1] = surface (refs=0), rec[2+] = lines.
   const numLineRecs = 2 + lineObjects.length
   const block11Data = new ArrayBuffer(numLineRecs * 340)
   const u11 = new Uint8Array(block11Data)
   const dv11 = new DataView(block11Data)
   for (let i = 0; i < numLineRecs; i++) {
-    u11.set(new Uint8Array(type11Tpl), i * 340) // template per record
+    // Use rec-specific template for first 4, then fallback to rec[3] (line) template
+    const tpl = t11Templates[Math.min(i, 3)]
+    u11.set(new Uint8Array(tpl), i * 340)
     const off = i * 340
     if (i === 0) {
       writeUtf16LE(dv11, off + 2, '0', 100)
     } else if (i === 1) {
       writeUtf16LE(dv11, off + 2, surface.name, 100)
-      // surface object: refX/refY = 0
     } else {
       const lo = lineObjects[i - 2]
       writeUtf16LE(dv11, off + 2, lo.name, 100)
