@@ -29,8 +29,8 @@ const FORMAT_BRANDS: Record<FileFormat, string> = {
   svd:     'Trimble / Leica',
 }
 
-const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'tp3', 'svl', 'svd']
-const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.TP3,.tp3,.svl,.svd,.SVL,.SVD'
+const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'tp3']
+const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.TP3,.tp3'
 const MAX_MB = 30
 
 type Status =
@@ -296,7 +296,7 @@ export default function ConverterPage() {
                   <Upload className={`h-8 w-8 ${dragging ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
                   <div>
                     <p className="text-sm font-semibold text-[var(--text-main)]">Sleep bestand hier of klik om te kiezen</p>
-                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .TP3 · .svl · .svd — max {MAX_MB} MB</p>
+                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .TP3 — max {MAX_MB} MB</p>
                   </div>
                 </>
               )}
@@ -448,8 +448,8 @@ export default function ConverterPage() {
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             <span className="font-semibold text-[var(--text-soft)]">Let op: </span>
-            SVL/SVD (Trimble) zijn gesloten binaire formaten. LandXML ↔ DXF, TN3, LN3 en TP3 hebben volledige ondersteuning.
-            TP3 splitst direct in XML oppervlak (voor Pythagoras) en DXF lijnen (editeerbaar in Pythagoras / AutoCAD).
+            LandXML ↔ DXF, TN3, LN3 en TP3 hebben volledige ondersteuning. TP3 splitst direct in XML oppervlak
+            (voor Pythagoras) en DXF lijnen (editeerbaar in Pythagoras / AutoCAD).
           </p>
         </div>
       </div>
