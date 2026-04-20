@@ -383,25 +383,30 @@ export default function ConverterPage() {
               </div>
             )}
 
-            {/* Normal conversion */}
+            {/* Normal conversion (alleen LandXML ↔ DXF; Topcon formaten gebruiken dedicated knoppen) */}
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
-                <div>
-                  <label className={lblCls}>Van formaat</label>
-                  <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
-                    {FORMATS.map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                  </select>
+              {!isTN3 && !isLN3 && !isTP3 && (
+                <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
+                  <div>
+                    <label className={lblCls}>Van formaat</label>
+                    <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
+                      <option value="landxml">{FORMAT_LABELS.landxml}</option>
+                      <option value="dxf">{FORMAT_LABELS.dxf}</option>
+                    </select>
+                  </div>
+                  <div className="flex items-end pb-3">
+                    <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
+                  </div>
+                  <div>
+                    <label className={lblCls}>Naar formaat</label>
+                    <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
+                      {inputFormat === 'landxml'
+                        ? <option value="dxf">{FORMAT_LABELS.dxf}</option>
+                        : <option value="landxml">{FORMAT_LABELS.landxml}</option>}
+                    </select>
+                  </div>
                 </div>
-                <div className="flex items-end pb-3">
-                  <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
-                </div>
-                <div>
-                  <label className={lblCls}>{(isTN3 || isLN3 || isTP3) ? 'Naar formaat (enkelvoudig)' : 'Naar formaat'}</label>
-                  <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
-                    {FORMATS.filter(f => f !== inputFormat).map(f => <option key={f} value={f}>{FORMAT_LABELS[f]}</option>)}
-                  </select>
-                </div>
-              </div>
+              )}
 
               {/* Status */}
               {status.type === 'error' && (
@@ -423,20 +428,22 @@ export default function ConverterPage() {
               )}
 
               <div className="flex gap-3">
-                <button
-                  onClick={handleConvert}
-                  disabled={!file || status.type === 'converting' || inputFormat === outputFormat}
-                  className="group relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] py-2.5 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:pointer-events-none disabled:opacity-50"
-                >
-                  {status.type === 'converting'
-                    ? <><Loader2 className="h-4 w-4 animate-spin text-[var(--accent)]" /> Bezig…</>
-                    : <><Download className="h-4 w-4 text-[var(--accent)]" /> {(isTN3 || isLN3 || isTP3) ? 'Enkelvoudig omzetten' : 'Omzetten & downloaden'}</>
-                  }
-                  <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                </button>
+                {!isTN3 && !isLN3 && !isTP3 && (
+                  <button
+                    onClick={handleConvert}
+                    disabled={!file || status.type === 'converting' || inputFormat === outputFormat}
+                    className="group relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] py-2.5 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:pointer-events-none disabled:opacity-50"
+                  >
+                    {status.type === 'converting'
+                      ? <><Loader2 className="h-4 w-4 animate-spin text-[var(--accent)]" /> Bezig…</>
+                      : <><Download className="h-4 w-4 text-[var(--accent)]" /> Omzetten & downloaden</>
+                    }
+                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
+                  </button>
+                )}
                 {(file || status.type !== 'idle') && (
-                  <button onClick={reset} className="flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition">
-                    <RefreshCw className="h-3.5 w-3.5" /> Nieuw
+                  <button onClick={reset} className={`flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition ${(isTN3 || isLN3 || isTP3) ? 'flex-1 justify-center' : ''}`}>
+                    <RefreshCw className="h-3.5 w-3.5" /> Nieuw bestand
                   </button>
                 )}
               </div>
