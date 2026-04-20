@@ -63,7 +63,8 @@ export function parseLandXML(text: string): MachineFile {
       for (const pm of ptMatches) {
         const vals = pm[2].trim().split(/\s+/).map(Number)
         if (vals.length >= 3) {
-          points.push({ x: vals[0], y: vals[1], z: vals[2] })
+          // LandXML 1.2: <P>Northing Easting Elevation</P> → swap naar interne x/y
+          points.push({ x: vals[1], y: vals[0], z: vals[2] })
         }
       }
     }
@@ -119,7 +120,8 @@ export function generateLandXML(data: MachineFile): string {
     const elevMin = Math.min(...elevs).toFixed(12)
 
     const pnts = pts
-      .map((p, i) => `          <P id="${i + 1}">${p.x.toFixed(12)} ${p.y.toFixed(12)} ${p.z.toFixed(12)}</P>`)
+      // LandXML 1.2 conventie: <P>Northing Easting Elevation</P>  (Y X Z, niet X Y Z)
+      .map((p, i) => `          <P id="${i + 1}">${p.y.toFixed(12)} ${p.x.toFixed(12)} ${p.z.toFixed(12)}</P>`)
       .join('\n')
 
     const faces = tris
@@ -360,10 +362,26 @@ export function generateDXF2010Lines(data: MachineFile, defaultLayerName = 'LIJN
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
+  // Bij duplicate namen: voeg index-suffix toe zodat elke polyline EIGEN layer krijgt
+  const nameCounts = new Map<string, number>()
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    const base = sanitizeLayerName(pl.name, 'Lijn')
+    nameCounts.set(base, (nameCounts.get(base) ?? 0) + 1)
+  }
+  const nameSeq = new Map<string, number>()
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const base = sanitizeLayerName(pl.name, 'Lijn')
+    let layer: string
+    if ((nameCounts.get(base) ?? 0) > 1) {
+      const idx = (nameSeq.get(base) ?? 0) + 1
+      nameSeq.set(base, idx)
+      layer = `${base} ${idx}`
+    } else {
+      layer = base
+    }
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
@@ -1419,10 +1437,26 @@ export async function generateDXF2010LinesPythagoras(
     if (!layers.has(name)) layers.set(name, palette[colorIdx++ % palette.length])
   }
 
+  // Bij duplicate namen: voeg index-suffix toe zodat elke polyline EIGEN layer krijgt
+  const nameCounts = new Map<string, number>()
+  for (const pl of data.lines) {
+    if (pl.points.length < 2) continue
+    const base = sanitizeLayerName(pl.name, 'Lijn')
+    nameCounts.set(base, (nameCounts.get(base) ?? 0) + 1)
+  }
+  const nameSeq = new Map<string, number>()
   for (let pi = 0; pi < data.lines.length; pi++) {
     const pl = data.lines[pi]
     if (pl.points.length < 2) continue
-    const layer = sanitizeLayerName(pl.name, `Lijn ${pi + 1}`)
+    const base = sanitizeLayerName(pl.name, 'Lijn')
+    let layer: string
+    if ((nameCounts.get(base) ?? 0) > 1) {
+      const idx = (nameSeq.get(base) ?? 0) + 1
+      nameSeq.set(base, idx)
+      layer = `${base} ${idx}`
+    } else {
+      layer = base
+    }
     addLayer(layer)
     polylines.push({ layer, pts: pl.points, closed: !!pl.closed })
   }
