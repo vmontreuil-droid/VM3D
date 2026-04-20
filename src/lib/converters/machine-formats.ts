@@ -1483,48 +1483,50 @@ export async function generateDXF2010LinesPythagoras(
   }
 
   // ── Entity entries — LINE per segment (Pythagoras-conventie voor breaklines) ──
+  // Conservatieve IQR-filter: alleen segmenten verwijderen die statistisch
+  // extreme outliers zijn (> Q3 + 3×IQR EN > 2m absoluut). Dit vangt de
+  // spookstreep uit TP3 zonder legitieme lange lijn-segmenten te raken.
   const entityLines: string[] = []
-  const fmt = (n: number) => {
-    if (Number.isInteger(n)) return `${n}.0`
-    return n.toString()
+  const fmt = (n: number) => Number.isInteger(n) ? `${n}.0` : n.toString()
+  const emitLine = (layer: string, p1: Point3D, p2: Point3D) => {
+    entityLines.push(
+      '  0', 'LINE',
+      '  5', nh(),
+      '330', '1F',
+      '100', 'AcDbEntity',
+      '  8', layer,
+      '100', 'AcDbLine',
+      ' 10', fmt(p1.x), ' 20', fmt(p1.y), ' 30', fmt(p1.z),
+      ' 11', fmt(p2.x), ' 21', fmt(p2.y), ' 31', fmt(p2.z),
+    )
   }
   for (const pl of polylines) {
+    const dists: number[] = []
     for (let i = 0; i < pl.pts.length - 1; i++) {
-      const p1 = pl.pts[i]
-      const p2 = pl.pts[i + 1]
-      entityLines.push(
-        '  0', 'LINE',
-        '  5', nh(),
-        '330', '1F', // owner = BLOCK_RECORD *Model_Space
-        '100', 'AcDbEntity',
-        '  8', pl.layer,
-        '100', 'AcDbLine',
-        ' 10', fmt(p1.x),
-        ' 20', fmt(p1.y),
-        ' 30', fmt(p1.z),
-        ' 11', fmt(p2.x),
-        ' 21', fmt(p2.y),
-        ' 31', fmt(p2.z),
-      )
+      const a = pl.pts[i], b = pl.pts[i + 1]
+      dists.push(Math.hypot(a.x - b.x, a.y - b.y))
     }
-    // Sluit polyline indien closed
+    // IQR-drempel — alleen gebruiken bij voldoende segmenten (>= 6)
+    let maxAllowed = Infinity
+    if (dists.length >= 6) {
+      const sorted = [...dists].sort((a, b) => a - b)
+      const q1 = sorted[Math.floor(sorted.length * 0.25)]
+      const q3 = sorted[Math.floor(sorted.length * 0.75)]
+      const iqr = q3 - q1
+      maxAllowed = Math.max(q3 + 3 * iqr, 2.0) // Minstens 2m, anders IQR-drempel
+    }
+
+    for (let i = 0; i < pl.pts.length - 1; i++) {
+      if (dists[i] > maxAllowed) continue // spookstreep-segment
+      emitLine(pl.layer, pl.pts[i], pl.pts[i + 1])
+    }
+
+    // Sluit polyline indien closed en afstand redelijk
     if (pl.closed && pl.pts.length > 2) {
       const p1 = pl.pts[pl.pts.length - 1]
       const p2 = pl.pts[0]
-      entityLines.push(
-        '  0', 'LINE',
-        '  5', nh(),
-        '330', '1F',
-        '100', 'AcDbEntity',
-        '  8', pl.layer,
-        '100', 'AcDbLine',
-        ' 10', fmt(p1.x),
-        ' 20', fmt(p1.y),
-        ' 30', fmt(p1.z),
-        ' 11', fmt(p2.x),
-        ' 21', fmt(p2.y),
-        ' 31', fmt(p2.z),
-      )
+      const closingDist = Math.hypot(p1.x - p2.x, p1.y - p2.y)
+      if (closingDist <= maxAllowed) emitLine(pl.layer, p1, p2)
     }
   }
 
