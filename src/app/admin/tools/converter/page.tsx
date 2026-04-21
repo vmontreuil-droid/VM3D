@@ -2,9 +2,10 @@
 
 import { useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/app-shell'
+import Link from 'next/link'
 import {
-  Upload, Download, ArrowRight, FileCode2, Loader2,
-  CheckCircle, AlertCircle, RefreshCw, Scissors,
+  Upload, Download, ArrowRight, ArrowLeft, Loader2,
+  CheckCircle, AlertCircle, RefreshCw, Scissors, Repeat, FileType2, HardDrive,
 } from 'lucide-react'
 import {
   parseTP3, parseLandXML, parseDXF, triangulate,
@@ -116,8 +117,8 @@ function TopconToLeicaCard() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-blue-500/25 bg-[var(--bg-card)] shadow-sm">
-      <div className="flex items-center gap-4 border-b border-blue-500/15 bg-gradient-to-br from-blue-500/8 to-transparent px-5 py-4">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-blue-500/25 bg-[var(--bg-card)] shadow-sm">
+      <div className="flex h-[72px] items-center gap-4 border-b border-blue-500/15 bg-gradient-to-br from-blue-500/8 to-transparent px-5">
         <div className="flex h-12 items-center gap-2">
           <BrandLogo name="topcon" />
           <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
@@ -129,13 +130,13 @@ function TopconToLeicaCard() {
         </div>
       </div>
 
-      <div className="space-y-4 p-5">
+      <div className="flex flex-1 flex-col gap-4 p-5">
         <div
           onDragOver={e => { e.preventDefault(); setDragging(true) }}
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}
-          className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-8 text-center transition ${
+          className={`flex h-[140px] cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 text-center transition ${
             dragging ? 'border-blue-500 bg-blue-500/6'
               : file ? 'border-emerald-500/40 bg-emerald-500/5'
               : 'border-[var(--border-soft)] hover:border-blue-500/30 hover:bg-blue-500/4'
@@ -160,6 +161,13 @@ function TopconToLeicaCard() {
               </div>
             </>
           )}
+        </div>
+
+        <div className="flex-1 rounded-xl border border-blue-500/15 bg-blue-500/4 px-4 py-3">
+          <p className="text-[11px] leading-relaxed text-[var(--text-soft)]">
+            <span className="font-semibold text-blue-300">Hoe werkt het: </span>
+            We splitsen je TP3 in twee bestanden — een <span className="font-medium text-[var(--text-main)]">.XML</span> met het 3D-oppervlak (driehoeken) en een <span className="font-medium text-[var(--text-main)]">.DXF</span> met alle ontwerplijnen. Direct importeerbaar in Leica iCON, Unicontrol of elke andere CAD/GPS-toepassing die LandXML ondersteunt.
+          </p>
         </div>
 
         {status.type === 'error' && (
@@ -265,7 +273,7 @@ function LeicaToTopconCard() {
   }) => (
     <div
       onClick={() => inputRef.current?.click()}
-      className={`flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed px-3 py-5 text-center transition ${
+      className={`flex h-[140px] cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-3 text-center transition ${
         file ? 'border-emerald-500/40 bg-emerald-500/5'
           : 'border-[var(--border-soft)] hover:border-red-500/30 hover:bg-red-500/4'
       }`}
@@ -274,21 +282,21 @@ function LeicaToTopconCard() {
         onChange={e => { const f = e.target.files?.[0]; if (f) set(f) }} />
       {file ? (
         <>
-          <CheckCircle className="h-5 w-5 text-emerald-400" />
+          <CheckCircle className="h-7 w-7 text-emerald-400" />
           <p className="text-xs font-semibold text-[var(--text-main)] truncate max-w-full">{file.name}</p>
         </>
       ) : (
         <>
-          <Upload className="h-5 w-5 text-[var(--text-muted)]" />
-          <p className="text-xs text-[var(--text-soft)]">{label}</p>
+          <Upload className="h-7 w-7 text-[var(--text-muted)]" />
+          <p className="text-sm font-semibold text-[var(--text-soft)]">{label}</p>
         </>
       )}
     </div>
   )
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-red-500/25 bg-[var(--bg-card)] shadow-sm">
-      <div className="flex items-center gap-4 border-b border-red-500/15 bg-gradient-to-br from-red-500/8 to-transparent px-5 py-4">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-500/25 bg-[var(--bg-card)] shadow-sm">
+      <div className="flex h-[72px] items-center gap-4 border-b border-red-500/15 bg-gradient-to-br from-red-500/8 to-transparent px-5">
         <div className="flex h-12 items-center gap-2">
           <BrandLogo name="leica" />
           <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
@@ -301,10 +309,17 @@ function LeicaToTopconCard() {
         <span className="ml-auto rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">Beta</span>
       </div>
 
-      <div className="space-y-4 p-5">
+      <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="grid grid-cols-2 gap-3">
           <FilePicker label=".XML oppervlak" accept=".xml,.XML" file={xmlFile} set={setXmlFile} inputRef={xmlInputRef} />
           <FilePicker label=".DXF lijnen" accept=".dxf,.DXF" file={dxfFile} set={setDxfFile} inputRef={dxfInputRef} />
+        </div>
+
+        <div className="flex-1 rounded-xl border border-red-500/15 bg-red-500/4 px-4 py-3">
+          <p className="text-[11px] leading-relaxed text-[var(--text-soft)]">
+            <span className="font-semibold text-red-300">Hoe werkt het: </span>
+            Upload het <span className="font-medium text-[var(--text-main)]">.XML</span> (oppervlak) en/of <span className="font-medium text-[var(--text-main)]">.DXF</span> (lijnen) uit Leica iCON of Unicontrol. We bouwen er een Topcon-compatibel <span className="font-medium text-[var(--text-main)]">.TP3</span> van — direct bruikbaar in 3D-MC of Sitelink. Beta: zeer grote opper­vlakken kunnen geweigerd worden.
+          </p>
         </div>
 
         {status.type === 'error' && (
@@ -348,32 +363,98 @@ function LeicaToTopconCard() {
 export default function ConverterPage() {
   return (
     <AppShell isAdmin>
-      <div className="mx-auto max-w-5xl space-y-6">
-        <div className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3">
-          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-          <span className="flex items-start gap-2.5 pr-3">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-              <FileCode2 className="h-3.5 w-3.5" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">Bestandsconverter</span>
-              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">Topcon ↔ Leica / Unicontrol</span>
-            </span>
-          </span>
-        </div>
+      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          <TopconToLeicaCard />
-          <LeicaToTopconCard />
-        </div>
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <Link
+                  href="/admin/tools"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Tools
+                </Link>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  Bestandsconverter
+                </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  Converteer machinebestanden tussen Topcon (.TP3) en Leica / Unicontrol (LandXML + DXF) — direct in de browser, geen upload naar derden.
+                </p>
+              </div>
 
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
-          <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-semibold text-[var(--text-soft)]">Hoe werkt het: </span>
-            Topcon-bestanden (.TP3) bevatten zowel oppervlak als ontwerplijnen. Leica / Unicontrol gebruikt LandXML (.xml) voor het oppervlak en DXF (.dxf) voor de lijnen.
-            De converter splitst TP3 automatisch in deze twee bestanden, of combineert XML + DXF terug naar TP3.
-          </p>
-        </div>
+              <div className="w-full xl:ml-auto xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Topcon → Leica</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">Stabiel</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                        <CheckCircle className="h-4.5 w-4.5 text-sky-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Leica → Topcon</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">Beta</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <Repeat className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.08),rgba(168,85,247,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Formaten</p>
+                        <p className="mt-1 text-lg font-semibold text-violet-400">3</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
+                        <FileType2 className="h-4.5 w-4.5 text-violet-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Max bestand</p>
+                        <p className="mt-1 text-lg font-semibold text-emerald-400">{MAX_MB} MB</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
+                        <HardDrive className="h-4.5 w-4.5 text-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 px-4 py-4 sm:px-5">
+            <div className="grid gap-5 md:grid-cols-2">
+              <TopconToLeicaCard />
+              <LeicaToTopconCard />
+            </div>
+
+            <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3">
+              <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
+                <span className="font-semibold text-[var(--text-soft)]">Wat zit er in welk formaat: </span>
+                Topcon (.TP3) bundelt oppervlak én ontwerplijnen in één bestand. Leica / Unicontrol gebruikt LandXML (.xml) voor het 3D-oppervlak en DXF (.dxf) voor lijnen — daarom splitsen we bij een Topcon-export, en combineren we ze terug bij een Leica-import.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </AppShell>
   )
