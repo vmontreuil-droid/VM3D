@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
+import { Home, LayoutDashboard, ChevronsLeft, ChevronsRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -444,13 +444,13 @@ export default function Sidebar({
         <button
           type="button"
           onClick={onToggle}
-          className="absolute -right-[16px] top-[140px] z-40 hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] text-[var(--text-main)] shadow-md transition hover:bg-[var(--bg-card-2)] lg:flex"
+          className="absolute -right-[14px] top-[200px] z-40 hidden h-8 w-8 items-center justify-center rounded-lg border border-[var(--accent)]/40 bg-[var(--bg-card)] text-[var(--accent)] shadow-md transition hover:border-[var(--accent)]/70 hover:bg-[var(--accent)]/10 lg:flex"
           aria-label={t.platform.toggleSidebar}
         >
           {collapsed ? (
-            <ChevronRight className="h-3.5 w-3.5" />
+            <ChevronsRight className="h-4 w-4" />
           ) : (
-            <ChevronLeft className="h-3.5 w-3.5" />
+            <ChevronsLeft className="h-4 w-4" />
           )}
         </button>
       )}
