@@ -1348,8 +1348,10 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   type LineObject = { name: string; refX: number; refY: number }
   const lineObjects: LineObject[] = []
   type VertexRange = { start: number; count: number; code: number }
+  // Topcon-conventie: 2 norm ranges (count=2 elk) ipv 1 range count=4
   const vertexRanges: VertexRange[] = [
-    { start: 0, count: 4, code: 1 }, // normalisatie
+    { start: 0, count: 2, code: 32 },
+    { start: 2, count: 2, code: 32 },
   ]
 
   // 1 line object per unieke naam. Topcon vereist DISTINCTE codes per layer
@@ -1422,27 +1424,21 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block2 = concatBuffers(makeBlockHeader(2, rawVerts.length, 24), block2Data)
 
-  // type=11 (line objects: rec[0]="0" placeholder, rec[1]=surface, rec[2..]=lines)
-  // Per-record template + ID byte 0 = record index
-  const numLineRecs = 2 + lineObjects.length
+  // type=11: alleen LINE OBJECT records (Topcon-conventie zoals xxx en project 6).
+  // Geen placeholder, geen aparte surface entry — surface zit in type=17.
+  const numLineRecs = lineObjects.length
   const block11Data = new ArrayBuffer(numLineRecs * 340)
   const u11 = new Uint8Array(block11Data)
   const dv11 = new DataView(block11Data)
   for (let i = 0; i < numLineRecs; i++) {
-    const tpl = t11Templates[Math.min(i, 3)]
+    const tpl = t11Templates[Math.min(i + 2, 3)] // begin met "lijn" templates (rec[2] of rec[3])
     u11.set(new Uint8Array(tpl), i * 340)
     const off = i * 340
-    dv11.setUint16(off, i, true) // ID = record index
-    if (i === 0) {
-      writeUtf16LE(dv11, off + 2, '0', 100)
-    } else if (i === 1) {
-      writeUtf16LE(dv11, off + 2, surface.name, 100)
-    } else {
-      const lo = lineObjects[i - 2]
-      writeUtf16LE(dv11, off + 2, lo.name, 100)
-      dv11.setFloat64(off + 138, lo.refX, true)
-      dv11.setFloat64(off + 146, lo.refY, true)
-    }
+    dv11.setUint16(off, i, true)
+    const lo = lineObjects[i]
+    writeUtf16LE(dv11, off + 2, lo.name, 100)
+    dv11.setFloat64(off + 138, lo.refX, true)
+    dv11.setFloat64(off + 146, lo.refY, true)
   }
   const block11 = concatBuffers(makeBlockHeader(11, numLineRecs, 340), block11Data)
 
