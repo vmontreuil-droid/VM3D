@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>italy_ndm</Name>
+  <SystemID>1</SystemID>
+  <Version>20220318</Version>
+  <Authority>ISTITUTO GEOGRAFICO MILITARE</Authority>
+  <AuthorityWebSite>https://www.igmi.org/it/direzione-geodetica/progetto-rdn-rete-dinamica-nazionale#rel_tecnica</AuthorityWebSite>
+  <AuthorityAddress>
+Via C. Battisti, 10 - 50122 Firenze Via Cavour, 49 - 50121 Firenze Italy
+</AuthorityAddress>
+  <AuthorityEmail>etorretta-geomil@tiscali.it;</AuthorityEmail>
+  <Url>https://hobbydocbox.com/Radio/112725454-Istituto-geografico-militare-servizio-geodetico.html</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>italy_ndm.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>6</MinimumLongitude>
+          <MaximumLongitude>19.0</MaximumLongitude>
+          <MinimumLatitude>35</MinimumLatitude>
+          <MaximumLatitude>48</MaximumLatitude>
+          <SpatialComplete>false</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>horizontal</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from Farolfi et al doi: 10.1007/s10291-015-0481-1</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

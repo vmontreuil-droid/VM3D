@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>HTDP 2022 CONUS</Name>
+  <SystemID>1</SystemID>
+  <Version>20250801</Version>
+  <Authority>NOAA's National Geodetic Survey</Authority>
+  <AuthorityWebSite>https://www.ngs.noaa.gov/</AuthorityWebSite>
+  <AuthorityAddress>
+SSMC3 #9340
+1315 East-West Highway
+Silver Spring, MD 20910-3282
+</AuthorityAddress>
+  <AuthorityEmail>ngs.cors.htdp@.noaa.gov</AuthorityEmail>
+  <Url>https://www.ngs.noaa.gov/web/surveys/NA2011/</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>ifdm_conus_2022_beta1.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>235</MinimumLongitude>
+          <MaximumLongitude>294</MaximumLongitude>
+          <MinimumLatitude>25</MinimumLatitude>
+          <MaximumLatitude>49.75</MaximumLatitude>
+          <SpatialComplete>false</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from TDP v0.4 see TDP Users guide Nov 16 2022</Description>
+        </Component>
+        <Component>
+          <GridFile>ifdm_western_conus_2022_beta1.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>1</Priority>
+          <MinimumLongitude>235</MinimumLongitude>
+          <MaximumLongitude>252.9375</MaximumLongitude>
+          <MinimumLatitude>31</MinimumLatitude>
+          <MaximumLatitude>49.</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from TDP</Description>
+        </Component>
+        <Component>
+          <GridFile>ifdm_northeastern_conus_2022_beta1.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>1</Priority>
+          <MinimumLongitude>253</MinimumLongitude>
+          <MaximumLongitude>294</MaximumLongitude>
+          <MinimumLatitude>40</MinimumLatitude>
+          <MaximumLatitude>49.75</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from TDP</Description>
+        </Component>
+        <Component>
+          <GridFile>ifdm_southeastern_conus_2022_beta1.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>1</Priority>
+          <MinimumLongitude>253</MinimumLongitude>
+          <MaximumLongitude>286.5</MaximumLongitude>
+          <MinimumLatitude>25</MinimumLatitude>
+          <MaximumLatitude>39.9375</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from TDP</Description>
+        </Component>
+        <Component>
+          <GridFile>ifdm_san_adreas_2022_beta1.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>2</Priority>
+          <MinimumLongitude>238.2</MinimumLongitude>
+          <MaximumLongitude>239.49</MaximumLongitude>
+          <MinimumLatitude>35.8</MinimumLatitude>
+          <MaximumLatitude>36.79</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from TDP</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

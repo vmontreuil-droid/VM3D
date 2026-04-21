@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>South Africa National Deformation Model 2013</Name>
+  <SystemID>1</SystemID>
+  <Version>20130111</Version>
+  <Authority> Chief Directorate: National Geo-spatial Information</Authority>
+  <AuthorityWebSite>www.ngi.gov.za</AuthorityWebSite>
+  <AuthorityAddress>19 Rhodes Avenue, Mowbray Cape Town</AuthorityAddress>
+  <AuthorityEmail>ngi@dalrrd.gov.za</AuthorityEmail>
+  <Url>https://academic.oup.com/gji/article/192/3/918/819004</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>sa_vels_2013.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>16</MinimumLongitude>
+          <MaximumLongitude>33.5</MaximumLongitude>
+          <MinimumLatitude>-35.5</MinimumLatitude>
+          <MaximumLatitude>-21.5</MaximumLatitude>
+          <SpatialComplete>false</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2016.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2017.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from Malservisi et al 2013</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

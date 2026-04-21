@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>NAMRIA Velocity Grid</Name>
+  <SystemID>1</SystemID>
+  <Version>20230509</Version>
+  <Authority>NAMRIA</Authority>
+  <AuthorityWebSite>https://www.namria.gov.ph/</AuthorityWebSite>
+  <AuthorityAddress>
+National Mapping and Resource Information Authority Lawton Ave., Fort Andres Bonifacio, Taguig City, 1634 PH
+</AuthorityAddress>
+  <AuthorityEmail>cvdcayapan@namria.gov.ph;</AuthorityEmail>
+  <Url>http://www.namria.gov.ph/</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>pgd2020_20230509_ndm.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>116</MinimumLongitude>
+          <MaximumLongitude>127</MaximumLongitude>
+          <MinimumLatitude>5</MinimumLatitude>
+          <MaximumLatitude>22</MaximumLatitude>
+          <SpatialComplete>false</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>horizontal</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Preliminary PGD2020 deformation model from Charisma Cayapan EMAIL of 20/01/2022 20:06</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

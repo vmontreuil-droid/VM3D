@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PlateRotationsFromHTDP version="1.0" lastSystemID="7" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TectonicModelSchema-1.0.xsd">
+	<TectonicModel>
+		<Name>HTDP Tectonic plates</Name>
+		<Plates>
+			<Plate>
+				<Name>Caribbean</Name>
+				<Abbreviation>CARB</Abbreviation>
+				<SystemID>1</SystemID>
+				<CartesianRotations>
+					<RotationX>0.000238</RotationX>
+					<RotationY>-0.005275</RotationY>
+					<RotationZ>0.003219</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_caribbean.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>Cocos</Name>
+				<Abbreviation>COCO</Abbreviation>
+				<SystemID>2</SystemID>
+				<CartesianRotations>
+					<RotationX>-0.01039</RotationX>
+					<RotationY>-0.014954</RotationY>
+					<RotationZ>0.009148</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_cocos.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>Juan de Fuca</Name>
+				<Abbreviation>JUFU</Abbreviation>
+				<SystemID>3</SystemID>
+				<CartesianRotations>
+					<RotationX>0.006626</RotationX>
+					<RotationY>0.011708</RotationY>
+					<RotationZ>-0.010615</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_juan_de_fuca.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>Mariana</Name>
+				<Abbreviation>MARI</Abbreviation>
+				<SystemID>4</SystemID>
+				<CartesianRotations>
+					<RotationX>-0.000097</RotationX>
+					<RotationY>0.000509</RotationY>
+					<RotationZ>-0.001682</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_mariana.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>North America</Name>
+				<Abbreviation>NOAM</Abbreviation>
+				<SystemID>5</SystemID>
+				<CartesianRotations>
+					<RotationX>0.00017</RotationX>
+					<RotationY>-0.003209</RotationY>
+					<RotationZ>-0.000485</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_north_america.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>Pacific</Name>
+				<Abbreviation>PCFC</Abbreviation>
+				<SystemID>6</SystemID>
+				<CartesianRotations>
+					<RotationX>-0.001993</RotationX>
+					<RotationY>0.005023</RotationY>
+					<RotationZ>-0.010501</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_pacific.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+			<Plate>
+				<Name>Philippine Sea</Name>
+				<Abbreviation>PHIL</Abbreviation>
+				<SystemID>7</SystemID>
+				<CartesianRotations>
+					<RotationX>-0.000841</RotationX>
+					<RotationY>0.003989</RotationY>
+					<RotationZ>-0.010626</RotationZ>
+				</CartesianRotations>
+                <Area>
+                    <xi:include href="plate_philippine_sea.gml"/>
+                </Area>
+                <Source>(4)</Source>
+			</Plate>
+		</Plates>
+		<Source>
+			(4) Fortran 90 Source Code for HTDP version 3.2.5 (https://geodesy.noaa.gov/TOOLS/Htdp/Htdp.shtml)
+		</Source>
+	</TectonicModel>
+</PlateRotationsFromHTDP>

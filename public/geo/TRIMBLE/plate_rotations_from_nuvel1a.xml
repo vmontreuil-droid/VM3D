@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PlateRotationsFromNuvel1A version="1.0" lastSystemID="17" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TectonicModelSchema-1.0.xsd">
+    <TectonicModel>
+        <Name>Nuvel1A Tectonic plates</Name>
+        <Plates>
+            <Plate>
+                <Name>Antarctica</Name>
+                <Abbreviation>ANTA</Abbreviation>
+                <SystemID>1</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.000821</RotationX>
+                    <RotationY>-0.001701</RotationY>
+                    <RotationZ>0.003706</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_antarctica.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Arabia</Name>
+                <Abbreviation>ARAB</Abbreviation>
+                <SystemID>2</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.006685</RotationX>
+                    <RotationY>-0.000521</RotationY>
+                    <RotationZ>0.006760</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_arabia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Australia</Name>
+                <Abbreviation>AUST</Abbreviation>
+                <SystemID>3</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.007839</RotationX>
+                    <RotationY>0.005124</RotationY>
+                    <RotationZ>0.006282</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_australia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Caribbean</Name>
+                <Abbreviation>CARB</Abbreviation>
+                <SystemID>4</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.000178</RotationX>
+                    <RotationY>-0.003385</RotationY>
+                    <RotationZ>0.001581</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_caribbean.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Cocos</Name>
+                <Abbreviation>COCO</Abbreviation>
+                <SystemID>5</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.010425</RotationX>
+                    <RotationY>-0.021605</RotationY>
+                    <RotationZ>0.010925</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_cocos.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Eurasia</Name>
+                <Abbreviation>EURA</Abbreviation>
+                <SystemID>6</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.000981</RotationX>
+                    <RotationY>-0.002395</RotationY>
+                    <RotationZ>0.003153</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_eurasia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>India</Name>
+                <Abbreviation>INDI</Abbreviation>
+                <SystemID>7</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.006670</RotationX>
+                    <RotationY>0.000040</RotationY>
+                    <RotationZ>0.006790</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_india.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Juan de Fuca</Name>
+                <Abbreviation>JUFU</Abbreviation>
+                <SystemID>8</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.005200</RotationX>
+                    <RotationY>0.008610</RotationY>
+                    <RotationZ>-0.005820</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_juan_de_fuca.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Nazca</Name>
+                <Abbreviation>NAZC</Abbreviation>
+                <SystemID>9</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.001532</RotationX>
+                    <RotationY>-0.008577</RotationY>
+                    <RotationZ>0.009609</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_nazca.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>            
+            <Plate>
+                <Name>North America</Name>
+                <Abbreviation>NOAM</Abbreviation>
+                <SystemID>10</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.000258</RotationX>
+                    <RotationY>-0.003599</RotationY>
+                    <RotationZ>-0.000153</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_north_america.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Nubia</Name>
+                <Abbreviation>NUBI</Abbreviation>
+                <SystemID>11</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.000891</RotationX>
+                    <RotationY>-0.003099</RotationY>
+                    <RotationZ>0.003922</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_nubia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Pacific</Name>
+                <Abbreviation>PCFC</Abbreviation>
+                <SystemID>12</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.001510</RotationX>
+                    <RotationY>0.004840</RotationY>
+                    <RotationZ>-0.009970</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_pacific.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Philippine Sea</Name>
+                <Abbreviation>PHSE</Abbreviation>
+                <SystemID>13</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.010090</RotationX>
+                    <RotationY>-0.007160</RotationY>
+                    <RotationZ>-0.009670</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_philippine_sea.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Rivera</Name>
+                <Abbreviation>RIVE</Abbreviation>
+                <SystemID>14</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.009390</RotationX>
+                    <RotationY>-0.030960</RotationY>
+                    <RotationZ>0.012050</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_rivera.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>
+            <Plate>
+                <Name>Scotia</Name>
+                <Abbreviation>SCOT</Abbreviation>
+                <SystemID>15</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.000410</RotationX>
+                    <RotationY>-0.002660</RotationY>
+                    <RotationZ>-0.001270</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_scotia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>            
+            <Plate>
+                <Name>Somalia</Name>
+                <Abbreviation>SOMA</Abbreviation>
+                <SystemID>16</SystemID>
+                <CartesianRotations>
+                    <RotationX>0.000891</RotationX>
+                    <RotationY>-0.003099</RotationY>
+                    <RotationZ>0.003922</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_somalia.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>            
+            <Plate>
+                <Name>South America</Name>
+                <Abbreviation>SOAM</Abbreviation>
+                <SystemID>17</SystemID>
+                <CartesianRotations>
+                    <RotationX>-0.001038</RotationX>
+                    <RotationY>-0.001515</RotationY>
+                    <RotationZ>-0.000870</RotationZ>
+                </CartesianRotations>
+                <Area>
+                    <xi:include href="plate_south_america.gml"/>
+                </Area>
+                <Source>(3)</Source>
+            </Plate>            
+        </Plates>
+        <Source>
+            (3) In DeMets et al. (1994), Effect of recent revisions to the geomagnetic reversal time scale on estimates of current plate motions, Geophys.Res. Lett. 21(20), p. 2191-2194
+            NUVEL-1A angular velocities are also given for the African plate,which was subsequently divided into western (Nubian) and eastern (Somalian) sectors.
+            This is why below we assign angular velocities of the African plate from the original NNR-NUVEL-1A model to two plates: Nubian and Somalian
+        </Source>
+    </TectonicModel>
+</PlateRotationsFromNuvel1A>

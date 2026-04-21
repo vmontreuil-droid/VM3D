@@ -13,9 +13,15 @@ export type GeoFile = {
 }
 
 export type VendorPack = {
-  vendor: 'topcon' | 'leica' | 'unicontrol'
+  vendor: 'topcon' | 'leica' | 'unicontrol' | 'trimble'
   vendorName: string
   files: GeoFile[]
+}
+
+export const VENDOR_ORDER: VendorPack['vendor'][] = ['topcon', 'leica', 'unicontrol', 'trimble']
+
+export function uniqueVendors(): number {
+  return VENDOR_ORDER.length
 }
 
 export type Region = {
@@ -74,6 +80,18 @@ export const REGIONS: Region[] = [
           { filename: 'hbg18.gem', path: '/geo/LEICA/hbg18.gem', description: 'Belgische geoide hBG18 (Leica .gem)', available: false },
         ],
       },
+      {
+        vendor: 'trimble',
+        vendorName: 'Trimble',
+        files: [
+          { filename: 'belgium.sgf', path: '/geo/TRIMBLE/belgium.sgf', description: 'Belgisch coördinatensysteem (Trimble SGF)', available: true },
+          { filename: 'bd72lb72_etrs89lb08_lat.dgf', path: '/geo/TRIMBLE/bd72lb72_etrs89lb08_lat.dgf', description: 'BD72/Lambert 72 ↔ ETRS89/Lambert 2008 NTv2 grid (lat)', available: true },
+          { filename: 'bd72lb72_etrs89lb08_lon.dgf', path: '/geo/TRIMBLE/bd72lb72_etrs89lb08_lon.dgf', description: 'BD72/Lambert 72 ↔ ETRS89/Lambert 2008 NTv2 grid (lon)', available: true },
+          { filename: 'hbg18.ggf', path: '/geo/TRIMBLE/hbg18.ggf', description: 'Belgische geoide hBG18 (Trimble GGF)', available: true },
+          { filename: 'hbg03.ggf', path: '/geo/TRIMBLE/hbg03.ggf', description: 'Belgische geoide hBG03 (oudere versie)', available: true },
+          { filename: '1298_europe.gml', path: '/geo/TRIMBLE/1298_europe.gml', description: 'Europe GML database (bevat BE definities)', available: true },
+        ],
+      },
     ],
   },
   {
@@ -109,6 +127,18 @@ export const REGIONS: Region[] = [
         files: [
           { filename: 'rdnew.csv', path: '/geo/LEICA/rdnew.csv', description: 'RD New (Leica iCON CSV)', available: false },
           { filename: 'nlgeo2018.gem', path: '/geo/LEICA/nlgeo2018.gem', description: 'NLGEO2018 geoide (Leica .gem)', available: false },
+        ],
+      },
+      {
+        vendor: 'trimble',
+        vendorName: 'Trimble',
+        files: [
+          { filename: '1172_netherlands.gml', path: '/geo/TRIMBLE/1172_netherlands.gml', description: 'Nederlandse CRS (Trimble GML)', available: true },
+          { filename: 'rdtrans2018lat.dgf', path: '/geo/TRIMBLE/rdtrans2018lat.dgf', description: 'RD↔ETRS89 transformatie 2018 (lat)', available: true },
+          { filename: 'rdtrans2018lon.dgf', path: '/geo/TRIMBLE/rdtrans2018lon.dgf', description: 'RD↔ETRS89 transformatie 2018 (lon)', available: true },
+          { filename: 'rdtrans2018nslat.dgf', path: '/geo/TRIMBLE/rdtrans2018nslat.dgf', description: 'RDTrans 2018 NSGI variant (lat)', available: true },
+          { filename: 'rdtrans2018nslon.dgf', path: '/geo/TRIMBLE/rdtrans2018nslon.dgf', description: 'RDTrans 2018 NSGI variant (lon)', available: true },
+          { filename: '1298_europe.gml', path: '/geo/TRIMBLE/1298_europe.gml', description: 'Europe GML database (bevat NL definities)', available: true },
         ],
       },
     ],
@@ -154,6 +184,22 @@ export const REGIONS: Region[] = [
           { filename: 'raf20.gem', path: '/geo/LEICA/raf20.gem', description: 'RAF20 geoide (Leica .gem)', available: false },
         ],
       },
+      {
+        vendor: 'trimble',
+        vendorName: 'Trimble',
+        files: [
+          { filename: '1096_france.gml', path: '/geo/TRIMBLE/1096_france.gml', description: 'Franse CRS — Lambert-93 + zones (Trimble GML)', available: true },
+          { filename: 'raf20.ggf', path: '/geo/TRIMBLE/raf20.ggf', description: 'RAF20 geoide (meest recente, Trimble GGF)', available: true },
+          { filename: 'raf18.ggf', path: '/geo/TRIMBLE/raf18.ggf', description: 'RAF18 geoide', available: true },
+          { filename: 'raf18b.ggf', path: '/geo/TRIMBLE/raf18b.ggf', description: 'RAF18b geoide', available: true },
+          { filename: 'raf09.ggf', path: '/geo/TRIMBLE/raf09.ggf', description: 'RAF09 geoide', available: true },
+          { filename: 'raf98.ggf', path: '/geo/TRIMBLE/raf98.ggf', description: 'RAF98 geoide', available: true },
+          { filename: 'raf96.ggf', path: '/geo/TRIMBLE/raf96.ggf', description: 'RAF96 geoide (oudst)', available: true },
+          { filename: 'corse97.ggf', path: '/geo/TRIMBLE/corse97.ggf', description: 'Corsica geoide 1997', available: true },
+          { filename: '2824_french_antilles.gml', path: '/geo/TRIMBLE/2824_french_antilles.gml', description: 'Franse Antillen CRS', available: true },
+          { filename: '1298_europe.gml', path: '/geo/TRIMBLE/1298_europe.gml', description: 'Europe GML database (bevat FR definities)', available: true },
+        ],
+      },
     ],
   },
   {
@@ -187,6 +233,14 @@ export const REGIONS: Region[] = [
         files: [
           { filename: 'luref.csv', path: '/geo/LEICA/luref.csv', description: 'LUREF (Leica iCON CSV)', available: false },
           { filename: 'luref-grid.gem', path: '/geo/LEICA/luref-grid.gem', description: 'LUREF geoide-grid (Leica .gem)', available: false },
+        ],
+      },
+      {
+        vendor: 'trimble',
+        vendorName: 'Trimble',
+        files: [
+          { filename: '1298_europe.gml', path: '/geo/TRIMBLE/1298_europe.gml', description: 'Europe GML database (bevat LU definities)', available: true },
+          { filename: 'CoordSystemDatabase.xml', path: '/geo/TRIMBLE/CoordSystemDatabase.xml', description: 'Wereldwijde Trimble CRS-database', available: true },
         ],
       },
     ],

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Gridtransformation version="1.0" lastSystemID="1">
+  <Name>KSA-GRF17 to MTRF-2000 Saudi-Arabia</Name>
+  <SystemID>1</SystemID>
+  <Version>20240801</Version>
+  <Authority>Ministry of Municipal &amp; Rural Affairs (MOMRA)</Authority>
+  <AuthorityWebSite>https://www.momrah.gov.sa/ar</AuthorityWebSite>
+  <AuthorityAddress>King Fahd Rd, King Fahd, Riyadh 12261, Saudi Arabia</AuthorityAddress>
+  <AuthorityEmail>infocs@momah.gov.sa</AuthorityEmail>
+  <Url>https://cors.momrah.gov.sa/Map/SensorMap.aspx</Url>
+  <Zones>
+    <Zone>
+      <Name>Saudi-Arabia</Name>
+      <LatitudeShiftGridFileName>grf17_mtrf_lat_xml.dgf</LatitudeShiftGridFileName>
+      <LongitudeShiftGridFileName>grf17_mtrf_lon.dgf</LongitudeShiftGridFileName>
+      <HeightShiftGridFileName>grf17_mtrf_hgt.dgf</HeightShiftGridFileName>
+      <WestBoundLongitude>36.25</WestBoundLongitude>
+      <EastBoundLongitude>50.25</EastBoundLongitude>
+      <SouthBoundLatitude>16.0</SouthBoundLatitude>
+      <NorthBoundLatitude>30.25</NorthBoundLatitude>
+    </Zone>
+  </Zones>
+</Gridtransformation>

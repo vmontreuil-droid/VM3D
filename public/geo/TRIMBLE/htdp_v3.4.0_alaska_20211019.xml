@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>HTDP v3.4.0 Alaska</Name>
+  <SystemID>1</SystemID>
+  <Version>20211019</Version>
+  <Authority>NOAA's National Geodetic Survey</Authority>
+  <AuthorityWebSite>https://www.ngs.noaa.gov/</AuthorityWebSite>
+  <AuthorityAddress>
+SSMC3 #9340
+1315 East-West Highway
+Silver Spring, MD 20910-3282
+</AuthorityAddress>
+  <AuthorityEmail>ngs.cors.htdp@.noaa.gov</AuthorityEmail>
+  <Url>https://www.ngs.noaa.gov/web/surveys/NA2011/</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>grid_alaska_3_2_9.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>190</MinimumLongitude>
+          <MaximumLongitude>230</MaximumLongitude>
+          <MinimumLatitude>54</MinimumLatitude>
+          <MaximumLatitude>73</MaximumLatitude>
+          <SpatialComplete>false</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model derived from HTDP 3.2.9</Description>
+        </Component>
+      </Components>
+    </SubModel>
+    <SubModel>
+      <Name>patch_c1_20021103</Name>
+      <Components>
+        <Component>
+          <GridFile>grid_c1_l1_alaska.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>210</MinimumLongitude>
+          <MaximumLongitude>225</MaximumLongitude>
+          <MinimumLatitude>60</MinimumLatitude>
+          <MaximumLatitude>66</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>decay</TimeFunction>
+          <Time0>2002.8624</Time0>
+          <Factor0>-1</Factor0>
+          <Time1>2119.2573</Time1>
+          <Factor1>0</Factor1>
+          <Decay>0.2</Decay>
+          <Description>2002 Denali earthquake posseismic </Description>
+        </Component>
+      </Components>
+    </SubModel>
+    <SubModel>
+      <Name>patch_c1_20180123</Name>
+      <Components>
+        <Component>
+          <GridFile>grid_c1_l1_20180123.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>202.9</MinimumLongitude>
+          <MaximumLongitude>218.8</MaximumLongitude>
+          <MinimumLatitude>51.5</MinimumLatitude>
+          <MaximumLatitude>60.4</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>step</TimeFunction>
+          <Time0>2018.0602</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2018.0602</Time1>
+          <Factor1>1.0</Factor1>
+          <Decay>0</Decay>
+          <Description>2018 Kodiak earthquake </Description>
+        </Component>
+      </Components>
+    </SubModel>
+    <SubModel>
+      <Name>patch_c1_20181130</Name>
+      <Components>
+        <Component>
+          <GridFile>grid_c1_l1_20181130.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>208.3</MinimumLongitude>
+          <MaximumLongitude>211.8</MaximumLongitude>
+          <MinimumLatitude>59.5</MinimumLatitude>
+          <MaximumLatitude>63</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>step</TimeFunction>
+          <Time0>2018.9117</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2018.9117</Time1>
+          <Factor1>1.0</Factor1>
+          <Decay>0</Decay>
+          <Description>2018 Anchorage earthquake </Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ArrowLeft, Globe2, Cpu, Package, CheckCircle2 } from 'lucide-react'
 import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
-import { REGIONS, totalPackages, totalAvailable } from './manifest'
+import { REGIONS, totalPackages, totalAvailable, uniqueVendors } from './manifest'
 import GeoSetupWizard from './geo-setup-wizard'
 
 export default async function GeoSetupPage() {
@@ -23,7 +23,7 @@ export default async function GeoSetupPage() {
   if (profile?.role !== 'admin') redirect('/dashboard')
 
   const regionCount = REGIONS.length
-  const vendorCount = 3
+  const vendorCount = uniqueVendors()
   const packageCount = totalPackages()
   const availableCount = totalAvailable()
 

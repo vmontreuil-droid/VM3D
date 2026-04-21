@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>version 8.0 Velocity Grid CSRS</Name>
+  <SystemID>1</SystemID>
+  <Version>20241201</Version>
+  <Authority>Canadian Geodetic Survey</Authority>
+  <AuthorityWebSite>https://www.nrcan.gc.ca/</AuthorityWebSite>
+  <AuthorityAddress>
+Canadian Geodetic Survey, Natural Resources Canada
+588 Booth Street, Ottawa, Ontario
+</AuthorityAddress>
+  <AuthorityEmail>michael.craymer@canada.ca</AuthorityEmail>
+  <Url>https://www.nrcan.gc.ca/maps-tools-and-publications/tools/geodetic-reference-systems/18766</Url>
+  <SubModels>
+    <SubModel>
+      <Name>ndm</Name>
+      <Components>
+        <Component>
+          <GridFile>grid_canada_v8g.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>0</Priority>
+          <MinimumLongitude>203</MinimumLongitude>
+          <MaximumLongitude>320</MaximumLongitude>
+          <MinimumLatitude>40</MinimumLatitude>
+          <MaximumLatitude>85</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>velocity</TimeFunction>
+          <Time0>2010.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2011.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>Secular deformation model from cvg80grd_e.xyz cvg80grd_n.xyz and cvg80grd_h.xyz.0</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

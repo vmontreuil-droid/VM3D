@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalDisplacementModel version="1.0" lastSystemID="1">
+  <Name>Mexico Deformation Model</Name>
+  <SystemID>1</SystemID>
+  <Version>20211210</Version>
+  <Authority>INEGI</Authority>
+  <AuthorityWebSite>https://www.inegi.org.mx/temas/geodesia_activa/</AuthorityWebSite>
+  <AuthorityAddress>Mexico</AuthorityAddress>
+  <AuthorityEmail>atencion.usuarios@inegi.org.mx</AuthorityEmail>
+  <Url>https://www.inegi.org.mx/temas/geodesia_activa/#Metadatos</Url>
+  <SubModels>
+    <SubModel>
+      <Name>grid transfo ITRF2014 to ITRF2008-Mexico</Name>
+      <Components>
+        <Component>
+          <GridFile>mexico_itrf08pr.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>1</ComponentID>
+          <Priority>1</Priority>
+          <MinimumLongitude>241</MinimumLongitude>
+          <MaximumLongitude>274</MaximumLongitude>
+          <MinimumLatitude>14</MinimumLatitude>
+          <MaximumLatitude>33</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>step</TimeFunction> <!-- add grid transfo as a step function just after ref epoch -->
+          <Time0>2010.001</Time0>			<!-- 2010.0 in LINZ format changed to 2010.001 -->
+          <Factor0>0</Factor0>				<!-- 1.0 in LINZ format changed to 0.0 -->
+          <Time1>2010.001</Time1>			<!-- 2011.0 in LINZ format changed to 2010.001 -->
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>transformation ITRF2008 eom to ITRF2008 @2010 derived from ITRF08PR.jar</Description>
+        </Component>
+        <Component>
+          <GridFile>mexico_itrf08pr_kvels.cmg</GridFile>
+          <ReversePatch>false</ReversePatch>
+          <ComponentID>2</ComponentID>
+          <Priority>1</Priority>
+          <MinimumLongitude>241</MinimumLongitude>
+          <MaximumLongitude>274</MaximumLongitude>
+          <MinimumLatitude>14</MinimumLatitude>
+          <MaximumLatitude>33</MaximumLatitude>
+          <SpatialComplete>true</SpatialComplete>
+          <MinDate>0</MinDate>
+          <MaxDate>0</MaxDate>
+          <TimeComplete>true</TimeComplete>
+          <DisplacementType>3d</DisplacementType>
+          <TimeFunction>ramp</TimeFunction>
+          <Time0>2021.0</Time0>
+          <Factor0>0</Factor0>
+          <Time1>2024.0</Time1>
+          <Factor1>1</Factor1>
+          <Decay>0</Decay>
+          <Description>ramp derived from ITRF08PR.jar</Description>
+        </Component>
+      </Components>
+    </SubModel>
+  </SubModels>
+</LocalDisplacementModel>

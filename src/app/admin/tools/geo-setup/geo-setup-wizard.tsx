@@ -27,6 +27,13 @@ const VENDOR_STYLES: Record<string, { dot: string; border: string; bg: string; t
     text: 'text-emerald-400',
     hover: 'hover:border-emerald-500/50 hover:bg-emerald-500/12',
   },
+  trimble: {
+    dot: 'bg-amber-500',
+    border: 'border-amber-500/30',
+    bg: 'bg-amber-500/8',
+    text: 'text-amber-400',
+    hover: 'hover:border-amber-500/50 hover:bg-amber-500/12',
+  },
 }
 
 export default function GeoSetupWizard({ regions }: { regions: Region[] }) {
@@ -143,7 +150,7 @@ export default function GeoSetupWizard({ regions }: { regions: Region[] }) {
         </header>
 
         {region ? (
-          <div className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 lg:grid-cols-4">
             {region.vendors.map(v => {
               const style = VENDOR_STYLES[v.vendor]
               const active = v.vendor === vendorCode
