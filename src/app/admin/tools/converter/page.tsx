@@ -17,12 +17,11 @@ const SURFACE_VERTS_LIMIT = 250
 
 // Brand logo met tekst-fallback als image niet aanwezig
 function BrandLogo({ name }: { name: 'topcon' | 'leica' }) {
-  const ext = name === 'leica' ? 'jpg' : 'png'
   const [ok, setOk] = useState(true)
   if (ok) {
     return (
       <img
-        src={`/logos/${name}.${ext}`}
+        src={`/logos/${name}.png`}
         alt={name === 'topcon' ? 'Topcon' : 'Leica Geosystems'}
         onError={() => setOk(false)}
         className="h-8 w-auto object-contain"
