@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
+import { useT } from '@/i18n/context'
 import {
   Upload, Download, ArrowRight, ArrowLeft, Loader2,
   CheckCircle, AlertCircle, RefreshCw, Scissors, Repeat, FileType2, HardDrive,
@@ -361,6 +362,8 @@ function LeicaToTopconCard() {
 
 // ─── Main page ────────────────────────────────────────────────────────────
 export default function ConverterPage() {
+  const { t } = useT()
+  const tt = t.adminConverter
   return (
     <AppShell isAdmin>
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
@@ -377,16 +380,16 @@ export default function ConverterPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Tools
+                  {tt.tools}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Bestandsconverter
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Converteer machinebestanden tussen Topcon (.TP3) en Leica / Unicontrol (LandXML + DXF) — direct in de browser, geen upload naar derden.
+                  {tt.description}
                 </p>
               </div>
 
@@ -395,8 +398,8 @@ export default function ConverterPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Topcon → Leica</p>
-                        <p className="mt-1 text-lg font-semibold text-sky-400">Stabiel</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiTopconToLeica}</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{tt.stable}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
                         <CheckCircle className="h-4.5 w-4.5 text-sky-400" />
@@ -406,8 +409,8 @@ export default function ConverterPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Leica → Topcon</p>
-                        <p className="mt-1 text-lg font-semibold text-amber-400">Beta</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiLeicaToTopcon}</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">{tt.beta}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
                         <Repeat className="h-4.5 w-4.5 text-amber-400" />
@@ -417,7 +420,7 @@ export default function ConverterPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.08),rgba(168,85,247,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Formaten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiFormats}</p>
                         <p className="mt-1 text-lg font-semibold text-violet-400">3</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
@@ -428,7 +431,7 @@ export default function ConverterPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Max bestand</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiMaxFile}</p>
                         <p className="mt-1 text-lg font-semibold text-emerald-400">{MAX_MB} MB</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">

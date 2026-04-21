@@ -2,9 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
 import { Send, AlertTriangle, Clock, CheckCircle2, ArrowLeft, Wallet, Users } from 'lucide-react'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function sendReminderAction(factuurId: number) {
   'use server'
@@ -90,6 +93,12 @@ function daysOverdue(due: string) {
 }
 
 export default async function HerinneringenPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminReminders
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -152,16 +161,16 @@ export default async function HerinneringenPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Herinneringen
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Volg vervallen en bijna-vervallen facturen op en stuur met één klik een betalingsherinnering naar de klant.
+                  {tt.description}
                 </p>
               </div>
 
@@ -170,7 +179,7 @@ export default async function HerinneringenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(239,68,68,0.10),rgba(239,68,68,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Vervallen</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiOverdue}</p>
                         <p className="mt-1 text-lg font-semibold text-red-400">{overdue?.length ?? 0}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-400/10">
@@ -181,7 +190,7 @@ export default async function HerinneringenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Bijna vervallen</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiUpcoming}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{upcoming?.length ?? 0}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -192,7 +201,7 @@ export default async function HerinneringenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Te innen</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiToCollect}</p>
                         <p className="mt-1 text-lg font-semibold text-sky-400">€ {fmt(overdueTotal + upcomingTotal)}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
@@ -203,7 +212,7 @@ export default async function HerinneringenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCustomers}</p>
                         <p className="mt-1 text-lg font-semibold text-violet-400">{distinctCustomers}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
@@ -226,8 +235,8 @@ export default async function HerinneringenPage() {
                 <AlertTriangle className="h-4 w-4" />
               </span>
               <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Vervallen facturen</h2>
-                <p className="text-xs text-[var(--text-soft)]">{overdue!.length} facturen zijn vervallen en nog niet betaald</p>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{tt.overdueTitle}</h2>
+                <p className="text-xs text-[var(--text-soft)]">{tt.overdueSubtitle.replace('{count}', String(overdue!.length))}</p>
               </div>
             </div>
             <div className="divide-y divide-[var(--border-soft)]">
@@ -242,15 +251,15 @@ export default async function HerinneringenPage() {
                           {f.factuur_number}
                         </Link>
                         <span className="rounded-full bg-red-500/12 px-2 py-0.5 text-[10px] font-semibold text-red-400">
-                          {days}d vervallen
+                          {tt.daysOverdue.replace('{n}', String(days))}
                         </span>
                       </div>
                       <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                        {customerMap[f.customer_id] || '—'} · Vervallen: {fmtDate(f.due_date)} · <strong>€ {fmt(Number(f.total))}</strong>
+                        {customerMap[f.customer_id] || '—'} · {tt.overdueOn} {fmtDate(f.due_date)} · <strong>€ {fmt(Number(f.total))}</strong>
                       </p>
                       {lastSent && (
                         <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-                          Laatste herinnering: {fmtDate(lastSent)}
+                          {tt.lastReminder} {fmtDate(lastSent)}
                         </p>
                       )}
                     </div>
@@ -260,7 +269,7 @@ export default async function HerinneringenPage() {
                         className="inline-flex items-center gap-2 rounded-lg border border-red-500/25 bg-red-500/8 px-3 py-1.5 text-xs font-semibold text-red-400 transition hover:bg-red-500/15"
                       >
                         <Send className="h-3 w-3" />
-                        Stuur herinnering
+                        {tt.sendReminder}
                       </button>
                     </form>
                   </div>
@@ -278,8 +287,8 @@ export default async function HerinneringenPage() {
                 <Clock className="h-4 w-4" />
               </span>
               <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Bijna vervallen</h2>
-                <p className="text-xs text-[var(--text-soft)]">{upcoming!.length} facturen vervallen binnen 7 dagen</p>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{tt.upcomingTitle}</h2>
+                <p className="text-xs text-[var(--text-soft)]">{tt.upcomingSubtitle.replace('{count}', String(upcoming!.length))}</p>
               </div>
             </div>
             <div className="divide-y divide-[var(--border-soft)]">
@@ -294,15 +303,15 @@ export default async function HerinneringenPage() {
                           {f.factuur_number}
                         </Link>
                         <span className="rounded-full bg-amber-500/12 px-2 py-0.5 text-[10px] font-semibold text-amber-400">
-                          nog {days}d
+                          {tt.daysUntilDue.replace('{n}', String(days))}
                         </span>
                       </div>
                       <p className="mt-0.5 text-xs text-[var(--text-soft)]">
-                        {customerMap[f.customer_id] || '—'} · Vervalt: {fmtDate(f.due_date)} · <strong>€ {fmt(Number(f.total))}</strong>
+                        {customerMap[f.customer_id] || '—'} · {tt.dueOn} {fmtDate(f.due_date)} · <strong>€ {fmt(Number(f.total))}</strong>
                       </p>
                       {lastSent && (
                         <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-                          Laatste herinnering: {fmtDate(lastSent)}
+                          {tt.lastReminder} {fmtDate(lastSent)}
                         </p>
                       )}
                     </div>
@@ -312,7 +321,7 @@ export default async function HerinneringenPage() {
                         className="inline-flex items-center gap-2 rounded-lg border border-amber-500/25 bg-amber-500/8 px-3 py-1.5 text-xs font-semibold text-amber-400 transition hover:bg-amber-500/15"
                       >
                         <Send className="h-3 w-3" />
-                        Stuur herinnering
+                        {tt.sendReminder}
                       </button>
                     </form>
                   </div>
@@ -325,8 +334,8 @@ export default async function HerinneringenPage() {
         {(overdue?.length ?? 0) === 0 && (upcoming?.length ?? 0) === 0 && (
           <div className="flex flex-col items-center justify-center rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 py-12 text-center shadow-sm">
             <CheckCircle2 className="h-8 w-8 text-emerald-400" />
-            <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">Geen openstaande herinneringen</p>
-            <p className="mt-1 text-xs text-[var(--text-soft)]">Alle facturen zijn betaald of hebben nog ruim tijd.</p>
+            <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">{tt.nothingPending}</p>
+            <p className="mt-1 text-xs text-[var(--text-soft)]">{tt.allPaid}</p>
           </div>
         )}
           </div>

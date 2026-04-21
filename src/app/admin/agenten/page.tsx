@@ -2,9 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
 import { Users, Plus, Percent, TrendingUp, ToggleLeft, ToggleRight, ArrowLeft, CheckCircle2, Wallet } from 'lucide-react'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function toggleAgentAction(agentId: string, active: boolean) {
   'use server'
@@ -36,6 +39,12 @@ function fmt(n: number) {
 }
 
 export default async function AgentenPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminAgenten
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -90,16 +99,16 @@ export default async function AgentenPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Agenten
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Beheer je verkoopagenten, hun commissiepercentage en bekijk de omzet die ze deze maand binnenbrachten.
+                  {tt.description}
                 </p>
               </div>
 
@@ -108,7 +117,7 @@ export default async function AgentenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiTotal}</p>
                         <p className="mt-1 text-lg font-semibold text-sky-400">{totalAgents}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
@@ -119,7 +128,7 @@ export default async function AgentenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiActive}</p>
                         <p className="mt-1 text-lg font-semibold text-emerald-400">{activeAgents}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
@@ -130,7 +139,7 @@ export default async function AgentenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Omzet (maand)</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiRevenue}</p>
                         <p className="mt-1 text-lg font-semibold text-violet-400">€ {fmt(totalOmzet)}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
@@ -141,7 +150,7 @@ export default async function AgentenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Commissie</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCommission}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">€ {fmt(totalCommissie)}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -158,13 +167,13 @@ export default async function AgentenPage() {
         {(!agents || agents.length === 0) ? (
           <div className="flex flex-col items-center justify-center rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 py-12 text-center shadow-sm">
             <Users className="h-8 w-8 text-[var(--text-muted)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">Nog geen agenten</p>
-            <p className="mt-1 text-xs text-[var(--text-soft)]">Maak een agent aan om klanten en projecten toe te wijzen.</p>
+            <p className="mt-3 text-sm font-semibold text-[var(--text-main)]">{tt.emptyTitle}</p>
+            <p className="mt-1 text-xs text-[var(--text-soft)]">{tt.emptyDesc}</p>
             <Link
               href="/admin/agenten/new"
               className="mt-5 inline-flex items-center gap-2 rounded-xl border border-[var(--accent)]/60 bg-[linear-gradient(90deg,rgba(245,140,55,0.22),rgba(245,140,55,0.06))] px-4 py-2.5 text-sm font-semibold text-[var(--accent)] shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_4px_12px_-6px_rgba(245,140,55,0.35)] transition hover:bg-[linear-gradient(90deg,rgba(245,140,55,0.3),rgba(245,140,55,0.1))]"
             >
-              <Plus className="h-4 w-4" /> Eerste agent aanmaken
+              <Plus className="h-4 w-4" /> {tt.createFirstAgent}
             </Link>
           </div>
         ) : (
@@ -187,15 +196,15 @@ export default async function AgentenPage() {
                     <div className="flex items-center gap-4 text-xs text-[var(--text-soft)]">
                       <div className="text-center">
                         <p className="font-semibold text-[var(--text-main)]">{stats.facturen}</p>
-                        <p className="text-[10px]">facturen</p>
+                        <p className="text-[10px]">{tt.facturen}</p>
                       </div>
                       <div className="text-center">
                         <p className="font-semibold text-[var(--accent)]">€ {fmt(stats.omzet)}</p>
-                        <p className="text-[10px]">omzet</p>
+                        <p className="text-[10px]">{tt.omzet}</p>
                       </div>
                       <div className="text-center">
                         <p className="font-semibold text-emerald-400">€ {fmt(stats.commissie)}</p>
-                        <p className="text-[10px]">commissie</p>
+                        <p className="text-[10px]">{tt.commissie}</p>
                       </div>
                     </div>
 
@@ -216,7 +225,7 @@ export default async function AgentenPage() {
                         className="w-16 rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-2 py-1 text-xs text-[var(--text-main)] outline-none focus:border-[var(--accent)]/50"
                       />
                       <button type="submit" className="rounded-lg bg-[var(--accent)]/12 px-2 py-1 text-[10px] font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/20">
-                        Sla op
+                        {tt.save}
                       </button>
                     </form>
 
@@ -228,8 +237,8 @@ export default async function AgentenPage() {
                           : 'bg-zinc-500/10 text-zinc-400 hover:bg-zinc-500/20'
                       }`}>
                         {agent.agent_active
-                          ? <><ToggleRight className="h-3.5 w-3.5" /> Actief</>
-                          : <><ToggleLeft className="h-3.5 w-3.5" /> Inactief</>}
+                          ? <><ToggleRight className="h-3.5 w-3.5" /> {tt.active}</>
+                          : <><ToggleLeft className="h-3.5 w-3.5" /> {tt.inactive}</>}
                       </button>
                     </form>
 
@@ -237,7 +246,7 @@ export default async function AgentenPage() {
                       href={`/admin/agenten/${agent.id}`}
                       className="rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-1.5 text-xs font-semibold text-[var(--text-main)] hover:border-[var(--accent)]/40"
                     >
-                      Details
+                      {tt.details}
                     </Link>
                   </div>
                 )

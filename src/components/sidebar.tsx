@@ -189,7 +189,7 @@ export default function Sidebar({
           icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
         },
         {
-          label: 'Snelstart',
+          label: t.platform.quickStart,
           href: '/admin/tools',
           match: (pathname) => pathname === '/admin/tools',
           icon: <Zap className="h-[17px] w-[17px]" />,
@@ -264,7 +264,7 @@ export default function Sidebar({
       badge: facturenCount ?? undefined,
     },
     {
-      label: 'Herinneringen',
+      label: t.platform.reminders,
       href: '/admin/herinneringen',
       match: (pathname) => pathname === '/admin/herinneringen',
       icon: <Bell className="h-[17px] w-[17px]" />,
@@ -277,21 +277,21 @@ export default function Sidebar({
       badge: machineCount ?? undefined,
     },
     {
-      label: 'Tijdsregistratie',
+      label: t.platform.timeTracking,
       href: '/admin/tijdsregistratie',
       match: (pathname) => pathname === '/admin/tijdsregistratie',
       icon: <Clock className="h-[17px] w-[17px]" />,
       badge: timeEntriesCount ?? undefined,
     },
     {
-      label: 'Notities',
+      label: t.platform.notes,
       href: '/admin/notities',
       match: (pathname) => pathname === '/admin/notities',
       icon: <StickyNote className="h-[17px] w-[17px]" />,
       badge: notesCount ?? undefined,
     },
     {
-      label: 'Agenten',
+      label: t.platform.agentsNav,
       href: '/admin/agenten',
       match: (pathname) => pathname === '/admin/agenten' || pathname.startsWith('/admin/agenten/'),
       icon: <UserCog className="h-[17px] w-[17px]" />,
@@ -306,7 +306,7 @@ export default function Sidebar({
 
   const adminToolsItems: NavItem[] = [
     {
-      label: 'Converter',
+      label: t.platform.converter,
       href: '/admin/tools/converter',
       match: (pathname) => pathname.startsWith('/admin/tools/converter'),
       icon: <FileCode2 className="h-[17px] w-[17px]" />,
@@ -516,7 +516,7 @@ export default function Sidebar({
               <div>
                 {!collapsed && (
                   <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                    Beheer
+                    {t.platform.managementSection}
                   </p>
                 )}
                 <div className="space-y-1.5">
@@ -526,7 +526,7 @@ export default function Sidebar({
               <div>
                 {!collapsed && (
                   <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                    Tools
+                    {t.platform.toolsSection}
                   </p>
                 )}
                 <div className="space-y-1.5">

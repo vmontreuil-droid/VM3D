@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
 import {
@@ -8,6 +9,8 @@ import {
   Clock, StickyNote, Zap, FileCode2,
   ArrowLeft, Sparkles, LayoutList, Rocket,
 } from 'lucide-react'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 const sections = [
   {
@@ -68,6 +71,12 @@ const colorMap = {
 }
 
 export default async function ToolsPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminTools
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -95,16 +104,16 @@ export default async function ToolsPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Snelstartmenu
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Directe toegang tot alle admin-functies — aanmaken, raadplegen en acties — op één centraal startscherm.
+                  {tt.description}
                 </p>
               </div>
 
@@ -113,7 +122,7 @@ export default async function ToolsPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.10),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Aanmaken</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCreate}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{createCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -124,7 +133,7 @@ export default async function ToolsPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Overzichten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiOverview}</p>
                         <p className="mt-1 text-lg font-semibold text-sky-400">{overviewCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
@@ -135,7 +144,7 @@ export default async function ToolsPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Acties</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiActions}</p>
                         <p className="mt-1 text-lg font-semibold text-emerald-400">{actionCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
@@ -146,7 +155,7 @@ export default async function ToolsPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Sneltoetsen</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiShortcuts}</p>
                         <p className="mt-1 text-lg font-semibold text-violet-400">{totalCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
