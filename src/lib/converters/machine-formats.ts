@@ -1293,24 +1293,22 @@ async function loadTp3Asset(name: string): Promise<ArrayBuffer> {
 
 function writeUtf16LE(view: DataView, offset: number, str: string, maxBytes: number): number {
   const maxChars = Math.floor(maxBytes / 2)
-  const chars = Math.min(str.length, maxChars)
+  const chars = Math.min(str.length, maxChars - 1) // reserve 2 bytes voor null-terminator
   for (let i = 0; i < chars; i++) {
     view.setUint16(offset + i * 2, str.charCodeAt(i), true)
   }
-  return chars * 2
+  view.setUint16(offset + chars * 2, 0, true) // null terminator
+  return chars * 2 + 2
 }
 
 export async function generateTP3(data: MachineFile, projectName?: string): Promise<ArrayBuffer> {
-  const [headerTpl, type12Tpl, type17Tpl, t11r0, t11r1, t11r2, t11r3] = await Promise.all([
+  const [headerTpl, type12Tpl, type17Tpl, t11Line] = await Promise.all([
     loadTp3Asset('tp3-header.bin'),
     loadTp3Asset('tp3-type12.bin'),
     loadTp3Asset('tp3-type17.bin'),
-    loadTp3Asset('tp3-type11-rec0.bin'),
-    loadTp3Asset('tp3-type11-rec1.bin'),
-    loadTp3Asset('tp3-type11-rec2.bin'),
-    loadTp3Asset('tp3-type11-rec3.bin'),
+    loadTp3Asset('tp3-type11-line.bin'),
   ])
-  const t11Templates = [t11r0, t11r1, t11r2, t11r3]
+  const t11Templates = [t11Line, t11Line, t11Line, t11Line] // gebruik echte line-template overal
   const HEADER_SIZE = 1822
 
   // ── Bereken referentiepunt voor RELATIVE vertices ──
@@ -1442,9 +1440,10 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   }
   const block11 = concatBuffers(makeBlockHeader(11, numLineRecs, 340), block11Data)
 
-  // type=13 (per-vertex attributes, all zeros). Alleen voor normalisatie + line
-  // vertices, NIET voor surface vertices. Aantal = surfaceVertStart.
-  const t13Count = surfaceVertStart
+  // type=13 (per-vertex attributes, all zeros). MAX = 128 (recPerBlk)!
+  // Topcon alloceert vaste 128-record buffer; hoger geeft ACCESS_VIOLATION crash.
+  // Werkende voorbeelden: TEST CONVERT 64, xxx 84, project 6 124. Altijd ≤ 128.
+  const t13Count = Math.min(surfaceVertStart, 128)
   const block13Data = new ArrayBuffer(t13Count * 4)
   const block13 = concatBuffers(makeBlockHeader(13, t13Count, 4), block13Data)
 
@@ -1539,8 +1538,10 @@ export async function generateTP3(data: MachineFile, projectName?: string): Prom
   new Uint8Array(out).set(new Uint8Array(headerTpl)) // copy template header
   const dvOut = new DataView(out)
 
-  // Patch project name at offset 28 (UTF-16LE, max 24 chars = 48 bytes)
-  const pname = projectName ?? data.name ?? 'MV3D Project'
+  // Patch project name at offset 28. Topcon VEREIST '!' prefix in project namen
+  // (alle echte TP3s starten met '!'). Zonder dit weigert 3D Office te renderen.
+  let pname = projectName ?? data.name ?? 'MV3D'
+  if (!pname.startsWith('!')) pname = '!' + pname
   writeUtf16LE(dvOut, 28, pname, 48)
 
   // Patch first-block hint at offset 192-199 (uint16 first_type=2 @+194, uint32 hdrSz=18 @+196)
@@ -1751,11 +1752,11 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     }
   }
 
-  // PATCH 3: project name in header (offset 28, max 48 bytes UTF-16LE)
-  const pname = data.name || 'MV3D'
-  // Clear name area first
+  // PATCH 3: project name in header. Topcon vereist '!' prefix.
+  let pname = data.name || 'MV3D'
+  if (!pname.startsWith('!')) pname = '!' + pname
   for (let i = 28; i < 76; i++) out[i] = 0
-  for (let i = 0; i < Math.min(pname.length, 24); i++) {
+  for (let i = 0; i < Math.min(pname.length, 23); i++) {
     dv.setUint16(28 + i * 2, pname.charCodeAt(i), true)
   }
 

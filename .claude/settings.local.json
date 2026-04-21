@@ -14,7 +14,9 @@
       "Bash(node -e \"const p=require\\('./node_modules/jspdf/package.json'\\); console.log\\('jsPDF installed:', p.version\\)\")",
       "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\({deps: p.dependencies, devDeps: p.devDependencies}, null, 2\\)\\)\")",
       "Bash(npm install *)",
-      "Bash(node -e \"const q=require\\('qrcode'\\); q.toDataURL\\('test', {width:200}, \\(err, url\\) => console.log\\('qrcode OK, starts with:', url?.slice\\(0,30\\)\\)\\)\")"
+      "Bash(node -e \"const q=require\\('qrcode'\\); q.toDataURL\\('test', {width:200}, \\(err, url\\) => console.log\\('qrcode OK, starts with:', url?.slice\\(0,30\\)\\)\\)\")",
+      "Bash(npx next *)",
+      "Bash(npm list *)"
     ]
   }
 }
