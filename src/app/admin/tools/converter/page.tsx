@@ -52,6 +52,8 @@ type Status =
 
 // ─── Topcon → Leica card ──────────────────────────────────────────────────
 function TopconToLeicaCard() {
+  const { t } = useT()
+  const tt = t.adminConverter
   const [file, setFile] = useState<File | null>(null)
   const [status, setStatus] = useState<Status>({ type: 'idle' })
   const [dragging, setDragging] = useState(false)
@@ -59,16 +61,16 @@ function TopconToLeicaCard() {
 
   const handleFile = useCallback((f: File) => {
     if (f.size > MAX_MB * 1024 * 1024) {
-      setStatus({ type: 'error', message: `Bestand te groot (max ${MAX_MB} MB)` })
+      setStatus({ type: 'error', message: tt.errFileTooBig.replace('{mb}', String(MAX_MB)) })
       return
     }
     if (!/\.tp3$/i.test(f.name)) {
-      setStatus({ type: 'error', message: 'Verwacht een .TP3 bestand' })
+      setStatus({ type: 'error', message: tt.errExpectTP3 })
       return
     }
     setFile(f)
     setStatus({ type: 'idle' })
-  }, [])
+  }, [tt])
 
   const onDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault(); setDragging(false)
@@ -108,9 +110,9 @@ function TopconToLeicaCard() {
 
       setStatus({ type: 'done', files: downloadedFiles })
     } catch (err) {
-      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
+      setStatus({ type: 'error', message: err instanceof Error ? err.message : tt.errUnknown })
     }
-  }, [file])
+  }, [file, tt])
 
   const reset = () => {
     setFile(null); setStatus({ type: 'idle' })
@@ -126,8 +128,8 @@ function TopconToLeicaCard() {
           <BrandLogo name="leica" />
         </div>
         <div className="ml-2">
-          <p className="text-sm font-semibold text-[var(--text-main)]">Topcon → Leica / Unicontrol</p>
-          <p className="text-[11px] text-[var(--text-soft)]">.TP3 → .XML (oppervlak) + .DXF (lijnen)</p>
+          <p className="text-sm font-semibold text-[var(--text-main)]">{tt.cardTopconLeicaTitle}</p>
+          <p className="text-[11px] text-[var(--text-soft)]">{tt.cardTopconLeicaSubtitle}</p>
         </div>
       </div>
 
@@ -157,8 +159,8 @@ function TopconToLeicaCard() {
             <>
               <Upload className={`h-7 w-7 ${dragging ? 'text-blue-400' : 'text-[var(--text-muted)]'}`} />
               <div>
-                <p className="text-sm font-semibold text-[var(--text-main)]">Sleep .TP3 hier of klik</p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">max {MAX_MB} MB</p>
+                <p className="text-sm font-semibold text-[var(--text-main)]">{tt.dropTP3}</p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">{tt.maxSize.replace('{mb}', String(MAX_MB))}</p>
               </div>
             </>
           )}
@@ -166,8 +168,8 @@ function TopconToLeicaCard() {
 
         <div className="flex-1 rounded-xl border border-blue-500/15 bg-blue-500/4 px-4 py-3">
           <p className="text-[11px] leading-relaxed text-[var(--text-soft)]">
-            <span className="font-semibold text-blue-300">Hoe werkt het: </span>
-            We splitsen je TP3 in twee bestanden — een <span className="font-medium text-[var(--text-main)]">.XML</span> met het 3D-oppervlak (driehoeken) en een <span className="font-medium text-[var(--text-main)]">.DXF</span> met alle ontwerplijnen. Direct importeerbaar in Leica iCON, Unicontrol of elke andere CAD/GPS-toepassing die LandXML ondersteunt.
+            <span className="font-semibold text-blue-300">{tt.howItWorks} </span>
+            {tt.howItWorksTopconLeica}
           </p>
         </div>
 
@@ -181,7 +183,7 @@ function TopconToLeicaCard() {
           <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 px-4 py-3">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <p className="text-sm font-semibold text-emerald-300">Conversie geslaagd</p>
+              <p className="text-sm font-semibold text-emerald-300">{tt.statusDone}</p>
             </div>
             {status.files.map(f => <p key={f} className="mt-1 text-[11px] text-[var(--text-soft)]">↓ {f}</p>)}
           </div>
@@ -194,12 +196,12 @@ function TopconToLeicaCard() {
             className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-400 transition hover:bg-blue-500/18 disabled:pointer-events-none disabled:opacity-50"
           >
             {status.type === 'converting'
-              ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-              : <><Scissors className="h-4 w-4" /> Converteren</>}
+              ? <><Loader2 className="h-4 w-4 animate-spin" /> {tt.btnBusy}</>
+              : <><Scissors className="h-4 w-4" /> {tt.btnConvert}</>}
           </button>
           {(file || status.type !== 'idle') && (
             <button onClick={reset} className="flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition">
-              <RefreshCw className="h-3.5 w-3.5" /> Nieuw
+              <RefreshCw className="h-3.5 w-3.5" /> {tt.btnNew}
             </button>
           )}
         </div>
@@ -210,6 +212,8 @@ function TopconToLeicaCard() {
 
 // ─── Leica → Topcon card ──────────────────────────────────────────────────
 function LeicaToTopconCard() {
+  const { t } = useT()
+  const tt = t.adminConverter
   const [xmlFile, setXmlFile] = useState<File | null>(null)
   const [dxfFile, setDxfFile] = useState<File | null>(null)
   const [status, setStatus] = useState<Status>({ type: 'idle' })
@@ -218,7 +222,7 @@ function LeicaToTopconCard() {
 
   const handleConvert = useCallback(async () => {
     if (!xmlFile && !dxfFile) {
-      setStatus({ type: 'error', message: 'Upload minstens 1 bestand' })
+      setStatus({ type: 'error', message: tt.errUploadOne })
       return
     }
     setStatus({ type: 'converting' })
@@ -242,7 +246,7 @@ function LeicaToTopconCard() {
 
       // Load template (project 006 — kleinste werkende Topcon TP3)
       const tplRes = await fetch('/converter/tp3-template-small.tp3')
-      if (!tplRes.ok) throw new Error('Template niet gevonden')
+      if (!tplRes.ok) throw new Error(tt.errTemplateMissing)
       const tplAb = await tplRes.arrayBuffer()
       const tplParsed = parseTP3(tplAb)
 
@@ -257,9 +261,9 @@ function LeicaToTopconCard() {
       downloadBlob(new Blob([out], { type: 'application/octet-stream' }), `${baseName}.TP3`)
       setStatus({ type: 'done', files: [`${baseName}.TP3 (${surfPts} oppervlakte-pnt, ${lines.length} lijnen)`] })
     } catch (err) {
-      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
+      setStatus({ type: 'error', message: err instanceof Error ? err.message : tt.errUnknown })
     }
-  }, [xmlFile, dxfFile])
+  }, [xmlFile, dxfFile, tt])
 
   const reset = () => {
     setXmlFile(null); setDxfFile(null); setStatus({ type: 'idle' })
@@ -304,22 +308,22 @@ function LeicaToTopconCard() {
           <BrandLogo name="topcon" />
         </div>
         <div className="ml-2">
-          <p className="text-sm font-semibold text-[var(--text-main)]">Leica / Unicontrol → Topcon</p>
-          <p className="text-[11px] text-[var(--text-soft)]">.XML (oppervlak) + .DXF (lijnen) → .TP3</p>
+          <p className="text-sm font-semibold text-[var(--text-main)]">{tt.cardLeicaTopconTitle}</p>
+          <p className="text-[11px] text-[var(--text-soft)]">{tt.cardLeicaTopconSubtitle}</p>
         </div>
-        <span className="ml-auto rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">Beta</span>
+        <span className="ml-auto rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">{tt.beta}</span>
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="grid grid-cols-2 gap-3">
-          <FilePicker label=".XML oppervlak" accept=".xml,.XML" file={xmlFile} set={setXmlFile} inputRef={xmlInputRef} />
-          <FilePicker label=".DXF lijnen" accept=".dxf,.DXF" file={dxfFile} set={setDxfFile} inputRef={dxfInputRef} />
+          <FilePicker label={tt.dropXML} accept=".xml,.XML" file={xmlFile} set={setXmlFile} inputRef={xmlInputRef} />
+          <FilePicker label={tt.dropDXF} accept=".dxf,.DXF" file={dxfFile} set={setDxfFile} inputRef={dxfInputRef} />
         </div>
 
         <div className="flex-1 rounded-xl border border-red-500/15 bg-red-500/4 px-4 py-3">
           <p className="text-[11px] leading-relaxed text-[var(--text-soft)]">
-            <span className="font-semibold text-red-300">Hoe werkt het: </span>
-            Upload het <span className="font-medium text-[var(--text-main)]">.XML</span> (oppervlak) en/of <span className="font-medium text-[var(--text-main)]">.DXF</span> (lijnen) uit Leica iCON of Unicontrol. We bouwen er een Topcon-compatibel <span className="font-medium text-[var(--text-main)]">.TP3</span> van — direct bruikbaar in 3D-MC of Sitelink. Beta: zeer grote opper­vlakken kunnen geweigerd worden.
+            <span className="font-semibold text-red-300">{tt.howItWorks} </span>
+            {tt.howItWorksLeicaTopcon}
           </p>
         </div>
 
@@ -333,7 +337,7 @@ function LeicaToTopconCard() {
           <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 px-4 py-3">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-              <p className="text-sm font-semibold text-emerald-300">TP3 gegenereerd</p>
+              <p className="text-sm font-semibold text-emerald-300">{tt.statusDoneTP3}</p>
             </div>
             {status.files.map(f => <p key={f} className="mt-1 text-[11px] text-[var(--text-soft)]">↓ {f}</p>)}
           </div>
@@ -346,12 +350,12 @@ function LeicaToTopconCard() {
             className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 py-2.5 text-sm font-semibold text-red-400 transition hover:bg-red-500/18 disabled:pointer-events-none disabled:opacity-50"
           >
             {status.type === 'converting'
-              ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-              : <><Download className="h-4 w-4" /> Genereer .TP3</>}
+              ? <><Loader2 className="h-4 w-4 animate-spin" /> {tt.btnBusy}</>
+              : <><Download className="h-4 w-4" /> {tt.btnGenerate}</>}
           </button>
           {(xmlFile || dxfFile || status.type !== 'idle') && (
             <button onClick={reset} className="flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition">
-              <RefreshCw className="h-3.5 w-3.5" /> Nieuw
+              <RefreshCw className="h-3.5 w-3.5" /> {tt.btnNew}
             </button>
           )}
         </div>
@@ -452,8 +456,8 @@ export default function ConverterPage() {
 
             <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3">
               <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
-                <span className="font-semibold text-[var(--text-soft)]">Wat zit er in welk formaat: </span>
-                Topcon (.TP3) bundelt oppervlak én ontwerplijnen in één bestand. Leica / Unicontrol gebruikt LandXML (.xml) voor het 3D-oppervlak en DXF (.dxf) voor lijnen — daarom splitsen we bij een Topcon-export, en combineren we ze terug bij een Leica-import.
+                <span className="font-semibold text-[var(--text-soft)]">{tt.formatsInfoTitle} </span>
+                {tt.formatsInfo}
               </p>
             </div>
           </div>
