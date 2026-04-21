@@ -17,18 +17,18 @@ const SURFACE_VERTS_LIMIT = 250
 
 // Brand logo met tekst-fallback als image niet aanwezig
 function BrandLogo({ name }: { name: 'topcon' | 'leica' }) {
+  const ext = name === 'leica' ? 'jpg' : 'png'
   const [ok, setOk] = useState(true)
   if (ok) {
     return (
       <img
-        src={`/logos/${name}.png`}
+        src={`/logos/${name}.${ext}`}
         alt={name === 'topcon' ? 'Topcon' : 'Leica Geosystems'}
         onError={() => setOk(false)}
-        className="h-7 w-auto object-contain"
+        className="h-8 w-auto object-contain"
       />
     )
   }
-  // Fallback: tekst badges met merk-kleur
   if (name === 'topcon') {
     return <span className="inline-flex items-center rounded-md bg-blue-600/90 px-2 py-1 text-[11px] font-bold text-white">TOPCON</span>
   }
