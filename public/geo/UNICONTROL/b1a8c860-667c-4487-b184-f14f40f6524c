@@ -1,0 +1,6744 @@
+HorizontalTransformations:
+  (NAD83 2011) Montana:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Montana.wkt
+    Gridshiftfile: null
+    Imagefile: US_Montana
+    LatMax: 49.01
+    LatMin: 44.35
+    LonMax: -104.04
+    LonMin: -116.07
+    Regions:
+    - US-MT
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) Nebraska:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Nebraska.wkt
+    Gridshiftfile: null
+    Imagefile: US_Nebraska
+    LatMax: 43.01
+    LatMin: 39.99
+    LonMax: -95.3
+    LonMin: -104.06
+    Regions:
+    - US-NE
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) North Dakota North:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) North Dakota North.wkt
+    Gridshiftfile: null
+    Imagefile: US_NorthDakotaNorth
+    LatMax: 49.01
+    LatMin: 47.15
+    LonMax: -96.83
+    LonMin: -104.07
+    Regions:
+    - US-ND
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) North Dakota South:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) North Dakota South.wkt
+    Gridshiftfile: null
+    Imagefile: US_NorthDakotaSouth
+    LatMax: 47.83
+    LatMin: 45.93
+    LonMax: -96.55
+    LonMin: -104.05
+    Regions:
+    - US-ND
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) South Dakota North:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) South Dakota North.wkt
+    Gridshiftfile: null
+    Imagefile: US_SouthDakotaNorth
+    LatMax: 45.95
+    LatMin: 44.14
+    LonMax: -96.45
+    LonMin: -104.07
+    Regions:
+    - US-SD
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) South Dakota South:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) South Dakota South.wkt
+    Gridshiftfile: null
+    Imagefile: US_SouthDakotaSouth
+    LatMax: 44.79
+    LatMin: 42.48
+    LonMax: -96.43
+    LonMin: -104.06
+    Regions:
+    - US-SD
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) Texas Central:
+    Deprecated: false
+    EPSG: 6577
+    Filename: (NAD83 2011) Texas Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_TexasCentral
+    LatMax: 32.27
+    LatMin: 29.78
+    LonMax: -93.5
+    LonMin: -106.66
+    Regions:
+    - US-TX
+    XMax: 1343480.5489688963
+    XMin: 88485.92409938842
+    YMax: 3308389.707573839
+    YMin: 3029958.4940986913
+  (NAD83 2011) Texas North:
+    Deprecated: false
+    EPSG: 6581
+    Filename: (NAD83 2011) Texas North.wkt
+    Gridshiftfile: null
+    Imagefile: US_TexasNorth
+    LatMax: 36.5
+    LatMin: 34.3
+    LonMax: -99.99
+    LonMin: -103.03
+    Regions:
+    - US-TX
+    XMax: 335289.37593961245
+    XMin: 59141.726237106835
+    YMax: 1278394.5558126802
+    YMin: 1034372.6299247842
+  (NAD83 2011) Texas North Central:
+    Deprecated: false
+    EPSG: 6583
+    Filename: (NAD83 2011) Texas North Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_TexasNorthCentral
+    LatMax: 34.58
+    LatMin: 31.72
+    LonMax: -94.0
+    LonMin: -103.07
+    Regions:
+    - US-TX
+    XMax: 1012852.9570071835
+    XMin: 166935.1235254464
+    YMax: 2331945.77575783
+    YMin: 2015335.542194469
+  (NAD83 2011) Texas South:
+    Deprecated: false
+    EPSG: 6585
+    Filename: (NAD83 2011) Texas South.wkt
+    Gridshiftfile: null
+    Imagefile: US_TexasSouth
+    LatMax: 28.21
+    LatMin: 25.83
+    LonMax: -96.85
+    LonMin: -100.2
+    Regions:
+    - US-TX
+    XMax: 461995.7043444619
+    XMin: 129543.46292791478
+    YMax: 5282860.637212539
+    YMin: 5019245.231079101
+  (NAD83 2011) Texas South Central:
+    Deprecated: false
+    EPSG: 6587
+    Filename: (NAD83 2011) Texas South Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_TexasSouthCentral
+    LatMax: 30.67
+    LatMin: 27.78
+    LonMax: -93.76
+    LonMin: -105.0
+    Regions:
+    - US-TX
+    XMax: 1102056.9519511203
+    XMin: 8759.288909710478
+    YMax: 4325654.7587438645
+    YMin: 4009258.217221931
+  (NAD83 2011) Wyoming East:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Wyoming East.wkt
+    Gridshiftfile: null
+    Imagefile: US_WyomingEast
+    LatMax: 45.01
+    LatMin: 40.99
+    LonMax: -104.05
+    LonMin: -106.33
+    Regions:
+    - US-WY
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) Wyoming East Central:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Wyoming East Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_WyomingEastCentral
+    LatMax: 45.01
+    LatMin: 40.99
+    LonMax: -106.0
+    LonMin: -108.63
+    Regions:
+    - US-WY
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) Wyoming West:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Wyoming West.wkt
+    Gridshiftfile: null
+    Imagefile: US_WyomingWest
+    LatMax: 44.67
+    LatMin: 40.99
+    LonMax: -109.04
+    LonMin: -111.06
+    Regions:
+    - US-WY
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  (NAD83 2011) Wyoming West Central:
+    Deprecated: false
+    EPSG: null
+    Filename: (NAD83 2011) Wyoming West Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_WyomingWestCentral
+    LatMax: 45.01
+    LatMin: 40.99
+    LonMax: -107.5
+    LonMin: -111.06
+    Regions:
+    - US-WY
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Alberta_3TM_111_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS)_Alberta_3TM_111.wkt
+    Gridshiftfile: null
+    Imagefile: Alberta 3tm 111
+    LatMax: 60.0
+    LatMin: 49.0
+    LonMax: -109.5
+    LonMin: -112.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Alberta_3TM_114_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS)_Alberta_3TM_114.wkt
+    Gridshiftfile: null
+    Imagefile: Alberta 3tm 114
+    LatMax: 60.0
+    LatMin: 49.0
+    LonMax: -112.5
+    LonMin: -115.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Alberta_3TM_117_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS)_Alberta_3TM_117.wkt
+    Gridshiftfile: null
+    Imagefile: Alberta 3tm 117
+    LatMax: 60.0
+    LatMin: 49.0
+    LonMax: -115.5
+    LonMin: -118.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Alberta_3TM_120_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS)_Alberta_3TM_120.wkt
+    Gridshiftfile: null
+    Imagefile: Alberta 3tm 120
+    LatMax: 60.0
+    LatMin: 49.0
+    LonMax: -118.5
+    LonMin: -121.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  DKTM1-ETRS89:
+    Deprecated: false
+    EPSG: 4093
+    Filename: DKTM1-ERTS89.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM01
+    LatMax: 57.64
+    LatMin: 54.8
+    LonMax: 10.0
+    LonMin: 8.0
+    Regions:
+    - DK
+    XMax: 259722.65787638188
+    XMin: 135690.3285612957
+    YMax: 1391500.2972894665
+    YMin: 1075303.083770441
+  DKTM2-ETRS89:
+    Deprecated: false
+    EPSG: 4098
+    Filename: DKTM2-ERTS89.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM02
+    LatMax: 57.8
+    LatMin: 54.67
+    LonMax: 11.29
+    LonMin: 9.0
+    Regions:
+    - DK
+    XMax: 476701.9092067635
+    XMin: 335484.09794662637
+    YMax: 1409610.019167508
+    YMin: 1060832.682947536
+  DKTM3-ETRS89:
+    Deprecated: false
+    EPSG: 4099
+    Filename: DKTM3-ERTS89.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM03
+    LatMax: 56.79
+    LatMin: 54.51
+    LonMax: 12.69
+    LonMin: 10.79
+    Regions:
+    - DK
+    XMax: 657445.0560324783
+    XMin: 537821.4266769625
+    YMax: 1296797.0501547642
+    YMin: 1042987.2919776896
+  DKTM4-ETRS89:
+    Deprecated: false
+    EPSG: 4096
+    Filename: DKTM4-ERTS89.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM04
+    LatMax: 55.38
+    LatMin: 54.94
+    LonMax: 15.25
+    LonMin: 14.59
+    Regions:
+    - DK
+    XMax: 815846.9595696031
+    XMin: 773723.3447364616
+    YMax: 1139563.033293629
+    YMin: 1090627.8916988568
+  EOV VITEL2014:
+    Deprecated: false
+    EPSG: 19931
+    Filename: VITEL2014.wkt
+    Gridshiftfile: vitel2014.gs
+    Imagefile: Hungary
+    LatMax: 48.58
+    LatMin: 45.74
+    LonMax: 22.9
+    LonMin: 16.11
+    Regions:
+    - HU
+    XMax: 934220.6344318893
+    XMin: 421391.2099427261
+    YMax: 366660.8810011103
+    YMin: 48212.57931651003
+  Estonian Coordinate System of 1997:
+    Deprecated: false
+    EPSG: 3301
+    Filename: L-EST97.wkt
+    Gridshiftfile: ''
+    Imagefile: Estonia
+    LatMax: 60.0
+    LatMin: 57.52
+    LonMax: 28.2
+    LonMin: 20.37
+    Regions:
+    - EE
+    XMax: 6658861.367557156
+    XMin: 6381157.43794509
+    YMax: 734255.0146500409
+    YMin: 282560.6696905027
+  FEH2010 Fehmarnbelt TM:
+    Deprecated: false
+    EPSG: 5596
+    Filename: FEH2010 Fehmarnbelt TM.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 54.83
+    LatMin: 54.33
+    LonMax: 12.01
+    LonMin: 10.66
+    Regions:
+    - DK
+    - DE
+    XMax: 1011373.0060526435
+    XMin: 989397.3985088811
+    YMax: 6070527.517331568
+    YMin: 6032678.061511265
+  Faroe TM:
+    Deprecated: false
+    EPSG: 5316
+    Filename: Faroe TM.wkt
+    Gridshiftfile: null
+    Imagefile: Faroe_Islands
+    LatMax: 65.7
+    LatMin: 59.94
+    LonMax: -0.48
+    LonMin: -13.91
+    Regions:
+    - FO
+    XMax: 234633.58853369628
+    XMin: 173763.07717415728
+    YMax: 922783.6745958459
+    YMin: 802344.0876518181
+  GDA2020 ACT Standard Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: AGD66 ACT Standard Grid.wkt
+    Gridshiftfile: AGD66.gsb
+    Imagefile: Australia
+    LatMax: -9.86
+    LatMin: -43.7
+    LonMax: 153.69
+    LonMin: 112.85
+    Regions:
+    - AU
+    - AU-West
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  GDA2020 Albany grid:
+    Deprecated: false
+    EPSG: 8013
+    Filename: GDA2020 Albany Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAAlbany
+    LatMax: -34.75
+    LatMin: -35.21
+    LonMax: 118.22
+    LonMin: 117.55
+    Regions:
+    - AU-West
+    XMax: 80827.06443088877
+    XMin: 19648.36557945645
+    YMax: 253073.11986334762
+    YMin: 202041.11717245262
+  GDA2020 Barrow Island Grid:
+    Deprecated: false
+    EPSG: 8014
+    Filename: GDA2020 Barrow Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABarrowIslandOnslow
+    LatMax: -20.21
+    LatMin: -22.2
+    LonMax: 115.59
+    LonMin: 114.9
+    Regions:
+    - AU-West
+    XMax: 95532.82567435948
+    XMin: 23908.904009375146
+    YMax: 464344.22936117137
+    YMin: 244006.1428296375
+  GDA2020 Broome Grid:
+    Deprecated: false
+    EPSG: 8015
+    Filename: GDA2020 Broome Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABroome
+    LatMax: -16.75
+    LatMin: -18.09
+    LonMax: 122.62
+    LonMin: 122.08
+    Regions:
+    - AU-West
+    XMax: 80566.31909029241
+    XMin: 23184.2299696209
+    YMax: 447332.25991079793
+    YMin: 299032.4130556991
+  GDA2020 Busselton Coastal Grid:
+    Deprecated: false
+    EPSG: 8016
+    Filename: GDA2020 Busselton Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABusselton
+    LatMax: -33.4
+    LatMin: -33.75
+    LonMax: 115.87
+    LonMin: 115.18
+    Regions:
+    - AU-West
+    XMax: 90622.76126239759
+    XMin: 26527.58069004718
+    YMax: 302818.61736982735
+    YMin: 264055.0036854176
+  GDA2020 Carnarvon Grid:
+    Deprecated: false
+    EPSG: 8017
+    Filename: GDA2020 Carnarvon Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACarnarvon
+    LatMax: -23.0
+    LatMin: -25.5
+    LonMax: 114.0
+    LonMin: 113.33
+    Regions:
+    - AU-West
+    XMax: 84174.24374516096
+    XMin: 16152.245205726293
+    YMax: 505428.76987526333
+    YMin: 228520.4613510212
+  GDA2020 Christmas Island Grid:
+    Deprecated: false
+    EPSG: 8018
+    Filename: GDA2020 Christmas Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAChristmasIsland
+    LatMax: -10.36
+    LatMin: -10.63
+    LonMax: 105.77
+    LonMin: 105.48
+    Regions:
+    - AU-West
+    XMax: 65880.31250578944
+    XMin: 34133.4548090295
+    YMax: 254293.52083718148
+    YMin: 224427.6757417305
+  GDA2020 Cocos Island Grid:
+    Deprecated: false
+    EPSG: 8019
+    Filename: GDA2020 Cocos Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACocosIslands
+    LatMax: -11.76
+    LatMin: -12.27
+    LonMax: 96.99
+    LonMin: 96.76
+    Regions:
+    - AU-West
+    XMax: 62534.70570337218
+    XMin: 37488.866455049305
+    YMax: 299470.06277850596
+    YMin: 243052.8723625047
+  GDA2020 Collie Grid:
+    Deprecated: false
+    EPSG: 8020
+    Filename: GDA2020 Collie Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACollie
+    LatMax: -33.25
+    LatMin: -34.67
+    LonMax: 116.4
+    LonMin: 115.73
+    Regions:
+    - AU-West
+    XMax: 83489.11108990818
+    XMin: 21363.491577163386
+    YMax: 419358.24927450484
+    YMin: 261924.75942003494
+  GDA2020 Esperance Grid:
+    Deprecated: false
+    EPSG: 8021
+    Filename: GDA2020 Esperance Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAEsperance
+    LatMax: -33.33
+    LatMin: -34.5
+    LonMax: 122.2
+    LonMin: 121.56
+    Regions:
+    - AU-West
+    XMax: 79483.08228192295
+    XMin: 20304.852384749152
+    YMax: 360587.45685840957
+    YMin: 230806.63809494907
+  GDA2020 Exmouth Grid:
+    Deprecated: false
+    EPSG: 8022
+    Filename: GDA2020 Exmouth Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAExmouth
+    LatMax: -21.75
+    LatMin: -22.42
+    LonMax: 114.25
+    LonMin: 113.75
+    Regions:
+    - AU-West
+    XMax: 68964.46451467006
+    XMin: 17397.28673656564
+    YMax: 343864.74861506745
+    YMin: 269651.3958616024
+  GDA2020 Geraldton Coastal Grid:
+    Deprecated: false
+    EPSG: 8023
+    Filename: GDA2020 Geraldton Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAGeraldton
+    LatMax: -28.48
+    LatMin: -29.1
+    LonMax: 115.0
+    LonMin: 114.51
+    Regions:
+    - AU-West
+    XMax: 90801.52339046105
+    XMin: 42861.32256367125
+    YMax: 298272.5135691962
+    YMin: 229624.57158740703
+  GDA2020 Goldfields Grid:
+    Deprecated: false
+    EPSG: 8024
+    Filename: GDA2020 Goldfields Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAGoldfields
+    LatMax: -28.75
+    LatMin: -32.25
+    LonMax: 121.84
+    LonMin: 121.0
+    Regions:
+    - AU-West
+    XMax: 93210.3786724527
+    XMin: 12879.484146091025
+    YMax: 618234.2516334839
+    YMin: 230138.94364134502
+  GDA2020 Jurien Coastal Grid:
+    Deprecated: false
+    EPSG: 8025
+    Filename: GDA2020 Jurien Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAJurien
+    LatMax: -29.08
+    LatMin: -30.74
+    LonMax: 115.34
+    LonMin: 114.83
+    Regions:
+    - AU-West
+    XMax: 84726.64529785074
+    XMin: 35316.37769669027
+    YMax: 431801.12335816724
+    YMin: 247830.43165699672
+  GDA2020 Kalbarri Grid:
+    Deprecated: false
+    EPSG: 8026
+    Filename: GDA2020 Kalbarri Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKalbarri
+    LatMax: -27.16
+    LatMin: -28.5
+    LonMax: 114.75
+    LonMin: 113.9
+    Regions:
+    - AU-West
+    XMax: 98087.91715814138
+    XMin: 14341.832726689245
+    YMax: 694524.2482945528
+    YMin: 546032.0423014387
+  GDA2020 Karratha Grid:
+    Deprecated: false
+    EPSG: 8027
+    Filename: GDA2020 Karratha Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKarratha
+    LatMax: -20.25
+    LatMin: -20.92
+    LonMax: 117.25
+    LonMin: 116.58
+    Regions:
+    - AU-West
+    XMax: 83085.70624211256
+    XMin: 13244.11821955689
+    YMax: 309928.1007188577
+    YMin: 235742.5295358235
+  GDA2020 Kununurra Grid:
+    Deprecated: false
+    EPSG: 8028
+    Filename: GDA2020 Kununurra Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKununurra
+    LatMax: -14.75
+    LatMin: -16.75
+    LonMax: 129.0
+    LonMin: 128.5
+    Regions:
+    - AU-West
+    XMax: 76919.1255964007
+    XMin: 23342.98833603087
+    YMax: 468630.41374155856
+    YMin: 247312.4889448178
+  GDA2020 Lancelin Coastal Grid:
+    Deprecated: false
+    EPSG: 8029
+    Filename: GDA2020 Lancelin Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDALancelin
+    LatMax: -30.71
+    LatMin: -31.49
+    LonMax: 115.62
+    LonMin: 115.15
+    Regions:
+    - AU-West
+    XMax: 74267.39721225607
+    XMin: 29413.91838758458
+    YMax: 351144.36532393703
+    YMin: 264671.76580131706
+  GDA2020 Margaret River Coastal Grid:
+    Deprecated: false
+    EPSG: 8030
+    Filename: GDA2020 Margaret River Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAMargaret River
+    LatMax: -33.51
+    LatMin: -34.42
+    LonMax: 115.24
+    LonMin: 114.96
+    Regions:
+    - AU-West
+    XMax: 56813.574451508845
+    XMin: 31001.505280215628
+    YMax: 340665.55532277096
+    YMin: 239709.23526388127
+  GDA2020 Perth Coastal Grid:
+    Deprecated: false
+    EPSG: 8031
+    Filename: GDA2020 Perth Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAPerth
+    LatMax: -31.33
+    LatMin: -33.42
+    LonMax: 116.09
+    LonMin: 115.44
+    Regions:
+    - AU-West
+    XMax: 76014.19200440164
+    XMin: 14966.946525556632
+    YMax: 432408.8104391033
+    YMin: 200610.56495344825
+  GDA2020 Port Hedland:
+    Deprecated: false
+    EPSG: 8032
+    Filename: GDA2020 Port Hedland.wkt
+    Gridshiftfile: null
+    Imagefile: GDAPortHedland
+    LatMax: -20.1
+    LatMin: -20.79
+    LonMax: 118.97
+    LonMin: 118.25
+    Regions:
+    - AU-West
+    XMax: 88695.1713307804
+    XMin: 13559.484527002664
+    YMax: 276517.3152629691
+    YMin: 200130.81018318748
+  GDA2020 Zone 46:
+    Deprecated: false
+    EPSG: 7846
+    Filename: GDA2020 Zone 46.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -8.57
+    LatMin: -15.46
+    LonMax: 96.01
+    LonMin: 93.41
+    Regions:
+    - AU
+    XMax: 831369.1908562363
+    XMin: 543982.7439616378
+    YMax: 9051388.91255792
+    YMin: 8290752.981076046
+  GDA2020 Zone 47:
+    Deprecated: false
+    EPSG: 7847
+    Filename: GDA2020 Zone 47.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -8.47
+    LatMin: -15.56
+    LonMax: 100.34
+    LonMin: 96.0
+    Regions:
+    - AU
+    XMax: 647505.8040450831
+    XMin: 178205.5417423764
+    YMax: 9063488.224004656
+    YMin: 8277472.621805217
+  GDA2020 Zone 48:
+    Deprecated: false
+    EPSG: 7848
+    Filename: GDA2020 Zone 48.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -8.87
+    LatMin: -34.68
+    LonMax: 108.01
+    LonMin: 102.14
+    Regions:
+    - AU
+    XMax: 831104.4355892052
+    XMin: 237969.66973216366
+    YMax: 9018178.23848433
+    YMin: 6158719.846304946
+  GDA2020 Zone 49:
+    Deprecated: false
+    EPSG: 7849
+    Filename: GDA2020 Zone 49.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone49
+    LatMax: -10.72
+    LatMin: -37.84
+    LonMax: 114.01
+    LonMin: 108.0
+    Regions:
+    - AU
+    XMax: 829272.3553011138
+    XMin: 236006.67164573778
+    YMax: 8813370.104420144
+    YMin: 5807695.060841706
+  GDA2020 Zone 50:
+    Deprecated: false
+    EPSG: 7850
+    Filename: GDA2020 Zone 50.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone50
+    LatMax: -12.06
+    LatMin: -38.53
+    LonMax: 120.01
+    LonMin: 114.0
+    Regions:
+    - AU
+    XMax: 827731.7540110351
+    XMin: 238487.90065300977
+    YMax: 8665011.7986882
+    YMin: 5731110.761738591
+  GDA2020 Zone 51:
+    Deprecated: false
+    EPSG: 7851
+    Filename: GDA2020 Zone 51.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone51
+    LatMax: -10.46
+    LatMin: -38.07
+    LonMax: 126.01
+    LonMin: 120.0
+    Regions:
+    - AU
+    XMax: 829550.5266798225
+    XMin: 236829.50091370137
+    YMax: 8842154.943583598
+    YMin: 5782167.689110662
+  GDA2020 Zone 52:
+    Deprecated: false
+    EPSG: 7852
+    Filename: GDA2020 Zone 52.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone52
+    LatMax: -9.1
+    LatMin: -37.38
+    LonMax: 132.0
+    LonMin: 125.99
+    Regions:
+    - AU
+    XMax: 829795.0524706775
+    XMin: 233488.18310987734
+    YMax: 8992725.59717385
+    YMin: 5858719.402739382
+  GDA2020 Zone 53:
+    Deprecated: false
+    EPSG: 7853
+    Filename: GDA2020 Zone 53.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone53
+    LatMax: -8.88
+    LatMin: -40.71
+    LonMax: 138.01
+    LonMin: 132.0
+    Regions:
+    - AU
+    XMax: 831095.4547267796
+    XMin: 246575.3094132078
+    YMax: 9017071.209460307
+    YMin: 5489105.418000078
+  GDA2020 Zone 54:
+    Deprecated: false
+    EPSG: 7854
+    Filename: GDA2020 Zone 54.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone54
+    LatMax: -9.08
+    LatMin: -48.19
+    LonMax: 144.01
+    LonMin: 138.0
+    Regions:
+    - AU
+    XMax: 830913.7291054369
+    XMin: 277047.6690437427
+    YMax: 8994930.538504545
+    YMin: 4658229.252789943
+  GDA2020 Zone 55:
+    Deprecated: false
+    EPSG: 7855
+    Filename: GDA2020 Zone 55.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone55
+    LatMax: -9.23
+    LatMin: -50.89
+    LonMax: 150.01
+    LonMin: 144.0
+    Regions:
+    - AU
+    XMax: 830774.8002619529
+    XMin: 289013.4663105268
+    YMax: 8978324.920725435
+    YMin: 4358119.671970694
+  GDA2020 Zone 56:
+    Deprecated: false
+    EPSG: 7856
+    Filename: GDA2020 Zone 56.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone56
+    LatMax: -13.87
+    LatMin: -58.96
+    LonMax: 156.0
+    LonMin: 150.0
+    Regions:
+    - AU
+    XMax: 824285.6729657773
+    XMin: 327480.12220176414
+    YMax: 8464614.441403877
+    YMin: 3460530.811405612
+  GDA2020 Zone 57:
+    Deprecated: false
+    EPSG: 7857
+    Filename: GDA2020 Zone 57.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -14.08
+    LatMin: -60.56
+    LonMax: 162.01
+    LonMin: 156.0
+    Regions:
+    - AU
+    XMax: 825072.2180578155
+    XMin: 335541.83418811124
+    YMax: 8441347.389279794
+    YMin: 3282469.4193779053
+  GDA2020 Zone 58:
+    Deprecated: false
+    EPSG: 7858
+    Filename: GDA2020 Zone 58.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -25.94
+    LatMin: -59.39
+    LonMax: 168.0
+    LonMin: 162.0
+    Regions:
+    - AU
+    XMax: 800470.6958234934
+    XMin: 329633.6227806936
+    YMax: 7127517.715836319
+    YMin: 3412679.943005142
+  GDA2020 Zone 59:
+    Deprecated: false
+    EPSG: 7859
+    Filename: GDA2020 Zone 59.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -25.61
+    LatMin: -32.48
+    LonMax: 173.35
+    LonMin: 168.0
+    Regions:
+    - AU
+    XMax: 735995.3593227603
+    XMin: 218065.2030595744
+    YMax: 7165412.326919317
+    YMin: 6402392.035948924
+  GDA94 Albany Grid:
+    Deprecated: false
+    EPSG: 4283
+    Filename: GDA94 Albany Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAAlbany
+    LatMax: -34.485802698957905
+    LatMin: -35.65381795505057
+    LonMax: 118.3587114677523
+    LonMin: 117.68401898951389
+    Regions:
+    - AU-West
+    XMax: 80522.1530074562
+    XMin: 19644.6475173596
+    YMax: 253074.132144535
+    YMin: 203150.567770687
+  GDA94 Barrow Island Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Barrow Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABarrowIslandOnslow
+    LatMax: -20.18244301711554
+    LatMin: -22.221886615058736
+    LonMax: 115.61294537143536
+    LonMin: 114.85381186647781
+    Regions:
+    - AU-West
+    XMax: 94834.2648111883
+    XMin: 23908.9040131981
+    YMax: 363607.2164054
+    YMin: 144006.141173365
+  GDA94 Broome Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Broome Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABroome
+    LatMax: -16.67614047742839
+    LatMin: -18.10355028337672
+    LonMax: 122.66545960850198
+    LonMin: 122.06095565956518
+    Regions:
+    - AU-West
+    XMax: 80211.2533063842
+    XMin: 23535.7215008442
+    YMax: 347332.768086014
+    YMin: 199771.145523367
+  GDA94 Busselton Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Busselton Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDABusselton
+    LatMax: -33.299539808129424
+    LatMin: -33.93848064640512
+    LonMax: 115.9075681630753
+    LonMin: 114.92304073240015
+    Regions:
+    - AU-West
+    XMax: 90312.9746759569
+    XMin: 26836.1233231385
+    YMax: 202819.908410044
+    YMin: 164055.752876385
+  GDA94 Carnarvon Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Carnarvon Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACarnarvon
+    LatMax: -23.086808602099588
+    LatMin: -25.544372763397803
+    LonMax: 114.19594075910095
+    LonMin: 113.2817746525445
+    Regions:
+    - AU-West
+    XMax: 84174.2403236622
+    XMin: 16487.0354248649
+    YMax: 405428.768087022
+    YMin: 128521.301824666
+  GDA94 Christmas Island Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Christmas Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAChristmasIsland
+    LatMax: -10.316251729438708
+    LatMin: -10.7027728422212
+    LonMax: 105.86304896762323
+    LonMin: 105.36179282132224
+    Regions:
+    - AU-West
+    XMax: 63691.0769724502
+    XMin: 36323.5825160589
+    YMax: 157244.50091187
+    YMin: 120372.366360666
+  GDA94 Cocos Island Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Cocos Island Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACocosIslands
+    LatMax: -11.737283612982733
+    LatMin: -12.300489958989141
+    LonMax: 97.0426041627306
+    LonMin: 96.69621663742569
+    Regions:
+    - AU-West
+    XMax: 63625.1733110585
+    XMin: 36399.9153007073
+    YMax: 200575.796583375
+    YMin: 145264.866253489
+  GDA94 Collie Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Collie Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDACollie
+    LatMax: -33.16060891092341
+    LatMin: -34.824555980156354
+    LonMax: 116.55338342480043
+    LonMin: 115.61292208680405
+    Regions:
+    - AU-West
+    XMax: 83489.1141798727
+    XMin: 21667.972574513
+    YMax: 319358.245588806
+    YMin: 162294.786385703
+  GDA94 Esperance Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Esperance Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAEsperance
+    LatMax: -33.30205596749927
+    LatMin: -34.79854744904272
+    LonMax: 122.35306965864476
+    LonMin: 121.47171504997635
+    Regions:
+    - AU-West
+    XMax: 79481.9637141901
+    XMin: 20917.4349569119
+    YMax: 260218.117335818
+    YMin: 130808.572082665
+  GDA94 Exmouth Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Exmouth Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAExmouth
+    LatMax: -21.613994076814564
+    LatMin: -22.617006595261355
+    LonMax: 114.25450363549868
+    LonMin: 113.64476341276041
+    Regions:
+    - AU-West
+    XMax: 68964.4610647399
+    XMin: 17396.5060503859
+    YMax: 243864.747039772
+    YMin: 170020.149801001
+  GDA94 Geraldton Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Geraldton Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAGeraldton
+    LatMax: -28.273134811893563
+    LatMin: -29.21336158112287
+    LonMax: 115.07532866822346
+    LonMin: 114.33487117099799
+    Regions:
+    - AU-West
+    XMax: 90800.2467313131
+    XMin: 43510.6211348455
+    YMax: 197903.448283062
+    YMin: 129624.954440982
+  GDA94 Goldfields Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Goldfields Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAGoldfields
+    LatMax: -28.76536251112063
+    LatMin: -32.329605212205514
+    LonMax: 121.95837244857981
+    LonMin: 120.91681604095307
+    Regions:
+    - AU-West
+    XMax: 92558.8651585977
+    XMin: 12879.4841624017
+    YMax: 518236.090127682
+    YMin: 130138.940138647
+  GDA94 Jurien Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Jurien Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAJurien
+    LatMax: -28.981546668167656
+    LatMin: -30.83097778985297
+    LonMax: 115.70400609235989
+    LonMin: 114.69998662265097
+    Regions:
+    - AU-West
+    XMax: 84076.1275861855
+    XMin: 35634.2817517865
+    YMax: 331433.974530272
+    YMin: 148570.332659918
+  GDA94 Kalbarri Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Kalbarri Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKalbarri
+    LatMax: -27.019358267880442
+    LatMin: -28.32362011091343
+    LonMax: 114.78846371164279
+    LonMin: 113.83413110431255
+    Regions:
+    - AU-West
+    XMax: 98085.3547779099
+    XMin: 14341.8305607497
+    YMax: 593785.146237141
+    YMin: 446032.039475062
+  GDA94 Karratha Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Karratha Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKarratha
+    LatMax: -20.218081147626968
+    LatMin: -21.164034733614596
+    LonMax: 117.33812362441897
+    LonMin: 116.4930239880184
+    Regions:
+    - AU-West
+    XMax: 83085.7097222601
+    XMin: 13589.7276523538
+    YMax: 209928.099378736
+    YMin: 136111.976224822
+  GDA94 Kununurra Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Kununurra Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAKununurra
+    LatMax: -14.519599779465283
+    LatMin: -16.785394638344783
+    LonMax: 129.0842738238292
+    LonMin: 128.16020865927766
+    Regions:
+    - AU-West
+    XMax: 76919.1255957313
+    XMin: 23342.9883370796
+    YMax: 368630.413139017
+    YMin: 147312.488110849
+  GDA94 Lancelin Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Lancelin Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDALancelin
+    LatMax: -30.314975936952695
+    LatMin: -31.57002986626213
+    LonMax: 115.70256249384755
+    LonMin: 115.10225859018107
+    Regions:
+    - AU-West
+    XMax: 73946.7565084544
+    XMin: 29412.4545153571
+    YMax: 250405.606552028
+    YMin: 165411.321378817
+  GDA94 Margaret River Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Margaret River Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAMargaret River
+    LatMax: -33.500935790761396
+    LatMin: -34.53117056525679
+    LonMax: 115.33768248200786
+    LonMin: 114.93546296420962
+    Regions:
+    - AU-West
+    XMax: 56193.370421874
+    XMin: 31613.9354141675
+    YMax: 239926.171445022
+    YMin: 140079.861028627
+  GDA94 Perth Coastal Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Perth Coastal Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAPerth
+    LatMax: -31.33
+    LatMin: -33.42
+    LonMax: 116.09
+    LonMin: 115.44
+    Regions:
+    - AU-West
+    XMax: 75378.4865613064
+    XMin: 15120.9396164036
+    YMax: 332041.146708876
+    YMin: 100980.46191534
+  GDA94 Port Hedland Grid:
+    Deprecated: false
+    EPSG: null
+    Filename: GDA94 Port Hedland Grid.wkt
+    Gridshiftfile: null
+    Imagefile: GDAPortHedland
+    LatMax: -20.01882477739546
+    LatMin: -20.83228929846271
+    LonMax: 119.03326194054073
+    LonMin: 118.12789980531873
+    Regions:
+    - AU-West
+    XMax: 88346.9111130882
+    XMin: 13557.8835717982
+    YMax: 176518.08336504
+    YMin: 100869.284298378
+  GDA94 Zone 48:
+    Deprecated: false
+    EPSG: 28348
+    Filename: GDA94 Zone 48.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone48
+    LatMax: -8.87
+    LatMin: -34.68
+    LonMax: 108.01
+    LonMin: 102.14
+    Regions:
+    - AU
+    XMax: 831104.4355892052
+    XMin: 237969.66973216366
+    YMax: 9018178.23848433
+    YMin: 6158719.846304946
+  GDA94 Zone 49:
+    Deprecated: false
+    EPSG: 28349
+    Filename: GDA94 Zone 49.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone49
+    LatMax: -10.72
+    LatMin: -37.84
+    LonMax: 114.01
+    LonMin: 108.0
+    Regions:
+    - AU
+    XMax: 829272.3553011138
+    XMin: 236006.67164573778
+    YMax: 8813370.104420144
+    YMin: 5807695.060841706
+  GDA94 Zone 50:
+    Deprecated: false
+    EPSG: 28350
+    Filename: GDA94 Zone 50.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone50
+    LatMax: -12.06
+    LatMin: -38.53
+    LonMax: 120.01
+    LonMin: 114.0
+    Regions:
+    - AU
+    XMax: 827731.7540110351
+    XMin: 238487.90065300977
+    YMax: 8665011.7986882
+    YMin: 5731110.761738591
+  GDA94 Zone 51:
+    Deprecated: false
+    EPSG: 28351
+    Filename: GDA94 Zone 51.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone51
+    LatMax: -10.46
+    LatMin: -38.07
+    LonMax: 126.01
+    LonMin: 120.0
+    Regions:
+    - AU
+    XMax: 829550.5266798225
+    XMin: 236829.50091370137
+    YMax: 8842154.943583598
+    YMin: 5782167.689110662
+  GDA94 Zone 52:
+    Deprecated: false
+    EPSG: 28352
+    Filename: GDA94 Zone 52.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone52
+    LatMax: -9.1
+    LatMin: -37.38
+    LonMax: 132.0
+    LonMin: 125.99
+    Regions:
+    - AU
+    XMax: 829795.0524706775
+    XMin: 233488.18310987734
+    YMax: 8992725.59717385
+    YMin: 5858719.402739382
+  GDA94 Zone 53:
+    Deprecated: false
+    EPSG: 28353
+    Filename: GDA94 Zone 53.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone53
+    LatMax: -8.88
+    LatMin: -40.71
+    LonMax: 138.01
+    LonMin: 132.0
+    Regions:
+    - AU
+    XMax: 831095.4547267796
+    XMin: 246575.3094132078
+    YMax: 9017071.209460307
+    YMin: 5489105.418000078
+  GDA94 Zone 54:
+    Deprecated: false
+    EPSG: 28354
+    Filename: GDA94 Zone 54.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone54
+    LatMax: -9.08
+    LatMin: -48.19
+    LonMax: 144.01
+    LonMin: 138.0
+    Regions:
+    - AU
+    XMax: 830913.7291054369
+    XMin: 277047.6690437427
+    YMax: 8994930.538504545
+    YMin: 4658229.252789943
+  GDA94 Zone 55:
+    Deprecated: false
+    EPSG: 28355
+    Filename: GDA94 Zone 55.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone55
+    LatMax: -9.23
+    LatMin: -50.89
+    LonMax: 150.01
+    LonMin: 144.0
+    Regions:
+    - AU
+    XMax: 830774.8002619529
+    XMin: 289013.4663105268
+    YMax: 8978324.920725435
+    YMin: 4358119.671970694
+  GDA94 Zone 56:
+    Deprecated: false
+    EPSG: 28356
+    Filename: GDA94 Zone 56.wkt
+    Gridshiftfile: null
+    Imagefile: GDAZone56
+    LatMax: -13.87
+    LatMin: -58.96
+    LonMax: 156.0
+    LonMin: 150.0
+    Regions:
+    - AU
+    XMax: 824285.6729657773
+    XMin: 327480.12220176414
+    YMax: 8464614.441403877
+    YMin: 3460530.811405612
+  GDA94 Zone 57:
+    Deprecated: false
+    EPSG: 28357
+    Filename: GDA94 Zone 57.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: -14.08
+    LatMin: -60.56
+    LonMax: 162.01
+    LonMin: 156.0
+    Regions:
+    - AU
+    XMax: 825072.2180578155
+    XMin: 335541.83418811124
+    YMax: 8441347.389279794
+    YMin: 3282469.4193779053
+  GK19FIN:
+    Deprecated: false
+    EPSG: 3873
+    Filename: GK19FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK19
+    LatMax: 60.34
+    LatMin: 60.08
+    LonMax: 19.5
+    LonMin: 19.24
+    Regions:
+    - FI
+    XMax: 19527613.0
+    XMin: 19513359.0
+    YMax: 6692058.0
+    YMin: 6663010.0
+  GK19FIN (short):
+    Deprecated: false
+    EPSG: 3873
+    Filename: GK19FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK19
+    LatMax: 60.34
+    LatMin: 60.08
+    LonMax: 19.5
+    LonMin: 19.24
+    Regions:
+    - FI
+    XMax: 527613.0
+    XMin: 513359.0
+    YMax: 6692058.0
+    YMin: 6663010.0
+  GK20FIN:
+    Deprecated: false
+    EPSG: 3874
+    Filename: GK20FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK20
+    LatMax: 60.48
+    LatMin: 59.92
+    LonMax: 20.5
+    LonMin: 19.5
+    Regions:
+    - FI
+    XMax: 20527494.0
+    XMin: 20472032.0
+    YMax: 6707657.0
+    YMin: 6645265.0
+  GK20FIN (short):
+    Deprecated: false
+    EPSG: 3874
+    Filename: GK20FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK20
+    LatMax: 60.48
+    LatMin: 59.92
+    LonMax: 20.5
+    LonMin: 19.5
+    Regions:
+    - FI
+    XMax: 527494.0
+    XMin: 472032.0
+    YMax: 6707657.0
+    YMin: 6645265.0
+  GK21FIN:
+    Deprecated: false
+    EPSG: 3875
+    Filename: GK21FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK21
+    LatMax: 69.33
+    LatMin: 59.84
+    LonMax: 21.5
+    LonMin: 20.5
+    Regions:
+    - FI
+    XMax: 21519704.0
+    XMin: 21471965.0
+    YMax: 7694317.0
+    YMin: 6636352.0
+  GK21FIN (short):
+    Deprecated: false
+    EPSG: 3875
+    Filename: GK21FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK21
+    LatMax: 69.33
+    LatMin: 59.84
+    LonMax: 21.5
+    LonMin: 20.5
+    Regions:
+    - FI
+    XMax: 519704.0
+    XMin: 471965.0
+    YMax: 7694317.0
+    YMin: 6636352.0
+  GK22FIN:
+    Deprecated: false
+    EPSG: 3876
+    Filename: GK22FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK22
+    LatMax: 69.31
+    LatMin: 59.76
+    LonMax: 22.5
+    LonMin: 21.5
+    Regions:
+    - FI
+    XMax: 22519722.0
+    XMin: 22471898.0
+    YMax: 7692086.0
+    YMin: 6627440.0
+  GK22FIN (short):
+    Deprecated: false
+    EPSG: 3876
+    Filename: GK22FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK22
+    LatMax: 69.31
+    LatMin: 59.76
+    LonMax: 22.5
+    LonMin: 21.5
+    Regions:
+    - FI
+    XMax: 519722.0
+    XMin: 471898.0
+    YMax: 7692086.0
+    YMin: 6627440.0
+  GK23FIN:
+    Deprecated: false
+    EPSG: 3877
+    Filename: GK23FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK23
+    LatMax: 68.74
+    LatMin: 59.75
+    LonMax: 23.5
+    LonMin: 22.5
+    Regions:
+    - FI
+    XMax: 23520241.0
+    XMin: 23471889.0
+    YMax: 7628505.0
+    YMin: 6626326.0
+  GK23FIN (short):
+    Deprecated: false
+    EPSG: 3877
+    Filename: GK23FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK23
+    LatMax: 68.74
+    LatMin: 59.75
+    LonMax: 23.5
+    LonMin: 22.5
+    Regions:
+    - FI
+    XMax: 520241.0
+    XMin: 471889.0
+    YMax: 7628505.0
+    YMin: 6626326.0
+  GK24FIN:
+    Deprecated: false
+    EPSG: 3878
+    Filename: GK24FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK24
+    LatMax: 68.84
+    LatMin: 59.86
+    LonMax: 24.5
+    LonMin: 23.5
+    Regions:
+    - FI
+    XMax: 24520150.0
+    XMin: 24471982.0
+    YMax: 7639659.0
+    YMin: 6638580.0
+  GK24FIN (short):
+    Deprecated: false
+    EPSG: 3878
+    Filename: GK24FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK24
+    LatMax: 68.84
+    LatMin: 59.86
+    LonMax: 24.5
+    LonMin: 23.5
+    Regions:
+    - FI
+    XMax: 520150.0
+    XMin: 471982.0
+    YMax: 7639659.0
+    YMin: 6638580.0
+  GK25FIN:
+    Deprecated: false
+    EPSG: 3879
+    Filename: GK25FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK25
+    LatMax: 68.9
+    LatMin: 59.94
+    LonMax: 25.5
+    LonMin: 24.5
+    Regions:
+    - FI
+    XMax: 25520095.0
+    XMin: 25472049.0
+    YMax: 7646352.0
+    YMin: 6647493.0
+  GK25FIN (short):
+    Deprecated: false
+    EPSG: 3879
+    Filename: GK25FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK25
+    LatMax: 68.9
+    LatMin: 59.94
+    LonMax: 25.5
+    LonMin: 24.5
+    Regions:
+    - FI
+    XMax: 520095.0
+    XMin: 472049.0
+    YMax: 7646352.0
+    YMin: 6647493.0
+  GK26FIN:
+    Deprecated: false
+    EPSG: 3880
+    Filename: GK26FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK26
+    LatMax: 69.94
+    LatMin: 60.18
+    LonMax: 26.5
+    LonMin: 25.5
+    Regions:
+    - FI
+    XMax: 26519147.0
+    XMin: 26472251.0
+    YMax: 7762365.0
+    YMin: 6674232.0
+  GK26FIN (short):
+    Deprecated: false
+    EPSG: 3880
+    Filename: GK26FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK26
+    LatMax: 69.94
+    LatMin: 60.18
+    LonMax: 26.5
+    LonMin: 25.5
+    Regions:
+    - FI
+    XMax: 519147.0
+    XMin: 472251.0
+    YMax: 7762365.0
+    YMin: 6674232.0
+  GK27FIN:
+    Deprecated: false
+    EPSG: 3881
+    Filename: GK27FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK27
+    LatMax: 70.05
+    LatMin: 60.36
+    LonMax: 27.5
+    LonMin: 26.5
+    Regions:
+    - FI
+    XMax: 27519047.0
+    XMin: 27472403.0
+    YMax: 7774636.0
+    YMin: 6694286.0
+  GK27FIN (short):
+    Deprecated: false
+    EPSG: 3881
+    Filename: GK27FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK27
+    LatMax: 70.05
+    LatMin: 60.36
+    LonMax: 27.5
+    LonMin: 26.5
+    Regions:
+    - FI
+    XMax: 519047.0
+    XMin: 472403.0
+    YMax: 7774636.0
+    YMin: 6694286.0
+  GK28FIN:
+    Deprecated: false
+    EPSG: 3882
+    Filename: GK28FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK28
+    LatMax: 70.09
+    LatMin: 60.42
+    LonMax: 28.5
+    LonMin: 27.5
+    Regions:
+    - FI
+    XMax: 28519010.0
+    XMin: 28472454.0
+    YMax: 7779099.0
+    YMin: 6700972.0
+  GK28FIN (short):
+    Deprecated: false
+    EPSG: 3882
+    Filename: GK28FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK28
+    LatMax: 70.09
+    LatMin: 60.42
+    LonMax: 28.5
+    LonMin: 27.5
+    Regions:
+    - FI
+    XMax: 519010.0
+    XMin: 472454.0
+    YMax: 7779099.0
+    YMin: 6700972.0
+  GK29FIN:
+    Deprecated: false
+    EPSG: 3883
+    Filename: GK29FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK29
+    LatMax: 69.81
+    LatMin: 60.94
+    LonMax: 29.5
+    LonMin: 28.5
+    Regions:
+    - FI
+    XMax: 29519266.0
+    XMin: 29472895.0
+    YMax: 7747863.0
+    YMin: 6758911.0
+  GK29FIN (short):
+    Deprecated: false
+    EPSG: 3883
+    Filename: GK29FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK29
+    LatMax: 69.81
+    LatMin: 60.94
+    LonMax: 29.5
+    LonMin: 28.5
+    Regions:
+    - FI
+    XMax: 519266.0
+    XMin: 472895.0
+    YMax: 7747863.0
+    YMin: 6758911.0
+  GK30FIN:
+    Deprecated: false
+    EPSG: 3884
+    Filename: GK30FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK30
+    LatMax: 67.98
+    LatMin: 61.43
+    LonMax: 30.5
+    LonMin: 29.5
+    Regions:
+    - FI
+    XMax: 30520928.0
+    XMin: 30473312.0
+    YMax: 7543736.0
+    YMin: 6813511.0
+  GK30FIN (short):
+    Deprecated: false
+    EPSG: 3884
+    Filename: GK30FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK30
+    LatMax: 67.98
+    LatMin: 61.43
+    LonMax: 30.5
+    LonMin: 29.5
+    Regions:
+    - FI
+    XMax: 520928.0
+    XMin: 473312.0
+    YMax: 7543736.0
+    YMin: 6813511.0
+  GK31FIN:
+    Deprecated: false
+    EPSG: 3885
+    Filename: GK31FIN.wkt
+    Gridshiftfile: null
+    Imagefile: GK31
+    LatMax: 64.27
+    LatMin: 62.08
+    LonMax: 31.59
+    LonMin: 30.5
+    Regions:
+    - FI
+    XMax: 31528590.0
+    XMin: 31473869.0
+    YMax: 7130086.0
+    YMin: 6885947.0
+  GK31FIN (short):
+    Deprecated: false
+    EPSG: 3885
+    Filename: GK31FIN_short.wkt
+    Gridshiftfile: null
+    Imagefile: GK31
+    LatMax: 64.27
+    LatMin: 62.08
+    LonMax: 31.59
+    LonMin: 30.5
+    Regions:
+    - FI
+    XMax: 528590.0
+    XMin: 473869.0
+    YMax: 7130086.0
+    YMin: 6885947.0
+  "Gauss-Kr\xFCger Zone 3 BETA2007":
+    Deprecated: false
+    EPSG: 31467
+    Filename: "Gauss-Kr\xFCger Zone3.wkt"
+    Gridshiftfile: BETA2007.gsb
+    Imagefile: null
+    LatMax: 55.09
+    LatMin: 47.27
+    LonMax: 10.51
+    LonMin: 7.5
+    Regions:
+    - DE
+    XMax: 3596477.0
+    XMin: 3386568.0
+    YMax: 6107852.0
+    YMin: 5237915.0
+  "Gauss-Kr\xFCger Zone 3 BW":
+    Deprecated: false
+    EPSG: 31467
+    Filename: "Gauss-Kr\xFCger Zone3 BW.wkt"
+    Gridshiftfile: BWTA2017.gsb
+    Imagefile: null
+    LatMax: 55.09
+    LatMin: 47.27
+    LonMax: 10.51
+    LonMin: 7.5
+    Regions:
+    - DE
+    XMax: 3596477.0
+    XMin: 3386506.0
+    YMax: 6107658.0
+    YMin: 5237821.0
+  "Gauss-Kr\xFCger Zone2 BETA2007":
+    Deprecated: false
+    EPSG: 31466
+    Filename: "Gauss-Kr\xFCger Zone2.wkt"
+    Gridshiftfile: BETA2007.gsb
+    Imagefile: null
+    LatMax: 53.81
+    LatMin: 49.11
+    LonMax: 7.5
+    LonMin: 5.86
+    Regions:
+    - DE
+    XMax: 2598847.151130545
+    XMin: 2489822.6815305785
+    YMax: 5965373.283714003
+    YMin: 5441430.713549649
+  "Gauss-Kr\xFCger Zone4 BETA2007":
+    Deprecated: false
+    EPSG: 31468
+    Filename: "Gauss-Kr\xFCger Zone4.wkt"
+    Gridshiftfile: BETA2007.gsb
+    Imagefile: null
+    LatMax: 54.59
+    LatMin: 47.39
+    LonMax: 13.51
+    LonMin: 10.5
+    Regions:
+    - DE
+    XMax: 4597352.308877991
+    XMin: 4386857.919329892
+    YMax: 6068891.589352192
+    YMin: 5251253.418348915
+  "Gauss-Kr\xFCger Zone5 BETA2007":
+    Deprecated: false
+    EPSG: 31469
+    Filename: "Gauss-Kr\xFCger Zone5.wkt"
+    Gridshiftfile: BETA2007.gsb
+    Imagefile: null
+    LatMax: 48.98
+    LatMin: 48.51
+    LonMax: 13.84
+    LonMin: 13.5
+    Regions:
+    - DE
+    XMax: 5415225.0
+    XMin: 5389309.503020781
+    YMax: 5427605.21413011
+    YMin: 5375778.0750552695
+  HARN_StatePlane_New_Hampshire_FIPS_2800:
+    Deprecated: false
+    EPSG: 102310
+    Filename: HARN_StatePlane_New_Hampshire_FIPS_2800.wkt
+    Gridshiftfile: null
+    Imagefile: US_NewHampshire
+    LatMax: 45.31
+    LatMin: 42.69
+    LonMax: -72.56
+    LonMin: -70.63
+    Regions:
+    - US-NH
+    XMax: 381293.173427491
+    XMin: 226793.802407924
+    YMax: 312732.671750408
+    YMin: 21492.387739571
+  HD72:
+    Deprecated: false
+    EPSG: 23700
+    Filename: HD72.wkt
+    Gridshiftfile: HD72.gs
+    Imagefile: Hungary
+    LatMax: 48.58
+    LatMin: 45.74
+    LonMax: 22.9
+    LonMin: 16.11
+    Regions:
+    - HU
+    XMax: 934220.6344318893
+    XMin: 421391.2099427261
+    YMax: 366660.8810011103
+    YMin: 48212.57931651003
+  IG (NI):
+    Deprecated: false
+    EPSG: 29903
+    Filename: IG.wkt
+    Gridshiftfile: IGShiftData.gs
+    Imagefile: IrishIsland
+    LatMax: 55.43
+    LatMin: 51.39
+    LonMax: -5.34
+    LonMin: -10.56
+    Regions:
+    - IE
+    XMax: 368431.4066843935
+    XMin: 21861.70878634634
+    YMax: 468039.7113395955
+    YMin: 18286.841685700318
+  ISN2004 / Lambert 2004:
+    Deprecated: false
+    EPSG: 5325
+    Filename: ISN2004.wkt
+    Gridshiftfile: ''
+    Imagefile: ''
+    LatMax: 69.59
+    LatMin: 59.96
+    LonMax: -5.55
+    LonMin: -30.87
+    Regions:
+    - IS
+    XMax: 2221477.132962391
+    XMin: 1038384.289031914
+    YMax: 868116.0339988437
+    YMin: -200072.38326692494
+  ISN93 / Lambert 1993:
+    Deprecated: false
+    EPSG: 3057
+    Filename: ISN93.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 69.59
+    LatMin: 59.96
+    LonMax: -5.55
+    LonMin: -30.87
+    Regions:
+    - IS
+    XMax: 1021477.132962391
+    XMin: -161615.71096808603
+    YMax: 1068116.0339988437
+    YMin: -72.38326692493865
+  ITM:
+    Deprecated: false
+    EPSG: 2157
+    Filename: ITM.wkt
+    Gridshiftfile: null
+    Imagefile: IrishIsland
+    LatMax: 55.43
+    LatMin: 51.39
+    LonMax: -5.34
+    LonMin: -10.56
+    Regions:
+    - IE
+    XMax: 768347.2762717761
+    XMin: 421849.8127984968
+    YMax: 968015.3873916555
+    YMin: 518361.28220504196
+  ITRF96 / TM27:
+    Deprecated: false
+    EPSG: 5253
+    Filename: ITRF96-TM27.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 42.11
+    LatMin: 36.5
+    LonMax: 28.5
+    LonMin: 25.62
+    Regions:
+    - TR
+    XMax: 624063.0
+    XMin: 376360.0
+    YMax: 4664944.0
+    YMin: 4041910.0
+  ITRF96 / TM30:
+    Deprecated: false
+    EPSG: 5254
+    Filename: ITRF96-TM30.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 41.46
+    LatMin: 36.06
+    LonMax: 31.5
+    LonMin: 28.5
+    Regions:
+    - TR
+    XMax: 625323.0
+    XMin: 364852.0
+    YMax: 4592746.0
+    YMin: 3993241.0
+  ITRF96 / TM33:
+    Deprecated: false
+    EPSG: 5255
+    Filename: ITRF96-TM33.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 42.07
+    LatMin: 35.97
+    LonMax: 34.5
+    LonMin: 31.5
+    Regions:
+    - TR
+    XMax: 624141.0
+    XMin: 364698.0
+    YMax: 4660501.0
+    YMin: 3983254.0
+  ITRF96 / TM36:
+    Deprecated: false
+    EPSG: 5256
+    Filename: ITRF96-TM36.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 42.15
+    LatMin: 35.81
+    LonMax: 37.5
+    LonMin: 34.5
+    Regions:
+    - TR
+    XMax: 623985.0
+    XMin: 364425.0
+    YMax: 4669387.0
+    YMin: 3965499.0
+  ITRF96 / TM39:
+    Deprecated: false
+    EPSG: 5257
+    Filename: ITRF96-TM39.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 41.19
+    LatMin: 36.66
+    LonMax: 40.5
+    LonMin: 37.5
+    Regions:
+    - TR
+    XMax: 625841.0
+    XMin: 365885.0
+    YMax: 4562758.0
+    YMin: 4059827.0
+  ITRF96 / TM42:
+    Deprecated: false
+    EPSG: 5258
+    Filename: ITRF96-TM42.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 41.6
+    LatMin: 37.02
+    LonMax: 43.5
+    LonMin: 40.5
+    Regions:
+    - TR
+    XMax: 625053.0
+    XMin: 366513.0
+    YMax: 4608296.0
+    YMin: 4099782.0
+  ITRF96 / TM45:
+    Deprecated: false
+    EPSG: 5259
+    Filename: ITRF96-TM45.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 41.02
+    LatMin: 36.97
+    LonMax: 44.83
+    LonMin: 43.5
+    Regions:
+    - TR
+    XMax: 485701.0
+    XMin: 366425.0
+    YMax: 4542808.0
+    YMin: 4099782.0
+  Irish Grid:
+    Deprecated: false
+    EPSG: 29903
+    Filename: IrishGrid.wkt
+    Gridshiftfile: tm75_etrs89.gsb
+    Imagefile: IrishIsland
+    LatMax: 55.43
+    LatMin: 51.39
+    LonMax: -5.34
+    LonMin: -10.56
+    Regions:
+    - IE
+    XMax: 368431.4066843935
+    XMin: 21861.70878634634
+    YMax: 468039.7113395955
+    YMin: 18286.841685700318
+  Korea2000-Central Belt:
+    Deprecated: false
+    EPSG: null
+    Filename: Korea2000-Central Belt.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 38.33
+    LatMin: 33.14
+    LonMax: 128.0
+    LonMin: 126.0
+    Regions:
+    - KR
+    XMax: 400000.0
+    XMin: 100000.0
+    YMax: 2250000.0
+    YMin: 1700000.0
+  Korea2000-East Belt:
+    Deprecated: false
+    EPSG: null
+    Filename: Korea2000-East Belt.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 38.64
+    LatMin: 34.49
+    LonMax: 129.65
+    LonMin: 128.0
+    Regions:
+    - KR
+    XMax: 250000.0
+    XMin: 100000.0
+    YMax: 2150000.0
+    YMin: 2100000.0
+  Korea2000-East Sea Belt:
+    Deprecated: false
+    EPSG: null
+    Filename: Korea2000-East Sea Belt.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 37.62
+    LatMin: 37.39
+    LonMax: 131.01
+    LonMin: 130.71
+    Regions:
+    - KR
+    XMax: 250000.0
+    XMin: 100000.0
+    YMax: 2150000.0
+    YMin: 2100000.0
+  Korea2000-Unified CS:
+    Deprecated: false
+    EPSG: null
+    Filename: Korea2000-Unified CS.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 40.27
+    LatMin: 28.6
+    LonMax: 134.28
+    LonMin: 122.71
+    Regions:
+    - KR
+    XMax: 1400000.0
+    XMin: 700000.0
+    YMax: 2200000.0
+    YMin: 1400000.0
+  Korea2000-West Belt:
+    Deprecated: false
+    EPSG: null
+    Filename: Korea2000-West Belt.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 38.04
+    LatMin: 126.0
+    LonMax: 33.99
+    LonMin: 124.53
+    Regions:
+    - KR
+    XMax: 400000.0
+    XMin: 100000.0
+    YMax: 2200000.0
+    YMin: 1700000.0
+  Kp2000-Bornholm:
+    Deprecated: false
+    EPSG: 2198
+    Filename: Kp2000-Bornholm.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM04
+    LatMax: 55.38
+    LatMin: 54.94
+    LonMax: 15.25
+    LonMin: 14.59
+    Regions:
+    - DK
+    XMax: 915846.9595696031
+    XMin: 873723.3447364616
+    YMax: 6139563.033293629
+    YMin: 6090627.891698857
+  Kp2000-Jylland:
+    Deprecated: false
+    EPSG: 2196
+    Filename: Kp2000-Jylland.wkt
+    Gridshiftfile: null
+    Imagefile: JyllandFyn
+    LatMax: 57.8
+    LatMin: 54.67
+    LonMax: 11.29
+    LonMin: 8.0
+    Regions:
+    - DK
+    XMax: 306424.5456331773
+    XMin: 103231.08034568948
+    YMax: 6410093.957739449
+    YMin: 6061225.046149768
+  Kp2000-Sjaelland:
+    Deprecated: false
+    EPSG: 2197
+    Filename: Kp2000-Sjaelland.wkt
+    Gridshiftfile: null
+    Imagefile: DKTM03
+    LatMax: 56.79
+    LatMin: 54.51
+    LonMax: 12.69
+    LonMin: 10.79
+    Regions:
+    - DK
+    XMax: 542166.1990547928
+    XMin: 421632.14308493
+    YMax: 6296426.314720094
+    YMin: 6043055.675060915
+  LKS92 / Latvia TM:
+    Deprecated: false
+    EPSG: 3059
+    Filename: LKS92.wkt
+    Gridshiftfile: null
+    Imagefile: Latvia
+    LatMax: 58.09
+    LatMin: 55.67
+    LonMax: 28.24
+    LonMin: 19.06
+    Regions:
+    - LV
+    XMax: 446584.7970396569
+    XMin: 180420.27793885116
+    YMax: 749893.1876944554
+    YMin: 189423.14348479122
+  LKS94:
+    Deprecated: false
+    EPSG: 3346
+    Filename: LKS94.wkt
+    Gridshiftfile: null
+    Imagefile: Lithuania
+    LatMax: 56.45
+    LatMin: 53.89
+    LonMax: 26.82
+    LonMin: 19.02
+    Regions:
+    - LT
+    XMax: 673835.0
+    XMin: 172763.0
+    YMax: 6260983.0
+    YMin: 5983979.0
+  LUREF / Luxembourg TM:
+    Deprecated: false
+    EPSG: 2169
+    Filename: LUREF.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 50.19
+    LatMin: 49.44
+    LonMax: 6.53
+    LonMin: 5.73
+    Regions:
+    - LU
+    XMax: 139616.40487707802
+    XMin: 56225.60455353281
+    YMax: 105842.03868915258
+    YMin: 48225.1656189296
+  LV95:
+    Deprecated: false
+    EPSG: 2056
+    Filename: LV95.wkt
+    Gridshiftfile: null
+    Imagefile: Switzerland
+    LatMax: 47.81
+    LatMin: 45.82
+    LonMax: 10.49
+    LonMin: 5.96
+    Regions:
+    - CH
+    XMax: 2828515.816102115
+    XMin: 2485071.5752530256
+    YMax: 1299941.786439353
+    YMin: 1075346.3052839658
+  Lambert 1 (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 1.wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert1
+    LatMax: 51.14
+    LatMin: 48.14
+    LonMax: 8.23
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 1 (extended) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 1 (extended).wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert1
+    LatMax: 51.14
+    LatMin: 48.14
+    LonMax: 8.23
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 1 (grid) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 1 (grid).wkt
+    Gridshiftfile: ntf_r93.gsb
+    Imagefile: FranceLambert1
+    LatMax: 51.14
+    LatMin: 48.14
+    LonMax: 8.23
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 2 (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 2.wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert2
+    LatMax: 48.14
+    LatMin: 45.27
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 2 (extended) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 2 (extended).wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert2
+    LatMax: 48.14
+    LatMin: 45.27
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 2 (grid) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 2 (grid).wkt
+    Gridshiftfile: ntf_r93.gsb
+    Imagefile: FranceLambert2
+    LatMax: 48.14
+    LatMin: 45.27
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 3 (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 3.wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert3
+    LatMax: 45.27
+    LatMin: 42.31
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 3 (extended) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 3 (extended).wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert3
+    LatMax: 45.27
+    LatMin: 42.31
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 3 (grid) (NTF):
+    Deprecated: false
+    EPSG: null
+    Filename: NTF(Paris) Lambert 3 (grid).wkt
+    Gridshiftfile: ntf_r93.gsb
+    Imagefile: FranceLambert3
+    LatMax: 45.27
+    LatMin: 42.31
+    LonMax: 9.63
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 4 (NTF):
+    Deprecated: true
+    EPSG: null
+    Filename: NTF(Paris) Lambert 4.wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert4
+    LatMax: 43.05
+    LatMin: 41.33
+    LonMax: 9.63
+    LonMin: 8.49
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 4 (extended) (NTF):
+    Deprecated: true
+    EPSG: null
+    Filename: NTF(Paris) Lambert 4 (extended).wkt
+    Gridshiftfile: null
+    Imagefile: FranceLambert4
+    LatMax: 43.05
+    LatMin: 41.33
+    LonMax: 9.63
+    LonMin: 8.49
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert 4 (grid) (NTF):
+    Deprecated: true
+    EPSG: null
+    Filename: NTF(Paris) Lambert 4 (grid).wkt
+    Gridshiftfile: ntf_r93.gsb
+    Imagefile: FranceLambert4
+    LatMax: 43.05
+    LatMin: 41.33
+    LonMax: 9.63
+    LonMin: 8.49
+    Regions:
+    - FR
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  Lambert2008:
+    Deprecated: false
+    EPSG: 3812
+    Filename: Lambert2008.wkt
+    Gridshiftfile: null
+    Imagefile: Belgium
+    LatMax: 51.51
+    LatMin: 49.5
+    LonMax: 6.4
+    LonMin: 2.5
+    Regions:
+    - BE
+    XMax: 791004.7334139675
+    XMin: 514655.595656322
+    YMax: 746440.8533193415
+    YMin: 522593.6536251466
+  Lambert72:
+    Deprecated: false
+    EPSG: 31370
+    Filename: Lambert72.h2g
+    Gridshiftfile: null
+    Imagefile: Belgium
+    LatMax: 51.51
+    LatMin: 49.5
+    LonMax: 6.4
+    LonMin: 2.5
+    Regions:
+    - BE
+    XMax: 291015.2934144228
+    XMin: 14637.24739517126
+    YMax: 246424.27546040807
+    YMin: 22608.210388014093
+  M28 GRD 2010 ETRS89:
+    Deprecated: false
+    EPSG: 31284
+    Filename: M28_GRD_2010_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID.gsb
+    Imagefile: Austria M28
+    LatMax: 47.61
+    LatMin: 46.77
+    LonMax: 11.84
+    LonMin: 9.53
+    Regions:
+    - AT
+    XMax: 113266.0
+    XMin: -61353.0
+    YMax: 275561.0
+    YMin: 181398.0
+  M28 GRD 2021 ETRS89:
+    Deprecated: false
+    EPSG: 31284
+    Filename: M28_GRD_2021_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID_2021.gsb
+    Imagefile: Austria M28
+    LatMax: 47.61
+    LatMin: 46.77
+    LonMax: 11.84
+    LonMin: 9.53
+    Regions:
+    - AT
+    XMax: 113266.0
+    XMin: -61353.0
+    YMax: 275561.0
+    YMin: 181398.0
+  M31 GRD 2010 ETRS89:
+    Deprecated: false
+    EPSG: 31285
+    Filename: M31_GRD_2010_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID.gsb
+    Imagefile: Austria M31
+    LatMax: 48.79
+    LatMin: 46.4
+    LonMax: 14.84
+    LonMin: 11.83
+    Regions:
+    - AT
+    XMax: 110694.0
+    XMin: -115597.0
+    YMax: 406750.0
+    YMin: 141057.0
+  M31 GRD 2021 ETRS89:
+    Deprecated: false
+    EPSG: 31285
+    Filename: M31_GRD_2021_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID_2021.gsb
+    Imagefile: Austria M31
+    LatMax: 48.79
+    LatMin: 46.4
+    LonMax: 14.84
+    LonMin: 11.83
+    Regions:
+    - AT
+    XMax: 110694.0
+    XMin: -115597.0
+    YMax: 406750.0
+    YMin: 141057.0
+  M34 GRD 2010 ETRS89:
+    Deprecated: false
+    EPSG: 31286
+    Filename: M34_GRD_2010_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID.gsb
+    Imagefile: Austria M34
+    LatMax: 49.02
+    LatMin: 46.56
+    LonMax: 17.17
+    LonMin: 14.83
+    Regions:
+    - AT
+    XMax: 61188.0
+    XMin: -115259.0
+    YMax: 431568.0
+    YMin: 158840.0
+  M34 GRD 2021 ETRS89:
+    Deprecated: false
+    EPSG: 31286
+    Filename: M34_GRD_2021_ETRS89.wkt
+    Gridshiftfile: AT_GIS_GRID_2021.gsb
+    Imagefile: Austria M34
+    LatMax: 49.02
+    LatMin: 46.56
+    LonMax: 17.17
+    LonMin: 14.83
+    Regions:
+    - AT
+    XMax: 61188.0
+    XMin: -115259.0
+    YMax: 431568.0
+    YMin: 158840.0
+  MTM01_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 32181
+    Filename: NAD83(CSRS) MTM zone 1.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 1
+    LatMax: 49.880440168616
+    LatMin: 46.567800287196
+    LonMax: -52.543563434093
+    LonMin: -54.5
+    Regions:
+    - CA
+    XMax: 337602.3076472727
+    XMin: 189811.51649044972
+    YMax: 5527095.810804051
+    YMin: 5159778.083166264
+  MTM02_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 32182
+    Filename: NAD83(CSRS) MTM zone 2.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 2
+    LatMax: 54.704265687623
+    LatMin: 46.810451303426
+    LonMax: -54.5
+    LonMin: -57.5
+    Regions:
+    - CA
+    XMax: 401482.592983508
+    XMin: 190325.42214867362
+    YMax: 6064735.534963832
+    YMin: 5186749.098981284
+  MTM03_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2945
+    Filename: NAD83(CSRS) MTM zone 3.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 3
+    LatMax: 55.38
+    LatMin: 47.5
+    LonMax: -57.1
+    LonMin: -60.0
+    Regions:
+    - CA
+    XMax: 393530.83962266275
+    XMin: 191796.80140584783
+    YMax: 6139811.584394756
+    YMin: 5263398.20108165
+  MTM04 Nova Scotia 2010 NAD83(CSRS):
+    Deprecated: false
+    EPSG: 8082
+    Filename: NAD83(CSRS) NSMTM 2010 zone 4.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) NSMTM 2010 zone 4
+    LatMax: 47.08
+    LatMin: 44.64
+    LonMax: -59.73
+    LonMin: -63.0
+    Regions:
+    - CA
+    XMax: 24634403.08344092
+    XMin: 24381003.19203076
+    YMax: 5217139.633297954
+    YMin: 4945538.329990779
+  MTM04 Nova Scotia ATS77:
+    Deprecated: false
+    EPSG: 2294
+    Filename: ATS77 NSMTM zone 4.wkt
+    Gridshiftfile: NS778302.gsb
+    Imagefile: NAD83(CSRS) NSMTM 2010 zone 4
+    LatMax: 47.08
+    LatMin: 44.64
+    LonMax: -59.73
+    LonMin: -63.0
+    Regions:
+    - CA
+    XMax: 4634403.041476005
+    XMin: 4381003.229198036
+    YMax: 5217137.978904728
+    YMin: 4945536.761075708
+  MTM04_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2946
+    Filename: NAD83(CSRS) MTM zone 4.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 4
+    LatMax: 58.92
+    LatMin: 47.16
+    LonMax: -60.0
+    LonMin: -63.0
+    Regions:
+    - CA
+    XMax: 391199.4651202934
+    XMin: 191069.1773851822
+    YMax: 6534071.58507897
+    YMin: 5225602.753110441
+  MTM05 Nova Scotia 2010 NAD83(CSRS):
+    Deprecated: false
+    EPSG: 8083
+    Filename: NAD83(CSRS) NSMTM 2010 zone 5.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) NSMTM 2010 zone 5
+    LatMax: 46.02
+    LatMin: 43.41
+    LonMax: -63.0
+    LonMin: -66.28
+    Regions:
+    - CA
+    XMax: 25616141.00869219
+    XMin: 25355838.948450495
+    YMax: 5098893.217257594
+    YMin: 4809327.862800603
+  MTM05 Nova Scotia ATS77:
+    Deprecated: false
+    EPSG: 2295
+    Filename: ATS77 NSMTM zone 5.wkt
+    Gridshiftfile: NS778302.gsb
+    Imagefile: NAD83(CSRS) NSMTM 2010 zone 5
+    LatMax: 46.02
+    LatMin: 43.41
+    LonMax: -63.0
+    LonMin: -66.28
+    Regions:
+    - CA
+    XMax: 5616140.972423896
+    XMin: 5355838.993485266
+    YMax: 5098891.600067531
+    YMin: 4809326.33678804
+  MTM05_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2947
+    Filename: NAD83(CSRS) MTM zone 5.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 5
+    LatMax: 60.52
+    LatMin: 47.95
+    LonMax: -63.0
+    LonMin: -66.0
+    Regions:
+    - CA
+    XMax: 387169.87440326135
+    XMin: 192766.258492104
+    YMax: 6712275.716578917
+    YMin: 5313424.826529948
+  MTM06_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2948
+    Filename: NAD83(CSRS) MTM zone 6.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 6
+    LatMax: 59.0
+    LatMin: 47.31
+    LonMax: -66.0
+    LonMin: -69.0
+    Regions:
+    - CA
+    XMax: 390999.72451434116
+    XMin: 191389.88740117277
+    YMax: 6542980.83375736
+    YMin: 5242276.970361081
+  MTM07_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2949
+    Filename: NAD83(CSRS) MTM zone 7.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 7
+    LatMax: 61.8
+    LatMin: 45.01
+    LonMax: -69.0
+    LonMin: -72.0
+    Regions:
+    - CA
+    XMax: 383899.30255555024
+    XMin: 186562.1830065762
+    YMax: 6854867.976507225
+    YMin: 4986650.804358136
+  MTM08_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2950
+    Filename: NAD83(CSRS) MTM zone 8.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 8
+    LatMax: 62.53
+    LatMin: 44.98
+    LonMax: -72.0
+    LonMin: -75.0
+    Regions:
+    - CA
+    XMax: 382016.02710479405
+    XMin: 186500.54153918556
+    YMax: 6936201.352126838
+    YMin: 4983317.19656948
+  MTM09_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2951
+    Filename: NAD83(CSRS) MTM zone 9.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 9
+    LatMax: 62.65
+    LatMin: 43.63
+    LonMax: -75.0
+    LonMin: -78.0
+    Regions:
+    - CA
+    XMax: 381705.28257957066
+    XMin: 183757.208434302
+    YMax: 6949572.0047856895
+    YMin: 4833321.337694463
+  MTM10_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2952
+    Filename: NAD83(CSRS) MTM zone 10.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 10
+    LatMax: 62.45
+    LatMin: 42.26
+    LonMax: -78.0
+    LonMin: -81.0
+    Regions:
+    - CA
+    XMax: 382223.1871669164
+    XMin: 181042.3225950835
+    YMax: 6927287.752906212
+    YMin: 4681137.182069552
+  MTM11_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 26891
+    Filename: NAD83(CSRS) MTM zone 11.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 11
+    LatMax: 46.0
+    LatMin: 41.67
+    LonMax: -81.0
+    LonMin: -83.6
+    Regions:
+    - CA
+    XMax: 420983.21189853543
+    XMin: 213203.66078148974
+    YMax: 5096669.451140297
+    YMin: 4615105.966044364
+  MTM12_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 12.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 12
+    LatMax: 86.46
+    LatMin: 46.0
+    LonMax: -82.5
+    LonMin: -79.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  MTM13_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 13.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 13
+    LatMax: 86.0
+    LatMin: 46.0
+    LonMax: -82.5
+    LonMin: -85.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  MTM14_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 14.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 14
+    LatMax: 86.0
+    LatMin: 46.0
+    LonMax: -85.5
+    LonMin: -88.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  MTM15_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 15.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 15
+    LatMax: 86.0
+    LatMin: 46.0
+    LonMax: -88.5
+    LonMin: -91.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  MTM16_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 16.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 16
+    LatMax: 86.0
+    LatMin: 46.0
+    LonMax: -91.5
+    LonMin: -94.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  MTM17_NAD83(CSRS):
+    Deprecated: false
+    EPSG: null
+    Filename: NAD83(CSRS) MTM zone 17.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) MTM zone 17
+    LatMax: 86.0
+    LatMin: 46.0
+    LonMax: -94.5
+    LonMin: -97.5
+    Regions:
+    - CA
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  NAD83 / New York East (ftUS):
+    Deprecated: false
+    EPSG: 2260
+    Filename: NAD83 New York East.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_East
+    LatMax: 45.02
+    LatMin: 40.88
+    LonMax: -73.23
+    LonMin: -75.87
+    Regions:
+    - US-NY
+    XMax: 820505.6927630712
+    XMin: 113306.67930590251
+    YMax: 2256824.0795176867
+    YMin: 748443.780758825
+  NAD83(2011) / Connecticut:
+    Deprecated: false
+    EPSG: 6433
+    Filename: NAD83(2011) Connecticut.wkt
+    Gridshiftfile: null
+    Imagefile: US_Connecticut
+    LatMax: 42.05
+    LatMin: 40.98
+    LonMax: -71.78
+    LonMin: -73.73
+    Regions:
+    - US-CT
+    XMax: 385103.1222049204
+    XMin: 222322.54347837294
+    YMax: 287977.43696073367
+    YMin: 169156.3466800607
+  NAD83(2011) / Maine East:
+    Deprecated: false
+    EPSG: 6483
+    Filename: NAD83(2011) Maine East.wkt
+    Gridshiftfile: null
+    Imagefile: US_Maine_East
+    LatMax: 47.47
+    LatMin: 43.88
+    LonMax: -66.91
+    LonMin: -70.03
+    Regions:
+    - US-ME
+    XMax: 419851.20673729526
+    XMin: 177049.16196835245
+    YMax: 423896.7865970171
+    YMin: 24838.65270351215
+  NAD83(2011) / Maine West:
+    Deprecated: false
+    EPSG: 6485
+    Filename: NAD83(2011) Maine West.wkt
+    Gridshiftfile: null
+    Imagefile: US_Maine_West
+    LatMax: 46.58
+    LatMin: 43.04
+    LonMax: -69.26
+    LonMin: -71.09
+    Regions:
+    - US-ME
+    XMax: 969493.4665432682
+    XMin: 824761.6428981957
+    YMax: 416737.78627018543
+    YMin: 23371.92855680277
+  NAD83(2011) / Massachusetts Island:
+    Deprecated: false
+    EPSG: 6489
+    Filename: NAD83(2011) Massachusetts Island.wkt
+    Gridshiftfile: null
+    Imagefile: US_Massachusetts-island
+    LatMax: 41.51
+    LatMin: 41.19
+    LonMax: -69.89
+    LonMin: -70.91
+    Regions:
+    - US-MA
+    XMax: 550924.4533078014
+    XMin: 465603.8085218641
+    YMax: 56819.46303831139
+    YMin: 21182.193901658546
+  NAD83(2011) / Massachusetts Mainland:
+    Deprecated: false
+    EPSG: 6491
+    Filename: NAD83(2011) Massachusetts Mainland.wkt
+    Gridshiftfile: null
+    Imagefile: US_Massachusetts-mainland
+    LatMax: 42.89
+    LatMin: 41.46
+    LonMax: -69.86
+    LonMin: -73.5
+    Regions:
+    - US-MA
+    XMax: 333962.18491762364
+    XMin: 32912.32927433515
+    YMax: 961218.4864862445
+    YMin: 803051.4395878355
+  NAD83(2011) / New York Central:
+    Deprecated: false
+    EPSG: 6534
+    Filename: NAD83(2011) New York Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_Central
+    LatMax: 44.41
+    LatMin: 41.99
+    LonMax: -75.04
+    LonMin: -77.75
+    Regions:
+    - US-NY
+    XMax: 372921.93601385155
+    XMin: 153330.97415895032
+    YMax: 490979.04527605977
+    YMin: 221641.7811135923
+  NAD83(2011) / New York Long Island:
+    Deprecated: false
+    EPSG: 6538
+    Filename: NAD83(2011) New York Long Island.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_Long_Island
+    LatMax: 41.3
+    LatMin: 40.47
+    LonMax: -71.8
+    LonMin: -74.26
+    Regions:
+    - US-NY
+    XMax: 484240.9609220225
+    XMin: 277950.22920969536
+    YMax: 128170.64580043124
+    YMin: 33716.39444708133
+  NAD83(2011) / New York West:
+    Deprecated: false
+    EPSG: 6540
+    Filename: NAD83(2011) New York West.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_West
+    LatMax: 43.64
+    LatMin: 41.99
+    LonMax: -77.36
+    LonMin: -79.77
+    Regions:
+    - US-NY
+    XMax: 448704.434264811
+    XMin: 251673.76576198317
+    YMax: 404996.19022632914
+    YMin: 221664.55284669393
+  NAD83(2011) / Oregon North (ft):
+    Deprecated: false
+    EPSG: 6559
+    Filename: NAD83(2011) Oregon North.wkt
+    Gridshiftfile: null
+    Imagefile: US_Northern_Oregon
+    LatMax: 46.26
+    LatMin: 43.95
+    LonMax: -116.47
+    LonMin: -124.17
+    Regions:
+    - US-OR
+    XMax: 9221150.299306909
+    XMin: 7235769.706659908
+    YMax: 970945.5571090237
+    YMin: 125253.26098378398
+  NAD83(2011) / Rhode Island:
+    Deprecated: false
+    EPSG: 6567
+    Filename: NAD83(2011) Rhode Island.wkt
+    Gridshiftfile: null
+    Imagefile: US_RhodeIsland
+    LatMax: 42.02
+    LatMin: 41.13
+    LonMax: -71.08
+    LonMin: -71.85
+    Regions:
+    - US-RI
+    XMax: 134786.23705289746
+    XMin: 70610.77827680032
+    YMax: 104115.19509468034
+    YMin: 5241.624167031077
+  NAD83(2011) / Vermont:
+    Deprecated: false
+    EPSG: 6589
+    Filename: NAD83(2011) Vermont.wkt
+    Gridshiftfile: null
+    Imagefile: US_Vermont
+    LatMax: 45.03
+    LatMin: 42.72
+    LonMax: -71.5
+    LonMin: -73.44
+    Regions:
+    - US-VT
+    XMax: 578802.8666454776
+    XMin: 423006.8382807577
+    YMax: 281578.89655270055
+    YMin: 24866.35169431841
+  NAD83(2011) Alabama East:
+    Deprecated: false
+    EPSG: 6355
+    Filename: NAD83(2011) Alabama East.wkt
+    Gridshiftfile: null
+    Imagefile: US_Alabama_East
+    LatMax: 35.0
+    LatMin: 30.99
+    LonMax: -84.89
+    LonMin: -86.79
+    Regions:
+    - US-AL
+    XMax: 286113.0710794821
+    XMin: 108626.36786491147
+    YMax: 499437.8336004764
+    YMin: 54714.51998364178
+  NAD83(2011) Alabama West:
+    Deprecated: false
+    EPSG: 6356
+    Filename: NAD83(2011) Alabama West.wkt
+    Gridshiftfile: null
+    Imagefile: US_Alabama_West
+    LatMax: 35.02
+    LatMin: 30.14
+    LonMax: -86.3
+    LonMin: -88.48
+    Regions:
+    - US-AL
+    XMax: 709514.5981036696
+    XMin: 505580.44594500464
+    YMax: 557319.3872848145
+    YMin: 15923.948440411992
+  NAD83(2011) Alaska Zone 1:
+    Deprecated: false
+    EPSG: 6394
+    Filename: NAD83(2011) Alaska Zone 1.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 1
+    LatMax: 60.35
+    LatMin: 54.61
+    LonMax: -129.99
+    LonMin: -141.0
+    Regions:
+    - US-AK
+    XMax: 1021673.7568623153
+    XMin: 345065.0006292928
+    YMax: 954041.267921349
+    YMin: 334042.2046982143
+  NAD83(2011) Alaska Zone 10:
+    Deprecated: false
+    EPSG: 6403
+    Filename: NAD83(2011) Alaska Zone 10.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 10
+    LatMax: 54.34
+    LatMin: 51.3
+    LonMax: -164.84
+    LonMin: 172.42
+    Regions:
+    - US-AK
+    XMax: 1723079.1763698556
+    XMin: 195688.3999031469
+    YMax: 427904.9014095067
+    YMin: 98298.29792074247
+  NAD83(2011) Alaska Zone 2:
+    Deprecated: false
+    EPSG: 6395
+    Filename: NAD83(2011) Alaska Zone 2.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 2
+    LatMax: 70.16
+    LatMin: 59.72
+    LonMax: -140.98
+    LonMin: -144.01
+    Regions:
+    - US-AK
+    XMax: 538646.0751082397
+    XMin: 386918.31041990273
+    YMax: 1801058.2813575123
+    YMin: 638611.495563188
+  NAD83(2011) Alaska Zone 3:
+    Deprecated: false
+    EPSG: 6396
+    Filename: NAD83(2011) Alaska Zone 3.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 3
+    LatMax: 70.38
+    LatMin: 59.72
+    LonMax: -144.0
+    LonMin: -148.0
+    Regions:
+    - US-AK
+    XMax: 574961.5237298969
+    XMin: 387480.7933152069
+    YMax: 1826509.1488610085
+    YMin: 638594.4905497337
+  NAD83(2011) Alaska Zone 4:
+    Deprecated: false
+    EPSG: 6397
+    Filename: NAD83(2011) Alaska Zone 4.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 4
+    LatMax: 70.63
+    LatMin: 59.11
+    LonMax: -147.99
+    LonMin: -152.01
+    Regions:
+    - US-AK
+    XMax: 574413.9786087219
+    XMin: 384866.0062102319
+    YMax: 1854397.4615086422
+    YMin: 570683.0524052249
+  NAD83(2011) Alaska Zone 5:
+    Deprecated: false
+    EPSG: 6398
+    Filename: NAD83(2011) Alaska Zone 5.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 5
+    LatMax: 71.28
+    LatMin: 55.72
+    LonMax: -151.86
+    LonMin: -156.0
+    Regions:
+    - US-AK
+    XMax: 576665.1462954525
+    XMin: 374335.6629656739
+    YMax: 1927037.849194219
+    YMin: 193265.4167218667
+  NAD83(2011) Alaska Zone 6:
+    Deprecated: false
+    EPSG: 6399
+    Filename: NAD83(2011) Alaska Zone 6.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 6
+    LatMax: 71.4
+    LatMin: 54.89
+    LonMax: -155.99
+    LonMin: -160.0
+    Regions:
+    - US-AK
+    XMax: 571564.5392518891
+    XMin: 371683.47061143327
+    YMax: 1940259.6195834302
+    YMin: 100891.27017918504
+  NAD83(2011) Alaska Zone 7:
+    Deprecated: false
+    EPSG: 6400
+    Filename: NAD83(2011) Alaska Zone 7.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 7
+    LatMax: 70.74
+    LatMin: 54.32
+    LonMax: -160.0
+    LonMin: -164.01
+    Regions:
+    - US-AK
+    XMax: 573639.6586334868
+    XMin: 369227.2759588344
+    YMax: 1866650.932337704
+    YMin: 37478.56021629183
+  NAD83(2011) Alaska Zone 8:
+    Deprecated: false
+    EPSG: 6401
+    Filename: NAD83(2011) Alaska Zone 8.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 8
+    LatMax: 69.05
+    LatMin: 54.34
+    LonMax: -164.0
+    LonMin: -168.26
+    Regions:
+    - US-AK
+    XMax: 579818.6224001455
+    XMin: 353035.9059764714
+    YMax: 1678220.016121422
+    YMin: 40196.47731406788
+  NAD83(2011) Alaska Zone 9:
+    Deprecated: false
+    EPSG: 6402
+    Filename: NAD83(2011) Alaska Zone 9.wkt
+    Gridshiftfile: null
+    Imagefile: Usa-alaska - 9
+    LatMax: 65.82
+    LatMin: 56.49
+    LonMax: -168.0
+    LonMin: -173.16
+    Regions:
+    - US-AK
+    XMax: 591427.5708482452
+    XMin: 305398.63289577013
+    YMax: 1318176.2713116712
+    YMin: 281655.18765712064
+  NAD83(2011) California Zone 1:
+    Deprecated: false
+    EPSG: 6415
+    Filename: NAD83(2011) California Zone 1.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 1
+    LatMax: 42.01
+    LatMin: 39.59
+    LonMax: -119.99
+    LonMin: -124.45
+    Regions:
+    - US-CA
+    XMax: 2166506.89441652
+    XMin: 1789539.5665343686
+    YMax: 799143.9865565519
+    YMin: 531443.8371340135
+  NAD83(2011) California Zone 2:
+    Deprecated: false
+    EPSG: 6417
+    Filename: NAD83(2011) California Zone 2.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 2
+    LatMax: 40.16
+    LatMin: 38.02
+    LonMax: -119.54
+    LonMin: -124.06
+    Regions:
+    - US-CA
+    XMax: 2209571.2464330723
+    XMin: 1819114.2581414785
+    YMax: 779630.525372654
+    YMin: 541273.7589847766
+  NAD83(2011) California Zone 3:
+    Deprecated: false
+    EPSG: 6419
+    Filename: NAD83(2011) California Zone 3.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 3
+    LatMax: 38.71
+    LatMin: 36.73
+    LonMax: -117.83
+    LonMin: -123.02
+    Regions:
+    - US-CA
+    XMax: 2232218.2534678923
+    XMin: 1774907.679626609
+    YMax: 748597.1784831426
+    YMin: 528557.1371853993
+  NAD83(2011) California Zone 4:
+    Deprecated: false
+    EPSG: 6419
+    Filename: NAD83(2011) California Zone 4.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 4
+    LatMax: 38.71
+    LatMin: 36.73
+    LonMax: -117.83
+    LonMin: -123.02
+    Regions:
+    - US-CA
+    XMax: 2232218.2534678923
+    XMin: 1774907.679626609
+    YMax: 748597.1784831426
+    YMin: 528557.1371853993
+  NAD83(2011) California Zone 5:
+    Deprecated: false
+    EPSG: 6421
+    Filename: NAD83(2011) California Zone 5.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 5
+    LatMax: 37.58
+    LatMin: 35.78
+    LonMax: -115.62
+    LonMin: -122.01
+    Regions:
+    - US-CA
+    XMax: 2298520.922247323
+    XMin: 1727886.7764527192
+    YMax: 754562.841666431
+    YMin: 553828.3138820422
+  NAD83(2011) California Zone 6:
+    Deprecated: false
+    EPSG: 6425
+    Filename: NAD83(2011) California Zone 6.wkt
+    Gridshiftfile: null
+    Imagefile: usa-california - 6
+    LatMax: 34.08
+    LatMin: 32.53
+    LonMax: -114.42
+    LonMin: -118.15
+    Regions:
+    - US-CA
+    XMax: 2168903.381623939
+    XMin: 1821504.0867444675
+    YMax: 713685.240120858
+    YMin: 541921.6090514645
+  NAD83(2011) Florida East:
+    Deprecated: false
+    EPSG: 6437
+    Filename: NAD83(2011) Florida East.wkt
+    Gridshiftfile: null
+    Imagefile: US_FloridaEast
+    LatMax: 30.83
+    LatMin: 24.41
+    LonMax: -79.97
+    LonMin: -82.33
+    Regions:
+    - US-FL
+    XMax: 298540.2068111297
+    XMin: 65102.494997785776
+    YMax: 720329.5066960583
+    YMin: 9138.88130670968
+  NAD83(2011) Florida North:
+    Deprecated: false
+    EPSG: 6440
+    Filename: NAD83(2011) Florida North.wkt
+    Gridshiftfile: null
+    Imagefile: US_FloridaNorth
+    LatMax: 31.01
+    LatMin: 29.21
+    LonMax: -82.04
+    LonMin: -87.63
+    Regions:
+    - US-FL
+    XMax: 834910.9831262925
+    XMin: 295646.5540769233
+    YMax: 225348.7609827626
+    YMin: 27456.464020441792
+  NAD83(2011) Florida West:
+    Deprecated: false
+    EPSG: 6442
+    Filename: NAD83(2011) Florida West.wkt
+    Gridshiftfile: null
+    Imagefile: US_FloridaWest
+    LatMax: 29.6
+    LatMin: 26.27
+    LonMax: -81.13
+    LonMin: -83.34
+    Regions:
+    - US-FL
+    XMax: 284274.37357896275
+    XMin: 66150.64843735518
+    YMax: 583846.6255438706
+    YMin: 215219.47775414193
+  NAD83(2011) Georgia East:
+    Deprecated: false
+    EPSG: 6444
+    Filename: NAD83(2011) Georgia East.wkt
+    Gridshiftfile: null
+    Imagefile: US_GeorgiaEast
+    LatMax: 34.68
+    LatMin: 30.36
+    LonMax: -80.77
+    LonMin: -83.47
+    Regions:
+    - US-GA
+    XMax: 327985.22104999487
+    XMin: 74709.789308767
+    YMax: 519815.2404935042
+    YMin: 40624.309794496774
+  NAD83(2011) Georgia West:
+    Deprecated: false
+    EPSG: 6446
+    Filename: NAD83(2011) Georgia West.wkt
+    Gridshiftfile: null
+    Imagefile: US_GeorgiaWest
+    LatMax: 35.01
+    LatMin: 30.62
+    LonMax: -82.99
+    LonMin: -85.61
+    Regions:
+    - US-GA
+    XMax: 807394.5382984749
+    XMin: 561618.6831736781
+    YMax: 556166.0817971718
+    YMin: 69612.78234582106
+  NAD83(2011) Idaho Central:
+    Deprecated: false
+    EPSG: 6448
+    Filename: NAD83(2011) Idaho Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-idaho - central
+    LatMax: 45.7
+    LatMin: 41.99
+    LonMax: -112.68
+    LonMin: -115.3
+    Regions:
+    - US-ID
+    XMax: 602797.1348322467
+    XMin: 392281.83037533704
+    YMax: 448951.8476535561
+    YMin: 36728.33694573676
+  NAD83(2011) Idaho East:
+    Deprecated: false
+    EPSG: 6450
+    Filename: NAD83(2011) Idaho East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-idaho - east
+    LatMax: 44.75
+    LatMin: 41.99
+    LonMax: -111.04
+    LonMin: -113.24
+    Regions:
+    - US-ID
+    XMax: 289214.9223945835
+    XMin: 111063.71939851392
+    YMax: 343148.0611808968
+    YMin: 36468.06030250134
+  NAD83(2011) Idaho West:
+    Deprecated: false
+    EPSG: 6452
+    Filename: NAD83(2011) Idaho West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-idaho - west
+    LatMax: 49.01
+    LatMin: 41.99
+    LonMax: -114.32
+    LonMin: -117.24
+    Regions:
+    - US-ID
+    XMax: 904606.2381105268
+    XMin: 676539.7837076162
+    YMax: 817057.2289334133
+    YMin: 36984.30998402617
+  NAD83(2011) Maryland:
+    Deprecated: false
+    EPSG: 6487
+    Filename: NAD83(2011) Maryland.wkt
+    Gridshiftfile: null
+    Imagefile: US_Maryland
+    LatMax: 39.73
+    LatMin: 37.97
+    LonMax: -74.97
+    LonMin: -79.49
+    Regions:
+    - US-MD
+    XMax: 574026.6173549057
+    XMin: 181219.09721396962
+    YMax: 230987.04872253735
+    YMin: 36655.85913985766
+  NAD83(2011) Nevada Central:
+    Deprecated: false
+    EPSG: 6518
+    Filename: NAD83(2011) Nevada Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-nevada - central
+    LatMax: 41.0
+    LatMin: 36.0
+    LonMax: -114.99
+    LonMin: -118.19
+    Regions:
+    - US-NV
+    XMax: 641055.3972230253
+    XMin: 362659.33828742534
+    YMax: 6694999.823411577
+    YMin: 6139743.768849752
+  NAD83(2011) Nevada East:
+    Deprecated: false
+    EPSG: 6520
+    Filename: NAD83(2011) Nevada East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-nevada - east
+    LatMax: 42.0
+    LatMin: 34.99
+    LonMax: -114.03
+    LonMin: -117.01
+    Regions:
+    - US-NV
+    XMax: 328683.6587060269
+    XMin: 69754.74639531817
+    YMax: 8805865.42636728
+    YMin: 8027552.47237993
+  NAD83(2011) Nevada West:
+    Deprecated: false
+    EPSG: 6522
+    Filename: NAD83(2011) Nevada West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-nevada - west.png
+    LatMax: 42.0
+    LatMin: 36.95
+    LonMax: -116.99
+    LonMin: -120.0
+    Regions:
+    - US-NV
+    XMax: 931997.4907157569
+    XMin: 673826.6301758504
+    YMax: 4805926.3308652975
+    YMin: 4245017.139322905
+  NAD83(2011) New Mexico Central:
+    Deprecated: false
+    EPSG: 6528
+    Filename: NAD83(2011) New Mexico Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_NewMexicoCentral
+    LatMax: 37.0
+    LatMin: 31.78
+    LonMax: -104.84
+    LonMin: -107.73
+    Regions:
+    - US-NM
+    XMax: 625497.4318649578
+    XMin: 359824.2791681125
+    YMax: 666399.5233026792
+    YMin: 87428.3980117214
+  NAD83(2011) New Mexico East:
+    Deprecated: false
+    EPSG: 6530
+    Filename: NAD83(2011) New Mexico East.wkt
+    Gridshiftfile: null
+    Imagefile: US_NewMexicoEast
+    LatMax: 37.0
+    LatMin: 32.0
+    LonMax: -102.99
+    LonMin: -105.72
+    Regions:
+    - US-NM
+    XMax: 284564.5241670381
+    XMin: 33975.77074362352
+    YMax: 666319.758960204
+    YMin: 111708.32825589125
+  NAD83(2011) New Mexico West:
+    Deprecated: false
+    EPSG: 6530
+    Filename: NAD83(2011) New Mexico West.wkt
+    Gridshiftfile: null
+    Imagefile: US_NewMexicoWest
+    LatMax: 37.0
+    LatMin: 32.0
+    LonMax: -102.99
+    LonMin: -105.72
+    Regions:
+    - US-NM
+    XMax: 284564.5241670381
+    XMin: 33975.77074362352
+    YMax: 666319.758960204
+    YMin: 111708.32825589125
+  NAD83(2011) Oregon South:
+    Deprecated: false
+    EPSG: 6560
+    Filename: NAD83(2011) Oregon South.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 44.56
+    LatMin: 41.98
+    LonMax: -116.9
+    LonMin: -124.6
+    Regions:
+    - US-OR
+    XMax: 1785979.111173056
+    XMin: 1160304.687469061
+    YMax: 327582.564817976
+    YMin: 43124.56959847339
+  NAD83(2011) SPCS Arizona Central:
+    Deprecated: false
+    EPSG: 6404
+    Filename: NAD83(2011) SPCS Arizona Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-arizona-central
+    LatMax: 37.01
+    LatMin: 31.33
+    LonMax: -110.44
+    LonMin: -113.35
+    Regions:
+    - US-AZ
+    XMax: 344774.25509364414
+    XMin: 76951.28315104556
+    YMax: 667599.2730779602
+    YMin: 37471.49767701424
+  NAD83(2011) SPCS Arizona East:
+    Deprecated: false
+    EPSG: 6406
+    Filename: NAD83(2011) SPCS Arizona East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-arizona-east
+    LatMax: 37.01
+    LatMin: 31.33
+    LonMax: -109.04
+    LonMin: -111.71
+    Regions:
+    - US-AZ
+    XMax: 313625.11771865113
+    XMin: 66481.57726905748
+    YMax: 667173.219860401
+    YMin: 37612.94225911591
+  NAD83(2011) SPCS Arizona West:
+    Deprecated: false
+    EPSG: 6408
+    Filename: NAD83(2011) SPCS Arizona West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-arizona-west
+    LatMax: 37.0
+    LatMin: 32.05
+    LonMax: -112.52
+    LonMin: -114.81
+    Regions:
+    - US-AZ
+    XMax: 322839.39768852945
+    XMin: 113255.82314843503
+    YMax: 666199.5535385566
+    YMin: 116906.13012893949
+  NAD83(2011) SPCS Delaware:
+    Deprecated: false
+    EPSG: 6435
+    Filename: NAD83(2011) SPCS Delaware.wkt
+    Gridshiftfile: null
+    Imagefile: US_Delaware
+    LatMax: 39.85
+    LatMin: 38.44
+    LonMax: -74.97
+    LonMin: -75.8
+    Regions:
+    - US-DE
+    XMax: 238225.79702413955
+    XMin: 166533.1617424154
+    YMax: 205470.48308192907
+    YMin: 48909.64130833831
+  NAD83(2011) SPCS Illinois East:
+    Deprecated: false
+    EPSG: 6454
+    Filename: NAD83(2011) SPCS Illinois East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-illinois - east
+    LatMax: 42.5
+    LatMin: 37.06
+    LonMax: -87.02
+    LonMin: -89.28
+    Regions:
+    - US-IL
+    XMax: 407952.84533971857
+    XMin: 215802.92024991306
+    YMax: 648476.2402160055
+    YMin: 44068.31688321397
+  NAD83(2011) SPCS Illinois West:
+    Deprecated: false
+    EPSG: 6456
+    Filename: NAD83(2011) SPCS Illinois West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-illinois - west
+    LatMax: 42.51
+    LatMin: 36.98
+    LonMax: -88.93
+    LonMin: -91.52
+    Regions:
+    - US-IL
+    XMax: 801631.300013067
+    XMin: 579509.9562219738
+    YMax: 649470.3402959763
+    YMin: 35625.98718209203
+  NAD83(2011) SPCS Indiana East:
+    Deprecated: false
+    EPSG: 6458
+    Filename: NAD83(2011) SPCS Indiana East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-indiana-east
+    LatMax: 41.77
+    LatMin: 37.95
+    LonMax: -84.78
+    LonMin: -86.59
+    Regions:
+    - US-IN
+    XMax: 173722.8293342126
+    XMin: 18848.169675766898
+    YMax: 724452.6023682756
+    YMin: 300346.5557813935
+  NAD83(2011) SPCS Indiana West:
+    Deprecated: false
+    EPSG: 6460
+    Filename: NAD83(2011) SPCS Indiana West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-indiana-west
+    LatMax: 41.77
+    LatMin: 37.77
+    LonMax: -86.24
+    LonMin: -88.06
+    Regions:
+    - US-IN
+    XMax: 970119.8033495815
+    XMin: 813951.5557038783
+    YMax: 724416.364641631
+    YMin: 280415.41109529027
+  NAD83(2011) SPCS Iowa North:
+    Deprecated: false
+    EPSG: 6462
+    Filename: NAD83(2011) SPCS Iowa North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-lowa-north
+    LatMax: 43.51
+    LatMin: 41.85
+    LonMax: -90.15
+    LonMin: -96.65
+    Regions:
+    - US-IA
+    XMax: 1770835.765002967
+    XMin: 1238456.4841177673
+    YMax: 1228643.9962682903
+    YMin: 1043750.404067701
+  NAD83(2011) SPCS Iowa South:
+    Deprecated: false
+    EPSG: 6464
+    Filename: NAD83(2011) SPCS Iowa South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-lowa-south
+    LatMax: 42.04
+    LatMin: 40.37
+    LonMax: -90.14
+    LonMin: -96.14
+    Regions:
+    - US-IA
+    XMax: 778150.4552814265
+    XMin: 275804.3149685068
+    YMax: 231925.01089940875
+    YMin: 44490.99603974775
+  NAD83(2011) SPCS Kentucky North:
+    Deprecated: false
+    EPSG: 6470
+    Filename: NAD83(2011) SPCS Kentucky North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-kentucky-north
+    LatMax: 39.15
+    LatMin: 37.71
+    LonMax: -82.47
+    LonMin: -85.96
+    Regions:
+    - US-KY
+    XMax: 653864.4011060491
+    XMin: 349218.2791870525
+    YMax: 184641.09895005266
+    YMin: 24709.163041468903
+  NAD83(2011) SPCS Kentucky South:
+    Deprecated: false
+    EPSG: 6474
+    Filename: NAD83(2011) SPCS Kentucky South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-kentucky-south
+    LatMax: 38.17
+    LatMin: 36.49
+    LonMax: -81.95
+    LonMin: -89.57
+    Regions:
+    - US-KY
+    XMax: 832918.8536462528
+    XMin: 157793.0920864537
+    YMax: 710531.6721022655
+    YMin: 524305.3717931791
+  NAD83(2011) SPCS Michigan Central:
+    Deprecated: false
+    EPSG: 6493
+    Filename: NAD83(2011) SPCS Michigan Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-michigan-central
+    LatMax: 45.92
+    LatMin: 43.8
+    LonMax: -82.27
+    LonMin: -87.06
+    Regions:
+    - US-MI
+    XMax: 6162640.001784503
+    XMin: 5783269.683611322
+    YMax: 291399.94080042426
+    YMin: 57309.82074061751
+  NAD83(2011) SPCS Michigan North:
+    Deprecated: false
+    EPSG: 6495
+    Filename: NAD83(2011) SPCS Michigan North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-michigan-north
+    LatMax: 48.32
+    LatMin: 45.08
+    LonMax: -83.44
+    LonMin: -90.42
+    Regions:
+    - US-MI
+    XMax: 8264072.881829599
+    XMin: 7730770.077384338
+    YMax: 399102.5058484616
+    YMin: 38783.291969269485
+  NAD83(2011) SPCS Michigan South:
+    Deprecated: false
+    EPSG: 6498
+    Filename: NAD83(2011) SPCS Michigan South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-michigan-south
+    LatMax: 44.22
+    LatMin: 41.69
+    LonMax: -82.13
+    LonMin: -87.2
+    Regions:
+    - US-MI
+    XMax: 4178741.346471115
+    XMin: 3764135.9814184066
+    YMax: 304539.38329520583
+    YMin: 25074.890927632514
+  NAD83(2011) SPCS Minnesota Central:
+    Deprecated: false
+    EPSG: 6500
+    Filename: NAD83(2011) SPCS Minnesota Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-minnesota-central
+    LatMax: 47.48
+    LatMin: 45.28
+    LonMax: -92.29
+    LonMin: -96.86
+    Regions:
+    - US-MN
+    XMax: 947732.4888004595
+    XMin: 595233.1859048485
+    YMax: 377495.16347312875
+    YMin: 134496.0658554418
+  NAD83(2011) SPCS Minnesota North:
+    Deprecated: false
+    EPSG: 6502
+    Filename: NAD83(2011) SPCS Minnesota North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-minnesota-north
+    LatMax: 49.38
+    LatMin: 46.64
+    LonMax: -89.49
+    LonMin: -97.22
+    Regions:
+    - US-MN
+    XMax: 1062109.9971384865
+    XMin: 484662.883379609
+    YMax: 426349.3882135934
+    YMin: 123970.60197833175
+  NAD83(2011) SPCS Minnesota South:
+    Deprecated: false
+    EPSG: 6504
+    Filename: NAD83(2011) SPCS Minnesota South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-michigan-south
+    LatMax: 45.59
+    LatMin: 43.49
+    LonMax: -91.21
+    LonMin: -96.85
+    Regions:
+    - US-MN
+    XMax: 1017693.4793720533
+    XMin: 569492.5128116712
+    YMax: 391514.8607947001
+    YMin: 158465.4349358629
+  NAD83(2011) SPCS Missouri Central:
+    Deprecated: false
+    EPSG: 6511
+    Filename: NAD83(2011) SPCS Missouri Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-missouri-central
+    LatMax: 40.61
+    LatMin: 36.48
+    LonMax: -91.41
+    LonMin: -93.79
+    Regions:
+    - US-MO
+    XMax: 592240.4863549052
+    XMin: 384402.582974351
+    YMax: 530749.7674890533
+    YMin: 72524.35270280449
+  NAD83(2011) SPCS Missouri East:
+    Deprecated: false
+    EPSG: 6512
+    Filename: NAD83(2011) SPCS Missouri East.wkt
+    Gridshiftfile: null
+    Imagefile: usa-missouri-east
+    LatMax: 40.61
+    LatMin: 35.98
+    LonMax: -89.1
+    LonMin: -91.97
+    Regions:
+    - US-MO
+    XMax: 368474.73767414974
+    XMin: 117430.21416727672
+    YMax: 531120.8788109587
+    YMin: 17271.89955836394
+  NAD83(2011) SPCS Missouri West:
+    Deprecated: false
+    EPSG: 6513
+    Filename: NAD83(2011) SPCS Missouri West.wkt
+    Gridshiftfile: null
+    Imagefile: usa-missouri-west
+    LatMax: 40.59
+    LatMin: 36.48
+    LonMax: -93.48
+    LonMin: -95.77
+    Regions:
+    - US-MO
+    XMax: 936343.0942781423
+    XMin: 736193.9857344828
+    YMax: 491477.91794944176
+    YMin: 35516.95357112248
+  NAD83(2011) SPCS New Jersey:
+    Deprecated: false
+    EPSG: 6526
+    Filename: NAD83(2011) SPCS New Jersey.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_Jersey
+    LatMax: 41.36
+    LatMin: 38.87
+    LonMax: -73.88
+    LonMin: -75.6
+    Regions:
+    - US-NJ
+    XMax: 201873.90102511132
+    XMin: 54545.12015456795
+    YMax: 280709.69043490384
+    YMin: 4645.126015017602
+  NAD83(2011) SPCS New York Central:
+    Deprecated: false
+    EPSG: 6534
+    Filename: NAD83(2011) SPCS New York Central.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_Central
+    LatMax: 44.41
+    LatMin: 41.99
+    LonMax: -75.04
+    LonMin: -77.75
+    Regions:
+    - US-NY
+    XMax: 372921.93601385155
+    XMin: 153330.97415895032
+    YMax: 490979.04527605977
+    YMin: 221641.7811135923
+  NAD83(2011) SPCS New York East:
+    Deprecated: false
+    EPSG: 6536
+    Filename: NAD83(2011) SPCS New York East.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_East
+    LatMax: 45.02
+    LatMin: 40.88
+    LonMax: -73.23
+    LonMin: -75.87
+    Regions:
+    - US-NY
+    XMax: 250090.63533545472
+    XMin: 34535.94492432893
+    YMax: 687881.3551997013
+    YMin: 228126.12062753108
+  NAD83(2011) SPCS New York Long Island:
+    Deprecated: false
+    EPSG: 6536
+    Filename: NAD83(2011) SPCS New York Long Island.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_Long_Island
+    LatMax: 45.02
+    LatMin: 40.88
+    LonMax: -73.23
+    LonMin: -75.87
+    Regions:
+    - US-NY
+    XMax: 250090.63533545472
+    XMin: 34535.94492432893
+    YMax: 687881.3551997013
+    YMin: 228126.12062753108
+  NAD83(2011) SPCS New York West:
+    Deprecated: false
+    EPSG: 6540
+    Filename: NAD83(2011) SPCS New York West.wkt
+    Gridshiftfile: null
+    Imagefile: US_New_York_West
+    LatMax: 43.64
+    LatMin: 41.99
+    LonMax: -77.36
+    LonMin: -79.77
+    Regions:
+    - US-NY
+    XMax: 448704.434264811
+    XMin: 251673.76576198317
+    YMax: 404996.19022632914
+    YMin: 221664.55284669393
+  NAD83(2011) SPCS North Carolina:
+    Deprecated: false
+    EPSG: 6542
+    Filename: NAD83(2011) SPCS North Carolina.wkt
+    Gridshiftfile: null
+    Imagefile: US_North_Carolina
+    LatMax: 36.59
+    LatMin: 33.83
+    LonMax: -75.38
+    LonMin: -84.33
+    Regions:
+    - US-NC
+    XMax: 933520.6710072558
+    XMin: 116361.13496227097
+    YMax: 320979.26197346306
+    YMin: 22119.888878431047
+  NAD83(2011) SPCS Ohio North:
+    Deprecated: false
+    EPSG: 6548
+    Filename: NAD83(2011) SPCS Ohio North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-ohio-north
+    LatMax: 42.33
+    LatMin: 40.1
+    LonMax: -80.51
+    LonMin: -84.81
+    Regions:
+    - US-OH
+    XMax: 764034.121937581
+    XMin: 403035.4105968764
+    YMax: 297653.76866597304
+    YMin: 50729.9881009595
+  NAD83(2011) SPCS Ohio South:
+    Deprecated: false
+    EPSG: 6550
+    Filename: NAD83(2011) SPCS Ohio South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-ohio-south
+    LatMax: 40.36
+    LatMin: 38.4
+    LonMax: -80.7
+    LonMin: -84.83
+    Regions:
+    - US-OH
+    XMax: 752900.9644348031
+    XMin: 396472.80539090245
+    YMax: 263532.0000815143
+    YMin: 47032.74485349824
+  NAD83(2011) SPCS Pennsylvania North:
+    Deprecated: false
+    EPSG: 6562
+    Filename: NAD83(2011) SPCS Pennsylvania North.wkt
+    Gridshiftfile: null
+    Imagefile: US_Pennsylvania_North
+    LatMax: 42.53
+    LatMin: 40.6
+    LonMax: -74.7
+    LonMin: -80.53
+    Regions:
+    - US-PA
+    XMax: 850571.8392683541
+    XMin: 364722.69794594496
+    YMax: 266893.2147778557
+    YMin: 51900.29667448617
+  NAD83(2011) SPCS Pennsylvania South:
+    Deprecated: false
+    EPSG: 6564
+    Filename: NAD83(2011) SPCS Pennsylvania South.wkt
+    Gridshiftfile: null
+    Imagefile: US_Pennsylvania_South
+    LatMax: 41.18
+    LatMin: 39.71
+    LonMax: -74.72
+    LonMin: -80.53
+    Regions:
+    - US-PA
+    XMax: 854195.2283628278
+    XMin: 361633.1351868203
+    YMax: 209415.98457540837
+    YMin: 45575.569319858565
+  NAD83(2011) SPCS South Carolina:
+    Deprecated: false
+    EPSG: 6569
+    Filename: NAD83(2011) SPCS South Carolina.wkt
+    Gridshiftfile: null
+    Imagefile: US_South_Carolina
+    LatMax: 35.21
+    LatMin: 32.05
+    LonMax: -78.52
+    LonMin: -83.36
+    Regions:
+    - US-SC
+    XMax: 835428.2312511974
+    XMin: 386694.5942843487
+    YMax: 377206.7954209551
+    YMin: 26576.309440703008
+  NAD83(2011) SPCS Virginia North:
+    Deprecated: false
+    EPSG: 6592
+    Filename: NAD83(2011) SPCS Virginia North.wkt
+    Gridshiftfile: null
+    Imagefile: US_Virginia_North
+    LatMax: 39.46
+    LatMin: 37.77
+    LonMax: -76.51
+    LonMin: -80.06
+    Regions:
+    - US-VA
+    XMax: 3671261.036751879
+    XMin: 3362553.3262610403
+    YMax: 2200927.0598530993
+    YMin: 2012637.7358033939
+  NAD83(2011) SPCS Virginia South:
+    Deprecated: false
+    EPSG: 6594
+    Filename: NAD83(2011) SPCS Virginia South.wkt
+    Gridshiftfile: null
+    Imagefile: US_Virginia_South
+    LatMax: 38.28
+    LatMin: 36.54
+    LonMax: -75.31
+    LonMin: -83.68
+    Regions:
+    - US-VA
+    XMax: 3779083.924305619
+    XMin: 3036366.9807438697
+    YMax: 1220762.136312244
+    YMin: 1035658.1369762697
+  NAD83(2011) Tennessee:
+    Deprecated: false
+    EPSG: 6575
+    Filename: NAD83(2011) Tennessee.wkt
+    Gridshiftfile: null
+    Imagefile: US_Tennessee
+    LatMax: 36.68
+    LatMin: 34.98
+    LonMax: -81.65
+    LonMin: -90.31
+    Regions:
+    - US-TN
+    XMax: 988711.5866813466
+    XMin: 206556.41678823263
+    YMax: 269011.42753063503
+    YMin: 80414.01570951591
+  NAD83(2011) Utah Central:
+    Deprecated: false
+    EPSG: 6619
+    Filename: NAD83(2011) Utah Central.wkt
+    Gridshiftfile: null
+    Imagefile: usa-utah - central
+    LatMax: 41.08
+    LatMin: 38.49
+    LonMax: -109.04
+    LonMin: -114.05
+    Regions:
+    - US-UT
+    XMax: 706724.0386204799
+    XMin: 277517.6837629482
+    YMax: 2307801.6831011996
+    YMin: 2020565.872252347
+  NAD83(2011) Utah North:
+    Deprecated: false
+    EPSG: 6620
+    Filename: NAD83(2011) Utah North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-utah - north
+    LatMax: 42.01
+    LatMin: 40.55
+    LonMax: -109.04
+    LonMin: -114.04
+    Regions:
+    - US-UT
+    XMax: 703762.8414941019
+    XMin: 284873.76674905524
+    YMax: 1189089.1253600805
+    YMin: 1027205.0082885996
+  NAD83(2011) Utah South:
+    Deprecated: false
+    EPSG: 6621
+    Filename: NAD83(2011) Utah South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-utah - south
+    LatMax: 38.58
+    LatMin: 36.99
+    LonMax: -109.04
+    LonMin: -114.05
+    Regions:
+    - US-UT
+    XMax: 714340.5503610092
+    XMin: 273008.0722493794
+    YMax: 3215179.3513247273
+    YMin: 3038980.003301329
+  NAD83(2011) Washington North:
+    Deprecated: false
+    EPSG: 6596
+    Filename: NAD83(2011) Washington North.wkt
+    Gridshiftfile: null
+    Imagefile: usa-washington - north
+    LatMax: 49.05
+    LatMin: 47.08
+    LonMax: -117.02
+    LonMin: -124.79
+    Regions:
+    - US-WA
+    XMax: 778655.8701648887
+    XMin: 199622.13896693772
+    YMax: 234845.72192574354
+    YMin: 16618.32590466795
+  NAD83(2011) Washington South:
+    Deprecated: false
+    EPSG: 6598
+    Filename: NAD83(2011) Washington South.wkt
+    Gridshiftfile: null
+    Imagefile: usa-washington - south
+    LatMax: 47.61
+    LatMin: 45.54
+    LonMax: -116.91
+    LonMin: -124.4
+    Regions:
+    - US-WA
+    XMax: 769845.025376511
+    XMin: 195499.39120977296
+    YMax: 259212.8282079461
+    YMin: 30501.042787401457
+  NAD83(2011) West Virginia North:
+    Deprecated: false
+    EPSG: 6600
+    Filename: NAD83(2011) West Virginia North.wkt
+    Gridshiftfile: null
+    Imagefile: US_West_Virginia_North
+    LatMax: 40.64
+    LatMin: 38.76
+    LonMax: -77.72
+    LonMin: -81.76
+    Regions:
+    - US-WV
+    XMax: 750577.3343822454
+    XMin: 403574.77820059075
+    YMax: 239088.07654411707
+    YMin: 31335.65418259631
+  NAD83(2011) West Virginia South:
+    Deprecated: false
+    EPSG: 6602
+    Filename: NAD83(2011) West Virginia South.wkt
+    Gridshiftfile: null
+    Imagefile: US_West_Virginia_South
+    LatMax: 39.17
+    LatMin: 37.2
+    LonMax: -79.05
+    LonMin: -82.65
+    Regions:
+    - US-WV
+    XMax: 768516.5072083795
+    XMin: 453513.4977037739
+    YMax: 242635.52047372516
+    YMin: 23502.170616558215
+  NAD83(CSRS) / MTM zone 8:
+    Deprecated: false
+    EPSG: 2950
+    Filename: 2950.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 62.53
+    LatMin: 44.98
+    LonMax: -72.0
+    LonMin: -75.0
+    Regions:
+    - CA
+    XMax: 382016.02710479405
+    XMin: 186500.54153918556
+    YMax: 6936201.352126838
+    YMin: 4983317.19656948
+  NGO Zone 1:
+    Deprecated: false
+    EPSG: 27391
+    Filename: NGO Zone 1.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 63.06
+    LatMin: 57.93
+    LonMax: 7.23
+    LonMin: 4.68
+    Regions:
+    - 'NO'
+    XMax: 564236.648738876
+    XMin: -7059.044220856107
+    YMax: 59597.54701889311
+    YMin: -81285.90832917758
+  NGO Zone 2:
+    Deprecated: false
+    EPSG: 27392
+    Filename: NGO Zone 2.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 63.87
+    LatMin: 57.95
+    LonMax: 9.56
+    LonMin: 7.22
+    Regions:
+    - 'NO'
+    XMax: 654503.8659821765
+    XMin: -5070.045282866259
+    YMax: 57788.50020207853
+    YMin: -68993.45975161542
+  NGO Zone 3:
+    Deprecated: false
+    EPSG: 27393
+    Filename: NGO Zone 3.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 65.76
+    LatMin: 58.84
+    LonMax: 11.98
+    LonMin: 9.55
+    Regions:
+    - 'NO'
+    XMax: 865258.9330379802
+    XMin: 94047.40754787835
+    YMax: 57872.49797125781
+    YMin: -67452.71278728331
+  NGO Zone 4:
+    Deprecated: false
+    EPSG: 27394
+    Filename: NGO Zone 4.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 69.06
+    LatMin: 59.88
+    LonMax: 15.06
+    LonMin: 11.97
+    Regions:
+    - 'NO'
+    XMax: 1233809.5420578762
+    XMin: 209965.21541367692
+    YMax: 73559.57998401349
+    YMin: -69881.80139566518
+  NGO Zone 5:
+    Deprecated: false
+    EPSG: 27395
+    Filename: NGO Zone 5.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 70.19
+    LatMin: 66.15
+    LonMax: 18.89
+    LonMin: 15.05
+    Regions:
+    - 'NO'
+    XMax: 1360000.1560778217
+    XMin: 909364.0792788886
+    YMax: 75961.33069249925
+    YMin: -82737.02954365427
+  NGO Zone 6:
+    Deprecated: false
+    EPSG: 27396
+    Filename: NGO Zone 6.wkt
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 70.81
+    LatMin: 68.33
+    LonMax: 22.89
+    LonMin: 18.88
+    Regions:
+    - 'NO'
+    XMax: 1429123.058674106
+    XMin: 1152601.9462355576
+    YMax: 73699.09685658928
+    YMin: -82533.11247201057
+  NGO Zone 7:
+    Deprecated: false
+    EPSG: 27397
+    Filename: NGO Zone 7.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-7
+    LatMax: 71.21
+    LatMin: 68.58
+    LonMax: 26.98
+    LonMin: 22.88
+    Regions:
+    - 'NO'
+    XMax: 1473823.4273530338
+    XMin: 1180457.5412675184
+    YMax: 75474.35952769355
+    YMin: -81609.52554351954
+  NGO Zone 8:
+    Deprecated: false
+    EPSG: 27398
+    Filename: NGO Zone 8.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-8
+    LatMax: 71.17
+    LatMin: 69.02
+    LonMax: 31.22
+    LonMin: 26.97
+    Regions:
+    - 'NO'
+    XMax: 1469436.8859736554
+    XMin: 1229598.8239612677
+    YMax: 78283.48029355296
+    YMin: -83054.97996270699
+  NTM Zone 05:
+    Deprecated: false
+    EPSG: 5105
+    Filename: NTM Zone 05.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-5
+    LatMax: 62.49
+    LatMin: 58.32
+    LonMax: 6.0
+    LonMin: 4.68
+    Regions:
+    - 'NO'
+    XMax: 125777.0
+    XMin: 51945.0
+    YMax: 1500358.0
+    YMin: 1035934.0
+  NTM Zone 06:
+    Deprecated: false
+    EPSG: 5106
+    Filename: NTM Zone 06.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-6
+    LatMax: 63.02
+    LatMin: 57.93
+    LonMax: 7.0
+    LonMin: 6.0
+    Regions:
+    - 'NO'
+    XMax: 125318.0
+    XMin: 70376.0
+    YMax: 1559429.0
+    YMin: 992313.0
+  NTM Zone 07:
+    Deprecated: false
+    EPSG: 5107
+    Filename: NTM Zone 07.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-7
+    LatMax: 63.52
+    LatMin: 57.93
+    LonMax: 8.0
+    LonMin: 7.0
+    Regions:
+    - 'NO'
+    XMax: 124884.0
+    XMin: 70376.0
+    YMax: 1615161.0
+    YMin: 992313.0
+  NTM Zone 08:
+    Deprecated: false
+    EPSG: 5108
+    Filename: NTM Zone 08.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-8
+    LatMax: 63.87
+    LatMin: 58.03
+    LonMax: 9.0
+    LonMin: 8.0
+    Regions:
+    - 'NO'
+    XMax: 124579.0
+    XMin: 70458.0
+    YMax: 1654175.0
+    YMin: 1003450.0
+  NTM Zone 09:
+    Deprecated: false
+    EPSG: 5109
+    Filename: NTM Zone 09.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-9
+    LatMax: 64.16
+    LatMin: 58.52
+    LonMax: 10.0
+    LonMin: 9.0
+    Regions:
+    - 'NO'
+    XMax: 124325.0
+    XMin: 70863.0
+    YMax: 1686503.0
+    YMin: 1058027.0
+  NTM Zone 10:
+    Deprecated: false
+    EPSG: 5110
+    Filename: NTM Zone 10.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-10
+    LatMax: 65.04
+    LatMin: 58.9
+    LonMax: 11.0
+    LonMin: 10.0
+    Regions:
+    - 'NO'
+    XMax: 123552.0
+    XMin: 71179.0
+    YMax: 1784609.0
+    YMin: 1100354.0
+  NTM Zone 11:
+    Deprecated: false
+    EPSG: 5111
+    Filename: NTM Zone 11.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-11
+    LatMax: 65.76
+    LatMin: 58.88
+    LonMax: 12.0
+    LonMin: 11.0
+    Regions:
+    - 'NO'
+    XMax: 122915.0
+    XMin: 71162.0
+    YMax: 1864886.0
+    YMin: 1098126.0
+  NTM Zone 12:
+    Deprecated: false
+    EPSG: 5112
+    Filename: NTM Zone 12.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-12
+    LatMax: 68.15
+    LatMin: 59.88
+    LonMax: 13.0
+    LonMin: 12.0
+    Regions:
+    - 'NO'
+    XMax: 120775.0
+    XMin: 71999.0
+    YMax: 2131414.0
+    YMin: 1209526.0
+  NTM Zone 13:
+    Deprecated: false
+    EPSG: 5113
+    Filename: NTM Zone 13.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-13
+    LatMax: 68.37
+    LatMin: 64.01
+    LonMax: 14.0
+    LonMin: 13.0
+    Regions:
+    - 'NO'
+    XMax: 120576.0
+    XMin: 75543.0
+    YMax: 2155952.0
+    YMin: 1669782.0
+  NTM Zone 14:
+    Deprecated: false
+    EPSG: 5114
+    Filename: NTM Zone 14.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-14
+    LatMax: 69.05
+    LatMin: 64.03
+    LonMax: 15.0
+    LonMin: 14.0
+    Regions:
+    - 'NO'
+    XMax: 119959.0
+    XMin: 75560.0
+    YMax: 2231801.0
+    YMin: 1672011.0
+  NTM Zone 15:
+    Deprecated: false
+    EPSG: 5115
+    Filename: NTM Zone 15.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-15
+    LatMax: 69.35
+    LatMin: 66.14
+    LonMax: 16.0
+    LonMin: 15.0
+    Regions:
+    - 'NO'
+    XMax: 119686.0
+    XMin: 77422.0
+    YMax: 2265265.0
+    YMin: 1907257.0
+  NTM Zone 16:
+    Deprecated: false
+    EPSG: 5116
+    Filename: NTM Zone 16.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-16
+    LatMax: 69.45
+    LatMin: 66.88
+    LonMax: 17.0
+    LonMin: 16.0
+    Regions:
+    - 'NO'
+    XMax: 119595.0
+    XMin: 78082.0
+    YMax: 2276420.0
+    YMin: 1989776.0
+  NTM Zone 17:
+    Deprecated: false
+    EPSG: 5117
+    Filename: NTM Zone 17.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-17
+    LatMax: 69.68
+    LatMin: 67.94
+    LonMax: 18.0
+    LonMin: 17.0
+    Regions:
+    - 'NO'
+    XMax: 119385.0
+    XMin: 79035.0
+    YMax: 2302078.0
+    YMin: 2107992.0
+  NTM Zone 18:
+    Deprecated: false
+    EPSG: 5118
+    Filename: NTM Zone 18.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-18
+    LatMax: 70.27
+    LatMin: 68.04
+    LonMax: 19.0
+    LonMin: 18.0
+    Regions:
+    - 'NO'
+    XMax: 118845.0
+    XMin: 79125.0
+    YMax: 2367897.0
+    YMin: 2119145.0
+  NTM Zone 19:
+    Deprecated: false
+    EPSG: 5119
+    Filename: NTM Zone 19.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-19
+    LatMax: 70.34
+    LatMin: 68.33
+    LonMax: 20.0
+    LonMin: 19.0
+    Regions:
+    - 'NO'
+    XMax: 118781.0
+    XMin: 79387.0
+    YMax: 2375707.0
+    YMin: 2151491.0
+  NTM Zone 20:
+    Deprecated: false
+    EPSG: 5120
+    Filename: NTM Zone 20.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-20
+    LatMax: 70.29
+    LatMin: 68.37
+    LonMax: 21.0
+    LonMin: 20.0
+    Regions:
+    - 'NO'
+    XMax: 118827.0
+    XMin: 79423.0
+    YMax: 2370128.0
+    YMin: 2155952.0
+  NTM Zone 21:
+    Deprecated: false
+    EPSG: 5121
+    Filename: NTM Zone 21.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-21
+    LatMax: 70.71
+    LatMin: 69.03
+    LonMax: 22.0
+    LonMin: 21.0
+    Regions:
+    - 'NO'
+    XMax: 118442.0
+    XMin: 80022.0
+    YMax: 2416986.0
+    YMin: 2229570.0
+  NTM Zone 22:
+    Deprecated: false
+    EPSG: 5122
+    Filename: NTM Zone 22.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-22
+    LatMax: 70.81
+    LatMin: 68.69
+    LonMax: 23.0
+    LonMin: 22.0
+    Regions:
+    - 'NO'
+    XMax: 118350.0
+    XMin: 79713.0
+    YMax: 2428143.0
+    YMin: 2191645.0
+  NTM Zone 23:
+    Deprecated: false
+    EPSG: 5123
+    Filename: NTM Zone 23.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-23
+    LatMax: 71.08
+    LatMin: 68.62
+    LonMax: 24.0
+    LonMin: 23.0
+    Regions:
+    - 'NO'
+    XMax: 118101.0
+    XMin: 79650.0
+    YMax: 2458267.0
+    YMin: 2183837.0
+  NTM Zone 24:
+    Deprecated: false
+    EPSG: 5124
+    Filename: NTM Zone 24.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-24
+    LatMax: 71.16
+    LatMin: 68.58
+    LonMax: 25.0
+    LonMin: 24.0
+    Regions:
+    - 'NO'
+    XMax: 118027.0
+    XMin: 79613.0
+    YMax: 2467192.0
+    YMin: 2179375.0
+  NTM Zone 25:
+    Deprecated: false
+    EPSG: 5125
+    Filename: NTM Zone 25.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-25
+    LatMax: 71.21
+    LatMin: 68.59
+    LonMax: 26.0
+    LonMin: 25.0
+    Regions:
+    - 'NO'
+    XMax: 118101.0
+    XMin: 79650.0
+    YMax: 2458267.0
+    YMin: 2183837.0
+  NTM Zone 26:
+    Deprecated: false
+    EPSG: 5126
+    Filename: NTM Zone 26.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-26
+    LatMax: 71.17
+    LatMin: 69.71
+    LonMax: 27.0
+    LonMin: 26.0
+    Regions:
+    - 'NO'
+    XMax: 118018.0
+    XMin: 80641.0
+    YMax: 2468308.0
+    YMin: 2305424.0
+  NTM Zone 27:
+    Deprecated: false
+    EPSG: 5127
+    Filename: NTM Zone 27.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-27
+    LatMax: 71.17
+    LatMin: 69.9
+    LonMax: 28.0
+    LonMin: 27.0
+    Regions:
+    - 'NO'
+    XMax: 118018.0
+    XMin: 80815.0
+    YMax: 2468308.0
+    YMin: 2326620.0
+  NTM Zone 28:
+    Deprecated: false
+    EPSG: 5128
+    Filename: NTM Zone 28.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-28
+    LatMax: 71.13
+    LatMin: 69.03
+    LonMax: 29.0
+    LonMin: 28.0
+    Regions:
+    - 'NO'
+    XMax: 118055.0
+    XMin: 80022.0
+    YMax: 2463845.0
+    YMin: 2229570.0
+  NTM Zone 29:
+    Deprecated: false
+    EPSG: 5129
+    Filename: NTM Zone 29.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-29
+    LatMax: 70.93
+    LatMin: 69.02
+    LonMax: 30.0
+    LonMin: 29.0
+    Regions:
+    - 'NO'
+    XMax: 118239.0
+    XMin: 80013.0
+    YMax: 2441531.0
+    YMin: 2228454.0
+  NTM Zone 30:
+    Deprecated: false
+    EPSG: 5130
+    Filename: NTM Zone 30.wkt
+    Gridshiftfile: null
+    Imagefile: NTM-30
+    LatMax: 70.77
+    LatMin: 69.46
+    LonMax: 31.22
+    LonMin: 30.0
+    Regions:
+    - 'NO'
+    XMax: 126476.0
+    XMin: 80413.0
+    YMax: 2423761.0
+    YMin: 2277536.0
+  NZGD2000 / Amuri 2000:
+    Deprecated: false
+    EPSG: 2119
+    Filename: NZGD2000 Amuri 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Amuri 2000
+    LatMax: -42.09
+    LatMin: -42.95
+    LonMax: 173.55
+    LonMin: 171.88
+    Regions:
+    - NZ
+    XMax: 866383.9667833812
+    XMin: 770373.729781629
+    YMax: 444676.381604188
+    YMin: 307783.59031107766
+  NZGD2000 / Bay of Plenty 2000:
+    Deprecated: false
+    EPSG: 2106
+    Filename: NZGD2000 Bay of Plenty 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Bay of Plenty 2000
+    LatMax: -37.22
+    LatMin: -39.13
+    LonMax: 177.23
+    LonMin: 175.75
+    Regions:
+    - NZ
+    XMax: 859782.832964711
+    XMin: 647802.365562084
+    YMax: 467799.17150354164
+    YMin: 338079.21376455604
+  NZGD2000 / Bluff 2000:
+    Deprecated: false
+    EPSG: 2132
+    Filename: NZGD2000 Bluff 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Bluff 2000
+    LatMax: -45.33
+    LatMin: -47.33
+    LonMax: 168.97
+    LonMin: 167.29
+    Regions:
+    - NZ
+    XMax: 940969.9021003905
+    XMin: 718308.2173642612
+    YMax: 449169.7724037481
+    YMin: 320424.62767151266
+  NZGD2000 / Buller 2000:
+    Deprecated: false
+    EPSG: 2117
+    Filename: NZGD2000 Buller 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Buller 2000
+    LatMax: -41.42
+    LatMin: -42.19
+    LonMax: 172.41
+    LonMin: 171.27
+    Regions:
+    - NZ
+    XMax: 843045.7559681997
+    XMin: 757806.9991322052
+    YMax: 469294.4575959161
+    YMin: 374301.01455101045
+  NZGD2000 / Collingwood 2000:
+    Deprecated: false
+    EPSG: 2114
+    Filename: NZGD2000 Collingwood 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Collingwood 2000
+    LatMax: -40.44
+    LatMin: -41.22
+    LonMax: 173.13
+    LonMin: 172.16
+    Regions:
+    - NZ
+    XMax: 830405.9677569862
+    XMin: 743760.8654153575
+    YMax: 438862.9830909714
+    YMin: 357070.9203976522
+  NZGD2000 / Gawler 2000:
+    Deprecated: false
+    EPSG: 2125
+    Filename: NZGD2000 Gawler 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Gawler 2000
+    LatMax: -43.13
+    LatMin: -44.25
+    LonMax: 172.26
+    LonMin: 170.68
+    Regions:
+    - NZ
+    XMax: 868335.7532531266
+    XMin: 744064.3017716812
+    YMax: 473186.9629972589
+    YMin: 345644.9158724317
+  NZGD2000 / Grey 2000:
+    Deprecated: false
+    EPSG: 2118
+    Filename: NZGD2000 Grey 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Grey 2000
+    LatMax: -41.5
+    LatMin: -42.74
+    LonMax: 172.75
+    LonMin: 171.15
+    Regions:
+    - NZ
+    XMax: 891894.9462404557
+    XMin: 754779.3245131352
+    YMax: 500219.50421288615
+    YMin: 367269.15081990097
+  NZGD2000 / Hawkes Bay 2000:
+    Deprecated: false
+    EPSG: 2108
+    Filename: NZGD2000 Hawkes Bay 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Hawkes Bay 2000
+    LatMax: -38.87
+    LatMin: -40.57
+    LonMax: 178.07
+    LonMin: 175.8
+    Regions:
+    - NZ
+    XMax: 885761.6182345663
+    XMin: 697571.8959503456
+    YMax: 521187.7630184046
+    YMin: 326022.51983114006
+  NZGD2000 / Hokitika 2000:
+    Deprecated: false
+    EPSG: 2121
+    Filename: NZGD2000 Hokitika 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Hokitika 2000
+    LatMax: -42.41
+    LatMin: -43.23
+    LonMax: 171.89
+    LonMin: 170.39
+    Regions:
+    - NZ
+    XMax: 852487.7632893431
+    XMin: 761627.1859796605
+    YMax: 474931.4379266977
+    YMin: 352093.17305216426
+  NZGD2000 / Jacksons Bay 2000:
+    Deprecated: false
+    EPSG: 2123
+    Filename: NZGD2000 Jacksons Bay 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Jacksons Bay 2000
+    LatMax: -43.67
+    LatMin: -44.4
+    LonMax: 170.01
+    LonMin: 168.02
+    Regions:
+    - NZ
+    XMax: 833238.9059669231
+    XMin: 752917.2857969411
+    YMax: 513223.35076644196
+    YMin: 353307.21867613454
+  NZGD2000 / Karamea 2000:
+    Deprecated: false
+    EPSG: 2116
+    Filename: NZGD2000 Karamea 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Karamea 2000
+    LatMax: -40.75
+    LatMin: -41.49
+    LonMax: 172.7
+    LonMin: 171.96
+    Regions:
+    - NZ
+    XMax: 859770.3728473033
+    XMin: 777746.1568661178
+    YMax: 449920.81510657514
+    YMin: 387566.43428381847
+  NZGD2000 / Lindis Peak 2000:
+    Deprecated: false
+    EPSG: 2127
+    Filename: NZGD2000 Lindis Peak 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Lindis Peak 2000
+    LatMax: -43.71
+    LatMin: -45.4
+    LonMax: 170.24
+    LonMin: 168.62
+    Regions:
+    - NZ
+    XMax: 913604.4649830614
+    XMin: 725747.0452051756
+    YMax: 462260.364190622
+    YMin: 333643.91642146546
+  NZGD2000 / Marlborough 2000:
+    Deprecated: false
+    EPSG: 2120
+    Filename: NZGD2000 Marlborough 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Marlborough 2000
+    LatMax: -40.85
+    LatMin: -42.65
+    LonMax: 174.46
+    LonMin: 172.95
+    Regions:
+    - NZ
+    XMax: 876914.9821307503
+    XMin: 676848.3099814288
+    YMax: 455491.1325367
+    YMin: 330138.41655190097
+  NZGD2000 / Mount Eden 2000:
+    Deprecated: false
+    EPSG: 2105
+    Filename: NZGD2000 Mount Eden 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Mount Eden 2000
+    LatMax: -34.1
+    LatMin: -39.01
+    LonMax: 176.12
+    LonMin: 171.99
+    Regions:
+    - NZ
+    XMax: 525103.0
+    XMin: 159722.0
+    YMax: 1107548.0
+    YMin: 559909.0
+  NZGD2000 / Mount Nicholas 2000:
+    Deprecated: false
+    EPSG: 2128
+    Filename: NZGD2000 Mount Nicholas 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Mount Nicholas 2000
+    LatMax: -44.29
+    LatMin: -45.58
+    LonMax: 169.11
+    LonMin: 167.72
+    Regions:
+    - NZ
+    XMax: 893408.4946720286
+    XMin: 750072.2608976149
+    YMax: 456779.18172295997
+    YMin: 347036.25624071
+  NZGD2000 / Mount Pleasant 2000:
+    Deprecated: false
+    EPSG: 2124
+    Filename: NZGD2000 Mount Pleasant 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Mount Pleasant 2000
+    LatMax: -42.69
+    LatMin: -43.96
+    LonMax: 173.38
+    LonMin: 171.11
+    Regions:
+    - NZ
+    XMax: 899840.8417026722
+    XMin: 757680.4986053623
+    YMax: 453517.79846628115
+    YMin: 270223.2895135087
+  NZGD2000 / Mount York 2000:
+    Deprecated: false
+    EPSG: 2129
+    Filename: NZGD2000 Mount York 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Mount York 2000
+    LatMax: -44.53
+    LatMin: -46.33
+    LonMax: 168.21
+    LonMin: 166.37
+    Regions:
+    - NZ
+    XMax: 914759.8894913999
+    XMin: 713905.1588297696
+    YMax: 437470.130470534
+    YMin: 294615.3468619585
+  NZGD2000 / Nelson 2000:
+    Deprecated: false
+    EPSG: 2115
+    Filename: NZGD2000 Nelson 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Nelson 2000
+    LatMax: -40.66
+    LatMin: -42.18
+    LonMax: 174.08
+    LonMin: 172.4
+    Regions:
+    - NZ
+    XMax: 867942.886591709
+    XMin: 699030.3463818699
+    YMax: 466032.29725026665
+    YMin: 325713.3677744962
+  NZGD2000 / New Zealand Transverse Mercator 2000:
+    Deprecated: false
+    EPSG: 2193
+    Filename: NZTM2000.wkt
+    Gridshiftfile: null
+    Imagefile: New Zealand
+    LatMax: -34.1
+    LatMin: -47.33
+    LonMax: 178.63
+    LonMin: 166.37
+    Regions:
+    - NZ
+    XMax: 2119620.0
+    XMin: 1099153.0
+    YMax: 6212415.0
+    YMin: 4736810.0
+  NZGD2000 / North Taieri 2000:
+    Deprecated: false
+    EPSG: 2131
+    Filename: NZGD2000 North Taieri 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_North Taieri 2000
+    LatMax: -45.23
+    LatMin: -46.73
+    LonMax: 170.87
+    LonMin: 168.64
+    Regions:
+    - NZ
+    XMax: 870003.3710792346
+    XMin: 702141.1385203148
+    YMax: 446134.9637561002
+    YMin: 274456.1487596093
+  NZGD2000 / Observation Point 2000:
+    Deprecated: false
+    EPSG: 2130
+    Filename: NZGD2000 Observation Point 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Observation Point 2000
+    LatMax: -44.61
+    LatMin: -45.82
+    LonMax: 171.24
+    LonMin: 169.77
+    Regions:
+    - NZ
+    XMax: 933860.2795169557
+    XMin: 799209.425371417
+    YMax: 448554.04269600223
+    YMin: 333295.46372098586
+  NZGD2000 / Okarito 2000:
+    Deprecated: false
+    EPSG: 2122
+    Filename: NZGD2000 Okarito 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Okarito 2000
+    LatMax: -43.0
+    LatMin: -43.85
+    LonMax: 170.89
+    LonMin: 169.21
+    Regions:
+    - NZ
+    XMax: 812028.2098750061
+    XMin: 717247.6269372106
+    YMax: 451302.9327729296
+    YMin: 315504.4092320163
+  NZGD2000 / Poverty Bay 2000:
+    Deprecated: false
+    EPSG: 2107
+    Filename: NZGD2000 Poverty Bay 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Poverty Bay 2000
+    LatMax: -37.49
+    LatMin: -39.04
+    LonMax: 178.63
+    LonMin: 176.73
+    Regions:
+    - NZ
+    XMax: 925660.2522529426
+    XMin: 753232.7234562587
+    YMax: 465837.09328845923
+    YMin: 299953.3466348467
+  NZGD2000 / Taranaki 2000:
+    Deprecated: false
+    EPSG: 2109
+    Filename: NZGD2000 Taranaki 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Taranaki 2000
+    LatMax: -38.4
+    LatMin: -39.78
+    LonMax: 175.44
+    LonMin: 173.68
+    Regions:
+    - NZ
+    XMax: 880958.9274278634
+    XMin: 728307.5162985184
+    YMax: 505893.3623461356
+    YMin: 353073.24108547176
+  NZGD2000 / Timaru 2000:
+    Deprecated: false
+    EPSG: 2126
+    Filename: NZGD2000 Timaru 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Timaru 2000
+    LatMax: -43.35
+    LatMin: -44.98
+    LonMax: 171.55
+    LonMin: 169.82
+    Regions:
+    - NZ
+    XMax: 916763.4199339706
+    XMin: 735018.3392760918
+    YMax: 439952.7849338846
+    YMin: 302414.9945174688
+  NZGD2000 / Tuhirangi 2000:
+    Deprecated: false
+    EPSG: 2110
+    Filename: NZGD2000 Tuhirangi 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Tuhirangi 2000
+    LatMax: -38.87
+    LatMin: -39.55
+    LonMax: 176.33
+    LonMin: 174.88
+    Regions:
+    - NZ
+    XMax: 871072.669778655
+    XMin: 795529.8210856072
+    YMax: 459881.75185913715
+    YMin: 334676.29712235124
+  NZGD2000 / UTM60S:
+    Deprecated: false
+    EPSG: 2135
+    Filename: NZGD2000 UTM60S.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_UTM60S
+    LatMax: 0.0
+    LatMin: -80.0
+    LonMax: 180.0
+    LonMin: 174.0
+    Regions:
+    - NZ
+    XMax: 833978.5569194623
+    XMin: 441867.78486720106
+    YMax: 10000000.0
+    YMin: 1116915.0440516975
+  NZGD2000 / Wairarapa 2000:
+    Deprecated: false
+    EPSG: 2112
+    Filename: NZGD2000 Wairarapa 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Wairarapa 2000
+    LatMax: -40.29
+    LatMin: -41.67
+    LonMax: 176.55
+    LonMin: 175.01
+    Regions:
+    - NZ
+    XMax: 870154.1702578864
+    XMin: 717095.2044037787
+    YMax: 476765.08945602295
+    YMin: 346933.63235053845
+  NZGD2000 / Wanganui 2000:
+    Deprecated: false
+    EPSG: 2111
+    Filename: NZGD2000 Wanganui 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Wanganui 2000
+    LatMax: -39.46
+    LatMin: -40.97
+    LonMax: 176.27
+    LonMin: 174.4
+    Regions:
+    - NZ
+    XMax: 886528.8186018829
+    XMin: 718581.9100282267
+    YMax: 467296.6569444586
+    YMin: 308413.96593510796
+  NZGD2000 / Wellington 2000:
+    Deprecated: false
+    EPSG: 2113
+    Filename: NZGD2000 Wellington 2000.wkt
+    Gridshiftfile: null
+    Imagefile: NZ_Wellington 2000
+    LatMax: -40.91
+    LatMin: -41.5
+    LonMax: 175.36
+    LonMin: 174.52
+    Regions:
+    - NZ
+    XMax: 843271.2217299109
+    XMin: 777879.3322444925
+    YMax: 449169.08215060213
+    YMin: 378592.5012313212
+  New Brunswick Stereographic NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2953
+    Filename: NAD83(CSRS) New Brunswick.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) New Brunswick
+    LatMax: 48.07
+    LatMin: 44.56
+    LonMax: -63.7
+    LonMin: -69.05
+    Regions:
+    - CA
+    XMax: 7678288.603219202
+    XMin: 7287600.231130924
+    YMax: 2708663.067677533
+    YMin: 2297385.2374844654
+  Not localized:
+    Deprecated: false
+    EPSG: null
+    Filename: Not localized
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: null
+    LatMin: null
+    LonMax: null
+    LonMin: null
+    Regions:
+    - DK
+    - SE
+    - PL
+    - BE
+    - DE
+    - FI
+    - NL
+    - 'NO'
+    - CZ
+    - FO
+    - FR
+    - AU
+    - EE
+    - GB
+    - AT
+    - CH
+    - CA
+    - LT
+    - LV
+    - HU
+    - IE
+    - RS
+    - AU-West
+    - US-NH
+    - US-NY
+    - ZA
+    - US-OR
+    - RO
+    - NZ
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - IS
+    - TR
+    - LU
+    - SK
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - SI
+    - US-IL
+    - US-MI
+    - ZM
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-FL
+    - US-GA
+    - US-TN
+    - US-NM
+    - GL
+    - US-TX
+    - US-WY
+    - US-MT
+    - KR
+    - US-NE
+    - US-SD
+    - US-ND
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  OSGB36 (OSTN15):
+    Deprecated: false
+    EPSG: 27700
+    Filename: OSGB36 (OSTN15)
+    Gridshiftfile: OSGB36_OSTN15_OSGM15.bin
+    Imagefile: OSGB36
+    LatMax: 61.01
+    LatMin: 49.75
+    LonMax: 2.01
+    LonMin: -9.0
+    Regions:
+    - GB
+    XMax: 616700.9248869751
+    XMin: -104009.3571371049
+    YMax: 1242963.8870186193
+    YMin: 6924.791620305623
+  Polski 1965 Strefa 1:
+    Deprecated: false
+    EPSG: 3120
+    Filename: Polski 1965 Strefa 1.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 1965 Strefa 1
+    LatMax: 52.34
+    LatMin: 49.0
+    LonMax: 24.15
+    LonMin: 18.0
+    Regions:
+    - PL
+    XMax: 5662192.017762601
+    XMin: 5290951.926192165
+    YMax: 4846101.776389655
+    YMin: 4411549.763623389
+  Polski 1965 Strefa 2:
+    Deprecated: false
+    EPSG: 2172
+    Filename: Polski 1965 Strefa 2.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 1965 Strefa 2
+    LatMax: 54.51
+    LatMin: 51.33
+    LonMax: 23.95
+    LonMin: 19.0
+    Regions:
+    - PL
+    XMax: 5976581.9266168475
+    XMin: 5623022.479610304
+    YMax: 4761608.7717784
+    YMin: 4428704.827620481
+  Polski 1965 Strefa 3:
+    Deprecated: false
+    EPSG: 2173
+    Filename: Polski 1965 Strefa 3.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 1965 Strefa 3
+    LatMax: 54.89
+    LatMin: 52.16
+    LonMax: 20.0
+    LonMin: 14.14
+    Regions:
+    - PL
+    XMax: 6148524.341878376
+    XMin: 5844581.972933685
+    YMax: 3693043.58338525
+    YMin: 3304881.7110833726
+  Polski 1965 Strefa 4:
+    Deprecated: false
+    EPSG: 2174
+    Filename: Polski 1965 Strefa 4.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 1965 Strefa 4
+    LatMax: 53.34
+    LatMin: 49.39
+    LonMax: 19.09
+    LonMin: 14.14
+    Regions:
+    - PL
+    XMax: 5815451.225674633
+    XMin: 5376473.4633276155
+    YMax: 3864152.1104703606
+    YMin: 3519274.764209671
+  Polski 1965 Strefa 5:
+    Deprecated: false
+    EPSG: 2175
+    Filename: Polski 1965 Strefa 5.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 1965 Strefa 5
+    LatMax: 51.34
+    LatMin: 49.39
+    LonMax: 19.67
+    LonMin: 18.33
+    Regions:
+    - PL
+    XMax: 990189.4040203355
+    XMin: 773230.9526943099
+    YMax: 286715.1225683836
+    YMin: 191508.52371901943
+  Polski 2000 Strefa 5:
+    Deprecated: false
+    EPSG: 2176
+    Filename: Polski 2000 Strefa 5.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 2000 Strefa 5
+    LatMax: 55.35
+    LatMin: 50.26
+    LonMax: 16.5
+    LonMin: 14.14
+    Regions:
+    - PL
+    XMax: 6136746.812857672
+    XMin: 5569692.263086983
+    YMax: 5595142.645542588
+    YMin: 5438679.954042289
+  Polski 2000 Strefa 6:
+    Deprecated: false
+    EPSG: 2177
+    Filename: Polski 2000 Strefa 6.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 2000 Strefa 6
+    LatMax: 55.93
+    LatMin: 49.39
+    LonMax: 19.5
+    LonMin: 16.5
+    Regions:
+    - PL
+    XMax: 6593747.0
+    XMin: 6391112.0
+    YMax: 6201308.0
+    YMin: 5473661.0
+  Polski 2000 Strefa 7:
+    Deprecated: false
+    EPSG: 2178
+    Filename: Polski 2000 Strefa 7.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 2000 Strefa 7
+    LatMax: 54.55
+    LatMin: 49.09
+    LonMax: 22.5
+    LonMin: 19.5
+    Regions:
+    - PL
+    XMax: 7597051.0
+    XMin: 7390450.0
+    YMax: 6047705.0
+    YMin: 5440301.0
+  Polski 2000 Strefa 8:
+    Deprecated: false
+    EPSG: 2179
+    Filename: Polski 2000 Strefa 8.wkt
+    Gridshiftfile: null
+    Imagefile: Polski 2000 Strefa 8
+    LatMax: 54.41
+    LatMin: 49.0
+    LonMax: 24.15
+    LonMin: 22.5
+    Regions:
+    - PL
+    XMax: 8509738.0
+    XMin: 8390252.0
+    YMax: 6031098.0
+    YMin: 5430293.0
+  Polski 92:
+    Deprecated: false
+    EPSG: 2180
+    Filename: Polski 92.wkt
+    Gridshiftfile: null
+    Imagefile: Poland
+    LatMax: 55.93
+    LatMin: 49.0
+    LonMax: 24.15
+    LonMin: 14.14
+    Regions:
+    - PL
+    XMax: 908411.1932242773
+    XMin: 137212.44215662032
+    YMax: 821516.4770167257
+    YMin: 144693.2803694181
+  Prince Edward Isl. Stereographic NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2954
+    Filename: NAD83(CSRS) Prince Edward Island.wkt
+    Gridshiftfile: null
+    Imagefile: NAD83(CSRS) Prince Edward Island
+    LatMax: 47.09
+    LatMin: 45.9
+    LonMax: -61.9
+    LonMin: -64.49
+    Regions:
+    - CA
+    XMax: 483512.07826042164
+    XMin: 284369.75375782826
+    YMax: 782800.5408479595
+    YMin: 651027.8947063276
+  RD:
+    Deprecated: false
+    EPSG: 28992
+    Filename: RD
+    Gridshiftfile: null
+    Imagefile: Holland
+    LatMax: 53.7
+    LatMin: 50.75
+    LonMax: 7.22
+    LonMin: 3.2
+    Regions:
+    - NL
+    XMax: 276050.81520949904
+    XMin: 646.3609077221481
+    YMax: 636456.306489758
+    YMin: 308975.282456769
+  RGF93 CC42:
+    Deprecated: false
+    EPSG: 3942
+    Filename: RGF93 CC42.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC42
+    LatMax: 43.07
+    LatMin: 41.31
+    LonMax: 9.63
+    LonMin: -1.06
+    Regions:
+    - FR
+    XMax: 2239511.025035966
+    XMin: 1360148.4364888414
+    YMax: 1339754.1403672944
+    YMin: 1131427.4887314423
+  RGF93 CC43:
+    Deprecated: false
+    EPSG: 3943
+    Filename: RGF93 CC43.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC43
+    LatMax: 44.01
+    LatMin: 42.33
+    LonMax: 7.65
+    LonMin: -1.79
+    Regions:
+    - FR
+    XMax: 2072731.8019300369
+    XMin: 1305422.5577783044
+    YMax: 2322528.009920486
+    YMin: 2136828.8677029638
+  RGF93 CC44:
+    Deprecated: false
+    EPSG: 3944
+    Filename: RGF93 CC44.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC44
+    LatMax: 45.0
+    LatMin: 42.92
+    LonMax: 7.71
+    LonMin: -1.79
+    Regions:
+    - FR
+    XMax: 2071191.5732185666
+    XMin: 1309096.6163205083
+    YMax: 3321719.663969387
+    YMin: 3091367.567333826
+  RGF93 CC45:
+    Deprecated: false
+    EPSG: 3945
+    Filename: RGF93 CC45.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC45
+    LatMax: 46.0
+    LatMin: 44.0
+    LonMax: 7.71
+    LonMin: -1.46
+    Regions:
+    - FR
+    XMax: 2064671.0636930296
+    XMin: 1342437.3808461844
+    YMax: 4321739.720176566
+    YMin: 4098725.174010325
+  RGF93 CC46:
+    Deprecated: false
+    EPSG: 3946
+    Filename: RGF93 CC46.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC46
+    LatMax: 47.0
+    LatMin: 45.0
+    LonMax: 7.16
+    LonMin: -2.21
+    Regions:
+    - FR
+    XMax: 2016270.2600515436
+    XMin: 1289473.772772382
+    YMax: 5319418.437278014
+    YMin: 5102293.909117335
+  RGF93 CC47:
+    Deprecated: false
+    EPSG: 3947
+    Filename: RGF93 CC47.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC47
+    LatMax: 48.0
+    LatMin: 46.0
+    LonMax: 7.63
+    LonMin: -4.77
+    Regions:
+    - FR
+    XMax: 2045337.3635087823
+    XMin: 1099056.8387382692
+    YMax: 6321384.661705493
+    YMin: 6118668.990048366
+  RGF93 CC48:
+    Deprecated: false
+    EPSG: 3948
+    Filename: RGF93 CC48.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC48
+    LatMax: 49.0
+    LatMin: 47.0
+    LonMax: 8.23
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: 2082420.6120056377
+    XMin: 1102438.8273905618
+    YMax: 7324172.227208503
+    YMin: 7119349.134108447
+  RGF93 CC49:
+    Deprecated: false
+    EPSG: 3949
+    Filename: RGF93 CC49.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC49
+    LatMax: 50.0
+    LatMin: 48.0
+    LonMax: 8.23
+    LonMin: -4.87
+    Regions:
+    - FR
+    XMax: 2074697.3196147452
+    XMin: 1113711.1645370102
+    YMax: 8324127.545972525
+    YMin: 8119220.756691261
+  RGF93 CC50:
+    Deprecated: false
+    EPSG: 3950
+    Filename: RGF93 CC50.wkt
+    Gridshiftfile: null
+    Imagefile: RGF332CC50
+    LatMax: 51.14
+    LatMin: 49.0
+    LonMax: 8.08
+    LonMin: -2.03
+    Regions:
+    - FR
+    XMax: 2055296.7707273373
+    XMin: 1332198.9930973798
+    YMax: 9338881.93890299
+    YMin: 9101156.988274556
+  RGF93 Lambert-93:
+    Deprecated: false
+    EPSG: 2154
+    Filename: RGF93 Lambert-93.wkt
+    Gridshiftfile: null
+    Imagefile: France
+    LatMax: 51.56
+    LatMin: 41.15
+    LonMax: 10.38
+    LonMin: -9.86
+    Regions:
+    - FR
+    XMax: 1212610.742309418
+    XMin: -378305.8099675197
+    YMax: 7186901.681865059
+    YMin: 6093283.211317762
+  S-JTSK / Krovak East North:
+    Deprecated: false
+    EPSG: 5514
+    Filename: S-JTSK_JTSK.wkt
+    Gridshiftfile: jtsk_grid_shift.gs
+    Imagefile: Slovakia
+    LatMax: 49.63
+    LatMin: 47.68
+    LonMax: 22.63
+    LonMin: 16.75
+    Regions:
+    - SK
+    XMax: 616000.0
+    XMin: 149000.0
+    YMax: 1340000.0
+    YMin: 1132000.0
+  S-JTSK Ferro Negative:
+    Deprecated: false
+    EPSG: 2065
+    Filename: S-JTSK Ferro Negative.h2g
+    Gridshiftfile: null
+    Imagefile: Czechia
+    LatMax: 51.06
+    LatMin: 47.73
+    LonMax: 22.56
+    LonMin: 12.09
+    Regions:
+    - CZ
+    XMax: 983087.5480082365
+    XMin: 1276319.151569747
+    YMax: 159523.5347495811
+    YMin: 951555.9378801656
+  S-JTSK Ferro Positive:
+    Deprecated: false
+    EPSG: 2065
+    Filename: S-JTSK Ferro Positive.h2g
+    Gridshiftfile: null
+    Imagefile: Czechia
+    LatMax: 51.06
+    LatMin: 47.73
+    LonMax: 22.56
+    LonMin: 12.09
+    Regions:
+    - CZ
+    XMax: 983087.5480082365
+    XMin: 1276319.151569747
+    YMax: 159523.5347495811
+    YMin: 951555.9378801656
+  S-JTSK Negative / Krovak East North:
+    Deprecated: false
+    EPSG: 5514
+    Filename: S-JTSK_JTSK_Negative.wkt
+    Gridshiftfile: jtsk_neg_grid_shift.gs
+    Imagefile: Slovakia
+    LatMax: 49.63
+    LatMin: 47.68
+    LonMax: 22.63
+    LonMin: 16.75
+    Regions:
+    - SK
+    XMax: -149000.0
+    XMin: -616000.0
+    YMax: -1132000.0
+    YMin: -1340000.0
+  S-JTSK [JTSK03] / Krovak East North:
+    Deprecated: false
+    EPSG: 8353
+    Filename: S-JTSK_JTSK03.wkt
+    Gridshiftfile: jtsk03_grid_shift.gs
+    Imagefile: Slovakia
+    LatMax: 49.63
+    LatMin: 47.68
+    LonMax: 22.63
+    LonMin: 16.75
+    Regions:
+    - SK
+    XMax: 616000.0
+    XMin: 149000.0
+    YMax: 1340000.0
+    YMin: 1132000.0
+  S-JTSK [JTSK03] Negative / Krovak East North:
+    Deprecated: false
+    EPSG: 8353
+    Filename: S-JTSK_JTSK03_Negative.wkt
+    Gridshiftfile: jtsk03_neg_grid_shift.gs
+    Imagefile: Slovakia
+    LatMax: 49.63
+    LatMin: 47.68
+    LonMax: 22.63
+    LonMin: 16.75
+    Regions:
+    - SK
+    XMax: -149000.0
+    XMin: -616000.0
+    YMax: -1132000.0
+    YMin: -1340000.0
+  SWEREF99-12-00:
+    Deprecated: false
+    EPSG: 3007
+    Filename: SWEREF99-12-00.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-12-00
+    LatMax: 60.13
+    LatMin: 56.74
+    LonMax: 13.11
+    LonMin: 10.93
+    Regions:
+    - SE
+    XMax: 632648.37
+    XMin: 23814.64
+    YMax: 7713337.26
+    YMin: 6094553.81
+  SWEREF99-13-30:
+    Deprecated: false
+    EPSG: 3008
+    Filename: SWEREF99-13-30.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-13-30
+    LatMax: 62.28
+    LatMin: 55.28
+    LonMax: 14.79
+    LonMin: 12.12
+    Regions:
+    - SE
+    XMax: 216969.0
+    XMin: 62307.0
+    YMax: 6908803.0
+    YMin: 6129269.0
+  SWEREF99-14-15:
+    Deprecated: false
+    EPSG: 3012
+    Filename: SWEREF99-14-15.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-14-15
+    LatMax: 64.39
+    LatMin: 61.55
+    LonMax: 15.55
+    LonMin: 11.93
+    Regions:
+    - SE
+    XMax: 212719.0
+    XMin: 26665.0
+    YMax: 7143973.0
+    YMin: 6828977.0
+  SWEREF99-15-00:
+    Deprecated: false
+    EPSG: 3009
+    Filename: SWEREF99-15-00.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-15-00
+    LatMax: 61.62
+    LatMin: 55.95
+    LonMax: 16.15
+    LonMin: 13.54
+    Regions:
+    - SE
+    XMax: 211004.0
+    XMin: 58792.0
+    YMax: 6835121.0
+    YMin: 6203958.0
+  SWEREF99-15-45:
+    Deprecated: false
+    EPSG: 3013
+    Filename: SWEREF99-15-45.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-15-45
+    LatMax: 65.13
+    LatMin: 60.44
+    LonMax: 17.01
+    LonMin: 13.66
+    Regions:
+    - SE
+    XMax: 209149.0
+    XMin: 34943.0
+    YMax: 7226423.0
+    YMin: 6704921.0
+  SWEREF99-16-30:
+    Deprecated: false
+    EPSG: 3010
+    Filename: SWEREF99-16-30.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-16-30
+    LatMax: 62.26
+    LatMin: 56.15
+    LonMax: 17.63
+    LonMin: 15.41
+    Regions:
+    - SE
+    XMax: 208702.0
+    XMin: 82257.0
+    YMax: 6906419.0
+    YMin: 6225799.0
+  SWEREF99-17-15:
+    Deprecated: false
+    EPSG: 3014
+    Filename: SWEREF99-17-15.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-17-15
+    LatMax: 67.19
+    LatMin: 62.12
+    LonMax: 19.04
+    LonMin: 14.31
+    Regions:
+    - SE
+    XMax: 227460.0
+    XMin: -3406.0
+    YMax: 7456658.0
+    YMin: 6893784.0
+  SWEREF99-18-00:
+    Deprecated: false
+    EPSG: 3011
+    Filename: SWEREF99-18-00.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-18-00
+    LatMax: 60.7
+    LatMin: 58.66
+    LonMax: 19.61
+    LonMin: 17.08
+    Regions:
+    - SE
+    XMax: 237927.0
+    XMin: 96603.0
+    YMax: 6733142.0
+    YMin: 6505161.0
+  SWEREF99-18-45:
+    Deprecated: false
+    EPSG: 3015
+    Filename: SWEREF99-18-45.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-18-45
+    LatMax: 66.17
+    LatMin: 56.86
+    LonMax: 20.22
+    LonMin: 17.18
+    Regions:
+    - SE
+    XMax: 216295.0
+    XMin: 54234.0
+    YMax: 7342573.0
+    YMin: 6305422.0
+  SWEREF99-20-15:
+    Deprecated: false
+    EPSG: 3016
+    Filename: SWEREF99-20-15.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-20-15
+    LatMax: 69.07
+    LatMin: 63.45
+    LonMax: 23.28
+    LonMin: 16.08
+    Regions:
+    - SE
+    XMax: 270803.0
+    XMin: -57936.0
+    YMax: 7668217.0
+    YMin: 7045316.0
+  SWEREF99-21-45:
+    Deprecated: false
+    EPSG: 3017
+    Filename: SWEREF99-21-45.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-21-45
+    LatMax: 66.43
+    LatMin: 65.01
+    LonMax: 22.91
+    LonMin: 19.63
+    Regions:
+    - SE
+    XMax: 201778.0
+    XMin: 50039.0
+    YMax: 7371269.0
+    YMin: 7214130.0
+  SWEREF99-23-15:
+    Deprecated: false
+    EPSG: 3018
+    Filename: SWEREF99-23-15.wkt
+    Gridshiftfile: null
+    Imagefile: SWEREF99-23-15
+    LatMax: 68.14
+    LatMin: 65.49
+    LonMax: 24.17
+    LonMin: 21.85
+    Regions:
+    - SE
+    XMax: 188242.0
+    XMin: 85170.0
+    YMax: 7561782.0
+    YMin: 7266693.0
+  SWEREF99-TM:
+    Deprecated: false
+    EPSG: 5845
+    Filename: SWEREF99-TM.wkt
+    Gridshiftfile: null
+    Imagefile: SWEDEN
+    LatMax: 69.07
+    LatMin: 55.28
+    LonMax: 24.17
+    LonMin: 10.93
+    Regions:
+    - SE
+    XMax: 864416.305602837
+    XMin: 241540.0
+    YMax: 7689478.0
+    YMin: 6133500.0
+  Slovenia 1996 / Slovene national grid:
+    Deprecated: false
+    EPSG: 3794
+    Filename: Slovenia1996.wkt
+    Gridshiftfile: null
+    Imagefile: Slovenia
+    LatMax: 46.88
+    LatMin: 45.42
+    LonMax: 16.61
+    LonMin: 13.38
+    Regions:
+    - SI
+    XMax: 622710.7360243343
+    XMin: 373217.6542446414
+    YMax: 194645.86094378773
+    YMin: 32395.089991691522
+  Stereographic 1930:
+    Deprecated: false
+    EPSG: null
+    Filename: Stereographic 1930.h2g
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 48.365054713564774
+    LatMin: 43.5324018372287
+    LonMax: 29.86481159437607
+    LonMin: 20.13652474583014
+    Regions:
+    - RO
+    XMax: 576461.497
+    XMin: 532461.497
+    YMax: 358183.296
+    YMin: 316183.296
+  Stereographic 1970:
+    Deprecated: false
+    EPSG: null
+    Filename: Stereographic 1970.h2g
+    Gridshiftfile: null
+    Imagefile: null
+    LatMax: 43.58101159353106
+    LatMin: 48.40110046735734
+    LonMax: 29.76777634655188
+    LonMin: 19.97937439298409
+    Regions:
+    - RO
+    XMax: 890783.0
+    XMin: 109783.0
+    YMax: 785634.564
+    YMin: 213634.0
+  System34B:
+    Deprecated: false
+    EPSG: null
+    Filename: System34B.h2g
+    Gridshiftfile: null
+    Imagefile: DKTM04
+    LatMax: 55.31539838743094
+    LatMin: 54.95238699397834
+    LonMax: 15.245673462247474
+    LonMin: 14.491768969706069
+    Regions:
+    - DK
+    XMax: -27369.7353842761
+    XMin: -71463.8816323702
+    YMax: 72733.7045063493
+    YMin: 32344.9056131872
+  System34J:
+    Deprecated: false
+    EPSG: null
+    Filename: System34J.h2g
+    Gridshiftfile: null
+    Imagefile: JyllandFyn
+    LatMax: 57.91962203935679
+    LatMin: 54.72842889422661
+    LonMax: 10.931718082375635
+    LonMin: 7.810756421211833
+    Regions:
+    - DK
+    XMax: -177422.957397484
+    XMin: -355248.746581505
+    YMax: 388309.211128966
+    YMin: 35665.462016972
+  System34S:
+    Deprecated: false
+    EPSG: null
+    Filename: System34S.h2g
+    Gridshiftfile: null
+    Imagefile: DKTM03
+    LatMax: 56.22891351957815
+    LatMin: 54.54470438806046
+    LonMax: 12.798796551914062
+    LonMin: 10.820391222625885
+    Regions:
+    - DK
+    XMax: -59713.6052992048
+    XMin: -181221.20032641
+    YMax: 202515.276139555
+    YMin: 12462.227226286
+  TM35FIN:
+    Deprecated: false
+    EPSG: 3067
+    Filename: TM35FIN.wkt
+    Gridshiftfile: null
+    Imagefile: Finland
+    LatMax: 70.09
+    LatMin: 58.84
+    LonMax: 31.59
+    LonMin: 19.08
+    Regions:
+    - FI
+    XMax: 674306.0
+    XMin: 64562.0
+    YMax: 7782478.0
+    YMin: 6649100.0
+  UTM07N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3154
+    Filename: UTM07N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM07N_NAD83(CSRS)
+    LatMax: 72.53
+    LatMin: 52.05
+    LonMax: -138.0
+    LonMin: -141.01
+    Regions:
+    - CA
+    XMax: 600486.5601257628
+    XMin: 499315.5089376352
+    YMax: 8050560.90261341
+    YMin: 5766599.04078322
+  UTM08N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3155
+    Filename: UTM08N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM08N_NAD83(CSRS)
+    LatMax: 79.42
+    LatMin: 48.06
+    LonMax: -132.0
+    LonMin: -138.0
+    Regions:
+    - CA
+    XMax: 561467.232725668
+    XMin: 276485.1318802559
+    YMax: 8818431.933467267
+    YMin: 5327323.134038847
+  UTM09N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3156
+    Filename: UTM09N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM09N_NAD83(CSRS)
+    LatMax: 80.93
+    LatMin: 46.52
+    LonMax: -126.0
+    LonMin: -132.0
+    Regions:
+    - CA
+    XMax: 552775.3844453981
+    XMin: 269895.4161556687
+    YMax: 8986755.025818966
+    YMin: 5156198.314805986
+  UTM10N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3157
+    Filename: UTM10N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM10N_NAD83(CSRS)
+    LatMax: 81.8
+    LatMin: 48.13
+    LonMax: -120.0
+    LonMin: -126.0
+    Regions:
+    - CA
+    XMax: 547750.195896947
+    XMin: 276788.45469233824
+    YMax: 9083740.554165378
+    YMin: 5335102.177297896
+  UTM11N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2955
+    Filename: UTM11N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM11N_NAD83(CSRS)
+    LatMax: 83.5
+    LatMin: 48.99
+    LonMax: -114.0
+    LonMin: -120.0
+    Regions:
+    - CA
+    XMax: 537899.7512287744
+    XMin: 280543.3956366234
+    YMax: 9273261.181131858
+    YMin: 5430680.713027789
+  UTM12N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2956
+    Filename: UTM12N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM12N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 48.99
+    LonMax: -108.0
+    LonMin: -114.0
+    Regions:
+    - CA
+    XMax: 534995.6681299285
+    XMin: 280543.3072461711
+    YMax: 9329004.345366994
+    YMin: 5430680.643921617
+  UTM13N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2957
+    Filename: UTM13N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM13N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 48.99
+    LonMax: -102.0
+    LonMin: -108.0
+    Regions:
+    - CA
+    XMax: 534995.5793893619
+    XMin: 280543.2055326797
+    YMax: 9329004.241216386
+    YMin: 5430680.579779303
+  UTM14N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3158
+    Filename: UTM14N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM14N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 48.99
+    LonMax: -96.0
+    LonMin: -102.0
+    Regions:
+    - CA
+    - US-IA
+    XMax: 534995.4801386512
+    XMin: 280543.0916105422
+    YMax: 9329004.146769397
+    YMin: 5430680.521303599
+  UTM15N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3159
+    Filename: UTM15N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM15N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 48.03
+    LonMax: -90.0
+    LonMin: -96.0
+    Regions:
+    - CA
+    - US-IA
+    XMax: 534995.3714652077
+    XMin: 276354.58601913543
+    YMax: 9329004.063060805
+    YMin: 5323988.755028327
+  UTM16N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3160
+    Filename: UTM16N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM16N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 46.11
+    LonMax: -84.0
+    LonMin: -90.0
+    Regions:
+    - CA
+    - US-IA
+    XMax: 534995.2545596804
+    XMin: 268168.2911163049
+    YMax: 9329003.991007743
+    YMin: 5110644.39620336
+  UTM17N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2958
+    Filename: UTM17N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM17N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 41.67
+    LonMax: -78.0
+    LonMin: -84.0
+    Regions:
+    - CA
+    XMax: 534995.1307029102
+    XMin: 250254.51163890772
+    YMax: 9329003.93139964
+    YMin: 4617485.912906009
+  UTM18N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2959
+    Filename: UTM18N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM18N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 43.63
+    LonMax: -72.0
+    LonMin: -78.0
+    Regions:
+    - CA
+    XMax: 534995.0012518982
+    XMin: 257982.74856303638
+    YMax: 9329003.884889567
+    YMin: 4835152.015604219
+  UTM19N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM19N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM19N
+    LatMax: 80.9
+    LatMin: 73.24
+    LonMax: -66.0
+    LonMin: -72.0
+    Regions:
+    - GL
+    XMax: 4355420.28
+    XMin: 129735.79
+    YMax: 9923000.29
+    YMin: 6249444.51
+  UTM19N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2960
+    Filename: UTM19N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM19N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 40.8
+    LonMax: -66.0
+    LonMin: -72.0
+    Regions:
+    - CA
+    XMax: 534994.8676249364
+    XMin: 246917.2093283545
+    YMax: 9329003.851987107
+    YMin: 4520886.128300999
+  UTM20N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM20N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM20N
+    LatMax: 82.22
+    LatMin: 68.92
+    LonMax: -60.0
+    LonMin: -66.0
+    Regions:
+    - GL
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  UTM20N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2961
+    Filename: UTM20N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM20N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 40.04
+    LonMax: -60.0
+    LonMin: -66.0
+    Regions:
+    - CA
+    XMax: 534994.7312860697
+    XMin: 244049.86411928493
+    YMax: 9329003.833052743
+    YMin: 4436508.824065976
+  UTM21N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM21N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM21N
+    LatMax: 84.0
+    LatMin: 58.91
+    LonMax: -54.0
+    LonMin: -60.0
+    Regions:
+    - GL
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  UTM21N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 2962
+    Filename: UTM21N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM21N_NAD83(CSRS)
+    LatMax: 84.0
+    LatMin: 40.57
+    LonMax: -54.0
+    LonMin: -60.0
+    Regions:
+    - CA
+    XMax: 534994.5937290551
+    XMin: 246044.43855324294
+    YMax: 9329003.828293921
+    YMin: 4495350.02461739
+  UTM22N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM22N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM22N
+    LatMax: 84.0
+    LatMin: 56.9
+    LonMax: -48.0
+    LonMin: -54.0
+    Regions:
+    - GL
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  UTM22N_NAD83(CSRS):
+    Deprecated: false
+    EPSG: 3761
+    Filename: UTM22N_NAD83(CSRS).wkt
+    Gridshiftfile: null
+    Imagefile: UTM22N_NAD83(CSRS)
+    LatMax: 57.65
+    LatMin: 43.27
+    LonMax: -48.0
+    LonMin: -54.0
+    Regions:
+    - CA
+    XMax: 679019.160486654
+    XMin: 256541.00414885217
+    YMax: 6393704.14136075
+    YMin: 4795168.413479655
+  UTM23N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM23N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM23N
+    LatMax: 84.0
+    LatMin: 56.38
+    LonMax: -42.0
+    LonMin: -48.0
+    Regions:
+    - GL
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  UTM24N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM24N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM24N
+    LatMax: 84.0
+    LatMin: 56.56
+    LonMax: -36.0
+    LonMin: -42.0
+    Regions:
+    - GL
+    XMax: null
+    XMin: null
+    YMax: null
+    YMin: null
+  UTM27N (GR96):
+    Deprecated: false
+    EPSG: null
+    Filename: UTM27N_GR96.wkt
+    Gridshiftfile: null
+    Imagefile: Greenland_UTM27N
+    LatMax: 8

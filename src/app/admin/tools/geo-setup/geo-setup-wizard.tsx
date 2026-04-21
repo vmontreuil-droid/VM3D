@@ -47,12 +47,10 @@ export default function GeoSetupWizard({ regions }: { regions: Region[] }) {
     setVendorCode(null)
   }
 
-  function downloadFile(filename: string) {
-    if (!region || !vendor) return
-    const url = `/geo/${region.code}/${vendor.vendor}/${filename}`
+  function downloadFile(file: { filename: string; path: string }) {
     const a = document.createElement('a')
-    a.href = url
-    a.download = filename
+    a.href = encodeURI(file.path)
+    a.download = file.filename
     document.body.appendChild(a)
     a.click()
     a.remove()
@@ -230,7 +228,7 @@ export default function GeoSetupWizard({ regions }: { regions: Region[] }) {
                     {f.available ? (
                       <button
                         type="button"
-                        onClick={() => downloadFile(f.filename)}
+                        onClick={() => downloadFile(f)}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/15"
                       >
                         <Download className="h-3.5 w-3.5" /> {tt.download}

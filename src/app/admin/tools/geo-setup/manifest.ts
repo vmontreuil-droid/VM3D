@@ -1,12 +1,14 @@
-// Geo-setup manifest — bewaar de werkelijke geoide- en CRS-bestanden onder
-// public/geo/<region>/<vendor>/<filename>. Zet `available: true` zodra het
-// bestand werkelijk in de map staat. De UI gebruikt deze flag om te
-// beslissen of de download-knop actief of disabled wordt.
+// Geo-setup manifest — verwijst naar de werkelijke bestanden in
+// public/geo/TOPCON/ en public/geo/UNICONTROL/. Voor LEICA zijn er
+// nog geen bestanden geüpload (alle entries available:false).
+//
+// Wanneer je een nieuw bestand toevoegt, plak het in de juiste vendor-map
+// en voeg het hier toe met available:true en een correcte path.
 
 export type GeoFile = {
   filename: string
+  path: string
   description: string
-  bytes?: number
   available: boolean
 }
 
@@ -26,36 +28,50 @@ export type Region = {
   vendors: VendorPack[]
 }
 
+const FRENCH_LAMBERT_WKT = [
+  ['NTF(Paris) Lambert 1.wkt', 'Lambert I — Noord-Frankrijk'],
+  ['NTF(Paris) Lambert 1 (extended).wkt', 'Lambert I (extended)'],
+  ['NTF(Paris) Lambert 1 (grid).wkt', 'Lambert I (grid)'],
+  ['NTF(Paris) Lambert 2.wkt', 'Lambert II — Centraal Frankrijk'],
+  ['NTF(Paris) Lambert 2 (extended).wkt', 'Lambert II (extended) / Lambert II étendu'],
+  ['NTF(Paris) Lambert 2 (grid).wkt', 'Lambert II (grid)'],
+  ['NTF(Paris) Lambert 3.wkt', 'Lambert III — Zuid-Frankrijk'],
+  ['NTF(Paris) Lambert 3 (extended).wkt', 'Lambert III (extended)'],
+  ['NTF(Paris) Lambert 3 (grid).wkt', 'Lambert III (grid)'],
+] as const
+
 export const REGIONS: Region[] = [
   {
     code: 'be',
     name: 'België',
     flag: '🇧🇪',
-    crs: 'Lambert 2008',
-    epsg: 'EPSG:3812',
+    crs: 'Lambert 72 / Lambert 2008',
+    epsg: 'EPSG:31370 / EPSG:3812',
     geoid: 'hBG18',
     vendors: [
       {
         vendor: 'topcon',
         vendorName: 'Topcon',
         files: [
-          { filename: 'lambert2008.gc3', description: 'Coördinatensysteem Lambert 2008', available: false },
-          { filename: 'hbg18.ggf', description: 'Belgische geoide hBG18', available: false },
-        ],
-      },
-      {
-        vendor: 'leica',
-        vendorName: 'Leica',
-        files: [
-          { filename: 'lambert2008.csv', description: 'CRS-definitie Lambert 2008', available: false },
-          { filename: 'hbg18.gem', description: 'Belgische geoide hBG18', available: false },
+          { filename: 'BELGIUM.xml', path: '/geo/TOPCON/BELGIUM.xml', description: 'Belgisch coördinatensysteem (XML-definitie)', available: true },
+          { filename: 'BELGIUM_dll.xml', path: '/geo/TOPCON/BELGIUM_dll.xml', description: 'Belgisch CRS — datum link library variant', available: true },
+          { filename: 'LB72.prj', path: '/geo/TOPCON/LB72.prj', description: 'Lambert 72 projectiebestand', available: true },
+          { filename: 'LB72.txt', path: '/geo/TOPCON/LB72.txt', description: 'Lambert 72 — toelichting / parameters', available: true },
         ],
       },
       {
         vendor: 'unicontrol',
         vendorName: 'Unicontrol',
         files: [
-          { filename: 'be-lambert2008-hbg18.json', description: 'Lambert 2008 + hBG18 bundel', available: false },
+          { filename: 'UTM31N (ETRS89).wkt', path: '/geo/UNICONTROL/UTM31N (ETRS89).wkt', description: 'UTM zone 31N (ETRS89) — bruikbaar voor België', available: true },
+        ],
+      },
+      {
+        vendor: 'leica',
+        vendorName: 'Leica',
+        files: [
+          { filename: 'lambert72.csv', path: '/geo/LEICA/lambert72.csv', description: 'Lambert 72 (Leica iCON CSV-formaat)', available: false },
+          { filename: 'hbg18.gem', path: '/geo/LEICA/hbg18.gem', description: 'Belgische geoide hBG18 (Leica .gem)', available: false },
         ],
       },
     ],
@@ -64,31 +80,35 @@ export const REGIONS: Region[] = [
     code: 'nl',
     name: 'Nederland',
     flag: '🇳🇱',
-    crs: 'RD New',
+    crs: 'RD New / Amersfoort',
     epsg: 'EPSG:28992',
-    geoid: 'NLGEO2018',
+    geoid: 'NLGEO2018 / RDNAP2018',
     vendors: [
       {
         vendor: 'topcon',
         vendorName: 'Topcon',
         files: [
-          { filename: 'rdnew.gc3', description: 'Coördinatensysteem RD New', available: false },
-          { filename: 'nlgeo2018.ggf', description: 'Nederlandse geoide NLGEO2018', available: false },
-        ],
-      },
-      {
-        vendor: 'leica',
-        vendorName: 'Leica',
-        files: [
-          { filename: 'rdnew.csv', description: 'CRS-definitie RD New', available: false },
-          { filename: 'nlgeo2018.gem', description: 'Nederlandse geoide NLGEO2018', available: false },
+          { filename: 'NETHERLANDS.xml', path: '/geo/TOPCON/NETHERLANDS.xml', description: 'Nederlandse CRS-definitie (XML)', available: true },
+          { filename: 'NETHERLANDS_dll.xml', path: '/geo/TOPCON/NETHERLANDS_dll.xml', description: 'Nederlandse CRS — datum link library variant', available: true },
+          { filename: 'RDNAP2018.dff', path: '/geo/TOPCON/RDNAP2018.dff', description: 'NAP geoide-grid 2018 (RDNAP2018)', available: true },
+          { filename: 'rdtrans.prj', path: '/geo/TOPCON/rdtrans.prj', description: 'RD-transformatie projectiebestand', available: true },
+          { filename: 'rdtrans2004.prj', path: '/geo/TOPCON/rdtrans2004.prj', description: 'RDTrans 2004 — verfijnde versie', available: true },
+          { filename: 'rdtrans2008.prj', path: '/geo/TOPCON/rdtrans2008.prj', description: 'RDTrans 2008 — meest gebruikte versie', available: true },
         ],
       },
       {
         vendor: 'unicontrol',
         vendorName: 'Unicontrol',
         files: [
-          { filename: 'nl-rdnew-nlgeo2018.json', description: 'RD New + NLGEO2018 bundel', available: false },
+          { filename: 'UTM31N (ETRS89).wkt', path: '/geo/UNICONTROL/UTM31N (ETRS89).wkt', description: 'UTM zone 31N (ETRS89) — bruikbaar voor Nederland', available: true },
+        ],
+      },
+      {
+        vendor: 'leica',
+        vendorName: 'Leica',
+        files: [
+          { filename: 'rdnew.csv', path: '/geo/LEICA/rdnew.csv', description: 'RD New (Leica iCON CSV)', available: false },
+          { filename: 'nlgeo2018.gem', path: '/geo/LEICA/nlgeo2018.gem', description: 'NLGEO2018 geoide (Leica .gem)', available: false },
         ],
       },
     ],
@@ -97,31 +117,41 @@ export const REGIONS: Region[] = [
     code: 'fr',
     name: 'Frankrijk',
     flag: '🇫🇷',
-    crs: 'Lambert-93',
+    crs: 'Lambert-93 / NTF Lambert I-IV',
     epsg: 'EPSG:2154',
-    geoid: 'RAF20',
+    geoid: 'RAF20 / RAF09',
     vendors: [
       {
         vendor: 'topcon',
         vendorName: 'Topcon',
         files: [
-          { filename: 'lambert93.gc3', description: 'Coördinatensysteem Lambert-93', available: false },
-          { filename: 'raf20.ggf', description: 'Franse geoide RAF20', available: false },
-        ],
-      },
-      {
-        vendor: 'leica',
-        vendorName: 'Leica',
-        files: [
-          { filename: 'lambert93.csv', description: 'CRS-definitie Lambert-93', available: false },
-          { filename: 'raf20.gem', description: 'Franse geoide RAF20', available: false },
+          { filename: 'France.xml', path: '/geo/TOPCON/France.xml', description: 'Frans CRS — Lambert-93 + zones (XML)', available: true },
+          { filename: 'NTFgrille.dff', path: '/geo/TOPCON/NTFgrille.dff', description: 'NTF↔RGF93 transformatiegrid', available: true },
         ],
       },
       {
         vendor: 'unicontrol',
         vendorName: 'Unicontrol',
         files: [
-          { filename: 'fr-lambert93-raf20.json', description: 'Lambert-93 + RAF20 bundel', available: false },
+          ...FRENCH_LAMBERT_WKT.map(([fn, desc]) => ({
+            filename: fn,
+            path: `/geo/UNICONTROL/${fn}`,
+            description: desc,
+            available: true,
+          })),
+          { filename: 'UTM30N (ETRS89).wkt', path: '/geo/UNICONTROL/UTM30N (ETRS89).wkt', description: 'UTM zone 30N (ETRS89)', available: true },
+          { filename: 'UTM31N (ETRS89).wkt', path: '/geo/UNICONTROL/UTM31N (ETRS89).wkt', description: 'UTM zone 31N (ETRS89)', available: true },
+          { filename: 'RAF09.bin', path: '/geo/UNICONTROL/RAF09.bin', description: 'RAF09 geoide-grid', available: true },
+          { filename: 'raf20.bin', path: '/geo/UNICONTROL/raf20.bin', description: 'RAF20 geoide-grid (meest recente IGN)', available: true },
+          { filename: 'ntf_r93.gsb', path: '/geo/UNICONTROL/ntf_r93.gsb', description: 'NTF↔RGF93 NTv2-grid', available: true },
+        ],
+      },
+      {
+        vendor: 'leica',
+        vendorName: 'Leica',
+        files: [
+          { filename: 'lambert93.csv', path: '/geo/LEICA/lambert93.csv', description: 'Lambert-93 (Leica iCON CSV)', available: false },
+          { filename: 'raf20.gem', path: '/geo/LEICA/raf20.gem', description: 'RAF20 geoide (Leica .gem)', available: false },
         ],
       },
     ],
@@ -138,23 +168,25 @@ export const REGIONS: Region[] = [
         vendor: 'topcon',
         vendorName: 'Topcon',
         files: [
-          { filename: 'luref.gc3', description: 'Coördinatensysteem LUREF', available: false },
-          { filename: 'luref-grid.ggf', description: 'Luxemburgse geoide-grid', available: false },
-        ],
-      },
-      {
-        vendor: 'leica',
-        vendorName: 'Leica',
-        files: [
-          { filename: 'luref.csv', description: 'CRS-definitie LUREF', available: false },
-          { filename: 'luref-grid.gem', description: 'Luxemburgse geoide-grid', available: false },
+          { filename: 'Luxembourg.xml', path: '/geo/TOPCON/Luxembourg.xml', description: 'LUREF coördinatensysteem (XML)', available: true },
+          { filename: 'UKLU.prj', path: '/geo/TOPCON/UKLU.prj', description: 'LUREF projectiebestand', available: true },
+          { filename: 'UKO_LU_dll.xml', path: '/geo/TOPCON/UKO_LU_dll.xml', description: 'LUREF DLL — voorwaartse transformatie', available: true },
+          { filename: 'UKO_LU_inverse.xml', path: '/geo/TOPCON/UKO_LU_inverse.xml', description: 'LUREF DLL — inverse transformatie', available: true },
         ],
       },
       {
         vendor: 'unicontrol',
         vendorName: 'Unicontrol',
         files: [
-          { filename: 'lu-luref-grid.json', description: 'LUREF + grid bundel', available: false },
+          { filename: 'UTM31N (ETRS89).wkt', path: '/geo/UNICONTROL/UTM31N (ETRS89).wkt', description: 'UTM zone 31N (ETRS89) — bruikbaar voor Luxembourg', available: true },
+        ],
+      },
+      {
+        vendor: 'leica',
+        vendorName: 'Leica',
+        files: [
+          { filename: 'luref.csv', path: '/geo/LEICA/luref.csv', description: 'LUREF (Leica iCON CSV)', available: false },
+          { filename: 'luref-grid.gem', path: '/geo/LEICA/luref-grid.gem', description: 'LUREF geoide-grid (Leica .gem)', available: false },
         ],
       },
     ],

@@ -1,0 +1,1226 @@
+VerticalTransformations:
+  AUSGeoid09:
+    Deprecated: false
+    EPSG: 5711
+    Filename: AUSGeoid09.bin
+    Imagefile: Australia
+    LatMax: -9.86
+    LatMin: -43.7
+    LonMax: 153.69
+    LonMin: 96.76
+    Regions:
+    - AU
+    - AU-West
+  AUSGeoid2020:
+    Deprecated: false
+    EPSG: 5711
+    Filename: AUSGeoid2020.bin
+    Imagefile: Australia
+    LatMax: -9.86
+    LatMin: -43.7
+    LonMax: 153.69
+    LonMin: 96.76
+    Regions:
+    - AU
+    - AU-West
+  AUSGeoid98:
+    Deprecated: false
+    EPSG: 5711
+    Filename: AUSGeoid98.bin
+    Imagefile: Australia
+    LatMax: -9.86
+    LatMin: -43.7
+    LonMax: 153.69
+    LonMin: 96.76
+    Regions:
+    - AU
+    - AU-West
+  Auckland 1946:
+    Deprecated: false
+    EPSG: 5759
+    Filename: Auckland 1946.bin
+    Imagefile: null
+    LatMax: -36.12
+    LatMin: -37.67
+    LonMax: 176.17
+    LonMin: 174.0
+    Regions:
+    - NZ
+  Bluff 1955:
+    Deprecated: false
+    EPSG: 5760
+    Filename: Bluff 1955.bin
+    Imagefile: null
+    LatMax: -46.26
+    LatMin: -46.71
+    LonMax: 168.86
+    LonMin: 168.01
+    Regions:
+    - NZ
+  CGG2000:
+    Deprecated: false
+    EPSG: null
+    Filename: CGG2000n83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  CGG2005:
+    Deprecated: false
+    EPSG: null
+    Filename: CGG2005n83.bin
+    Imagefile: null
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  CGG2010:
+    Deprecated: false
+    EPSG: null
+    Filename: CGG2010n83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  CGG2013:
+    Deprecated: false
+    EPSG: 6647
+    Filename: CGG2013n83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  CGG2013a:
+    Deprecated: false
+    EPSG: 9245
+    Filename: CGG2013an83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  CR-2005:
+    Deprecated: false
+    EPSG: null
+    Filename: CR-2005.bin
+    Imagefile: Czechia
+    LatMax: 51.165388733931906
+    LatMin: 48.24142124279565
+    LonMax: 19.400953881086764
+    LonMin: 11.623345006485467
+    Regions:
+    - CZ
+  Christchurch Drainage Datum (NZGD2000):
+    Deprecated: false
+    EPSG: null
+    Filename: cdd_2019.bin
+    Imagefile: NZ_Lyttelton
+    LatMax: -41.333
+    LatMin: -45.0
+    LonMax: 174.2
+    LonMin: 168.5
+    Regions:
+    - NZ
+  DHHN2016v2023:
+    Deprecated: false
+    EPSG: 7837
+    Filename: dhhn2016_gcg23.bin
+    Imagefile: Germany
+    LatMax: 55.09
+    LatMin: 47.27
+    LonMax: 15.04
+    LonMin: 5.86
+    Regions:
+    - DE
+  DHHN92 (GCG2005):
+    Deprecated: false
+    EPSG: 5783
+    Filename: dhhn92_gcg05.bin
+    Imagefile: Germany
+    LatMax: 55.09
+    LatMin: 47.27
+    LonMax: 15.04
+    LonMin: 5.86
+    Regions:
+    - DE
+  DHHN92 (GCG2011):
+    Deprecated: false
+    EPSG: 5783
+    Filename: dhhn92_gcg11.bin
+    Imagefile: Germany
+    LatMax: 55.09
+    LatMin: 47.27
+    LonMax: 15.04
+    LonMin: 5.86
+    Regions:
+    - DE
+  DVRM05 (bpv):
+    Deprecated: false
+    EPSG: 8361
+    Filename: DVRM05_bpv.bin
+    Imagefile: Slovakia
+    LatMax: 49.61
+    LatMin: 47.73
+    LonMax: 22.56
+    LonMin: 16.84
+    Regions:
+    - SK
+  Dunedin 1958:
+    Deprecated: false
+    EPSG: 5761
+    Filename: Dunedin 1958.bin
+    Imagefile: null
+    LatMax: -43.82
+    LatMin: -46.4
+    LonMax: 171.28
+    LonMin: 167.73
+    Regions:
+    - NZ
+  Dunedin-Bluff 1960:
+    Deprecated: false
+    EPSG: null
+    Filename: Dunedin-bluff 1960.bin
+    Imagefile: null
+    LatMax: -45.0
+    LatMin: -46.7
+    LonMax: 169.9
+    LonMin: 167.4
+    Regions:
+    - NZ
+  EGG97:
+    Deprecated: false
+    EPSG: null
+    Filename: EGG97.bin
+    Imagefile: null
+    LatMax: 48.374883084501015
+    LatMin: 43.51758842820242
+    LonMax: 29.773481611184067
+    LonMin: 20.115752166717748
+    Regions:
+    - RO
+  EST-GEOID2017:
+    Deprecated: false
+    EPSG: 3301
+    Filename: EST-GEOID2017.bin
+    Imagefile: Estonia
+    LatMax: 60.0
+    LatMin: 57.52
+    LonMax: 28.2
+    LonMin: 20.37
+    Regions:
+    - EE
+  ETRS 89:
+    Deprecated: false
+    EPSG: 7423
+    Filename: ERTS89
+    Imagefile: null
+    LatMax: 71.21
+    LatMin: 35.95
+    LonMax: 31.59
+    LonMin: -9.56
+    Regions: []
+  ETRS89:
+    Deprecated: false
+    EPSG: 7423
+    Filename: ETRS89
+    Imagefile: null
+    LatMax: 71.21
+    LatMin: 35.95
+    LonMax: 31.59
+    LonMin: -9.56
+    Regions:
+    - DK
+    - SE
+    - PL
+    - BE
+    - DE
+    - FI
+    - NL
+    - 'NO'
+    - CZ
+    - FO
+    - FR
+    - EE
+    - GB
+    - AT
+    - CH
+    - LT
+    - LV
+    - HU
+    - IE
+    - RS
+    - RO
+    - TR
+    - LU
+    - IT
+  FCSVR10:
+    Deprecated: false
+    EPSG: 5597
+    Filename: fcsvr10.bin
+    Imagefile: null
+    LatMax: 54.76
+    LatMin: 54.42
+    LonMax: 11.51
+    LonMin: 11.17
+    Regions:
+    - DK
+  FIN2000:
+    Deprecated: false
+    EPSG: null
+    Filename: FIN2000.gtx
+    Imagefile: Finland
+    LatMax: 70.74312028384504
+    LatMin: 58.982735793364576
+    LonMax: 33.20257329088449
+    LonMin: 17.28305766783994
+    Regions:
+    - FI
+  FIN2000N60:
+    Deprecated: false
+    EPSG: null
+    Filename: FIN2000.bin
+    Imagefile: Finland
+    LatMax: 70.09
+    LatMin: 59.75
+    LonMax: 31.59
+    LonMin: 19.24
+    Regions:
+    - FI
+  FIN2005N00:
+    Deprecated: false
+    EPSG: null
+    Filename: FIN2005N00.bin
+    Imagefile: Finland
+    LatMax: 70.8030513360152
+    LatMin: 58.93192606351187
+    LonMax: 33.86654284608009
+    LonMin: 17.105466925782462
+    Regions:
+    - FI
+  FIN2023N2000:
+    Deprecated: false
+    EPSG: null
+    Filename: FIN2023N2000.bin
+    Imagefile: Finland
+    LatMax: 70.19
+    LatMin: 58.8
+    LonMax: 31.98
+    LonMin: 19.0
+    Regions: []
+  FOGeoid12:
+    Deprecated: false
+    EPSG: null
+    Filename: fogeoid12.gtx
+    Imagefile: null
+    LatMax: 63.29455825761438
+    LatMin: 60.932276410231495
+    LonMax: -4.835055208558734
+    LonMin: -9.42311727358481
+    Regions:
+    - FO
+  GCG2016:
+    Deprecated: false
+    EPSG: null
+    Filename: GCG2016.bin
+    Imagefile: Germany
+    LatMax: 56.177884282597624
+    LatMin: 46.99722622288483
+    LonMax: 15.147357602621737
+    LonMin: 3.205878169166569
+    Regions:
+    - DE
+  GVR2016:
+    Deprecated: false
+    EPSG: null
+    Filename: ggeoid16.bin
+    Imagefile: Greenland_GVR2016
+    LatMax: 85.01
+    LatMin: 58.0
+    LonMax: -6.99
+    LonMin: -75.0
+    Regions:
+    - GL
+  GV_Hoehengrid_plus_Geoid:
+    Deprecated: false
+    EPSG: null
+    Filename: GV_Hoehengrid_plus_Geoid.bin
+    Imagefile: Austria
+    LatMax: 49.0291667
+    LatMin: 46.3666667
+    LonMax: 17.16875
+    LonMin: 9.51875
+    Regions:
+    - AT
+  Gisborne 1926:
+    Deprecated: false
+    EPSG: 5762
+    Filename: Gisborne 1926.bin
+    Imagefile: null
+    LatMax: -37.49
+    LatMin: -39.04
+    LonMax: 178.63
+    LonMin: 176.41
+    Regions:
+    - NZ
+  HGG2013:
+    Deprecated: false
+    EPSG: 4237
+    Filename: HGG2013.bin
+    Imagefile: Hungary
+    LatMax: 48.58
+    LatMin: 45.74
+    LonMax: 22.9
+    LonMin: 16.11
+    Regions:
+    - HU
+  HTv2.0 (1997):
+    Deprecated: false
+    EPSG: null
+    Filename: HT2_1997.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  HTv2.0 (2002):
+    Deprecated: false
+    EPSG: null
+    Filename: HT2_2002v70.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  HTv2.0 (2010):
+    Deprecated: false
+    EPSG: null
+    Filename: HT2_2010v70.bin
+    Imagefile: Canada
+    LatMax: 83.9833333333333
+    LatMin: 41.01666666666
+    LonMax: -48.01666666666
+    LonMin: -141.9833333333
+    Regions:
+    - CA
+  LHN95:
+    Deprecated: false
+    EPSG: 5729
+    Filename: LHN95.bin
+    Imagefile: Switzerland
+    LatMax: 47.81
+    LatMin: 45.82
+    LonMax: 10.49
+    LonMin: 5.96
+    Regions:
+    - CH
+  LIT20G:
+    Deprecated: false
+    EPSG: null
+    Filename: LIT20G.bin
+    Imagefile: Lithuania
+    LatMax: 57.0
+    LatMin: 53.0
+    LonMax: 27.0
+    LonMin: 18.0
+    Regions:
+    - LT
+  LN02:
+    Deprecated: false
+    EPSG: 5728
+    Filename: LN02.bin
+    Imagefile: Switzerland
+    LatMax: 47.81
+    LatMin: 45.82
+    LonMax: 10.49
+    LonMin: 5.96
+    Regions:
+    - CH
+  LUREF:
+    Deprecated: false
+    EPSG: null
+    Filename: LUREF.bin
+    Imagefile: null
+    LatMax: 50.19
+    LatMin: 49.44
+    LonMax: 6.53
+    LonMin: 5.73
+    Regions:
+    - LU
+  LV'14:
+    Deprecated: false
+    EPSG: null
+    Filename: LV14.bin
+    Imagefile: Latvia
+    LatMax: 58.16171603939024
+    LatMin: 55.64055397776116
+    LonMax: 28.324075874155785
+    LonMin: 20.782360735237425
+    Regions:
+    - LV
+  Lyttelton 1937:
+    Deprecated: false
+    EPSG: 5763
+    Filename: Lyttelton 1937.bin
+    Imagefile: null
+    LatMax: -41.6
+    LatMin: -44.92
+    LonMax: 173.77
+    LonMin: 168.95
+    Regions:
+    - NZ
+  Moturiki 1953:
+    Deprecated: false
+    EPSG: 5764
+    Filename: Moturiki 1953.bin
+    Imagefile: null
+    LatMax: -37.52
+    LatMin: -40.59
+    LonMax: 177.26
+    LonMin: 174.57
+    Regions:
+    - NZ
+  NAD83:
+    Deprecated: false
+    EPSG: 4269
+    Filename: NAD83
+    Imagefile: US
+    LatMax: 86.46
+    LatMin: 23.81
+    LonMax: -47.74
+    LonMin: -172.54
+    Regions:
+    - CA
+    - US-NH
+    - US-NY
+    - US-OR
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - US-IL
+    - US-MI
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-FL
+    - US-GA
+    - US-TN
+    - US-NM
+    - US-TX
+    - US-WY
+    - US-MT
+    - US-NE
+    - US-SD
+    - US-ND
+  NGSD91:
+    Deprecated: false
+    EPSG: null
+    Filename: NGSD91n83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  NGSD95:
+    Deprecated: false
+    EPSG: null
+    Filename: NGSD95n83.bin
+    Imagefile: Canada
+    LatMax: 86.46
+    LatMin: 40.04
+    LonMax: -47.74
+    LonMin: -141.01
+    Regions:
+    - CA
+  NN1954:
+    Deprecated: false
+    EPSG: null
+    Filename: NN1954.bin
+    Imagefile: Norway
+    LatMax: 73.5031469514535
+    LatMin: 52.82871950627672
+    LonMax: 33.02449715585092
+    LonMin: 0.7750753944353377
+    Regions:
+    - 'NO'
+  NN2000:
+    Deprecated: false
+    EPSG: 5941
+    Filename: NN2000.bin
+    Imagefile: Norway
+    LatMax: 71.21
+    LatMin: 57.93
+    LonMax: 31.22
+    LonMin: 4.68
+    Regions:
+    - 'NO'
+  NZVD2009:
+    Deprecated: false
+    EPSG: 4440
+    Filename: NZVD2009.bin
+    Imagefile: New Zealand
+    LatMax: -25.88
+    LatMin: -55.95
+    LonMax: -171.2
+    LonMin: 160.6
+    Regions:
+    - NZ
+  NZVD2016:
+    Deprecated: false
+    EPSG: 7839
+    Filename: NZVD2016.bin
+    Imagefile: New Zealand
+    LatMax: -25.88
+    LatMin: -55.95
+    LonMax: -170.0
+    LonMin: -200.0
+    Regions:
+    - NZ
+  Napier 1962:
+    Deprecated: false
+    EPSG: 5765
+    Filename: Napier 1962.bin
+    Imagefile: null
+    LatMax: -38.87
+    LatMin: -40.57
+    LonMax: 178.07
+    LonMin: 175.8
+    Regions:
+    - NZ
+  Nelson 1955:
+    Deprecated: false
+    EPSG: 5766
+    Filename: Nelson 1955.bin
+    Imagefile: null
+    LatMax: -40.44
+    LatMin: -42.44
+    LonMax: 174.46
+    LonMin: 171.82
+    Regions:
+    - NZ
+  Not localized:
+    Deprecated: false
+    EPSG: null
+    Filename: Not localized
+    Imagefile: null
+    LatMax: null
+    LatMin: null
+    LonMax: null
+    LonMin: null
+    Regions:
+    - DK
+    - SE
+    - PL
+    - BE
+    - DE
+    - FI
+    - NL
+    - 'NO'
+    - CZ
+    - FO
+    - FR
+    - AU
+    - EE
+    - GB
+    - AT
+    - CH
+    - CA
+    - LT
+    - LV
+    - HU
+    - IE
+    - RS
+    - AU-West
+    - US-NH
+    - US-NY
+    - ZA
+    - US-OR
+    - RO
+    - NZ
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - IS
+    - TR
+    - LU
+    - SK
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - SI
+    - US-IL
+    - US-MI
+    - ZM
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-NM
+    - GL
+    - US-TX
+    - US-WY
+    - US-MT
+    - KR
+    - US-NE
+    - US-SD
+    - US-ND
+  OSGM15:
+    Deprecated: false
+    EPSG: 27700
+    Filename: OSGB36_OSTN15_OSGM15.bin
+    Imagefile: OSGB36
+    LatMax: 61.01
+    LatMin: 49.75
+    LonMax: 2.01
+    LonMin: -9.0
+    Regions:
+    - GB
+  OSGM15Belfast:
+    Deprecated: false
+    EPSG: 5732
+    Filename: OSGM15_Belfast.bin
+    Imagefile: OSGB36
+    LatMax: 55.36
+    LatMin: 53.96
+    LonMax: -5.34
+    LonMin: -8.18
+    Regions:
+    - IE
+  OSGM15Malin:
+    Deprecated: false
+    EPSG: 5731
+    Filename: OSGM15_Malin.bin
+    Imagefile: OSGB36
+    LatMax: 55.43
+    LatMin: 51.39
+    LonMax: -5.34
+    LonMin: -10.56
+    Regions:
+    - IE
+  One Tree Point 1964:
+    Deprecated: false
+    EPSG: 5767
+    Filename: One tree point 1964.bin
+    Imagefile: null
+    LatMax: -34.36
+    LatMin: -36.41
+    LonMax: 174.83
+    LonMin: 172.61
+    Regions:
+    - NZ
+  RAF09:
+    Deprecated: false
+    EPSG: null
+    Filename: RAF09.bin
+    Imagefile: null
+    LatMax: 51.5125
+    LatMin: 41.9875
+    LonMax: 8.5167
+    LonMin: -5.5167
+    Regions:
+    - FR
+  RAF18b:
+    Deprecated: false
+    EPSG: null
+    Filename: RAF18b.bin
+    Imagefile: null
+    LatMax: 51.63292966348513
+    LatMin: 41.85983368645
+    LonMax: 8.547078974514958
+    LonMin: -5.6027721575063625
+    Regions:
+    - FR
+  RAF20:
+    Deprecated: false
+    EPSG: null
+    Filename: raf20.bin
+    Imagefile: France_wo_Corsica
+    LatMax: 51.5
+    LatMin: 42.0
+    LonMax: 8.5
+    LonMin: -5.5
+    Regions:
+    - FR
+  RIGA'20:
+    Deprecated: false
+    EPSG: null
+    Filename: RIGA20.bin
+    Imagefile: Latvia-Riga
+    LatMax: 57.253109249828526
+    LatMin: 56.74126846787838
+    LonMax: 24.763372645553176
+    LonMin: 23.49085049065452
+    Regions:
+    - LV
+  SLO VRP2016 (Koper):
+    Deprecated: false
+    EPSG: null
+    Filename: SLO-VRP2016_Koper.bin
+    Imagefile: Slovenia
+    LatMax: 47.0
+    LatMin: 45.0
+    LonMax: 17.0
+    LonMin: 13.0
+    Regions:
+    - SI
+  SWEN08_RH2000:
+    Deprecated: false
+    EPSG: 5613
+    Filename: SWEN08_RH2000.bin
+    Imagefile: SWEDEN
+    LatMax: 69.07
+    LatMin: 55.28
+    LonMax: 24.17
+    LonMin: 10.93
+    Regions:
+    - SE
+  SWEN08_RH70:
+    Deprecated: false
+    EPSG: 5718
+    Filename: SWEN08_RH70.bin
+    Imagefile: SWEDEN
+    LatMax: 69.07
+    LatMin: 55.28
+    LonMax: 24.17
+    LonMin: 10.93
+    Regions:
+    - SE
+  SWEN17_RH2000:
+    Deprecated: false
+    EPSG: 5613
+    Filename: SWEN17_RH2000.bin
+    Imagefile: SWEDEN
+    LatMax: 69.07
+    LatMin: 55.28
+    LonMax: 24.17
+    LonMin: 10.93
+    Regions:
+    - SE
+  SWEN17_RH70:
+    Deprecated: false
+    EPSG: 5718
+    Filename: SWEN17_RH70.bin
+    Imagefile: SWEDEN
+    LatMax: 69.07
+    LatMin: 55.28
+    LonMax: 24.17
+    LonMin: 10.93
+    Regions:
+    - SE
+  Stewart Island 1977:
+    Deprecated: false
+    EPSG: 5772
+    Filename: Stewart island 1977.bin
+    Imagefile: null
+    LatMax: -46.63
+    LatMin: -47.33
+    LonMax: 168.34
+    LonMin: 167.29
+    Regions:
+    - NZ
+  Taranaki 1970:
+    Deprecated: false
+    EPSG: 5769
+    Filename: Taranaki 1970.bin
+    Imagefile: null
+    LatMax: -38.41
+    LatMin: -39.92
+    LonMax: 174.95
+    LonMin: 173.68
+    Regions:
+    - NZ
+  TnBz:
+    Deprecated: false
+    EPSG: null
+    Filename: tnbz.bin
+    Imagefile: null
+    LatMax: 47.1
+    LatMin: 45.6666666666667
+    LonMax: 12.5
+    LonMin: 10.3666666666667
+    Regions:
+    - AT
+    - IT
+  VITEL2014:
+    Deprecated: false
+    EPSG: 19931
+    Filename: vitel2014.bin
+    Imagefile: Hungary
+    LatMax: 48.75
+    LatMin: 45.5
+    LonMax: 23.25
+    LonMin: 15.75
+    Regions:
+    - HU
+  WGS84:
+    Deprecated: false
+    EPSG: 4326
+    Filename: WGS84
+    Imagefile: null
+    LatMax: 90.0
+    LatMin: -90.0
+    LonMax: 180.0
+    LonMin: -180.0
+    Regions:
+    - DK
+    - SE
+    - PL
+    - BE
+    - DE
+    - FI
+    - NL
+    - 'NO'
+    - CZ
+    - FO
+    - FR
+    - AU
+    - EE
+    - GB
+    - AT
+    - CH
+    - CA
+    - LT
+    - LV
+    - HU
+    - IE
+    - RS
+    - AU-West
+    - US-NH
+    - US-NY
+    - ZA
+    - US-OR
+    - RO
+    - NZ
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - IS
+    - TR
+    - LU
+    - SK
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - US-IL
+    - US-MI
+    - ZM
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-FL
+    - US-GA
+    - US-TN
+    - IT
+    - US-NM
+    - GL
+    - US-TX
+    - KR
+    - US-NE
+    - US-SD
+    - US-ND
+  Wellington 1953:
+    Deprecated: false
+    EPSG: 5770
+    Filename: Wellington 1953.bin
+    Imagefile: null
+    LatMax: -40.12
+    LatMin: -41.67
+    LonMax: 176.56
+    LonMin: 174.52
+    Regions:
+    - NZ
+  dnn:
+    Deprecated: false
+    EPSG: 5733
+    Filename: dnn.bin
+    Imagefile: Danmark
+    LatMax: 57.8
+    LatMin: 54.51
+    LonMax: 15.24
+    LonMin: 8.0
+    Regions:
+    - DK
+  dvr90:
+    Deprecated: false
+    EPSG: 5799
+    Filename: dvr90.bin
+    Imagefile: Danmark
+    LatMax: 57.8
+    LatMin: 54.51
+    LonMax: 15.24
+    LonMin: 8.0
+    Regions:
+    - DK
+  dvr90_2023:
+    Deprecated: false
+    EPSG: 10485
+    Filename: dvr90_2023.bin
+    Imagefile: Danmark
+    LatMax: 58.0
+    LatMin: 53.5
+    LonMax: 17.0
+    LonMin: 7.0
+    Regions:
+    - DK
+  g2012bu0:
+    Deprecated: false
+    EPSG: null
+    Filename: g2012bu0.bin
+    Imagefile: US
+    LatMax: 58.0
+    LatMin: 24.0
+    LonMax: -60.0
+    LonMin: -130.0
+    Regions:
+    - US-NH
+    - US-NY
+    - US-OR
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - US-IL
+    - US-MI
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-FL
+    - US-GA
+    - US-TN
+    - US-NM
+    - US-TX
+    - US-WY
+    - US-MT
+    - US-NE
+    - US-SD
+    - US-ND
+  g2018u0:
+    Deprecated: false
+    EPSG: null
+    Filename: g2018u0.bin
+    Imagefile: US
+    LatMax: 86.46
+    LatMin: 23.81
+    LonMax: -47.79
+    LonMin: -172.54
+    Regions:
+    - US-NH
+    - US-NY
+    - US-OR
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - US-NC
+    - US-AL
+    - US-VA
+    - US-DE
+    - US-PA
+    - US-NJ
+    - US-SC
+    - US-IL
+    - US-MI
+    - US-AZ
+    - US-OH
+    - US-MO
+    - US-MN
+    - US-IA
+    - US-IN
+    - US-KY
+    - US-AK
+    - US-UT
+    - US-NV
+    - US-ID
+    - US-CA
+    - US-WA
+    - US-MD
+    - US-WV
+    - US-FL
+    - US-GA
+    - US-TN
+    - US-NM
+    - US-TX
+    - US-WY
+    - US-MT
+    - US-NE
+    - US-SD
+    - US-ND
+  g2018u4:
+    Deprecated: false
+    EPSG: null
+    Filename: g2018u4.bin
+    Imagefile: USASubgrid4
+    LatMax: 58.0
+    LatMin: 40.0
+    LonMax: -60.0
+    LonMin: -79.0
+    Regions:
+    - US-NH
+    - US-NY
+    - US-CT
+    - US-ME
+    - US-MA
+    - US-RI
+    - US-VT
+    - US-NC
+  geoid2011-PL-EVRF2007-NH:
+    Deprecated: false
+    EPSG: 5621
+    Filename: geoid2011-PL-EVRF2007-NH.bin
+    Imagefile: Poland
+    LatMax: 54.88
+    LatMin: 49.0
+    LonMax: 24.2
+    LonMin: 14.05
+    Regions:
+    - PL
+  geoid2011-PL-KRON86-NH:
+    Deprecated: false
+    EPSG: null
+    Filename: geoid2011-PL-KRON86-NH.bin
+    Imagefile: Poland
+    LatMax: 54.99969868995263
+    LatMin: 48.85921134800986
+    LonMax: 24.525444617557564
+    LonMin: 13.93817752563319
+    Regions:
+    - PL
+  hBG03:
+    Deprecated: false
+    EPSG: null
+    Filename: hBG03.bin
+    Imagefile: Belgium
+    LatMax: 51.65111896561308
+    LatMin: 49.41060326894742
+    LonMax: 6.661736313389861
+    LonMin: 2.4709511056346365
+    Regions:
+    - BE
+  hBG18:
+    Deprecated: false
+    EPSG: null
+    Filename: hBG18.bin
+    Imagefile: Belgium
+    LatMax: 52.54232154115004
+    LatMin: 48.46475592145718
+    LonMax: 7.046927617632098
+    LonMin: 0.9045555822282342
+    Regions:
+    - BE
+  naptrans2008:
+    Deprecated: false
+    EPSG: 5709
+    Filename: naptrans2008.bin
+    Imagefile: Holland
+    LatMax: 55.77
+    LatMin: 50.75
+    LonMax: 7.22
+    LonMin: 2.53
+    Regions:
+    - NL
+  naptrans2018:
+    Deprecated: false
+    EPSG: 5709
+    Filename: naptrans2018.bin
+    Imagefile: Holland
+    LatMax: 55.77
+    LatMin: 50.75
+    LonMax: 7.22
+    LonMin: 2.53
+    Regions:
+    - NL
