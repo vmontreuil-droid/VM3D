@@ -6,7 +6,7 @@ import Link from 'next/link'
 import {
   UserPlus, Receipt, FolderPlus, Ticket, Construction,
   UserCog, MousePointerClick, Bell, BarChart3,
-  Clock, StickyNote, Zap, FileCode2,
+  Clock, StickyNote, Zap, FileCode2, Globe2,
   ArrowLeft, Sparkles, LayoutList, Rocket,
 } from 'lucide-react'
 import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
@@ -45,6 +45,7 @@ const sections = [
       { label: 'Herinneringen',  href: '/admin/herinneringen',         icon: Bell,      sub: 'Betalingsherinneringen' },
       { label: 'Statistieken',   href: '/admin/statistieken',          icon: BarChart3,  sub: 'Rapporten & grafieken' },
       { label: 'Bestandsconverter', href: '/admin/tools/converter',    icon: FileCode2,  sub: 'GPS bestanden omzetten' },
+      { label: 'Geo-setup',      href: '/admin/tools/geo-setup',       icon: Globe2,     sub: 'Geoide & coördinaten per regio' },
     ],
   },
 ]

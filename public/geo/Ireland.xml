@@ -1,0 +1,42 @@
+<?xml version="1.0"?><data><Projection><Name>Ireland-ITM</Name>
+<Comment>Irish TM System</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80000.00000</P0>
+<P1 name="Scale">0.99982</P1>
+<P2 name="Lat0">533000.00000</P2>
+<P3 name="East0">600000</P3>
+<P4 name="North0">750000</P4>
+</Projection>
+<Projection><Name>Ireland-IRISH</Name>
+<DisplayName>Ireland-Irish Grid</DisplayName>
+<Comment>Irish Reference System</Comment>
+<Unit>Meters</Unit>
+<Datum>Ireland1975</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80000.00000</P0>
+<P1 name="Scale">1.000035</P1>
+<P2 name="Lat0">533000.00000</P2>
+<P3 name="East0">200000</P3>
+<P4 name="North0">250000</P4>
+</Projection>
+<Projection><Name>Ireland-IrishGrid</Name>
+<DisplayName>Ireland-IreNET</DisplayName>
+<Comment>Irish Grid Polinomial system</Comment>
+<Unit>Meters</Unit>
+<Datum>Ireland1965</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80000.00000</P0>
+<P1 name="Scale">1.000035</P1>
+<P2 name="Lat0">533000.00000</P2>
+<P3 name="East0">200000</P3>
+<P4 name="North0">250000</P4>
+</Projection>
+</data>

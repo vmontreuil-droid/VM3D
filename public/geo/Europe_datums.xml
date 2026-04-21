@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<data>
+	<Datum>
+		<Name>RDNAP2018</Name>
+		<Comment>RDNAPTRANS2018 datum</Comment>
+	 	<DLLName>CustomDatums.dll</DLLName> 
+		<Ellipsoid>BESS</Ellipsoid>
+	</Datum>
+
+
+	<Datum>
+		<Name>PZ90_11(G32453_2017)</Name>
+		<Comment>Parametry Zemli 1990(PZ-90_11) GOST 32453-2017</Comment>
+		<Ellipsoid>PZ90_02</Ellipsoid>
+		<DX>-0.003</DX>
+		<DY>-0.001</DY>
+		<DZ>0.000 </DZ>
+		<RX>0.000019</RX>
+		<RY>-0.000042</RY>
+		<RZ>0.000002</RZ>
+		<Scale>0</Scale>
+		<IsVoid>0</IsVoid>
+		<IsChangeable>1</IsChangeable>
+	</Datum>
+
+
+	<Datum>
+		<Name>GSK2011(G32453_2017)</Name>
+		<Comment>RUSSIA GSK-2011 GOST 32453-2017</Comment>
+		<Ellipsoid>GSK2011</Ellipsoid>
+		<MethodType>HelmertStrict</MethodType>
+		<DX>0.000</DX>
+		<DY>0.014</DY>
+		<DZ>-0.008</DZ>
+		<RX>-5.62e-04</RX>
+		<RY>-1.9e-05</RY>
+		<RZ>5.3e-05</RZ>
+		<Scale>-0.0006</Scale>
+		<IsVoid>0</IsVoid>
+	</Datum>
+	<Datum>
+		<Name>SK95(G32453_2017)</Name>
+		<Comment>RUSSIA SK-95 GOST 32453-2017</Comment>
+		<Ellipsoid>KRASS</Ellipsoid>
+		<DX>24.457</DX>
+		<DY>-130.784</DY>
+		<DZ>-81.538</DZ>
+		<RX>-0.00230</RX>
+		<RY>0.00354</RY>
+		<RZ>-0.13421</RZ>
+		<Scale>-0.228</Scale>
+		<IsVoid>0</IsVoid>
+		<IsChangeable>0</IsChangeable>
+	</Datum>
+	<Datum>
+		<Name>SK42(G32453_2017)</Name>
+		<Comment>RUSSIA SK-42 GOST 32453-2017</Comment>
+		<Ellipsoid>KRASS</Ellipsoid>
+		<DX>23.557</DX>
+		<DY>-140.844</DY>
+		<DZ>-79.778</DZ>
+		<RX>-0.00230</RX>
+		<RY>-0.34646</RY>
+		<RZ>-0.79421</RZ>
+		<Scale>-0.228</Scale>
+		<IsVoid>0</IsVoid>
+		<IsChangeable>0</IsChangeable>
+	</Datum>	
+
+<Datum>
+<Name>EUREF_EST97</Name>
+<Comment>Estonian Datum, equal ETRF89</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+
+<Datum>
+<Name>GSK2011</Name><Comment>RUSSIA GSK-2011</Comment><Ellipsoid>GSK2011</Ellipsoid><MethodType>HelmertStrict</MethodType><DX>-0.002</DX><DY>0.003</DY><DZ>0.003</DZ><RX>-5.3e-05</RX><RY>-9.3e-05</RY><RZ>1.2e-05</RZ><Scale>-0.0008</Scale><IsVoid>0</IsVoid></Datum>
+<Datum>
+<Name>PL_ETRF89</Name>
+<Comment>Poland datum ETRF89</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum> 
+	<Name>PL_ETRF2000</Name>
+	 <Comment>Poland table datum</Comment> 
+	<Ellipsoid>GRS80</Ellipsoid> 
+	<DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+<Datum> 
+	<Name>SA_S4283</Name>
+	 <Comment>Sachsen-Anhalt NTV2 datum</Comment> 
+	<Ellipsoid>KRASS</Ellipsoid> 
+	<DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+<Datum>
+<Name>LUREF2015</Name>
+<Comment>Luxembourg Transformation ETRF2000 (WGS84) -> LUREF</Comment>
+<Ellipsoid>INTL</Ellipsoid>
+<DX>189.0330 </DX>
+<DY>-14.1335</DY>
+<DZ>43.0901</DZ>
+<RX>-0.43331 </RX>
+<RY>-3.11448</RY>
+<RZ>2.63636</RZ>
+<Scale>-0.4752 </Scale>
+<ToLocalDatum>1</ToLocalDatum>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>SJTSK_SK</Name>
+<Comment>Slovakia datum 2013</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+<Datum> 
+	<Name>TH_PD83</Name>
+	 <Comment>Thuringian NTV2 datum</Comment> 
+	<Ellipsoid>BESS</Ellipsoid> 
+	<DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+<Datum>
+<Name>S_JTSK05</Name>
+<Comment>Czech datum</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+
+<Datum>
+<Name>ETRS89_Berlin</Name>
+<Comment>Berlin ETRS89(91), calculated by pair of points</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>30.438</DX>
+<DY>11.245</DY>
+<DZ>-21.716</DZ>
+<RX>-0.44478</RX>
+<RY>1.18644</RY>
+<RZ>0.00213</RZ>
+<Scale>-0.4126</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+  <Name>Amersfoort2008</Name> 
+  <Comment>Amersfoort Datum</Comment> 
+  <Ellipsoid>GRS80</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+<Datum>
+<Name>EGSA87</Name>
+<Comment>Greece datum 1987 (table shifts)</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+<Datum>
+<Name>HTRS07</Name>
+<Comment>Greece datum 2007</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0.</DX>
+<DY>0.</DY>
+<DZ>0.</DZ>
+<RX>0.</RX>
+<RY>0.</RY>
+<RZ>0.</RZ>
+<Scale>0.</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+
+<Datum>
+<Name>S_JTSK</Name>
+<Comment>Czech datum</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+
+<Datum>
+<Name>HD-72(2009)</Name>
+<Comment>Hungarian datum</Comment>
+<Ellipsoid>GRS67</Ellipsoid>
+<DX>52.7289</DX>
+<DY>-71.1477</DY>
+<DZ>-13.8316</DZ>
+<RX>0.316647</RX>
+<RY>0.106728</RY>
+<RZ>0.378279</RZ>
+<Scale>0.989578</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>SK42_old</Name>
+<Comment>Russia should be removed when newer SK42 is tested</Comment>
+<Ellipsoid>KRASS</Ellipsoid>
+<DX>26.3</DX>
+<DY>-132.6</DY>
+<DZ>-76.3</DZ>
+<RX>-0.22</RX>
+<RY>-0.4</RY>
+<RZ>-0.9</RZ>
+<Scale>-0.12</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>SK95</Name>
+<Comment>Russia</Comment>
+<Ellipsoid>KRASS</Ellipsoid>
+<DX>24.653</DX>
+<DY>-129.136</DY>
+<DZ>-83.057</DZ>
+<RX>-0.06696</RX>
+<RY>0.00391</RY>
+<RZ>-0.12902</RZ>
+<Scale>-0.175</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>PZ90.02</Name>
+<Comment>Parametry Zemli 1990(PZ-90_02) 2007</Comment>
+<Ellipsoid>PZ90_02</Ellipsoid>
+<DX>-0.36</DX>
+<DY>0.08</DY>
+<DZ>0.18 </DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>1</IsChangeable>
+</Datum>
+<Datum>
+<Name>SK42</Name>
+<Comment>Russia</Comment>
+<Ellipsoid>KRASS</Ellipsoid>
+<DX>23.9</DX>
+<DY>-141.3</DY>
+<DZ>-80.9</DZ>
+<RX>0.</RX>
+<RY>-0.35</RY>
+<RZ>-0.82</RZ>
+<Scale>-0.12</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>HD-72</Name>
+<Comment>Hungarian datum</Comment>
+<Ellipsoid>GRS67</Ellipsoid>
+<DX>53.5383</DX>
+<DY>-64.5168</DY>
+<DZ>-16.3046</DZ>
+<RX>0.139217 </RX>
+<RY>0.177428</RY>
+<RZ>0.508271</RZ>
+<Scale>1.992526</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>EURO50_ICC</Name>
+<Comment>ED50 Spain ICC</Comment>
+<Ellipsoid>INTL</Ellipsoid>
+<DX>-136.65549</DX>
+<DY>-141.46580</DY>
+<DZ>-167.29848</DZ>
+<RX>2.093087</RX>
+<RY>0.001405</RY>
+<RZ>0.107708</RZ>
+<Scale>11.546110</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>JTSK03</Name>
+<Comment>Slovakia datum 2003</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DX>485.021</DX>
+<DY>169.465</DY>
+<DZ>483.839</DZ>
+<RX>-7.786342</RX>
+<RY>-4.397554</RY>
+<RZ>-4.102655</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum><Datum>
+<Name>NGO1948</Name> 
+<Comment>Norway NGO1948</Comment> 
+<Ellipsoid>BESSMod</Ellipsoid> 
+<DX>337</DX> 
+<DY>-210</DY> 
+<DZ>564</DZ> 
+<RX>0</RX> 
+<RY>0</RY> 
+<RZ>0</RZ> 
+<Scale>0</Scale> 
+<IsVoid>0</IsVoid> 
+<IsChangeable>0</IsChangeable> 
+</Datum>
+<Datum>
+<Name>LUREF</Name>
+<Comment>Luxembourg Reference Frame </Comment>
+<Ellipsoid>INTL</Ellipsoid>
+<DX>-192.986</DX>
+<DY>13.673</DY>
+<DZ>-39.309</DZ>
+<RX>0.4099</RX>
+<RY>2.9332</RY>
+<RZ>-2.6881</RZ>
+<Scale>0.43</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>CH1903(+)</Name>
+<Comment>Swiss datum</Comment>
+<Code name="EPSG">4150</Code>
+<Ellipsoid>BESS</Ellipsoid>
+<DX>674.374</DX>
+<DY>15.056</DY>
+<DZ>405.346</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>Soldner Netz88</Name>
+<Comment>Berlin Soldner datum</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+<Datum>
+<Name>NTFgrille</Name>
+<Comment>French grid datum ( NTF-RGF93)</Comment>
+<Ellipsoid>CLK80M</Ellipsoid>
+<DLLName>CustomDatums.dll</DLLName>
+</Datum>
+</data>

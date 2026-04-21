@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data>
+<Ellipsoid><Name>GSK2011</Name><Comment>Russian GSK 2011 system ellipsoid</Comment><Code name="EPSG">1025</Code><Source>0</Source><SphA>6378136.5</SphA><SphF>298.2564151</SphF></Ellipsoid>
+<Ellipsoid><Name>CGCS2000</Name><Comment>Chineese Geodetic Ref. Sys. 2000</Comment><Code name="EPSG">1024</Code><Source>0</Source><SphA>6378137</SphA><SphF>298.257222101</SphF></Ellipsoid>
+<Ellipsoid><Name>WEBSPHERE</Name><Comment>Sphere</Comment><Code name="EPSG">7059</Code><Source>0</Source><SphA>6378137</SphA><SphF>1000000000000</SphF></Ellipsoid>
+<Ellipsoid><Name>SPHERE</Name><Comment>Sphere</Comment><Code name="EPSG">7052</Code><Source>0</Source><SphA>6370997</SphA><SphF>1000000000000</SphF></Ellipsoid>
+<Ellipsoid><Name>PZ90_02</Name><Comment>Parametry Zemli 1990(PZ-90) 2007</Comment><Code name="EPSG">1157</Code><Source>0</Source><SphA>6378136</SphA><SphF>298.25784</SphF></Ellipsoid>
+<Ellipsoid><Name>CLK80SA</Name><Comment>Clarke 1880 SA</Comment><Code name="EPSG">7013</Code><Source>0</Source><SphA>6378249.145</SphA><SphF>293.4663158184</SphF></Ellipsoid>
+<Ellipsoid><Name>BESSMod</Name><Comment>Modified Bessel (Norway)</Comment><Code name="EPSG">7005</Code><Source>0</Source><SphA>6377492.0176</SphA><SphF>299.15281285</SphF></Ellipsoid>
+<Ellipsoid><Name>TWD67</Name><Comment>Geodetic Ref. Sys. 1967</Comment><Code name="EPSG">3821</Code><Source>0</Source><SphA>6378160</SphA><SphF>298.25</SphF></Ellipsoid>
+<Ellipsoid><Name>ATS77</Name><Comment>Average Terrestrial System 1977</Comment><Code name="EPSG">7041</Code><Source>0</Source><SphA>6378135</SphA><SphF>298.257</SphF></Ellipsoid>
+<Ellipsoid><Name>AIRY</Name><Comment>Airy</Comment><Code name="EPSG">7001</Code><Source>0</Source><SphA>6377563.396</SphA><SphF>299.3249646</SphF></Ellipsoid>
+<Ellipsoid><Name>ANS</Name><Comment>Australian National</Comment><Code name="EPSG">7003</Code><Source>0</Source><SphA>6378160</SphA><SphF>298.25</SphF></Ellipsoid>
+<Ellipsoid><Name>BESS</Name><Comment>Bessel 1841</Comment><Code name="EPSG">7004</Code><Source>0</Source><SphA>6377397.155</SphA><SphF>299.1528128</SphF></Ellipsoid>
+<Ellipsoid><Name>CHINA80</Name><Comment>China Geodetic Ref.Sys.1980</Comment><Code name="EPSG">7049</Code><Source>0</Source><SphA>6378140</SphA><SphF>298.257</SphF></Ellipsoid>
+<Ellipsoid><Name>CLK66</Name><Comment>Clarke 1866</Comment><Code name="EPSG">7008</Code><Source>0</Source><SphA>6378206.4</SphA><SphF>294.9786982</SphF></Ellipsoid>
+<Ellipsoid><Name>CLK80</Name><Comment>Clarke 1880</Comment><Code name="EPSG">7012</Code><Source>0</Source><SphA>6378249.145</SphA><SphF>293.465</SphF></Ellipsoid>
+<Ellipsoid><Name>CLK80M</Name><Comment>Clarke 1880 modified</Comment><Code name="EPSG">7011</Code><Source>0</Source><SphA>6378249.2</SphA><SphF>293.4660212936</SphF></Ellipsoid>
+<Ellipsoid><Name>CLK80MIsrael</Name><Comment>Clarke 1880 modified for Israel</Comment><Code name="EPSG">7010</Code><Source>0</Source><SphA>6378300.789</SphA><SphF>293.466</SphF></Ellipsoid>
+<Ellipsoid><Name>DANISH</Name><Comment>Danish</Comment><Source>0</Source><SphA>6377104.43</SphA><SphF>300</SphF></Ellipsoid>
+<Ellipsoid><Name>EVER</Name><Comment>Everest</Comment><Code name="EPSG">7015</Code><Source>0</Source><SphA>6377276.345</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>EVER2</Name><Comment>Everest (Sabah Sarawak)</Comment><Code name="EPSG">7016</Code><Source>0</Source><SphA>6377298.556</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>EVER3</Name><Comment>Everest (India 1956)</Comment><Code name="EPSG">7044</Code><Source>0</Source><SphA>6377301.243</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>EVER4</Name><Comment>Everest (Malaysia 1969)</Comment><Code name="EPSG">7056</Code><Source>0</Source><SphA>6377295.664</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>EVER5</Name><Comment>Everest (Pakistan)</Comment><Source>0</Source><SphA>6377309.613</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>FISC60</Name><Comment>Fischer 1960 (Mercury)</Comment><Source>0</Source><SphA>6378166</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>FISC68</Name><Comment>Fischer 1968</Comment><Source>0</Source><SphA>6378150</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>GRS67</Name><Comment>Geodetic Ref. Sys. 1967</Comment><Code name="EPSG">7036</Code><Source>0</Source><SphA>6378160</SphA><SphF>298.247167427</SphF></Ellipsoid>
+<Ellipsoid><Name>GRS80</Name><Comment>Geodetic Ref. Sys. 1980</Comment><Code name="EPSG">7019</Code><Source>0</Source><SphA>6378137</SphA><SphF>298.257222101</SphF></Ellipsoid>
+<Ellipsoid><Name>HELM</Name><Comment>Helmert 1906</Comment><Code name="EPSG">7020</Code><Source>0</Source><SphA>6378200</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>HOUGH</Name><Comment>Hough</Comment><Code name="EPSG">7053</Code><Source>0</Source><SphA>6378270</SphA><SphF>297</SphF></Ellipsoid>
+<Ellipsoid><Name>INDONES</Name><Comment>Indonesian National 1974</Comment><Code name="EPSG">7021</Code><Source>0</Source><SphA>6378160</SphA><SphF>298.247</SphF></Ellipsoid>
+<Ellipsoid><Name>INTL</Name><Comment>International</Comment><Code name="EPSG">7022</Code><Source>0</Source><SphA>6378388</SphA><SphF>297</SphF></Ellipsoid>
+<Ellipsoid><Name>KRASS</Name><Comment>Krassovsky</Comment><Code name="EPSG">7024</Code><Source>0</Source><SphA>6378245</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>MAIRY</Name><Comment>Modified Airy</Comment><Code name="EPSG">7002</Code><Source>0</Source><SphA>6377340.189</SphA><SphF>299.3249646</SphF></Ellipsoid>
+<Ellipsoid><Name>MEVER</Name><Comment>Modified Everest</Comment><Code name="EPSG">7018</Code><Source>0</Source><SphA>6377304.063</SphA><SphF>300.8017</SphF></Ellipsoid>
+<Ellipsoid><Name>MFISC60</Name><Comment>Modified Fischer 1960 (S. Asia)</Comment><Source>0</Source><SphA>6378155</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>PZ90</Name><Comment>Parametry Zemli 1990(PZ-90)</Comment><Code name="EPSG">7054</Code><Source>0</Source><SphA>6378136</SphA><SphF>298.257839303</SphF></Ellipsoid>
+<Ellipsoid><Name>SA1969</Name><Comment>South America 1969</Comment><Code name="EPSG">6291</Code><Source>0</Source><SphA>6378160</SphA><SphF>298.25</SphF></Ellipsoid>
+<Ellipsoid><Name>STRUVE</Name><Comment>Struve</Comment><Code name="EPSG">7028</Code><Source>0</Source><SphA>6378298</SphA><SphF>294.73</SphF></Ellipsoid>
+<Ellipsoid><Name>WGS60</Name><Comment>World Geodetic Sys. 1960</Comment><Source>0</Source><SphA>6378165</SphA><SphF>298.3</SphF></Ellipsoid>
+<Ellipsoid><Name>WGS66</Name><Comment>World Geodetic Sys. 1966</Comment><Code name="EPSG">7025</Code><Source>0</Source><SphA>6378145</SphA><SphF>298.25</SphF></Ellipsoid>
+<Ellipsoid><Name>WGS72</Name><Comment>World Geodetic Sys. 1972</Comment><Code name="EPSG">7043</Code><Source>0</Source><SphA>6378135</SphA><SphF>298.26</SphF></Ellipsoid>
+<Ellipsoid><Name>WGS84</Name><Comment>World Geodetic Sys. 1984</Comment><Code name="EPSG">7030</Code><Source>0</Source><SphA>6378137</SphA><SphF>298.257223563</SphF></Ellipsoid>
+</data>

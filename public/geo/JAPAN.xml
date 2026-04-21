@@ -1,0 +1,478 @@
+<?xml version="1.0"?>
+<data>
+<Projection><Name>JAPAN2000-JAPAN_01</Name>
+<Comment>JAPAN2000 Zone 1</Comment>
+<Code name="EPSG">2443</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1293000.00000</P0>
+<P1 name="Lat0">330000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_02</Name>
+<Comment>JAPAN2000 Zone 2</Comment>
+<Code name="EPSG">2444</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1310000.00000</P0>
+<P1 name="Lat0">330000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_03</Name>
+<Comment>JAPAN2000 Zone 3</Comment>
+<Code name="EPSG">2445</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1321000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_04</Name>
+<Comment>JAPAN2000 Zone 4</Comment>
+<Code name="EPSG">2446</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1333000.00000</P0>
+<P1 name="Lat0">330000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_05</Name>
+<Comment>JAPAN2000 Zone 5</Comment>
+<Code name="EPSG">2447</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1342000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_06</Name>
+<Comment>JAPAN2000 Zone 6</Comment>
+<Code name="EPSG">2448</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1360000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_07</Name>
+<Comment>JAPAN2000 Zone 7</Comment>
+<Code name="EPSG">2449</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1371000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_08</Name>
+<Comment>JAPAN2000 Zone 8</Comment>
+<Code name="EPSG">2450</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1383000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_09</Name>
+<Comment>JAPAN2000 Zone 9</Comment>
+<Code name="EPSG">2451</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1395000.00000</P0>
+<P1 name="Lat0">360000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_10</Name>
+<Comment>JAPAN2000 Zone 10</Comment>
+<Code name="EPSG">2452</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1405000.00000</P0>
+<P1 name="Lat0">400000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_11</Name>
+<Comment>JAPAN2000 Zone 11</Comment>
+<Code name="EPSG">2453</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1401500.00000</P0>
+<P1 name="Lat0">440000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_12</Name>
+<Comment>JAPAN2000 Zone 12</Comment>
+<Code name="EPSG">2454</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1421500.00000</P0>
+<P1 name="Lat0">440000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_13</Name>
+<Comment>JAPAN2000 Zone 13</Comment>
+<Code name="EPSG">2455</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1441500.00000</P0>
+<P1 name="Lat0">440000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_14</Name>
+<Comment>JAPAN2000 Zone 14</Comment>
+<Code name="EPSG">2456</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1420000.00000</P0>
+<P1 name="Lat0">260000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_15</Name>
+<Comment>JAPAN2000 Zone 15</Comment>
+<Code name="EPSG">2457</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1273000.00000</P0>
+<P1 name="Lat0">260000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_16</Name>
+<Comment>JAPAN2000 Zone 16</Comment>
+<Code name="EPSG">2458</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1240000.00000</P0>
+<P1 name="Lat0">260000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_17</Name>
+<Comment>JAPAN2000 Zone 17</Comment>
+<Code name="EPSG">2459</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1310000.00000</P0>
+<P1 name="Lat0">260000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_18</Name>
+<Comment>JAPAN2000 Zone 18</Comment>
+<Code name="EPSG">2460</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1360000.00000</P0>
+<P1 name="Lat0">200000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN2000-JAPAN_19</Name>
+<Comment>JAPAN2000 Zone 19</Comment>
+<Code name="EPSG">2461</Code>
+<Unit>Meters</Unit>
+<Datum>JGD2000/2011</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RECT</Type>
+<P0 name="Lon0">1540000.00000</P0>
+<P1 name="Lat0">260000.00000</P1>
+<P2 name="Scale">0.9999</P2>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_01</Name>
+<Comment>Japan Zone 1</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1293000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">330000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_02</Name>
+<Comment>Japan Zone 2</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1310000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">330000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_03</Name>
+<Comment>Japan Zone 3</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1321000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_04</Name>
+<Comment>Japan Zone 4</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1333000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">330000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_05</Name>
+<Comment>Japan Zone 5</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1342000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_06</Name>
+<Comment>Japan Zone 6</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1360000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_07</Name>
+<Comment>Japan Zone 7</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1371000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_08</Name>
+<Comment>Japan Zone 8</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1383000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_09</Name>
+<Comment>Japan Zone 9</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1395000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">360000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_10</Name>
+<Comment>Japan Zone 10</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1405000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">400000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_11</Name>
+<Comment>Japan Zone 11</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1401500.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">440000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_12</Name>
+<Comment>Japan Zone 12</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1421500.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">440000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_13</Name>
+<Comment>Japan Zone 13</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1441500.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">440000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_14</Name>
+<Comment>Japan Zone 14</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1420000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">260000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_15</Name>
+<Comment>Japan Zone 15</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1273000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">260000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_16</Name>
+<Comment>Japan Zone 16</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1240000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">260000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_17</Name>
+<Comment>Japan Zone 17</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1310000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">260000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_18</Name>
+<Comment>Japan Zone 18</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1360000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">200000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>JAPAN-JAPAN_19</Name>
+<Comment>Japan Zone 19</Comment>
+<Unit>Meters</Unit>
+<Datum>TOKYO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1540000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">260000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

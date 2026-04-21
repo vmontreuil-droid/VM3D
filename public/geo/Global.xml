@@ -1,0 +1,70 @@
+<data>
+  <Projection>
+    <Name>UPSN</Name>
+    <DisplayName>UPS-North</DisplayName>
+    <Comment>Univ. Polar Stereographic (N)</Comment>
+    <Unit>Meters</Unit>
+    <Datum>UPS</Datum>
+    <AnyDatum>1</AnyDatum>
+    <Type>STER</Type>
+    <P0 name="Lat0">900000.00000</P0>
+    <P1 name="Lon0">00000.00000</P1>
+    <P2 name="Scale">0.994</P2>
+    <P3 name="E0">2000000</P3>
+    <P4 name="N0">2000000</P4>
+  </Projection>
+  <Projection>
+    <Name>UPSS</Name>
+    <DisplayName>UPS-South</DisplayName>
+    <Comment>Univ. Polar Stereographic (S)</Comment>
+    <Unit>Meters</Unit>
+    <Datum>UPS</Datum>
+    <AnyDatum>1</AnyDatum>
+    <Type>STER</Type>
+    <P0 name="Lat0">-900000.00000</P0>
+    <P1 name="Lon0">00000.00000</P1>
+    <P2 name="Scale">0.994</P2>
+    <P3 name="E0">2000000</P3>
+    <P4 name="N0">2000000</P4>
+  </Projection>
+  <Projection>
+    <Name>UTMNorth-Zone_</Name>
+	<Code name="EPSG">32601</Code>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>1</AnyDatum>
+    <Type>TM</Type>
+    <P0 name="1-st zone central meridian">-1770000.00000</P0>
+    <P1 name="Zone width">60000.00000</P1>
+    <P2 name="Scale">0.9996</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+    <P5 name="Number of zones">60</P5>
+  </Projection>
+  <Projection>
+    <Name>UTMSouth-Zone_</Name>
+	<Code name="EPSG">32701</Code>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>1</AnyDatum>
+    <Type>TM</Type>
+    <P0 name="1-st zone central meridian">-1770000.00000</P0>
+    <P1 name="Zone width">60000.00000</P1>
+    <P2 name="Scale">0.9996</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">10000000</P4>
+    <P5 name="Number of zones">60</P5>
+  </Projection>
+  <Projection>
+  <Name>WebSphereMercator</Name>
+  <Datum>WGS84</Datum>
+  <AnyDatum>0</AnyDatum>
+  <Type>MERCATOR</Type>
+  <P0 name="Lon0">00000.00000</P0>
+  <P1 name="Lat0">00000.00000</P1>
+  <P2 name="FEast">0</P2>
+  <P3 name="FNorth">0</P3>
+ <Ellipsoid_A>6378137</Ellipsoid_A>
+ <Ellipsoid_F>1000000000000</Ellipsoid_F>
+  </Projection>
+</data>

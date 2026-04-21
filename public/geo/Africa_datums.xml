@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+<Name>CAPE(CDSM)</Name>
+<Comment>Cape South Africa CDSM version</Comment>
+<Ellipsoid>CLK80SA</Ellipsoid>
+<DX>-134.7</DX>
+<DY>-110.9</DY>
+<DZ>-292.7</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>Hart94</Name>
+<Comment>Hartebeesthoek94 South Africa NEW version relative to ITRF2005 TrigNet 2010.02</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0.217</DX>
+<DY>0.054</DY>
+<DZ>-0.172</DZ>
+<RX>-0.00215</RX>
+<RY>0.01418</RY>
+<RZ>-0.01143</RZ>
+<Scale>-0.0394</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>ITRF2005_TrigNet2010.02</Name>
+<Comment>South Africa ITRF2005 2010.02 realization by TrigNet</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+</data>

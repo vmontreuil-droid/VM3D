@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, ChevronsLeft, ChevronsRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
+import { Home, LayoutDashboard, ChevronsLeft, ChevronsRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2, Globe2 } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -310,6 +310,12 @@ export default function Sidebar({
       href: '/admin/tools/converter',
       match: (pathname) => pathname.startsWith('/admin/tools/converter'),
       icon: <FileCode2 className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: t.platform.geoSetup,
+      href: '/admin/tools/geo-setup',
+      match: (pathname) => pathname.startsWith('/admin/tools/geo-setup'),
+      icon: <Globe2 className="h-[17px] w-[17px]" />,
     },
   ]
 

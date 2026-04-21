@@ -1,0 +1,14 @@
+<?xml version="1.0"?><data><Projection><Name>HK80</Name>
+<DisplayName>Hong Kong 1980</DisplayName>
+<Unit>Meters</Unit>
+<Datum>HK80</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1141042.80000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">221843.68000</P2>
+<P3 name="East0">836694.0500000001</P3>
+<P4 name="North0">819069.8000000001</P4>
+</Projection>
+</data>

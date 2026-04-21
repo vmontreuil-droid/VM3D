@@ -1,0 +1,197 @@
+<?xml version="1.0"?><data><Projection><Name>Argentina-POSGAR_72W</Name>
+<DisplayName>Argentina-POSGAR Zone1</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR 72W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-720000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_69W</Name>
+<DisplayName>Argentina-POSGAR Zone2</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 69W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-690000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_66W</Name>
+<DisplayName>Argentina-POSGAR Zone3</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 66W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-660000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_63W</Name>
+<DisplayName>Argentina-POSGAR Zone4</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 63W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-630000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_60W</Name>
+<DisplayName>Argentina-POSGAR Zone5</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 60W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-600000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_57W</Name>
+<DisplayName>Argentina-POSGAR Zone6</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 57W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-570000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">6500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-POSGAR_54W</Name>
+<DisplayName>Argentina-POSGAR Zone7</DisplayName>
+<Comment>Argentina Gauss Kruger POSGAR zone 54W</Comment>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-540000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">7500000</P3>
+<P4 name="North0">10001965.73</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_72W</Name>
+<DisplayName>Argentina-Inchauspe Zone1</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 72W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-720000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_69W</Name>
+<DisplayName>Argentina-Inchauspe Zone2</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 69W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-690000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_66W</Name>
+<DisplayName>Argentina-Inchauspe Zone3</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 66W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-660000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_63W</Name>
+<DisplayName>Argentina-Inchauspe Zone4</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 63W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-630000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_60W</Name>
+<DisplayName>Argentina-Inchauspe Zone5</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 60W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-600000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_57W</Name>
+<DisplayName>Argentina-Inchauspe Zone6</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 57W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-570000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">6500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+<Projection><Name>Argentina-Inchauspe_54W</Name>
+<DisplayName>Argentina-Inchauspe Zone7</DisplayName>
+<Comment>Argentina Gauss Kruger Inchauspe zone 54W</Comment>
+<Unit>Meters</Unit>
+<Datum>CAMPO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-540000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">7500000</P3>
+<P4 name="North0">10002288.3</P4>
+</Projection>
+</data>

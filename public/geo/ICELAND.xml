@@ -1,0 +1,17 @@
+<?xml version="1.0"?><data><Projection><Name>ICELAND</Name>
+<DisplayName>ICELAND-Iceland ISN93</DisplayName>
+<Comment>Iceland ISN93</Comment>
+<Unit>Meters</Unit>
+<Datum>ISN93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">641500.00000</P0>
+<P1 name="NorthLat">654500.00000</P1>
+<P2 name="Lon0">-190000.00000</P2>
+<P3 name="Lat0">650000.00000</P3>
+<P4 name="East0">500000</P4>
+<P5 name="North0">500000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+</data>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>NETHERLANDS-RD</Name>
+<Unit>Meters</Unit>
+<Datum>RD_NAP</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>RDPROJ</Type>
+<P0 name="Lat0">520922.17800</P0>
+<P1 name="Lon0">52315.50000</P1>
+<P2 name="East0">155000</P2>
+<P3 name="North0">463000</P3>
+</Projection>
+<Projection>
+<Name>NETHERLANDS-RDNAPTRANS2018</Name>
+<Unit>Meters</Unit>
+<Datum>RDNAP2018</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>RDPROJ2008</Type>
+<P0 name="Lat0">520922.17800</P0>
+<P1 name="Lon0">52315.50000</P1>
+<P2 name="Scale">0.9999079</P2>
+<P3 name="East0">155000</P3>
+<P4 name="North0">463000</P4>
+</Projection>
+</data>

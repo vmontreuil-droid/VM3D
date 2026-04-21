@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+<Name>IGD05/12</Name>
+<Comment>Israel Geodetic Datum 2005/12</Comment>
+<Code name="EPSG">7137</Code>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>24.0024</DX>
+<DY>17.1032</DY>
+<DZ>17.8444</DZ>
+<RX>0.33009</RX>
+<RY>1.85269</RY>
+<RZ>-1.66969</RZ>
+<Scale>-5.4248</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>IGD0501</Name>
+<Comment>Israel Grid Datum 2005(01)</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>23.8085</DX>
+<DY>17.5937</DY>
+<DZ>17.801</DZ>
+<RX>0.3306</RX>
+<RY>1.85706</RY>
+<RZ>-1.64828</RZ>
+<Scale>-5.4374</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>ISRAEL_1</Name>
+<Comment>Israel ITM Datum( updates 2 Aug. 2005 )</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>-105.6754</DX>
+<DY>103.8426</DY>
+<DZ>110.0449</DZ>
+<RX>0.3307</RX>
+<RY>-2.4158</RY>
+<RZ>2.3519</RZ>
+<Scale>-2.553</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>IGD05</Name>
+<Comment>Israel Grid Datum 2005</Comment>
+<Code name="EPSG">7134</Code>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>23.734</DX>
+<DY>17.736</DY>
+<DZ>17.754</DZ>
+<RX>0.32786</RX>
+<RY>1.85704</RY>
+<RZ>-1.6436</RZ>
+<Scale>-5.436</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>OMAN1994</Name>
+<Ellipsoid>WGS84</Ellipsoid>
+<MethodType>HelmertStrict</MethodType>
+<DX>0.819</DX>
+<DY>-0.5762</DY>
+<DZ>-1.6446</DZ>
+<RX>0.00378</RX>
+<RY>0.03317</RY>
+<RZ>-0.00318</RZ>
+<Scale>0.0693</Scale>
+<ToLocalDatum>1</ToLocalDatum>
+<IsVoid>0</IsVoid>
+<BLAxes />
+</Datum>
+<Datum>
+<Name>ONGD14</Name>
+<Ellipsoid>GRS80</Ellipsoid>
+<MethodType>HelmertStrict</MethodType>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<BLAxes />
+</Datum>
+
+</data>

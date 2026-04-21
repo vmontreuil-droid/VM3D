@@ -1,0 +1,20 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>Hungary-VITEL</Name>
+<Unit>Meters</Unit>
+<DLLName>TableProjections.dll</DLLName> 
+<Datum>HD-72</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>VITEL</Type>
+</Projection>
+<Projection>
+<Name>Hungary-VITEL2009</Name>
+<Unit>Meters</Unit>
+<DLLName>TableProjections.dll</DLLName> 
+<Datum>HD-72(2009)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>VITEL2009</Type>
+</Projection>
+</data>

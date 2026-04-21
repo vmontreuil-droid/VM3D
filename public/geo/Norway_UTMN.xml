@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data>
+  <Projection>
+    <Name>Norway-EUREF89 UTM 32</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">90000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>Norway-EUREF89 UTM 33</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">150000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>Norway-EUREF89 UTM 35</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">270000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+</data>

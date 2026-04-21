@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+	<Name>HS2TN02</Name>
+	<Comment>UK HS2 (High Speed) system reference datum</Comment>
+ 	<DLLName>CustomDatums.dll</DLLName> 
+	<Ellipsoid>WGS84</Ellipsoid>
+</Datum>
+<Datum>
+	<Name>HS2TN15</Name>
+	<Comment>UK HS2 (High Speed) system reference datum</Comment>
+ 	<DLLName>CustomDatums.dll</DLLName> 
+	<Ellipsoid>WGS84</Ellipsoid>
+</Datum>
+
+</data>

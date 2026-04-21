@@ -1,0 +1,281 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>Sweden-SWEREF99_12.00</Name>
+<DisplayName>Sweden-SWEREF99 12 00</DisplayName>
+<Code name="EPSG">3007</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_13.30</Name>
+<DisplayName>Sweden-SWEREF99 13 30</DisplayName>
+<Code name="EPSG">3008</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">133000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_14.15</Name>
+<DisplayName>Sweden-SWEREF99 14 15</DisplayName>
+<Code name="EPSG">3009</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">141500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_15.00</Name>
+<DisplayName>Sweden-SWEREF99 15 00</DisplayName>
+<Code name="EPSG">3010</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_15.45</Name>
+<DisplayName>Sweden-SWEREF99 15 45</DisplayName>
+<Code name="EPSG">3011</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">154500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_16.30</Name>
+<DisplayName>Sweden-SWEREF99 16 30</DisplayName>
+<Code name="EPSG">3012</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">163000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_17.15</Name>
+<DisplayName>Sweden-SWEREF99 17 15</DisplayName>
+<Code name="EPSG">3013</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">171500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_18.00</Name>
+<DisplayName>Sweden-SWEREF99 18 00</DisplayName>
+<Code name="EPSG">3014</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">180000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_18.45</Name>
+<DisplayName>Sweden-SWEREF99 18 45</DisplayName>
+<Code name="EPSG">3015</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">184500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_20.15</Name>
+<DisplayName>Sweden-SWEREF99 20 15</DisplayName>
+<Code name="EPSG">3016</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">201500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_21.45</Name>
+<DisplayName>Sweden-SWEREF99 21 45</DisplayName>
+<Code name="EPSG">3017</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">214500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99_23.15</Name>
+<DisplayName>Sweden-SWEREF99 23 15</DisplayName>
+<Code name="EPSG">3018</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">231500.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">150000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-SWEREF99 TM</Name>
+<DisplayName>Sweden-SWEREF99 TM</DisplayName>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Sweden-RT90_0_gonO</Name>
+<DisplayName>Sweden-RT90 0 gon O</DisplayName>
+<Code name="EPSG">3848</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">180322.68000</P0>
+<P1 name="Scale">1.0000054</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500083.521</P3>
+<P4 name="North0">-668.8440000000001</P4>
+</Projection>
+<Projection><Name>Sweden-RT90_2.5_gonO</Name>
+<DisplayName>Sweden-RT90 2.5 gon O</DisplayName>
+<Code name="EPSG">3849</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">201822.74000</P0>
+<P1 name="Scale">1.0000052</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500102.765</P3>
+<P4 name="North0">-670.706</P4>
+</Projection>
+<Projection><Name>Sweden-RT90_2.5_gonV</Name>
+<DisplayName>Sweden-RT90 2.5 gon V</DisplayName>
+<Code name="EPSG">3847</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">154822.62431</P0>
+<P1 name="Scale">1.00000561024</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500064.274</P3>
+<P4 name="North0">-667.711</P4>
+</Projection>
+<Projection><Name>Sweden-RT90_5_gonO</Name>
+<DisplayName>Sweden-RT90 5 gon O</DisplayName>
+<Code name="EPSG">3850</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">223322.80000</P0>
+<P1 name="Scale">1.0000049</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500121.846</P3>
+<P4 name="North0">-672.557</P4>
+</Projection>
+<Projection><Name>Sweden-RT90_5_gonV</Name>
+<DisplayName>Sweden-RT90 5 gon V</DisplayName>
+<Code name="EPSG">3846</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">133322.56000</P0>
+<P1 name="Scale">1.0000058</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500044.695</P3>
+<P4 name="North0">-667.13</P4>
+</Projection>
+<Projection><Name>Sweden-RT90_7.5_gonV</Name>
+<DisplayName>Sweden-RT90 7.5 gon V</DisplayName>
+<Code name="EPSG">3845</Code>
+<Unit>Meters</Unit>
+<Datum>WGS84</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">111822.50000</P0>
+<P1 name="Scale">1.000006</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500025.141</P3>
+<P4 name="North0">-667.282</P4>
+</Projection>
+</data>

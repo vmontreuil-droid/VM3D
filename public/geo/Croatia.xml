@@ -1,0 +1,15 @@
+<data>
+<Projection>
+<Name>Croatia-HTRS96_TM</Name>
+<Comment>Croatia Croatia TM zone</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">163000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

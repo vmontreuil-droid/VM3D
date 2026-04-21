@@ -1,0 +1,274 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>Colombia-Colombia</Name>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>COLOMBIA</Type>
+<P0 name="Lat0">44100.00000</P0>
+<P1 name="Lon0">-740900.00000</P1>
+<P2 name="East0">92334.879</P2>
+<P3 name="North0">109320.965</P3>
+</Projection>
+<Projection><Name>Colombia-GaussBogota</Name>
+<DisplayName>Colombia-Gauss Bogota</DisplayName>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-740451.30000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">43556.57000</P2>
+<P3 name="East0">1000000</P3>
+<P4 name="North0">1000000</P4>
+</Projection>
+<Projection><Name>Colombia-GaussOccidental</Name>
+<DisplayName>Colombia-Gauss Occidental</DisplayName>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-770451.30000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">43556.57000</P2>
+<P3 name="East0">1000000</P3>
+<P4 name="North0">1000000</P4>
+</Projection>
+<Projection><Name>Colombia-GaussOri</Name>
+<DisplayName>Colombia-Gauss Oriental</DisplayName>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-710451.30000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">43556.57000</P2>
+<P3 name="East0">1000000</P3>
+<P4 name="North0">1000000</P4>
+</Projection>
+<Projection><Name>Colombia-GaussOriOri</Name>
+<DisplayName>Colombia-Gauss OriOriental</DisplayName>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-680451.30000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">43556.57000</P2>
+<P3 name="East0">1000000</P3>
+<P4 name="North0">1000000</P4>
+</Projection>
+<Projection><Name>Colombia-GaussManizales</Name>
+<DisplayName>Colombia-Gauss Manizales</DisplayName>
+<Comment>Colombian  Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>BOGOTA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>South America</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-753052.10000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">50415.30000</P2>
+<P3 name="East0">1173727.04</P3>
+<P4 name="North0">1052391.13</P4>
+</Projection>
+ <Projection>
+  <Name>Colombia-Bogota_MAGNA</Name>
+  <DisplayName>Colombia-Bogota MAGNA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Code name="EPSG">3116</Code>
+  <Unit>Meters</Unit> 
+  <Datum>SIRGAS</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-740439.02850</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43546.32150</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-EsteCentral_MAGNA</Name> 
+  <DisplayName>Colombia-Este Central MAGNA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Code name="EPSG">3117</Code>
+  <Unit>Meters</Unit> 
+  <Datum>SIRGAS</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-710439.02850</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43546.32150</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-EsteEste_MAGNA</Name> 
+   <DisplayName>Colombia-Este Este MAGNA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Code name="EPSG">3118</Code>
+  <Unit>Meters</Unit> 
+  <Datum>SIRGAS</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-680439.02850</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43546.32150</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-Oeste_MAGNA</Name> 
+  <DisplayName>Colombia-Oeste MAGNA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit> 
+  <Datum>SIRGAS</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-770439.02850</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43546.32150</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-OesteOeste_MAGNA</Name> 
+  <DisplayName>Colombia-Oeste Oeste MAGNA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Code name="EPSG">3115</Code>
+  <Unit>Meters</Unit> 
+  <Datum>SIRGAS</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-800439.02850</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43546.32150</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-Bogota_BOGOTA</Name>
+  <DisplayName>Colombia-Bogota BOGOTA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit>
+  <Datum>BOGOTAI</Datum>
+  <Datum>BOGOTAII</Datum> 
+  <Datum>BOGOTAIII</Datum> 
+  <Datum>BOGOTAIV</Datum> 
+  <Datum>BOGOTAV</Datum> 
+  <Datum>BOGOTAVI</Datum> 
+  <Datum>BOGOTAVII</Datum> 
+  <Datum>BOGOTAVIII</Datum>  
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-740451.30</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43556.57</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-EsteCentral_BOGOTA</Name> 
+  <DisplayName>Colombia-Este Central BOGOTA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit> 
+  <Datum>BOGOTAI</Datum>
+  <Datum>BOGOTAII</Datum> 
+  <Datum>BOGOTAIII</Datum> 
+  <Datum>BOGOTAIV</Datum> 
+  <Datum>BOGOTAV</Datum> 
+  <Datum>BOGOTAVI</Datum> 
+  <Datum>BOGOTAVII</Datum> 
+  <Datum>BOGOTAVIII</Datum>  
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-710451.30</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43556.57</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-EsteEste_BOGOTA</Name> 
+   <DisplayName>Colombia-Este Este BOGOTA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit> 
+  <Datum>BOGOTAI</Datum>
+  <Datum>BOGOTAII</Datum> 
+  <Datum>BOGOTAIII</Datum> 
+  <Datum>BOGOTAIV</Datum> 
+  <Datum>BOGOTAV</Datum> 
+  <Datum>BOGOTAVI</Datum> 
+  <Datum>BOGOTAVII</Datum> 
+  <Datum>BOGOTAVIII</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-680451.30</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43556.57</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-Oeste_BOGOTA</Name> 
+  <DisplayName>Colombia-Oeste BOGOTA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit> 
+  <Datum>BOGOTAI</Datum>
+  <Datum>BOGOTAII</Datum> 
+  <Datum>BOGOTAIII</Datum> 
+  <Datum>BOGOTAIV</Datum> 
+  <Datum>BOGOTAV</Datum> 
+  <Datum>BOGOTAVI</Datum> 
+  <Datum>BOGOTAVII</Datum> 
+  <Datum>BOGOTAVIII</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-770451.30</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43556.57</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+ <Projection>
+  <Name>Colombia-OesteOeste_BOGOTA</Name> 
+  <DisplayName>Colombia-Oeste Oeste BOGOTA</DisplayName>
+  <Comment>Colombian Grid</Comment>
+  <Unit>Meters</Unit> 
+  <Datum>BOGOTAI</Datum>
+  <Datum>BOGOTAII</Datum> 
+  <Datum>BOGOTAIII</Datum> 
+  <Datum>BOGOTAIV</Datum> 
+  <Datum>BOGOTAV</Datum> 
+  <Datum>BOGOTAVI</Datum> 
+  <Datum>BOGOTAVII</Datum> 
+  <Datum>BOGOTAVIII</Datum> 
+  <AnyDatum>0</AnyDatum>
+  <Region>South America</Region>  
+  <Type>TMERC</Type> 
+  <P0 name="Central Meridian">-800451.30</P0> 
+  <P1 name="Scale">1</P1> 
+  <P2 name="Lat0">43556.57</P2> 
+  <P3 name="East0">1000000</P3> 
+  <P4 name="North0">1000000</P4> 
+  </Projection>
+</data>

@@ -1,0 +1,345 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>France-CC42</Name>
+<DisplayName>France-LambertCC42</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3942</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">411500.00</P0>
+<P1 name="NorthLat">424500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">420000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">1200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC43</Name>
+<DisplayName>France-LambertCC43</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3943</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">421500.00</P0>
+<P1 name="NorthLat">434500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">430000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">2200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC44</Name>
+<DisplayName>France-LambertCC44</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3944</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">431500.00</P0>
+<P1 name="NorthLat">444500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">440000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">3200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC45</Name>
+<DisplayName>France-LambertCC45</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3945</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">441500.00</P0>
+<P1 name="NorthLat">454500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">450000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">4200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC46</Name>
+<DisplayName>France-LambertCC46</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3946</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">451500.00</P0>
+<P1 name="NorthLat">464500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">460000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">5200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC47</Name>
+<DisplayName>France-LambertCC47</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3947</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">461500.00</P0>
+<P1 name="NorthLat">474500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">470000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">6200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC48</Name>
+<DisplayName>France-LambertCC48</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3948</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">471500.00</P0>
+<P1 name="NorthLat">484500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">480000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">7200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC49</Name>
+<DisplayName>France-LambertCC49</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3949</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">481500.00</P0>
+<P1 name="NorthLat">494500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">490000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">8200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-CC50</Name>
+<DisplayName>France-LambertCC50</DisplayName>
+<Comment>Lambert 9z</Comment>
+<Code name="EPSG">3950</Code>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">491500.00</P0>
+<P1 name="NorthLat">504500.00</P1>
+<P2 name="Lon0">30000.000</P2>
+<P3 name="Lat0">500000.00000</P3>
+<P4 name="East0">1700000</P4>
+<P5 name="North0">9200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>France-Zone1(NTFgrille)</Name>
+<DisplayName>France-Lambert Zone I(grille)</DisplayName>
+<Comment>Lambert Zone I</Comment>
+<Unit>Meters</Unit>
+<Datum>NTFgrille</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">483554.68200</P0>
+<P1 name="NorthLat">502345.28200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">493000.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone2(NTFgrille)</Name>
+<DisplayName>France-Lambert Zone II(grille)</DisplayName>
+<Comment>Lambert Zone II</Comment>
+<Unit>Meters</Unit>
+<Datum>NTFgrille</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">455356.10800</P0>
+<P1 name="NorthLat">474145.65200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">464800.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone2e(NTFgrille)</Name>
+<DisplayName>France-Lambert Zone II etendu(grille)</DisplayName>
+<Comment>Lambert Zone II etendu</Comment>
+<Unit>Meters</Unit>
+<Datum>NTFgrille</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">455356.10800</P0>
+<P1 name="NorthLat">474145.65200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">464800.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">2200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone3(NTFgrille)</Name>
+<DisplayName>France-Lambert Zone III(grille)</DisplayName>
+<Comment>Lambert Zone III</Comment>
+<Unit>Meters</Unit>
+<Datum>NTFgrille</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">431157.44900</P0>
+<P1 name="NorthLat">445945.93800</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">440600.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone4(NTFgrille)</Name>
+<DisplayName>France-Lambert Zone IV(grille)</DisplayName>
+<Comment>Lambert Zone IV</Comment>
+<Unit>Meters</Unit>
+<Datum>NTFgrille</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">413337.39600</P0>
+<P1 name="NorthLat">424603.58800</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">420954.00000</P3>
+<P4 name="East0">234.358</P4>
+<P5 name="North0">185861.369</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Lambert93</Name>
+<DisplayName>France-Lambert 93</DisplayName>
+<Comment>Lambert 93</Comment>
+<Unit>Meters</Unit>
+<Datum>RGF93</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">440000.00000</P0>
+<P1 name="NorthLat">490000.00000</P1>
+<P2 name="Lon0">30000.00000</P2>
+<P3 name="Lat0">463000.00000</P3>
+<P4 name="East0">700000</P4>
+<P5 name="North0">6600000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone1</Name>
+<DisplayName>France-Lambert Zone I</DisplayName>
+<Comment>Lambert Zone I</Comment>
+<Code name="EPSG">27571</Code>
+<Unit>Meters</Unit>
+<Datum>NTF</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">483554.68200</P0>
+<P1 name="NorthLat">502345.28200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">493000.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone2</Name>
+<DisplayName>France-Lambert Zone II</DisplayName>
+<Comment>Lambert Zone II</Comment>
+<Unit>Meters</Unit>
+<Datum>NTF</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">455356.10800</P0>
+<P1 name="NorthLat">474145.65200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">464800.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone2e</Name>
+<DisplayName>France-Lambert Zone II etendu</DisplayName>
+<Comment>Lambert Zone II etendu</Comment>
+<Code name="EPSG">27572</Code>
+<Unit>Meters</Unit>
+<Datum>NTF</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">455356.10800</P0>
+<P1 name="NorthLat">474145.65200</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">464800.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">2200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone3</Name>
+<DisplayName>France-Lambert Zone III</DisplayName>
+<Comment>Lambert Zone III</Comment>
+<Code name="EPSG">27573</Code>
+<Unit>Meters</Unit>
+<Datum>NTF</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">431157.44900</P0>
+<P1 name="NorthLat">445945.93800</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">440600.00000</P3>
+<P4 name="East0">600000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>France-Zone4</Name>
+<DisplayName>France-Lambert Zone IV</DisplayName>
+<Comment>Lambert Zone IV</Comment>
+<Code name="EPSG">27574</Code>
+<Unit>Meters</Unit>
+<Datum>NTF</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">413337.39600</P0>
+<P1 name="NorthLat">424603.58800</P1>
+<P2 name="Lon0">22014.02500</P2>
+<P3 name="Lat0">420954.00000</P3>
+<P4 name="East0">234.358</P4>
+<P5 name="North0">185861.369</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+</data>

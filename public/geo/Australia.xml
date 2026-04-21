@@ -1,0 +1,318 @@
+<data>
+  <Projection>
+    <Name>WA Project Grids-Albany</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1175300.00000</P0>
+    <P1 name="Scale">1.0000044</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">4000000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Barrow Island and Onslow</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1151500.00000</P0>
+    <P1 name="Scale">1.0000022</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">60000</P3>
+    <P4 name="North0">2600000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Broome</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1222000.00000</P0>
+    <P1 name="Scale">1.00000298</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2200000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Busselton</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1152600.00000</P0>
+    <P1 name="Scale">0.99999592</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3900000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Carnarvon</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1134000.00000</P0>
+    <P1 name="Scale">0.99999796</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2950000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Christmas Island</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1053730.00000</P0>
+    <P1 name="Scale">1.00002514</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">1300000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Cocos (Keeling) Islands</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">965230.00000</P0>
+    <P1 name="Scale">0.99999387</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">1500000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Collie</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1155600.00000</P0>
+    <P1 name="Scale">1.000019</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">40000</P3>
+    <P4 name="North0">4000000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Esperance</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1215300.00000</P0>
+    <P1 name="Scale">1.0000055</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3950000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Exmouth</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1140400.00000</P0>
+    <P1 name="Scale">1.00000236</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2650000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Geraldton</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1143500.00000</P0>
+    <P1 name="Scale">1.00000628</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3350000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Goldfields</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1213000.00000</P0>
+    <P1 name="Scale">1.00004949</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">60000</P3>
+    <P4 name="North0">3700000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Jurien</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1145900.00000</P0>
+    <P1 name="Scale">1.00000314</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3550000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Kalbarri</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1141855.00000</P0>
+    <P1 name="Scale">1.000014</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">55000</P3>
+    <P4 name="North0">3600000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Karratha</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1165600.00000</P0>
+    <P1 name="Scale">0.9999989</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2450000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Kununurra</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1284500.00000</P0>
+    <P1 name="Scale">1.0000165</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2000000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Lancelin</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1152200.00000</P0>
+    <P1 name="Scale">1.00000157</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3650000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Margaret River</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1151000.00000</P0>
+    <P1 name="Scale">1.0000055</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3950000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Perth</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1154900.00000</P0>
+    <P1 name="Scale">0.99999906</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">3800000</P4>
+  </Projection>
+  <Projection>
+    <Name>WA Project Grids-Port Headland</Name>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1183600.00000</P0>
+    <P1 name="Scale">1.00000135</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">2400000</P4>
+  </Projection>
+  <Projection>
+    <Name>Qld-BCSG02</Name>	     
+    <Comment>Brisbane City Survey Grid 02</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDA94</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Australia</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">1530000</P0>
+    <P1 name="Scale">0.99999</P1>
+    <P2 name="Lat0">-280000</P2>
+    <P3 name="East0">50000</P3>
+    <P4 name="North0">100000</P4>
+  </Projection>
+<Projection>
+<Name>MGA94-Zone_</Name>
+<Comment>Map Grid of Australia 1994</Comment>
+<Unit>Meters</Unit>
+<Datum>GDA94(2020)</Datum>
+<Datum>GDA94</Datum>
+<Region>Australia</Region>
+<Type>TM</Type>
+<P0 name="1-st zone central meridian">-1770000.00000</P0>
+<P1 name="Zone width">60000.00000</P1>
+<P2 name="Scale">0.9996</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">10000000</P4>
+<P5 name="Number of zones">60</P5>
+</Projection>
+<Projection>
+<Name>MGA2020-Zone_</Name>
+	<Comment>Map Grid of Australia 2020</Comment>
+	<Unit>Meters</Unit>
+	<Datum>GDA2020</Datum>
+	<Region>Australia</Region>
+	<Type>TM</Type>
+	<P0 name="1-st zone central meridian">-1770000.00000</P0>
+	<P1 name="Zone width">60000.00000</P1>
+	<P2 name="Scale">0.9996</P2>
+	<P3 name="East0">500000</P3>
+	<P4 name="North0">10000000</P4>
+	<P5 name="Number of zones">60</P5>
+</Projection>
+<Projection>
+<Name>AMG-Zone_</Name>
+<Unit>Meters</Unit>
+<Datum>ANS84</Datum>
+<Region>Australia</Region>
+<Type>TM</Type>
+<P0 name="1-st zone central meridian">-1770000.00000</P0>
+<P1 name="Zone width">60000.00000</P1>
+<P2 name="Scale">0.9996</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">10000000</P4>
+<P5 name="Number of zones">60</P5>
+</Projection>
+</data>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<data>
+<Projection>
+<Name>Hungary-EOV</Name>
+<Comment>Hungary Tm projection (on sphere)</Comment>
+<Unit>Meters</Unit>
+<Datum>HD-72</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMSPHER</Type>
+<P0 name="Lat0">470839.8174</P0>
+<P1 name="Lon0">190254.8584</P1>
+<P2 name="LatNormal">471000.0</P2>
+<P3 name="_k1">1.0031100083</P3>
+<P4 name="k2">1.0007197049</P4>
+<P5 name="Scale">0.99993</P5>
+<P6 name="East0">650000.</P6>
+<P7 name="North0">200000.</P7>
+</Projection>
+
+<Projection>
+<Name>Hungary-EOV2009</Name>
+<Comment>Hungary Tm projection (on sphere)</Comment>
+<Unit>Meters</Unit>
+<Datum>HD-72(2009)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMSPHER</Type>
+<P0 name="Lat0">470839.8174</P0>
+<P1 name="Lon0">190254.8584</P1>
+<P2 name="LatNormal">471000.0</P2>
+<P3 name="_k1">1.0031100083</P3>
+<P4 name="k2">1.0007197049</P4>
+<P5 name="Scale">0.99993</P5>
+<P6 name="East0">650000.</P6>
+<P7 name="North0">200000.</P7>
+</Projection>
+</data>

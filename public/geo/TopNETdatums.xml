@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+<Name>Ger_TopNET_Bessel</Name>
+<Comment>TopNET PED Onlinetransformation</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DX>584.9567</DX>
+<DY>107.7277</DY>
+<DZ>413.8036</DZ>
+<RX>-1.11552576</RX>
+<RY>-0.28241702</RY>
+<RZ>3.13845059</RZ>
+<Scale>7.992171</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>Ger_TopNET_Krass</Name>
+<Comment>TopNET PED Onlinetransformation</Comment>
+<Ellipsoid>KRASS</Ellipsoid>
+<DX>23.3189</DX>
+<DY>-121.7131</DY>
+<DZ>-90.9398</DZ>
+<RX>-0.041789</RX>
+<RY>0.163727</RY>
+<RZ>0.147479</RZ>
+<Scale>0.799309</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>UTM TopNET</Name>
+<Comment>TopNET UTM Transformation</Comment>
+<Ellipsoid>WGS84</Ellipsoid>
+<DX>76.3</DX>
+<DY>-40.1</DY>
+<DZ>-54.7</DZ>
+<RX>0.81</RX>
+<RY>3.02</RY>
+<RZ>-1.08</RZ>
+<Scale>6.9</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+</data>

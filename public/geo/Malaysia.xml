@@ -1,0 +1,670 @@
+<?xml version="1.0"?>
+<data>
+  <Projection>
+    <Name>Malaysia_CS2009-Johor</Name>
+    <Comment>State Johor</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">20233.20279</P0>
+    <P1 name="Lon0">1033339.83599</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-NSembilan_Melaka</Name>
+    <Comment>State N.Sembilan and MELAKA</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">24243.63412</P0>
+    <P1 name="Lon0">1015622.92628</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Pahang</Name>
+    <Comment>State Pahang</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">34238.69308</P0>
+    <P1 name="Lon0">1022604.60447</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Selangor</Name>
+    <Comment>State Selangor</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">34048.37751</P0>
+    <P1 name="Lon0">1013024.48130</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Terengganu</Name>
+    <Comment>State Terengganu</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">45644.97144</P0>
+    <P1 name="Lon0">1025337.00068</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-PPinang_SPerai</Name>
+    <Comment>State P.Pinang and S. Perai</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">52515.20204</P0>
+    <P1 name="Lon0">1002040.75188</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Kedah_Perlis</Name>
+    <Comment>State Kedah and Perlis</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">55752.81981</P0>
+    <P1 name="Lon0">1003810.93028</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Perak</Name>
+    <Comment>State Perak</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">45132.64361</P0>
+    <P1 name="Lon0">1004855.46334</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2009-Kelantan</Name>
+    <Comment>State Kelantan</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2009</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">55337.07908</P0>
+    <P1 name="Lon0">1021032.24004</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Johor</Name>
+    <Comment>State Johor</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">20233.20196</P0>
+    <P1 name="Lon0">1033339.83730</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-NSembilan_Melaka</Name>
+    <Comment>State N.Sembilan and MELAKA</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">24243.63383</P0>
+    <P1 name="Lon0">1015622.92969</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Pahang</Name>
+    <Comment>State Pahang</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">34238.69263</P0>
+    <P1 name="Lon0">1022604.60772</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Selangor</Name>
+    <Comment>State Selangor</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">34048.37778</P0>
+    <P1 name="Lon0">1013024.48581</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Terengganu</Name>
+    <Comment>State Terengganu</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">45644.97184</P0>
+    <P1 name="Lon0">1025337.00496</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-PPinang_SPerai</Name>
+    <Comment>State P.Pinang and S. Perai</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">52515.20433</P0>
+    <P1 name="Lon0">1002040.76024</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Kedah_Perlis</Name>
+    <Comment>State Kedah and Perlis</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">55752.82155</P0>
+    <P1 name="Lon0">1003810.93860</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Perak</Name>
+    <Comment>State Perak</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">45132.64488</P0>
+    <P1 name="Lon0">1004855.47038</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+  <Projection>
+    <Name>Malaysia_CS2000-Kelantan</Name>
+    <Comment>State Kelantan</Comment>
+    <Unit>Meters</Unit>
+    <Datum>GDM2000</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Asia</Region>
+    <Type>C_S2000</Type>
+    <P0 name="Lat0">55337.07975</P0>
+    <P1 name="Lon0">1021032.24529</P1>
+    <P2 name="NCSorigin">0</P2>
+    <P3 name="ECSorigin">0</P3>
+  </Projection>
+ 
+<Projection>
+<Name>Malaysia_RSO2009</Name>
+<Comment>Malaysian RSO Grid 2009</Comment>
+<Unit>Meters</Unit>
+<Datum>GDM2009</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">-365827.13271988</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1021500.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">804671.</P4>
+<P5 name="North0">0</P5>
+</Projection>
+<Projection>
+<Name>Borneo_RSO2009</Name>
+<Comment>Borneo RSO Grid 2009</Comment>
+<NEAxes>WN</NEAxes>
+<Unit>Meters</Unit>
+<Datum>GDM2009</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">531856.91582</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1150000.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">0</P4>
+<P5 name="North0">0</P5>
+</Projection>
+
+<Projection>
+<Name>Malaysia_RSO2000</Name>
+<Comment>Malaysian RSO Grid 2000</Comment>
+<Unit>Meters</Unit>
+<Datum>GDM2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">-365827.13271988</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1021500.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">804671.</P4>
+<P5 name="North0">0</P5>
+</Projection>
+<Projection>
+<Name>Borneo_RSO2000</Name>
+<Comment>Borneo RSO Grid 2000</Comment>
+<NEAxes>WN</NEAxes>
+<Unit>Meters</Unit>
+<Datum>GDM2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">531856.91582</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1150000.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">0</P4>
+<P5 name="North0">0</P5>
+</Projection>
+
+<Projection><Name>Malaysia_CS-JOHOR</Name>
+<Comment>State Johor</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>30745.124</P2>
+<P3>11227.927</P3>
+<P4>-0.0098</P4>
+<P5>0.021</P5>
+<P6>-2.0871</P6>
+<P7>5.29886</P7>
+<P8>-5.27113</P8>
+<P9>-1.83579</P9>
+<P10>-0.47547</P10>
+<P11>-0.74017</P11>
+<P12>-0.64384</P12>
+<P13>0.17978</P13>
+<P14>0.58805</P14>
+<P15>-0.66614</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-KEDAH_PERLIS</Name>
+<Comment>State Kedah_Perlis</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>14652.327</P2>
+<P3>32818.535</P3>
+<P4>0.0229</P4>
+<P5>-0.0139</P5>
+<P6>-1.67791</P6>
+<P7>43.48222</P7>
+<P8>-43.47877</P8>
+<P9>-1.60907</P9>
+<P10>-0.78177</P10>
+<P11>0.02231</P11>
+<P12>-0.71284</P12>
+<P13>0.28692</P13>
+<P14>-0.007889999999999999</P14>
+<P15>-0.05668</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-KELANTAN</Name>
+<Comment>State Kelantan</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>23123.367</P2>
+<P3>32402.468</P3>
+<P4>-0.0055</P4>
+<P5>0.009299999999999999</P5>
+<P6>0.09802</P6>
+<P7>16.79903</P7>
+<P8>-16.90028</P8>
+<P9>0.03457</P9>
+<P10>3.08499</P10>
+<P11>2.12603</P11>
+<P12>1.30902</P12>
+<P13>-1.83988</P13>
+<P14>-0.43245</P14>
+<P15>1.14088</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-NEGERI_MELAKA</Name>
+<Comment>State Negeri_Melaka</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>-12.03</P0>
+<P1>-47.152</P1>
+<P2>21786.154</P2>
+<P3>14918.998</P3>
+<P4>-0.0132</P4>
+<P5>-0.011</P5>
+<P6>0.04887</P6>
+<P7>19.88167</P7>
+<P8>-19.7519</P8>
+<P9>-0.08787</P9>
+<P10>-5.29544</P10>
+<P11>-3.60882</P11>
+<P12>-1.48678</P12>
+<P13>2.40011</P13>
+<P14>1.39966</P14>
+<P15>-1.63052</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-BARAT_LAUT_PAHANG</Name>
+<Comment>State Barat_Laut_Pahang</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>24530.257</P2>
+<P3>20402.611</P3>
+<P4>-0.0402</P4>
+<P5>-0.0392</P5>
+<P6>-1.17721</P6>
+<P7>16.45555</P7>
+<P8>-15.97246</P8>
+<P9>-1.60681</P9>
+<P10>2.36266</P10>
+<P11>0.79414</P11>
+<P12>-0.47438</P12>
+<P13>-1.33406</P13>
+<P14>0.31267</P14>
+<P15>0.56153</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-TIMUR_LAUT_PAHANG</Name>
+<Comment>State Timur_Laut_Pahang</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>24530.257</P2>
+<P3>20402.611</P3>
+<P4>0.0074</P4>
+<P5>0.0167</P5>
+<P6>-1.85804</P6>
+<P7>15.74953</P7>
+<P8>-15.531</P8>
+<P9>-1.98886</P9>
+<P10>-0.26344</P10>
+<P11>1.13755</P11>
+<P12>0.6903</P12>
+<P13>-0.37557</P13>
+<P14>-0.80353</P14>
+<P15>0.92214</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-BARAT_DAYA_PAHANG</Name>
+<Comment>State Barat_Daya_Pahang</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>24530.257</P2>
+<P3>20402.611</P3>
+<P4>-0.019</P4>
+<P5>0.0142</P5>
+<P6>-2.0555</P6>
+<P7>15.96743</P7>
+<P8>-15.85</P8>
+<P9>-1.75774</P9>
+<P10>-0.87963</P10>
+<P11>-0.77691</P11>
+<P12>-0.85008</P12>
+<P13>0.84104</P13>
+<P14>0.51332</P14>
+<P15>-0.57895</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-TENGGARA_PAHANG</Name>
+<Comment>State Tenggara_Pahang</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>24530.257</P2>
+<P3>20402.611</P3>
+<P4>0.1201</P4>
+<P5>-0.1127</P5>
+<P6>-0.65021</P6>
+<P7>15.98562</P7>
+<P8>-15.75245</P8>
+<P9>-1.29342</P9>
+<P10>-3.5823</P10>
+<P11>1.27091</P11>
+<P12>0.62127</P12>
+<P13>1.81814</P13>
+<P14>-0.85946</P14>
+<P15>0.1889</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-PINANG</Name>
+<Comment>State Pinang</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>13032.613</P2>
+<P3>29837.058</P3>
+<P4>0.0035</P4>
+<P5>-0.002</P5>
+<P6>-0.70331</P6>
+<P7>47.88313</P7>
+<P8>-48.434</P8>
+<P9>-0.97433</P9>
+<P10>-7.83333</P10>
+<P11>0</P11>
+<P12>0</P12>
+<P13>0</P13>
+<P14>0</P14>
+<P15>0</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-ZUN_PERAK_UTARA</Name>
+<Comment>State Zun_Perak_Utara</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>6633.947</P1>
+<P2>15613.508</P2>
+<P3>26737.765</P3>
+<P4>0.0097</P4>
+<P5>-0.008500000000000001</P5>
+<P6>-1.26936</P6>
+<P7>38.94896</P7>
+<P8>-38.99859</P8>
+<P9>-1.195</P9>
+<P10>-2.48409</P10>
+<P11>-0.4236</P11>
+<P12>-0.09546</P12>
+<P13>1.13201</P13>
+<P14>0.38284</P14>
+<P15>-0.44895</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-ZUN_PERAK_SELATAN</Name>
+<Comment>State Zun_Perak_Selatan</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>6633.947</P1>
+<P2>15613.508</P2>
+<P3>26737.765</P3>
+<P4>0.0164</P4>
+<P5>0.0098</P5>
+<P6>-0.94169</P6>
+<P7>39.34524</P7>
+<P8>-39.34054</P8>
+<P9>-0.98511</P9>
+<P10>-4.55691</P10>
+<P11>-2.53941</P11>
+<P12>-1.11538</P12>
+<P13>2.35634</P13>
+<P14>1.7355</P14>
+<P15>-1.56404</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-SELANGOR</Name>
+<Comment>State Selangor</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>-1081.656</P0>
+<P1>2781.802</P1>
+<P2>19407.061</P2>
+<P3>20245.21</P3>
+<P4>0.00454</P4>
+<P5>-0.01114</P5>
+<P6>-1.05487</P6>
+<P7>27.09565</P7>
+<P8>-26.99523</P8>
+<P9>-0.88007</P9>
+<P10>-4.56972</P10>
+<P11>-4.10737</P11>
+<P12>-2.38486</P12>
+<P13>2.26095</P13>
+<P14>1.43565</P14>
+<P15>-2.38064</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-TERENGGA</Name>
+<Comment>State Terengga</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>27071.372</P2>
+<P3>27187.737</P3>
+<P4>0.0023</P4>
+<P5>0.0022</P5>
+<P6>0.12995</P6>
+<P7>8.656739999999999</P7>
+<P8>-8.66038</P8>
+<P9>0.21035</P9>
+<P10>4.4369</P10>
+<P11>3.95148</P11>
+<P12>1.61249</P12>
+<P13>-2.29659</P13>
+<P14>-1.96429</P14>
+<P15>2.52198</P15>
+</Projection>
+<Projection><Name>Malaysia_CS-SINGAPURA</Name>
+<Comment>State Singapura</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>C_S</Type>
+<P0>0</P0>
+<P1>0</P1>
+<P2>32348.193</P2>
+<P3>7077.985</P3>
+<P4>0.0076</P4>
+<P5>-0.0042</P5>
+<P6>-1.86323</P6>
+<P7>3.41033</P7>
+<P8>-1.8972</P8>
+<P9>-3.36242</P9>
+<P10>0.33333</P10>
+<P11>-1</P11>
+<P12>0</P12>
+<P13>0</P13>
+<P14>0</P14>
+<P15>0</P15>
+</Projection>
+<Projection><Name>Malaysia_RSO</Name>
+<Comment>Malaysian RSO Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>MRT48</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">-365827.15420</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1021500.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">804671.2996</P4>
+<P5 name="North0">0</P5>
+</Projection>
+<Projection><Name>Borneo_RSO</Name>
+<Comment>Borneo RSO Grid</Comment>
+<NEAxes>WN</NEAxes>
+<Unit>Meters</Unit>
+<Datum>BT68</Datum>
+<Datum>BT68(SABAH)</Datum>
+<Datum>BT68(SARAWAK)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>RSO</Type>
+<P0 name="AxisAzimuth">531856.95370</P0>
+<P1 name="Scale">0.99984</P1>
+<P2 name="Lon0">1150000.00000</P2>
+<P3 name="Lat0">40000.00000</P3>
+<P4 name="East0">0</P4>
+<P5 name="North0">0</P5>
+</Projection>
+
+</data>

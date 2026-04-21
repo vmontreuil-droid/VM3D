@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+<Name>NTV2SPAIN</Name>
+<Comment>Spain NTV2 datum</Comment>
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+<Datum>
+<Name>NTV2BALE</Name>
+<Comment>Balearic Islands NTV2 datum</Comment>
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+</Datum>
+</data>

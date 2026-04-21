@@ -1,0 +1,19 @@
+<?xml version="1.0"?><data>
+<Projection><Name>UKO-OSTN02</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<DLLName>TableProjections.dll</DLLName> 
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>OSTN02</Type>
+</Projection>
+
+<Projection><Name>UKO-OSTN15</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<DLLName>TableProjections.dll</DLLName> 
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>OSTN15</Type>
+</Projection>
+</data>

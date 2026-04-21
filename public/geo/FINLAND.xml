@@ -1,0 +1,248 @@
+<?xml version="1.0"?><data><Projection><Name>FINLAND-TM35FIN</Name>
+<Comment>ETRS89 Transverse Mercator CRS for Finland</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK19</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3873</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">190000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">19500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK20</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3874</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">200000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">20500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK21</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3875</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">21500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK22</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3876</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">220000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">22500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK23</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3877</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">230000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">23500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK24</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3878</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">240000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">24500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK25</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3879</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">250000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">25500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK26</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3880</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">260000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">26500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK27</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3881</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">27500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK28</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3882</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">280000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">28500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK29</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3883</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">290000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">29500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK30</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3884</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">300000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">30500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-GK31</Name>
+<Comment>ETRS89 Gauss-Kruger CRS for Finland</Comment>
+<Code name="EPSG">3885</Code>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">310000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">31500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-FINLAND1</Name>
+<Comment>Finland Zone 1</Comment>
+<Unit>Meters</Unit>
+<Datum>FINLAND</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">1500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-FINLAND2</Name>
+<Comment>Finland Zone 2</Comment>
+<Unit>Meters</Unit>
+<Datum>FINLAND</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">240000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-FINLAND3</Name>
+<Comment>Finland Zone 3</Comment>
+<Unit>Meters</Unit>
+<Datum>FINLAND</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>FINLAND-FINLAND4</Name>
+<Comment>Finland Zone 4</Comment>
+<Unit>Meters</Unit>
+<Datum>FINLAND</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">300000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

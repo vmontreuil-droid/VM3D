@@ -1,0 +1,169 @@
+<?xml version="1.0"?><data><Projection><Name>GERMANY-Berlin</Name>
+<DisplayName>GERMANY-Berlin Soldner</DisplayName>
+<Comment>Berlin Soldner Projection</Comment>
+<Unit>Meters</Unit>
+<Datum>Soldner Netz88</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>CASSINI</Type>
+<P0 name="Lat0">522507.13380</P0>
+<P1 name="Lon0">133737.93320</P1>
+<P2 name="AxisAzimuth">00000.00000</P2>
+<P3 name="East0">40000</P3>
+<P4 name="North0">10000</P4>
+</Projection>
+<Projection><Name>GERMANY-GERMANY1</Name>
+<Comment>Germany Zone 1</Comment>
+<Unit>Meters</Unit>
+<Datum>GERMANY</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">60000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GERMANY2</Name>
+<Comment>Germany Zone 2</Comment>
+<Unit>Meters</Unit>
+<Datum>GERMANY</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">90000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GERMANY3</Name>
+<Comment>Germany Zone 3</Comment>
+<Unit>Meters</Unit>
+<Datum>GERMANY</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK6E(PD42)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 6E(PD42)</DisplayName>
+<Comment>Gauss Krueger Zone 6E</Comment>
+<Unit>Meters</Unit>
+<Datum>PD42</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">60000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK9E(PD42)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 9E(PD42)</DisplayName>
+<Comment>Gauss Krueger Zone 9E</Comment>
+<Unit>Meters</Unit>
+<Datum>PD42</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">90000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK12E(PD42)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 12E(PD42)</DisplayName>
+<Comment>Gauss Krueger Zone 12E</Comment>
+<Unit>Meters</Unit>
+<Datum>PD42</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK15E(PD42)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 15E(PD42)</DisplayName>
+<Comment>Gauss Krueger Zone 15E</Comment>
+<Unit>Meters</Unit>
+<Datum>PD42</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK6E(SN42/83)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 6E(SN42/83)</DisplayName>
+<Comment>Gauss Krueger Zone 6E</Comment>
+<Unit>Meters</Unit>
+<Datum>SN42/83</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">60000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>GERMANY-GK9E(SN42/83)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 9E(SN42/83)</DisplayName>
+<Comment>Gauss Krueger Zone 9E</Comment>
+<Unit>Meters</Unit>
+<Datum>SN42/83</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">90000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>GERMANY-GK12E(SN42/83)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 12E(SN42/83)</DisplayName>
+<Comment>Gauss Krueger Zone 12E</Comment>
+<Unit>Meters</Unit>
+<Datum>SN42/83</Datum>
+<Datum>SA_S4283</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>GERMANY-GK15E(SN42/83)</Name>
+<DisplayName>GERMANY-Gauss Krueger Zone 15E(SN42/83)</DisplayName>
+<Comment>Gauss Krueger Zone 15E</Comment>
+<Unit>Meters</Unit>
+<Datum>SN42/83</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

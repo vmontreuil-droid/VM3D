@@ -1,0 +1,101 @@
+<data>
+<Projection>
+<Name>TopNET (OT)-Bessel Z2</Name>
+<Comment>Deutschland Z2</Comment>
+<DisplayName>TopNET Bessel Zone 2</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Bessel</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">60000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>TopNET (OT)-Bessel Z3</Name>
+<Comment>Deutschland Z3</Comment>
+<DisplayName>TopNET Bessel Zone 3</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Bessel</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">90000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>TopNET (OT)-Bessel Z4</Name>
+<Comment>Deutschland Z4</Comment>
+<DisplayName>TopNET Bessel Zone 4</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Bessel</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>TopNET (OT)-Bessel Z5</Name>
+<Comment>Deutschland Z5</Comment>
+<DisplayName>TopNET Bessel Zone 5</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Bessel</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>
+<Projection>
+<Name>TopNET (OT)-Krassowski Z3</Name>
+<Comment>Deutschland Z3</Comment>
+<DisplayName>TopNET Krass Zone 3</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Krass</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">90000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>TopNET (OT)-Krassowski Z4</Name>
+<Comment>Deutschland Z4</Comment>
+<DisplayName>TopNET Krass Zone 4</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Krass</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">120000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>TopNET (OT)-Krassowski Z5</Name>
+<Comment>Deutschland Z5</Comment>
+<DisplayName>TopNET Krass Zone 5</DisplayName>
+<Unit>Meters</Unit>
+<Datum>Ger_TopNET_Krass</Datum>
+<Region>Deutschland</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

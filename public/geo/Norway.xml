@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<data>
+  <Projection>
+    <Name>NORWAY-EUREF89 UTM 32</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">90000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 UTM 33</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">150000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 UTM 35</Name>
+    <Comment>EUREF89 UTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">270000.00000</P0>
+    <P1 name="Scale">0.9996</P1>
+    <P2 name="Lat0">00000.00000</P2>
+    <P3 name="East0">500000</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 1</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">60322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 2</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">82322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 3</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">104322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 4</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">131322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 5</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">165322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 6</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">205322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 7</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">245322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-NGO48 AKSE 8</Name>
+    <Comment>Norwegian Map Grid</Comment>
+    <Unit>Meters</Unit>
+    <Datum>NGO1948</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">290322.50000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">0</P3>
+    <P4 name="North0">0</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 5</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">53000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 6</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">63000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 7</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">73000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 8</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">83000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 9</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">93000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 10</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">103000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 11</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">113000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 12</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">123000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 13</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">133000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 14</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">143000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 15</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">153000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 16</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">163000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 17</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">173000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 18</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">183000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 19</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">193000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 20</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">203000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 21</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">213000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 22</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">223000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 23</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">233000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 24</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">243000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 25</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">253000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 26</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">263000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 27</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">273000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 28</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">283000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 29</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">293000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+  <Projection>
+    <Name>NORWAY-EUREF89 NTM 30</Name>
+    <Comment>EUREF89 NTM</Comment>
+    <Unit>Meters</Unit>
+    <Datum>WGS84</Datum>
+    <AnyDatum>0</AnyDatum>
+    <Region>Europe</Region>
+    <Type>TMERC</Type>
+    <P0 name="Central Meridian">303000.00000</P0>
+    <P1 name="Scale">1</P1>
+    <P2 name="Lat0">580000.00000</P2>
+    <P3 name="East0">100000</P3>
+    <P4 name="North0">1000000</P4>
+  </Projection>
+</data>

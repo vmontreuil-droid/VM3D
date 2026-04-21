@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<data>
+
+<Datum> 
+	<Name>NAD27(CSRS)</Name> 
+	<Comment>Canadian 1927</Comment>
+	 <Multiple/> 
+	<DataFile/>
+	<Ellipsoid>CLK66</Ellipsoid>
+ 	<DLLName>CustomDatums.dll</DLLName> 
+	<DX>-8</DX> <DY>160</DY> <DZ>176</DZ> 
+	<RX>0</RX> <RY>0</RY> <RZ>0</RZ> 
+	<Scale>0</Scale>
+	<DataFile/> 
+	<RequiresSetup>1</RequiresSetup>
+	 <IsVoid>0</IsVoid> 
+	<IsChangeable>0</IsChangeable> 
+</Datum>
+<Datum>
+	<Name>NAD83(CSRS)</Name>
+	<Comment>Canadian Datum NAD 1983, NTv2</Comment>
+ 	<DLLName>CustomDatums.dll</DLLName> 
+	<DataFile/> 
+	<RequiresSetup>1</RequiresSetup>
+	<Ellipsoid>GRS80</Ellipsoid>
+</Datum>
+<Datum>
+	<Name>NAD83(CSRS1997)</Name>
+	<Comment>Canadian Datum NAD 1983, epoch 1997.0</Comment>
+	<Ellipsoid>GRS80</Ellipsoid>
+	<DX>-0.9889</DX><DY>1.9074</DY><DZ>0.5030</DZ>
+	<RX>-0.025915</RX><RY>-0.009426</RY><RZ>-0.011599</RZ>
+	<Scale>0.000935</Scale>
+	<IsVoid>0</IsVoid>
+	<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+	<Name>ATS77(CSRS)</Name>
+	<Comment>Canadian Datum ATS77, NTv2</Comment>
+ 	<DLLName>CustomDatums.dll</DLLName> 
+	<DataFile/> 
+	<RequiresSetup>1</RequiresSetup>
+	<Ellipsoid>ATS77</Ellipsoid>
+</Datum>
+</data>

@@ -1,0 +1,841 @@
+<?xml version="1.0"?><data><Projection><Name>CH3-Zone_1</Name>
+<DisplayName>CH3-Zone_1 : 0E to 3E</DisplayName>
+<Comment>0E to 3E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">13000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_2</Name>
+<DisplayName>CH3-Zone_2 : 3E to 6E</DisplayName>
+<Comment>3E to 6E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">43000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_3</Name>
+<DisplayName>CH3-Zone_3 : 6E to 9E</DisplayName>
+<Comment>6E to 9E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">73000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_4</Name>
+<DisplayName>CH3-Zone_4 : 9E to 12E</DisplayName>
+<Comment>9E to 12E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">103000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_5</Name>
+<DisplayName>CH3-Zone_5 : 12E to 15E</DisplayName>
+<Comment>12E to 15E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">133000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_6</Name>
+<DisplayName>CH3-Zone_6 : 15E to 18E</DisplayName>
+<Comment>15E to 18E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">163000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_7</Name>
+<DisplayName>CH3-Zone_7 : 18E to 21E</DisplayName>
+<Comment>18E to 21E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">193000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_8</Name>
+<DisplayName>CH3-Zone_8 : 21E to 24E</DisplayName>
+<Comment>21E to 24E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">223000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_9</Name>
+<DisplayName>CH3-Zone_9 : 24E to 27E</DisplayName>
+<Comment>24E to 27E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">253000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_10</Name>
+<DisplayName>CH3-Zone_10 : 27E to 30E</DisplayName>
+<Comment>27E to 30E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">283000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_11</Name>
+<DisplayName>CH3-Zone_11 : 30E to 33E</DisplayName>
+<Comment>30E to 33E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">313000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_12</Name>
+<DisplayName>CH3-Zone_12 : 33E to 36E</DisplayName>
+<Comment>33E to 36E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">343000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_13</Name>
+<DisplayName>CH3-Zone_13 : 36E to 39E</DisplayName>
+<Comment>36E to 39E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">373000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_14</Name>
+<DisplayName>CH3-Zone_14 : 39E to 42E</DisplayName>
+<Comment>39E to 42E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">403000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_15</Name>
+<DisplayName>CH3-Zone_15 : 42E to 45E</DisplayName>
+<Comment>42E to 45E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">433000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_16</Name>
+<DisplayName>CH3-Zone_16 : 45E to 48E</DisplayName>
+<Comment>45E to 48E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">463000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_17</Name>
+<DisplayName>CH3-Zone_17 : 48E to 51E</DisplayName>
+<Comment>48E to 51E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">493000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_18</Name>
+<DisplayName>CH3-Zone_18 : 51E to 54E</DisplayName>
+<Comment>51E to 54E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">523000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_19</Name>
+<DisplayName>CH3-Zone_19 : 54E to 57E</DisplayName>
+<Comment>54E to 57E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">553000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_20</Name>
+<DisplayName>CH3-Zone_20 : 57E to 60E</DisplayName>
+<Comment>57E to 60E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">583000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_21</Name>
+<DisplayName>CH3-Zone_21 : 60E to 63E</DisplayName>
+<Comment>60E to 63E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_22</Name>
+<DisplayName>CH3-Zone_22 : 63E to 66E</DisplayName>
+<Comment>63E to 66E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_23</Name>
+<DisplayName>CH3-Zone_23 : 66E to 69E</DisplayName>
+<Comment>66E to 69E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">673000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_24</Name>
+<DisplayName>CH3-Zone_24 : 69E to 72E</DisplayName>
+<Comment>69E to 72E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">703000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_25</Name>
+<DisplayName>CH3-Zone_25 : 72E to 75E</DisplayName>
+<Comment>72E to 75E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">733000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_26</Name>
+<DisplayName>CH3-Zone_26 : 75E to 78E</DisplayName>
+<Comment>75E to 78E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">763000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_27</Name>
+<DisplayName>CH3-Zone_27 : 78E to 81E</DisplayName>
+<Comment>78E to 81E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">793000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_28</Name>
+<DisplayName>CH3-Zone_28 : 81E to 84E</DisplayName>
+<Comment>81E to 84E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">823000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_29</Name>
+<DisplayName>CH3-Zone_29 : 84E to 87E</DisplayName>
+<Comment>84E to 87E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">853000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_30</Name>
+<DisplayName>CH3-Zone_30 : 87E to 90E</DisplayName>
+<Comment>87E to 90E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">883000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_31</Name>
+<DisplayName>CH3-Zone_31 : 90E to 93E</DisplayName>
+<Comment>90E to 93E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">913000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_32</Name>
+<DisplayName>CH3-Zone_32 : 93E to 96E</DisplayName>
+<Comment>93E to 96E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">943000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_33</Name>
+<DisplayName>CH3-Zone_33 : 96E to 99E</DisplayName>
+<Comment>96E to 99E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">973000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_34</Name>
+<DisplayName>CH3-Zone_34 : 99E to 102E</DisplayName>
+<Comment>99E to 102E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1003000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_35</Name>
+<DisplayName>CH3-Zone_35 : 102E to 105E</DisplayName>
+<Comment>102E to 105E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1033000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_36</Name>
+<DisplayName>CH3-Zone_36 : 105E to 108E</DisplayName>
+<Comment>105E to 108E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1063000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_37</Name>
+<DisplayName>CH3-Zone_37 : 108E to 111E</DisplayName>
+<Comment>108E to 111E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1093000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_38</Name>
+<DisplayName>CH3-Zone_38 : 111E to 114E</DisplayName>
+<Comment>111E to 114E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1123000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_39</Name>
+<DisplayName>CH3-Zone_39 : 114E to 117E</DisplayName>
+<Comment>114E to 117E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1153000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_40</Name>
+<DisplayName>CH3-Zone_40 : 117E to 120E</DisplayName>
+<Comment>117E to 120E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1183000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_41</Name>
+<DisplayName>CH3-Zone_41 : 120E to 123E</DisplayName>
+<Comment>120E to 123E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1213000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_42</Name>
+<DisplayName>CH3-Zone_42 : 123E to 126E</DisplayName>
+<Comment>123E to 126E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1243000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_43</Name>
+<DisplayName>CH3-Zone_43 : 126E to 129E</DisplayName>
+<Comment>126E to 129E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1273000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_44</Name>
+<DisplayName>CH3-Zone_44 : 129E to 132E</DisplayName>
+<Comment>129E to 132E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1303000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_45</Name>
+<DisplayName>CH3-Zone_45 : 132E to 135E</DisplayName>
+<Comment>132E to 135E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1333000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_46</Name>
+<DisplayName>CH3-Zone_46 : 135E to 138E</DisplayName>
+<Comment>135E to 138E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1363000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_47</Name>
+<DisplayName>CH3-Zone_47 : 138E to 141E</DisplayName>
+<Comment>138E to 141E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1393000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_48</Name>
+<DisplayName>CH3-Zone_48 : 141E to 144E</DisplayName>
+<Comment>141E to 144E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1423000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_49</Name>
+<DisplayName>CH3-Zone_49 : 144E to 147E</DisplayName>
+<Comment>144E to 147E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1453000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_50</Name>
+<DisplayName>CH3-Zone_50 : 147E to 150E</DisplayName>
+<Comment>147E to 150E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1483000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_51</Name>
+<DisplayName>CH3-Zone_51 : 150E to 153E</DisplayName>
+<Comment>150E to 153E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1513000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_52</Name>
+<DisplayName>CH3-Zone_52 : 153E to 156E</DisplayName>
+<Comment>153E to 156E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1543000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_53</Name>
+<DisplayName>CH3-Zone_53 : 156E to 159E</DisplayName>
+<Comment>156E to 159E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1573000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_54</Name>
+<DisplayName>CH3-Zone_54 : 159E to 162E</DisplayName>
+<Comment>159E to 162E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1603000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_55</Name>
+<DisplayName>CH3-Zone_55 : 162E to 165E</DisplayName>
+<Comment>162E to 165E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1633000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_56</Name>
+<DisplayName>CH3-Zone_56 : 165E to 168E</DisplayName>
+<Comment>165E to 168E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1663000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_57</Name>
+<DisplayName>CH3-Zone_57 : 168E to 171E</DisplayName>
+<Comment>168E to 171E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1693000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_58</Name>
+<DisplayName>CH3-Zone_58 : 171E to 174E</DisplayName>
+<Comment>171E to 174E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1723000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_59</Name>
+<DisplayName>CH3-Zone_59 : 174E to 177E</DisplayName>
+<Comment>174E to 177E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1753000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>CH3-Zone_60</Name>
+<DisplayName>CH3-Zone_60 : 177E to 180E</DisplayName>
+<Comment>177E to 180E</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1954</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Asia</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1783000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

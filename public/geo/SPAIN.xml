@@ -1,0 +1,169 @@
+<?xml version="1.0"?><data><Projection><Name>SPAIN-SPAIN1</Name>
+<DisplayName>SPAIN-30 UTM IGN</DisplayName>
+<Comment>30 UTM IGN</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50_IGN</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN2</Name>
+<DisplayName>SPAIN-31 UTM IGN</DisplayName>
+<Comment>31 UTM IGN</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50_IGN</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN3</Name>
+<DisplayName>SPAIN-29 UTM IGN</DisplayName>
+<Comment>29 UTM IGN</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50_IGN</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-90000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN4</Name>
+<DisplayName>SPAIN-30 UTM ED50</DisplayName>
+<Comment>30 UTM ED50</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN5</Name>
+<DisplayName>SPAIN-31 UTM ED50</DisplayName>
+<Comment>31 UTM ED50</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN6</Name>
+<DisplayName>SPAIN-29 UTM ED50</DisplayName>
+<Comment>29 UTM ED50</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-90000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN7</Name>
+<DisplayName>SPAIN-31 UTM ICC</DisplayName>
+<Comment>29 UTM ICC</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50_ICC</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN8</Name>
+<DisplayName>SPAIN-28 UTM ED50</DisplayName>
+<Comment>28 UTM ED50</Comment>
+<Unit>Meters</Unit>
+<Datum>EURO50</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-150000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN9</Name>
+<DisplayName>SPAIN-28 UTM ETRS89</DisplayName>
+<Comment>28 UTM ETRS89</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-150000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN10</Name>
+<DisplayName>SPAIN-29 UTM ETRS89</DisplayName>
+<Comment>29 UTM ETRS89</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-90000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN11</Name>
+<DisplayName>SPAIN-30 UTM ETRS89</DisplayName>
+<Comment>30 UTM ETRS89</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SPAIN-SPAIN12</Name>
+<DisplayName>SPAIN-31 UTM ETRS89</DisplayName>
+<Comment>31 UTM ETRS89</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">30000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

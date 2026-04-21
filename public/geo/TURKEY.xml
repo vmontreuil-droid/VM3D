@@ -1,0 +1,197 @@
+<?xml version="1.0"?><data><Projection><Name>TURKEY-TURKEY27</Name>
+<DisplayName>TURKEY-Zone 27 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 27</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY30</Name>
+<DisplayName>TURKEY-Zone 30 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 30</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">300000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY33</Name>
+<DisplayName>TURKEY-Zone 33 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 33</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY36</Name>
+<DisplayName>TURKEY-Zone 36 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 36</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">360000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY39</Name>
+<DisplayName>TURKEY-Zone 39 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 39</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">390000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY42</Name>
+<DisplayName>TURKEY-Zone 42 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 42</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">420000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY45</Name>
+<DisplayName>TURKEY-Zone 45 (ED50_T)</DisplayName>
+<Comment>Turkey Zone 45</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50_T</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">450000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY_ITRF96_27</Name>
+<DisplayName>TURKEY-Zone 27 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 27</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_30</Name>
+<DisplayName>TURKEY-Zone 30 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 30</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">300000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_33</Name>
+<DisplayName>TURKEY-Zone 33 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 33</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_36</Name>
+<DisplayName>TURKEY-Zone 36 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 36</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">360000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_39</Name>
+<DisplayName>TURKEY-Zone 39 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 39</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">390000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_42</Name>
+<DisplayName>TURKEY-Zone 42 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 42</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">420000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>TURKEY-TURKEY(ITRF96)_45</Name>
+<DisplayName>TURKEY-Zone 45 (ITRF96)</DisplayName>
+<Comment>Turkey(ITRF96) Zone 45</Comment>
+<Unit>Meters</Unit>
+<Datum>ITRF96</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">450000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

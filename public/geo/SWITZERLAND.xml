@@ -1,0 +1,26 @@
+<?xml version="1.0"?><data><Projection><Name>SWITZERLAND-CH1903(+)</Name>
+<Comment>Swiss Map Grid 2004</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1903(+)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>SWISS</Type>
+<P0 name="L0">72622.50000</P0>
+<P1 name="B0">465708.66000</P1>
+<P2 name="East0">2600000</P2>
+<P3 name="North0">1200000</P3>
+</Projection>
+<Projection><Name>SWITZERLAND-SWITZERLAND</Name>
+<DisplayName>SWITZERLAND-CH1903</DisplayName>
+<Comment>Swiss Map Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>CH1903(+)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>SWISS</Type>
+<P0 name="L0">72622.50000</P0>
+<P1 name="B0">465708.66000</P1>
+<P2 name="East0">600000</P2>
+<P3 name="North0">200000</P3>
+</Projection>
+</data>

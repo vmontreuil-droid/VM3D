@@ -1,0 +1,20 @@
+<?xml version="1.0"?><data>
+<Projection>
+	<Name>Romania-Ster70</Name>
+	<Unit>Meters</Unit>
+	<Datum>ETRS89</Datum>
+	<DLLName>TableProjections.dll</DLLName> 
+	<AnyDatum>0</AnyDatum>
+	<Region>Europe</Region>
+	<Type>RomaniaSter70</Type>
+</Projection>
+<Projection>
+	<Name>Romania-Ster30</Name>
+	<Unit>Meters</Unit>
+	<Datum>ETRS89</Datum>
+	<DLLName>TableProjections.dll</DLLName> 
+	<AnyDatum>0</AnyDatum>
+	<Region>Europe</Region>
+	<Type>RomaniaSter30</Type>
+</Projection>
+</data>

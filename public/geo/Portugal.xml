@@ -1,0 +1,211 @@
+<?xml version="1.0"?><data>
+<Projection><Name>Portugal-Base SE</Name>
+<Comment>Portugal, Madeira e Porto Santo</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SE</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-150000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Base SW Faial</Name>
+<Comment>Portugal, Acores, Gr Central, Faial</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SW_Faial</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Base SW Gr Central</Name>
+<Comment>Portugal, Acores, Grupo Central</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SW_GrCentral</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Base SW Pico</Name>
+<Comment>Portugal, Acores, Gr Central, Pico</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SW_Pico</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Base SW S.Jorge</Name>
+<Comment>Portugal, Acores, Gr Central, S.Jorge</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SW_SJorge</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Base SW Terceira</Name>
+<Comment>Portugal, Acores, Gr Central,Terceira</Comment>
+<Unit>Meters</Unit>
+<Datum>Base_SW_Terceira</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Datum 73</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>D73</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80754.86200</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394000.00000</P2>
+<P3 name="East0">180.598</P3>
+<P4 name="North0">-86.99</P4>
+</Projection>
+<Projection><Name>Portugal-Datum 73 Mil</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>D73</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80754.86200</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394000.00000</P2>
+<P3 name="East0">200180.598</P3>
+<P4 name="North0">299913.01</P4>
+</Projection>
+<Projection><Name>Portugal-Datum Lisboa</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>DLx</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80754.86200</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-ED50</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>ED50(Portugal)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-90000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-ETRS89</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80759.19000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394005.73000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Militares</Name>
+<Comment>Portugal, Continente</Comment>
+<Unit>Meters</Unit>
+<Datum>DLx</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80754.86200</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394000.00000</P2>
+<P3 name="East0">200000</P3>
+<P4 name="North0">300000</P4>
+</Projection>
+<Projection><Name>Portugal-Observatorio</Name>
+<Comment>Portugal, Acores, Grupo Ocidental</Comment>
+<Unit>Meters</Unit>
+<Datum>Observatorio_Acores</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-330000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Sao Braz Gr Oriental</Name>
+<Comment>Portugal, Acores, Grupo Oriental</Comment>
+<Unit>Meters</Unit>
+<Datum>S_Braz_GrOriental</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>Portugal-Sao Braz S.Miguel</Name>
+<Comment>Portugal, Acores, Gr Oriental, Sao Miguel</Comment>
+<Unit>Meters</Unit>
+<Datum>S_Braz_SMiguel</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+
+<Projection>
+<Name>PORTUGAL</Name>
+<DisplayName>Portugal-PORTUGAL</DisplayName>
+<Comment>Portugal Datum73</Comment>
+<Unit>Meters</Unit><Datum>ED50_PORTUGAL</Datum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-80754.86200</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">394000.00000</P2>
+<P3 name="East0">180.598</P3>
+<P4 name="North0">-86.99</P4>
+</Projection>
+</data>

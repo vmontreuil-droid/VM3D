@@ -1,0 +1,1012 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>BELGIUM-LB2008</Name>
+<Comment>Belgium Lambert 2008</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00000</P0>
+<P1 name="NorthLat">511000.00000</P1>
+<P2 name="Lon0">42133.17700</P2>
+<P3 name="Lat0">504752.13400</P3>
+<P4 name="East0">649328.0</P4>
+<P5 name="North0">665262.0</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection>
+<Name>BELGIUM-LB2005</Name>
+<Comment>Belgium Lambert 2005</Comment>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00000</P0>
+<P1 name="NorthLat">511000.00000</P1>
+<P2 name="Lon0">42133.17700</P2>
+<P3 name="Lat0">504752.13400</P3>
+<P4 name="East0">150328</P4>
+<P5 name="North0">166262</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_01</Name>
+<Comment>Flepos 01</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos01</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_02</Name>
+<Comment>Flepos 02</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_03</Name>
+<Comment>Flepos 03</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos03</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_04</Name>
+<Comment>Flepos 04</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos04</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_05</Name>
+<Comment>Flepos 05</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos05</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_06</Name>
+<Comment>Flepos 06</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos06</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_07</Name>
+<Comment>Flepos 07</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos07</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_08</Name>
+<Comment>Flepos 08</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos08</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_09</Name>
+<Comment>Flepos 09</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos09</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_10</Name>
+<Comment>Flepos 10</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos10</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_11</Name>
+<Comment>Flepos 11</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos11</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_12</Name>
+<Comment>Flepos 12</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos12</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_13</Name>
+<Comment>Flepos 13</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos13</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_14</Name>
+<Comment>Flepos 14</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos14</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_15</Name>
+<Comment>Flepos 15</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos15</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_16</Name>
+<Comment>Flepos 16</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos16</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_17</Name>
+<Comment>Flepos 17</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos17</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_18</Name>
+<Comment>Flepos 18</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos18</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_19</Name>
+<Comment>Flepos 19</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos19</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_20</Name>
+<Comment>Flepos 20</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos20</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_21</Name>
+<Comment>Flepos 21</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos21</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_22</Name>
+<Comment>Flepos 22</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos22</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_23</Name>
+<Comment>Flepos 23</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos23</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_24</Name>
+<Comment>Flepos 24</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos24</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_25</Name>
+<Comment>Flepos 25</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos25</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_26</Name>
+<Comment>Flepos 26</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos26</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_27</Name>
+<Comment>Flepos 27</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos27</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_28</Name>
+<Comment>Flepos 28</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos28</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_29</Name>
+<Comment>Flepos 29</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos29</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_30</Name>
+<Comment>Flepos 30</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos30</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_31</Name>
+<Comment>Flepos 31</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos31</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_32</Name>
+<Comment>Flepos 32</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos32</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_33</Name>
+<Comment>Flepos 33</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos33</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_34</Name>
+<Comment>Flepos 34_1</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos34_1</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_35</Name>
+<Comment>Flepos 35</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos35</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_36</Name>
+<Comment>Flepos 36</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos36</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_37</Name>
+<Comment>Flepos 37_1</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos37_1</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_38</Name>
+<Comment>Flepos 38_1</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos38_1</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Flepos_39</Name>
+<Comment>Flepos 39</Comment>
+<Unit>Meters</Unit>
+<Datum>Flepos39</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Bruxells</Name>
+<DisplayName>BELGIUM-Bruxelles</DisplayName>
+<Comment>Bruxelles zone</Comment>
+<Unit>Meters</Unit>
+<Datum>Bruxelles</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Arlon_old</Name>
+<Comment>WAL_ARLO</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_ARLO_old</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+
+<Projection><Name>BELGIUM-Arlon</Name>
+<Comment>WAL_ARLO</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_ARLO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Battice</Name>
+<Comment>WAL_BATT</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_BATT</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Berloz</Name>
+<Comment>WAL_BERL</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_BERL</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Charleroi</Name>
+<Comment>WAL_CHAR</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_CHAR</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Florenville</Name>
+<Comment>WAL_FLOR</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_FLOR</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Fontaine_Valmont</Name>
+<Comment>WAL_FOVA</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_FOVA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Saint_Ghislain</Name>
+<Comment>WAL_GHIS</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_GHIS</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Kain</Name>
+<Comment>WAL_KAIN</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_KAIN</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Leglise</Name>
+<Comment>WAL_LEGL</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_LEGL</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Mabompre</Name>
+<Comment>WAL_MABO</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_MABO</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Marche_en_Famenne</Name>
+<Comment>WAL_MAFA</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_MAFA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Mariembourg</Name>
+<Comment>WAL_MARI</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_MARI</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Meix_devant_Virton</Name>
+<Comment>WAL_MEIX</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_MEIX</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Moha</Name>
+<Comment>WAL_MOHA</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_MOHA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Namur</Name>
+<Comment>WAL_NAMR</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_NAMR</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Nivelles</Name>
+<Comment>WAL_NIVL</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_NIVL</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Ottignies</Name>
+<Comment>WAL_OLLN</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_OLLN</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Onhaye</Name>
+<Comment>WAL_ONHA</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_ONHA</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Ostiches</Name>
+<Comment>WAL_OSTI</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_OSTI</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Tellin</Name>
+<Comment>WAL_TELL</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_TELL</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-SartTilman</Name>
+<DisplayName>BELGIUM-Sart Tilman</DisplayName>
+<Comment>WAL_TILM</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_TILM</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Saint_Vith</Name>
+<Comment>WAL_VITH</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_VITH</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-Werbomont</Name>
+<Comment>WAL_WERB</Comment>
+<Unit>Meters</Unit>
+<Datum>WAL_WERB</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+<Projection><Name>BELGIUM-BELGIUM72</Name>
+<Comment>Belgium Lambert 72</Comment>
+<Unit>Meters</Unit>
+<Datum>BELGIUM_72</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">495000.00204</P0>
+<P1 name="NorthLat">511000.00204</P1>
+<P2 name="Lon0">42202.95200</P2>
+<P3 name="Lat0">900000.00000</P3>
+<P4 name="East0">150000.013</P4>
+<P5 name="North0">5400088.438</P5>
+<P6 name="Scale">1</P6>
+</Projection>
+</data>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?><data>
+<Projection>
+<Name>BELGIUM-LB72</Name>
+<Unit>Meters</Unit>
+<DLLName>TableProjections.dll</DLLName> 
+<Datum>BD72</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>LB72</Type>
+</Projection>
+</data>

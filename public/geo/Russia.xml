@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<data>
+
+<Projection>
+<Name>GSK2011-Zone_</Name>
+<Unit>Meters</Unit>
+<Datum>GSK2011(G32453_2017)</Datum>
+<Datum>GSK2011</Datum>
+<Region>Europe</Region>
+<Type>TM</Type>
+<P0 name="1-st zone central meridian">30000.00000</P0>
+<P1 name="Zone width">60000.00000</P1>
+<P2 name="Scale">1</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+<P5 name="Number of zones">32</P5>
+</Projection>
+
+<Projection>
+<Name>SK1995-Zone_</Name>
+<Unit>Meters</Unit>
+<Datum>SK95(G32453_2017)</Datum>
+<Datum>SK95</Datum>
+<Region>Europe</Region>
+<Type>TM</Type>
+<P0 name="1-st zone central meridian">30000.00000</P0>
+<P1 name="Zone width">60000.00000</P1>
+<P2 name="Scale">1</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+<P5 name="Number of zones">32</P5>
+</Projection>
+
+<Projection>
+<Name>SK1942-Zone_</Name>
+<Unit>Meters</Unit>
+<Datum>SK42(G32453_2017)</Datum>
+<Datum>SK42</Datum>
+<Region>Europe</Region>
+<Type>TM</Type>
+<P0 name="1-st zone central meridian">30000.00000</P0>
+<P1 name="Zone width">60000.00000</P1>
+<P2 name="Scale">1</P2>
+<P3 name="East0">500000</P3>
+<P4 name="North0">0</P4>
+<P5 name="Number of zones">32</P5>
+</Projection>
+
+</data>

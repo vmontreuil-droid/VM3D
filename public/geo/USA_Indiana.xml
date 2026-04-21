@@ -1,0 +1,1294 @@
+
+<data>
+
+<Projection>
+<Name>IndianaGCS-Adams</Name>
+<Comment>Indiana GCS Adams county (01)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-845700.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">403300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">01</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Allen</Name>
+<Comment>Indiana GCS Allen county (02)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">02</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Bartholomew</Name>
+<Comment>Indiana GCS Bartholomew county (03)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855100.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">390000.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">03</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Benton</Name>
+<Comment>Indiana GCS Benton county (04)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-871800.0</P0>
+<P1 name="Scale">1.000029</P1>
+<P2 name="Lat0">402700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">04</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Blackford</Name>
+<Comment>Indiana GCS Blackford county (05)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852400.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">400300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">05</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Boone</Name>
+<Comment>Indiana GCS Boone county (06)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">393600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">06</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Brown</Name>
+<Comment>Indiana GCS Brown county (07)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-861800.0</P0>
+<P1 name="Scale">1.000030</P1>
+<P2 name="Lat0">390000.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">07</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Carroll</Name>
+<Comment>Indiana GCS Carroll county (08)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863900.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">402400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">08</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Cass</Name>
+<Comment>Indiana GCS Cass county (09)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-862400.0</P0>
+<P1 name="Scale">1.000028</P1>
+<P2 name="Lat0">403300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">09</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Clark</Name>
+<Comment>Indiana GCS Clark county (10)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853600.0</P0>
+<P1 name="Scale">1.000021</P1>
+<P2 name="Lat0">380900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">10</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Clay</Name>
+<Comment>Indiana GCS Clay county (11)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870900.0</P0>
+<P1 name="Scale">1.000024</P1>
+<P2 name="Lat0">390900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">11</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Clinton</Name>
+<Comment>Indiana GCS Clinton county (12)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863600.0</P0>
+<P1 name="Scale">1.000032</P1>
+<P2 name="Lat0">400900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">12</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Crawford</Name>
+<Comment>Indiana GCS Crawford county (13)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">380600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">13</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Daviess</Name>
+<Comment>Indiana GCS Daviess county (14)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870600.0</P0>
+<P1 name="Scale">1.000018</P1>
+<P2 name="Lat0">382700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">14</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Dearborn</Name>
+<Comment>Indiana GCS Dearborn county (15)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-845400.0</P0>
+<P1 name="Scale">1.000029</P1>
+<P2 name="Lat0">383900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">15</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Decatur</Name>
+<Comment>Indiana GCS Decatur county (16)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853900.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">390600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">16</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-DeKalb</Name>
+<Comment>Indiana GCS DeKalb county (17)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-845700.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">411500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">17</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Delaware</Name>
+<Comment>Indiana GCS Delaware county (18)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852400.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">400300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">18</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Dubois</Name>
+<Comment>Indiana GCS Dubois county (19)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865700.0</P0>
+<P1 name="Scale">1.000020</P1>
+<P2 name="Lat0">381200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">19</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Elkhart</Name>
+<Comment>Indiana GCS Elkhart county (20)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855100.0</P0>
+<P1 name="Scale">1.000033</P1>
+<P2 name="Lat0">403900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">20</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Fayette</Name>
+<Comment>Indiana GCS Fayette county (21)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">391500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">21</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Floyd</Name>
+<Comment>Indiana GCS Floyd county (22)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853600.0</P0>
+<P1 name="Scale">1.000021</P1>
+<P2 name="Lat0">380900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">22</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Fountain</Name>
+<Comment>Indiana GCS Fountain county (23)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-871800.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">395700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">23</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Franklin</Name>
+<Comment>Indiana GCS Franklin county (24)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">391500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">24</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Fulton</Name>
+<Comment>Indiana GCS Fulton county (25)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-861800.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">25</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Gibson</Name>
+<Comment>Indiana GCS Gibson county (26)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-873900.0</P0>
+<P1 name="Scale">1.000013</P1>
+<P2 name="Lat0">380900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">26</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Grant</Name>
+<Comment>Indiana GCS Grant county (27)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-854200.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">402100.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">27</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Greene</Name>
+<Comment>Indiana GCS Greene county (28)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870600.0</P0>
+<P1 name="Scale">1.000018</P1>
+<P2 name="Lat0">382700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">28</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Hamilton</Name>
+<Comment>Indiana GCS Hamilton county (29)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860000.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">395400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">29</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Hancock</Name>
+<Comment>Indiana GCS Hancock county (30)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-854800.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">393900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">30</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Harrison</Name>
+<Comment>Indiana GCS Harrison county (31)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">375700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">31</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Hendricks</Name>
+<Comment>Indiana GCS Hendricks county (32)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">393600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">32</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Henry</Name>
+<Comment>Indiana GCS Henry county (33)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852700.0</P0>
+<P1 name="Scale">1.000043</P1>
+<P2 name="Lat0">394500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">33</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Howard</Name>
+<Comment>Indiana GCS Howard county (34)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">402100.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">34</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Huntington</Name>
+<Comment>Indiana GCS Huntington county (35)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853000.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">403900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">35</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Jackson</Name>
+<Comment>Indiana GCS Jackson county (36)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855700.0</P0>
+<P1 name="Scale">1.000022</P1>
+<P2 name="Lat0">384200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">36</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Jasper</Name>
+<Comment>Indiana GCS Jasper county (37)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870600.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">404200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">37</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Jay</Name>
+<Comment>Indiana GCS Jay county (38)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850000.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">401800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">38</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Jefferson</Name>
+<Comment>Indiana GCS Jefferson county (39)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852100.0</P0>
+<P1 name="Scale">1.000028</P1>
+<P2 name="Lat0">383300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">39</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Jennings</Name>
+<Comment>Indiana GCS Jennings county (40)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-854800.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">384800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">40</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Johnson</Name>
+<Comment>Indiana GCS Johnson county (41)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">391800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">41</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Knox</Name>
+<Comment>Indiana GCS Knox county (42)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872700.0</P0>
+<P1 name="Scale">1.000015</P1>
+<P2 name="Lat0">382400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">42</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Kosciusko</Name>
+<Comment>Indiana GCS Kosciusko county (43)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855100.0</P0>
+<P1 name="Scale">1.000033</P1>
+<P2 name="Lat0">403900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">43</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-LaGrange</Name>
+<Comment>Indiana GCS LaGrange county (44)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852700.0</P0>
+<P1 name="Scale">1.000037</P1>
+<P2 name="Lat0">411500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">44</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Lake</Name>
+<Comment>Indiana GCS Lake county (45)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872400.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">404200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">45</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-LaPorte</Name>
+<Comment>Indiana GCS LaPorte county (46)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-864500.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">46</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Lawrence</Name>
+<Comment>Indiana GCS Lawrence county (47)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">380600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">47</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Madison</Name>
+<Comment>Indiana GCS Madison county (48)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-854800.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">393900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">48</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Marion</Name>
+<Comment>Indiana GCS Marion county (49)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">391800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">49</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Marshall</Name>
+<Comment>Indiana GCS Marshall county (50)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-861800.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">50</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Martin</Name>
+<Comment>Indiana GCS Martin county (51)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865700.0</P0>
+<P1 name="Scale">1.000020</P1>
+<P2 name="Lat0">381200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">51</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Miami</Name>
+<Comment>Indiana GCS Miami county (52)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">402100.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">52</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Monroe</Name>
+<Comment>Indiana GCS Monroe county (53)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000028</P1>
+<P2 name="Lat0">385700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">53</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Montgomery</Name>
+<Comment>Indiana GCS Montgomery county (54)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865700.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">392700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">54</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Morgan</Name>
+<Comment>Indiana GCS Morgan county (55)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000028</P1>
+<P2 name="Lat0">385700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">55</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Newton</Name>
+<Comment>Indiana GCS Newton county (56)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872400.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">404200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">56</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Noble</Name>
+<Comment>Indiana GCS Noble county (57)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-852700.0</P0>
+<P1 name="Scale">1.000037</P1>
+<P2 name="Lat0">411500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">57</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Ohio</Name>
+<Comment>Indiana GCS Ohio county (58)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-845400.0</P0>
+<P1 name="Scale">1.000029</P1>
+<P2 name="Lat0">383900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">58</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Orange</Name>
+<Comment>Indiana GCS Orange county (59)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-863000.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">380600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">59</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Owen</Name>
+<Comment>Indiana GCS Owen county (60)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865400.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">390900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">60</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Parke</Name>
+<Comment>Indiana GCS Parke county (61)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872100.0</P0>
+<P1 name="Scale">1.000022</P1>
+<P2 name="Lat0">393600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">61</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Perry</Name>
+<Comment>Indiana GCS Perry county (62)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-864200.0</P0>
+<P1 name="Scale">1.000020</P1>
+<P2 name="Lat0">374800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">62</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Pike</Name>
+<Comment>Indiana GCS Pike county (63)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-871800.0</P0>
+<P1 name="Scale">1.000015</P1>
+<P2 name="Lat0">375100.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">63</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Porter</Name>
+<Comment>Indiana GCS Porter county (64)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870600.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">404200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">64</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Posey</Name>
+<Comment>Indiana GCS Pulaski county (65)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-875700.0</P0>
+<P1 name="Scale">1.000013</P1>
+<P2 name="Lat0">374500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">65</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Pulaski</Name>
+<Comment>Indiana GCS Pulaski county (66)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-864500.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">66</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Putnam</Name>
+<Comment>Indiana GCS Putnam county (67)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865700.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">392700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">67</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Randolph</Name>
+<Comment>Indiana GCS Randolph county (68)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000044</P1>
+<P2 name="Lat0">394200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">68</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Ripley</Name>
+<Comment>Indiana GCS Ripley county (69)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-851800.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">385400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">68</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Rush</Name>
+<Comment>Indiana GCS Rush county (70)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853900.0</P0>
+<P1 name="Scale">1.000036</P1>
+<P2 name="Lat0">390600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">70</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-StJoseph</Name>
+<DisplayName>IndianaGCS-St.Joseph</DisplayName>
+<Comment>Indiana GCS St. Joseph county (71)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-861800.0</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">71</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Scott</Name>
+<Comment>Indiana GCS Scott county (72)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853600.0</P0>
+<P1 name="Scale">1.000021</P1>
+<P2 name="Lat0">380900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">72</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Shelby</Name>
+<Comment>Indiana GCS Shelby county (73)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855400.0</P0>
+<P1 name="Scale">1.000030</P1>
+<P2 name="Lat0">391800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">73</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Spencer</Name>
+<Comment>Indiana GCS Spencer county (74)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-870300.0</P0>
+<P1 name="Scale">1.000014</P1>
+<P2 name="Lat0">374500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">74</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Starke</Name>
+<Comment>Indiana GCS Starke county (75)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-864500.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">405400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">75</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Steuben</Name>
+<Comment>Indiana GCS Steuben county (76)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850000.0</P0>
+<P1 name="Scale">1.000041</P1>
+<P2 name="Lat0">413000.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">76</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Sullivan</Name>
+<Comment>Indiana GCS Sullivan county (77)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-873000.0</P0>
+<P1 name="Scale">1.000017</P1>
+<P2 name="Lat0">385400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">77</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Switzerland</Name>
+<Comment>Indiana GCS Switzerland county (78)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-845400.0</P0>
+<P1 name="Scale">1.000029</P1>
+<P2 name="Lat0">383900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">78</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Tippecanoe</Name>
+<Comment>Indiana GCS Tippecanoe county (79)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865400.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">401200</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">79</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Tipton</Name>
+<Comment>Indiana GCS Tipton county (80)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860000.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">395400.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">80</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Union</Name>
+<Comment>Indiana GCS Union county (81)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000038</P1>
+<P2 name="Lat0">391500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">81</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Vanderburgh</Name>
+<Comment>Indiana GCS Vanderburgh county (82)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-873300.0</P0>
+<P1 name="Scale">1.000015</P1>
+<P2 name="Lat0">374800.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">82</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Vermillion</Name>
+<Comment>Indiana GCS Vermillion county (83)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872100.0</P0>
+<P1 name="Scale">1.000022</P1>
+<P2 name="Lat0">393600.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">83</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Vigo</Name>
+<Comment>Indiana GCS Vigo county (84)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-872700.0</P0>
+<P1 name="Scale">1.000020</P1>
+<P2 name="Lat0">391500.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">84</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Wabash</Name>
+<Comment>Indiana GCS Wabash county (85)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-855100.0</P0>
+<P1 name="Scale">1.000033</P1>
+<P2 name="Lat0">403900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">43</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Warren</Name>
+<Comment>Indiana GCS Warren county (86)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-871800.0</P0>
+<P1 name="Scale">1.000025</P1>
+<P2 name="Lat0">395700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">86</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Warrick</Name>
+<Comment>Indiana GCS Warrick county (87)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-871800.0</P0>
+<P1 name="Scale">1.000015</P1>
+<P2 name="Lat0">375100.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">87</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Washington</Name>
+<Comment>Indiana GCS Washington county (88)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-860900.0</P0>
+<P1 name="Scale">1.000027</P1>
+<P2 name="Lat0">375700.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">88</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Wayne</Name>
+<Comment>Indiana GCS Wayne county (89)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-850300.0</P0>
+<P1 name="Scale">1.000044</P1>
+<P2 name="Lat0">394200.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">89</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Wells</Name>
+<Comment>Indiana GCS Wells county (90)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-851500.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">403300.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">90</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-White</Name>
+<Comment>Indiana GCS White county (91)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-865400.0</P0>
+<P1 name="Scale">1.000026</P1>
+<P2 name="Lat0">401200</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">91</P5>
+</Projection>
+<Projection>
+<Name>IndianaGCS-Whitley</Name>
+<Comment>Indiana GCS Whitley county (92)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(2011)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="CentralMeridian">-853000.0</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">403900.0</P2>
+<P3 name="East0">240000</P3>
+<P4 name="North0">36000</P4>
+<P5 name="Zone number">92</P5>
+</Projection>
+
+</data>

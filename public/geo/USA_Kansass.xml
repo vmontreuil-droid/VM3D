@@ -1,0 +1,254 @@
+<?xml version="1.0"?><data>
+<Projection><Name>KansasRCS-Goodland</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1013600.00000</P0>
+<P1 name="Scale">1.000156</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">1500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Colby</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1005700.00000</P0>
+<P1 name="Scale">1.000134</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">2500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Oberlin</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1002100.00000</P0>
+<P1 name="Scale">1.000116</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Hays</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-992700.00000</P0>
+<P1 name="Scale">1.000082</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-GreatBend</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-984000.00000</P0>
+<P1 name="Scale">1.000078</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Beloit</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-980900.00000</P0>
+<P1 name="Scale">1.000068</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">6500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Salina</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-972000.00000</P0>
+<P1 name="Scale">1.000049</P1>
+<P2 name="Lat0">373000.00000</P2>
+<P3 name="East0">7500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Manhattan</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">391000.00000</P0>
+<P1 name="NorthLat">391000.00000</P1>
+<P2 name="Lon0">-963000.00000</P2>
+<P3 name="Lat0">391000.00000</P3>
+<P4 name="East0">8500000</P4>
+<P5 name="North0">600000</P5>
+<P6 name="Scale">1.000044</P6>
+</Projection>
+<Projection><Name>KansasRCS-Emporia</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">383000.00000</P0>
+<P1 name="NorthLat">383000.00000</P1>
+<P2 name="Lon0">-963000.00000</P2>
+<P3 name="Lat0">383000.00000</P3>
+<P4 name="East0">9500000</P4>
+<P5 name="North0">300000</P5>
+<P6 name="Scale">1.000050</P6>
+</Projection>
+<Projection><Name>KansasRCS-Atchison</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">393800.00000</P0>
+<P1 name="NorthLat">393800.00000</P1>
+<P2 name="Lon0">-954500.00000</P2>
+<P3 name="Lat0">393800.00000</P3>
+<P4 name="East0">10500000</P4>
+<P5 name="North0">700000</P5>
+<P6 name="Scale">1.000040</P6>
+</Projection>
+<Projection><Name>KansasRCS-KansasCity</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">390600.00000</P0>
+<P1 name="NorthLat">390600.00000</P1>
+<P2 name="Lon0">-951500.00000</P2>
+<P3 name="Lat0">390600.00000</P3>
+<P4 name="East0">11500000</P4>
+<P5 name="North0">600000</P5>
+<P6 name="Scale">1.000033</P6>
+</Projection>
+<Projection><Name>KansasRCS-Ulysses</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1012500.00000</P0>
+<P1 name="Scale">1.000140</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">12500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-GardenCity</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1002400.00000</P0>
+<P1 name="Scale">1.000109</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">13500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-DodgeCity</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-994000.00000</P0>
+<P1 name="Scale">1.000097</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">14500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Larned</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-991200.00000</P0>
+<P1 name="Scale">1.000087</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">15500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Pratt</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-983300.00000</P0>
+<P1 name="Scale">1.000069</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">16500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Wichita</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">374600.00000</P0>
+<P1 name="NorthLat">374600.00000</P1>
+<P2 name="Lon0">-973000.00000</P2>
+<P3 name="Lat0">374600.00000</P3>
+<P4 name="East0">17500000</P4>
+<P5 name="North0">400000</P5>
+<P6 name="Scale">1.000059</P6>
+</Projection>
+<Projection><Name>KansasRCS-ArkansasCity</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>LC</Type>
+<P0 name="SouthLat">371100.00000</P0>
+<P1 name="NorthLat">371100.00000</P1>
+<P2 name="Lon0">-973000.00000</P2>
+<P3 name="Lat0">371100.00000</P3>
+<P4 name="East0">18500000</P4>
+<P5 name="North0">200000</P5>
+<P6 name="Scale">1.000055</P6>
+</Projection>
+<Projection><Name>KansasRCS-Coffeyville</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-955800.00000</P0>
+<P1 name="Scale">1.000034</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">19500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>KansasRCS-Pittsburg</Name>
+<Unit>USFeet</Unit>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>NAD83(2011)</Datum><Datum>NAD83(CORS96)</Datum>
+<Region>USA</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-950500.00000</P0>
+<P1 name="Scale">1.000031</P1>
+<P2 name="Lat0">364500.00000</P2>
+<P3 name="East0">20500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

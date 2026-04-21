@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<data>
+
+<Datum>
+<Name>CGCS2000</Name>
+<Comment>Chinees datum 2000</Comment>
+<Code name="EPSG">4479</Code>
+<Ellipsoid>CGCS2000</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>Macao</Name>
+<Comment>Macao 3D Transformation Macao -> ITRF2005(WGS84)</Comment>
+<Ellipsoid>INTL</Ellipsoid>
+<MethodType>Molodenskiy</MethodType>
+<DX>-202.865</DX>
+<DY>-303.990</DY>
+<DZ>-155.873</DZ>
+<P0X>-2361554.788</P0X>
+<P0Y>5417536.177</P0Y>
+<P0Z>2391608.926</P0Z>
+<RX>-34.079</RX>
+<RY>76.126</RY>
+<RZ>32.660</RZ>
+<Scale>6.096</Scale>
+<ToLocalDatum>0</ToLocalDatum>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>KOREA1985</Name>
+<Comment>KOREA 1985 datum of Old Korea Geodetic System</Comment>
+<Ellipsoid>BESS</Ellipsoid>
+<DX>-145.90217</DX>
+<DY>505.03353</DY>
+<DZ>685.75047</DZ>
+<RX>1.162</RX>
+<RY>-2.347</RY>
+<RZ>-1.592</RZ>
+<Scale>-6.342</Scale>
+<IsVoid>0</IsVoid>
+</Datum>
+ <Datum>
+  <Name>GDM2006</Name> 
+  <Comment>Penninsula Malaysian datum</Comment> 
+  <Ellipsoid>GRS80</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+ </Datum>
+ <Datum>
+  <Name>BT68(SABAH)</Name> 
+  <Comment>East Malaysian datum</Comment> 
+  <Ellipsoid>EVER2</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+ </Datum>
+ <Datum>
+  <Name>BT68(SARAWAK)</Name> 
+  <Comment>East Malaysian datum</Comment> 
+  <Ellipsoid>EVER2</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+ </Datum>
+ <Datum>
+  <Name>MRT48</Name> 
+  <Comment>Penninsula Malaysian datum</Comment> 
+  <Ellipsoid>MEVER</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+ </Datum>
+ <Datum>
+  <Name>GDM2009</Name> 
+  <Comment>Penninsula Malaysian datum</Comment> 
+  <Ellipsoid>GRS80</Ellipsoid> 
+  <DLLName>CustomDatums.dll</DLLName> 
+ </Datum>
+<Datum>
+<Name>EMGSN97</Name>
+<Comment>East Malaysia</Comment>
+<Ellipsoid>WGS84</Ellipsoid>
+<DX>1.04278 </DX>
+<DY>0.30902 </DY>
+<DZ>-0.57544 </DZ>
+<RX>-0.01102 </RX>
+<RY>0.03471 </RY>
+<RZ>-0.02865 </RZ>
+<Scale>0.01934 </Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>PMGSN94</Name>
+<Comment>Penninsula Malaysia</Comment>
+<Ellipsoid>WGS84</Ellipsoid>
+<DX>-1.69276</DX>
+<DY>1.92994</DY>
+<DZ>-2.07108</DZ>
+<RX>-0.03515</RX>
+<RY>0.02858</RY>
+<RZ>0.00617</RZ>
+<Scale>-0.24859</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>GDM2000</Name>
+<Comment>Malaysia</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>JGD2000/2011</Name>
+<Comment>Tokyo 2000 Mean Value</Comment>
+<Code name="EPSG">4612</Code>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+<Datum>
+<Name>INDIAN75_Thailand</Name>
+<Comment>Thailand Local Datum</Comment>
+<Ellipsoid>EVER</Ellipsoid>
+<DX>206</DX>
+<DY>837</DY>
+<DZ>295</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+</data>

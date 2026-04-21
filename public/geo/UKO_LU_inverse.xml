@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<data>
+
+<Projection>
+<Name>NorthWest</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450612.718</P0>
+<P1 name="ShiftNorthing">143236.271</P1>
+<P2 name="scale">0.999745653</P2>
+<P3 name="Rot">1.44420116</P3>
+</Projection>
+
+<Projection>
+<Name>SouthWest</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450610.266</P0>
+<P1 name="ShiftNorthing">143238.209</P1>
+<P2 name="scale">0.999756316</P2>
+<P3 name="Rot">1.4418927</P3>
+</Projection>
+
+<Projection>
+<Name>Central</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450607.111</P0>
+<P1 name="ShiftNorthing">143235.329</P1>
+<P2 name="scale">0.999807558</P2>
+<P3 name="Rot">1.44247667</P3>
+</Projection>
+
+<Projection>
+<Name>East</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450603.379</P0>
+<P1 name="ShiftNorthing">143233.058</P1>
+<P2 name="scale">0.999853968</P2>
+<P3 name="Rot">1.44271751</P3>
+</Projection>
+
+<Projection>
+<Name>South</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450607.363</P0>
+<P1 name="ShiftNorthing">143239.590</P1>
+<P2 name="scale">0.999782133</P2>
+<P3 name="Rot">1.43993901</P3>
+</Projection>
+
+<Projection>
+<Name>SouthEast</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>UK_LU</Type>
+<P0 name="ShiftEasting">450602.420</P0>
+<P1 name="ShiftNorthing">143236.998</P1>
+<P2 name="scale">0.999847640</P2>
+<P3 name="Rot">1.44037806</P3>
+</Projection>
+
+</data>

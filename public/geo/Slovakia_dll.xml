@@ -1,0 +1,24 @@
+<?xml version="1.0"?><data>
+
+<Projection>
+<Name>Slovakia-JTSK</Name>
+<DisplayName>Slovak Republik - SJTSK_SK</DisplayName>
+<Unit>Meters</Unit>
+<DLLName>TableProjections.dll</DLLName> 
+<Datum>SJTSK_SK</Datum>
+<Region>Europe</Region>
+<Type>JTSK</Type>
+</Projection>
+<Projection>
+<Name>Slovakia-JTSK_inverse</Name>
+<DisplayName>Slovak Republik - SJTSK_SK_inverse</DisplayName>
+<Unit>Meters</Unit>
+<DLLName>TableProjections.dll</DLLName> 
+<Datum>SJTSK_SK</Datum>
+<Region>Europe</Region>
+<NEAxes>SW</NEAxes>
+<Type>JTSK#SW</Type>
+</Projection>
+
+
+</data>

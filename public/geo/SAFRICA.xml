@@ -1,0 +1,601 @@
+<?xml version="1.0"?><data><Projection><Name>SAFRICA-LO15E(H94)</Name>
+<DisplayName>SAFRICA-LO_15E(H94)</DisplayName>
+<Comment>South Africa LO_15E (Hartebeest94)</Comment>
+<Code name="EPSG">2046</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO17E(H94)</Name>
+<DisplayName>SAFRICA-LO_17E(H94)</DisplayName>
+<Comment>South Africa LO_17E (Hartebeest94)</Comment>
+<Code name="EPSG">2047</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">170000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO19E(H94)</Name>
+<DisplayName>SAFRICA-LO_19E(H94)</DisplayName>
+<Comment>South Africa LO_19E (Hartebeest94)</Comment>
+<Code name="EPSG">2048</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">190000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO21E(H94)</Name>
+<DisplayName>SAFRICA-LO_21E(H94)</DisplayName>
+<Comment>South Africa LO_21E (Hartebeest94)</Comment>
+<Code name="EPSG">2049</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO23E(H94)</Name>
+<DisplayName>SAFRICA-LO_23E(H94)</DisplayName>
+<Comment>South Africa LO_23E (Hartebeest94)</Comment>
+<Code name="EPSG">2050</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">230000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO25E(H94)</Name>
+<DisplayName>SAFRICA-LO_25E(H94)</DisplayName>
+<Comment>South Africa LO_25E (Hartebeest94)</Comment>
+<Code name="EPSG">2051</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">250000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO27E(H94)</Name>
+<DisplayName>SAFRICA-LO_27E(H94)</DisplayName>
+<Comment>South Africa LO_27E (Hartebeest94)</Comment>
+<Code name="EPSG">2052</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO29E(H94)</Name>
+<DisplayName>SAFRICA-LO_29E(H94)</DisplayName>
+<Comment>South Africa LO_29E (Hartebeest94)</Comment>
+<Code name="EPSG">2053</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">290000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO31E(H94)</Name>
+<DisplayName>SAFRICA-LO_31E(H94)</DisplayName>
+<Comment>South Africa LO_31E (Hartebeest94)</Comment>
+<Code name="EPSG">2054</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">310000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO33E(H94)</Name>
+<DisplayName>SAFRICA-LO_33E(H94)</DisplayName>
+<Comment>South Africa LO_33E (Hartebeest94)</Comment>
+<Code name="EPSG">2055</Code>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hartebeest94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_15E(CAPE)</Name>
+<Comment>South Africa LO_15E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_17E(CAPE)</Name>
+<Comment>South Africa LO_17E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">170000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_19E(CAPE)</Name>
+<Comment>South Africa LO_19E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">190000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_21E(CAPE)</Name>
+<Comment>South Africa LO_21E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_23E(CAPE)</Name>
+<Comment>South Africa LO_23E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">230000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_25E(CAPE)</Name>
+<Comment>South Africa LO_25E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">250000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_27E(CAPE)</Name>
+<Comment>South Africa LO_27E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_29E(CAPE)</Name>
+<Comment>South Africa LO_29E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">290000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_31E(CAPE)</Name>
+<Comment>South Africa LO_31E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">310000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO_33E(CAPE)</Name>
+<Comment>South Africa LO_33E (Cape)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>CAPE(CDSM)</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO15E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_15E(Hart94)</DisplayName>
+<Comment>South Africa LO_15E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO17E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_17E(Hart94)</DisplayName>
+<Comment>South Africa LO_17E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">170000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO19E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_19E(Hart94)</DisplayName>
+<Comment>South Africa LO_19E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">190000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO21E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_21E(Hart94)</DisplayName>
+<Comment>South Africa LO_21E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO23E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_23E(Hart94)</DisplayName>
+<Comment>South Africa LO_23E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">230000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO25E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_25E(Hart94)</DisplayName>
+<Comment>South Africa LO_25E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">250000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO27E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_27E(Hart94)</DisplayName>
+<Comment>South Africa LO_27E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO29E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_29E(Hart94)</DisplayName>
+<Comment>South Africa LO_29E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">290000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO31E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_31E(Hart94)</DisplayName>
+<Comment>South Africa LO_31E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">310000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO33E(Hart94)</Name>
+<DisplayName>SAFRICA-LO_33E(Hart94)</DisplayName>
+<Comment>South Africa LO_33E (Hart94)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>Hart94</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO15E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_15E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_15E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO17E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_17E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_17E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">170000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO19E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_19E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_19E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">190000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO21E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_21E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_21E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO23E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_23E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_23E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">230000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO25E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_25E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_25E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">250000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO27E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_27E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_27E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO29E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_29E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_29E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">290000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO31E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_31E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_31E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">310000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection><Name>SAFRICA-LO33E(ITRF2005_TrigNet2010.02)</Name>
+<DisplayName>SAFRICA-LO_33E(ITRF2005_TrigNet2010.02)</DisplayName>
+<Comment>South Africa LO_33E (ITRF2005_TrigNet2010.02)</Comment>
+<NEAxes>SW</NEAxes>
+<Unit>Meters</Unit>
+<Datum>ITRF2005_TrigNet2010.02</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Africa</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">330000.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

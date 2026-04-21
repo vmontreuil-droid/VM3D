@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<data>
+
+<Projection>
+<Name>Zone1</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>M25#Zone1</Type>
+<P0 name="oEasting">475000.</P0>
+<P1 name="oNorthing">-475000.</P1>
+<P2 name="scale">0.999729988</P2>
+</Projection>
+<Projection>
+<Name>Zone2</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>M25#Zone2</Type>
+<P0 name="oEasting">475000.</P0>
+<P1 name="oNorthing">-475000.</P1>
+<P2 name="scale">0.999761955</P2>
+</Projection>
+<Projection>
+<Name>Zone3</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>M25#Zone3</Type>
+<P0 name="oEasting">475000.</P0>
+<P1 name="oNorthing">-475000.</P1>
+<P2 name="scale">0.999829933</P2>
+</Projection>
+<Projection>
+<Name>Zone4</Name>
+<Unit>Meters</Unit>
+<Datum>ETRS89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>M25#Zone4</Type>
+<P0 name="oEasting">475000.</P0>
+<P1 name="oNorthing">-475000.</P1>
+<P2 name="scale">0.999886459</P2>
+</Projection>
+
+</data>

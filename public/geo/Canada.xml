@@ -1,0 +1,1086 @@
+<data>
+<Projection>
+<Name>Ontario-MTMZone8</Name>
+<DisplayName>Ontario-MTM Zone 8</DisplayName>
+<Comment>Ontario MTM Zone 73 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-733000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone9</Name>
+<DisplayName>Ontario-MTM Zone 9</DisplayName>
+<Comment>Ontario MTM Zone 76 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-763000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone10</Name>
+<DisplayName>Ontario-MTM Zone 10</DisplayName>
+<Comment>Ontario MTM Zone 79 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-793000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone11</Name>
+<DisplayName>Ontario-MTM Zone 11</DisplayName>
+<Comment>Ontario MTM Zone 82 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-823000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone12</Name>
+<DisplayName>Ontario-MTM Zone 12</DisplayName>
+<Comment>Ontario MTM Zone 81 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-810000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone13</Name>
+<DisplayName>Ontario-MTM Zone 13</DisplayName>
+<Comment>Ontario MTM Zone 84 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-840000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone14</Name>
+<DisplayName>Ontario-MTM Zone 14</DisplayName>
+<Comment>Ontario MTM Zone 87 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-870000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone15</Name>
+<DisplayName>Ontario-MTM Zone 15</DisplayName>
+<Comment>Ontario MTM Zone 90 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-900000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone16</Name>
+<DisplayName>Ontario-MTM Zone 16</DisplayName>
+<Comment>Ontario MTM Zone 93 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-930000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Ontario-MTMZone17</Name>
+<DisplayName>Ontario-MTM Zone 17</DisplayName>
+<Comment>Ontario MTM Zone 96 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-960000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-AlbersEAConic</Name>
+<DisplayName>British Columbia-Albers Equal Area Conic</DisplayName>
+<Comment></Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>AlbersConic</Type>
+<P0 name="SouthLat">500000.0</P0>
+<P1 name="NorthLat">583000.0</P1>
+<P2 name="Lon0">-1260000.0</P2>
+<P3 name="Lat0">450000.0</P3>
+<P4 name="East0">1000000.</P4>
+<P5 name="North0">0</P5>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone2</Name>
+<DisplayName>Quebec-MTM Zone 2</DisplayName>
+<Comment>Quebec MTM Zone 56 00 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-560000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-Zone3</Name>
+<DisplayName>Quebec-MTM Zone 3</DisplayName>
+<Comment>Quebec MTM Zone 58 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-583000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone4</Name>
+<DisplayName>Quebec-MTM Zone 4</DisplayName>
+<Comment>Quebec MTM Zone 61 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone5</Name>
+<DisplayName>Quebec-MTM Zone 5</DisplayName>
+<Comment>Quebec MTM Zone 64 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone6</Name>
+<DisplayName>Quebec-MTM Zone 6</DisplayName>
+<Comment>Quebec MTM Zone 67 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-673000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone7</Name>
+<DisplayName>Quebec-MTM Zone 7</DisplayName>
+<Comment>Quebec MTM Zone 70 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-703000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone8</Name>
+<DisplayName>Quebec-MTM Zone 8</DisplayName>
+<Comment>Quebec MTM Zone 73 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-733000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone9</Name>
+<DisplayName>Quebec-MTM Zone 9</DisplayName>
+<Comment>Quebec MTM Zone 76 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-763000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Quebec-MTMZone10</Name>
+<DisplayName>Quebec-MTM Zone 10</DisplayName>
+<Comment>Quebec MTM Zone 79 30 W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-793000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-MTMZone4</Name>
+<DisplayName>Nova Scotia-MTM Zone 4</DisplayName>
+<Comment>Modified TM  Zone4 (61 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-MTMZone5</Name>
+<DisplayName>Nova Scotia-MTM Zone 5</DisplayName>
+<Comment>Modified TM  Zone4 (64 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTMZone4</Name>
+<DisplayName>Nova Scotia-NSMTM Zone 4</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (61 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">4500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTMZone5</Name>
+<DisplayName>Nova Scotia-NSMTM Zone 5</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (64 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTM1997Zone4</Name>
+<DisplayName>Nova Scotia-NSMTM 1997 Zone 4</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (61 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">14500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTM1997Zone5</Name>
+<DisplayName>Nova Scotia-NSMTM 1997 Zone 5</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (64 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">15500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTM2010Zone4</Name>
+<DisplayName>Nova Scotia-NSMTM 2010 Zone 4</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (61 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">24500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NovaScotia-NSMTM2010Zone5</Name>
+<DisplayName>Nova Scotia-NSMTM 2010 Zone 5</DisplayName>
+<Comment>Nova Scotia MTM  Zone4 (64 30 W)</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Datum>NAD83_NO_TRANS</Datum>
+<Datum>ATS77-7PRMS</Datum>
+<Datum>ATS77(CSRS)</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">25500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+
+
+<Projection>
+<Name>PEI-PEI</Name>
+<DisplayName>Prince Edward Island-PEI double stereographic</DisplayName>
+<Comment>Prince Edward Island double stereographic projection</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>NAD83(ITRF96)</Datum><Datum>WGS84</Datum>
+<Region>Canada</Region>
+<Type>DSTER</Type>
+<P0 name="Lat0">471500.00000</P0>
+<P1 name="Lon0">-630000.00000</P1>
+<P2 name="Scale">0.999912</P2>
+<P3 name="E0">400000</P3>
+<P4 name="N0">800000</P4>
+</Projection>
+<Projection>
+<Name>Alberta-Zone111W</Name>
+<DisplayName>Alberta-3TM 111W</DisplayName>
+<Comment>Alberta 3TM  Zone 111W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1110000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Alberta-Zone114W</Name>
+<DisplayName>Alberta-3TM 114W</DisplayName>
+<Comment>Alberta-3TM Zone 114Wcm</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1140000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Alberta-Zone117W</Name>
+<DisplayName>Alberta-3TM 117W</DisplayName>
+<Comment>Alberta-3TM Zone 117W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1170000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Alberta-Zone120W</Name>
+<DisplayName>Alberta-3TM 120W</DisplayName>
+<Comment>Alberta-3TM Zone 120W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1200000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Manitoba-Zone90W</Name>
+<DisplayName>Manitoba-3TM 90W</DisplayName>
+<Comment>Manitoba-3TM Zone 90W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-900000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Manitoba-Zone93W</Name>
+<DisplayName>Manitoba-3TM 93W</DisplayName>
+<Comment>Manitoba-3TM Zone 93W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-930000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Manitoba-Zone96W</Name>
+<DisplayName>Manitoba-3TM 96W</DisplayName>
+<Comment>Manitoba-3TM Zone 96W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-960000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Manitoba-Zone99W</Name>
+<DisplayName>Manitoba-3TM 99W</DisplayName>
+<Comment>Manitoba-3TM Zone 99W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-990000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Manitoba-Zone102W</Name>
+<DisplayName>Manitoba-3TM 102W</DisplayName>
+<Comment>Manitoba-3TM Zone 102W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1020000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Saskatchewan-Zone102W</Name>
+<DisplayName>Saskatchewan-3TM 102W</DisplayName>
+<Comment>Saskatchewan-3TM Zone 102W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1020000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Saskatchewan-Zone105W</Name>
+<DisplayName>Saskatchewan-3TM 105W</DisplayName>
+<Comment>Saskatchewan-3TM Zone 105W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1050000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Saskatchewan-Zone108W</Name>
+<DisplayName>Saskatchewan-3TM 108W</DisplayName>
+<Comment>Saskatchewan-3TM Zone 108W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1080000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Saskatchewan-Zone111W</Name>
+<DisplayName>Saskatchewan-3TM 111W</DisplayName>
+<Comment>Saskatchewan-3TM Zone 111W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1110000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+
+<Projection>
+<Name>BC-Zone114W</Name>
+<DisplayName>British Columbia-3TM 114W</DisplayName>
+<Comment>British Columbia-3TM Zone 114Wcm</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1140000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone117W</Name>
+<DisplayName>British Columbia-3TM 117W</DisplayName>
+<Comment>British Columbia-3TM Zone 117W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1170000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone120W</Name>
+<DisplayName>British Columbia-3TM 120W</DisplayName>
+<Comment>British Columbia-3TM Zone 120W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1200000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone123W</Name>
+<DisplayName>British Columbia-3TM 123W</DisplayName>
+<Comment>British Columbia-3TM Zone 123W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1230000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-zone126W</Name>
+<DisplayName>British Columbia-3TM 126W</DisplayName>
+<Comment>British Columbia-3TM Zone 126W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1260000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone129W</Name>
+<DisplayName>British Columbia-3TM 129W</DisplayName>
+<Comment>British Columbia-3TM Zone 129W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1290000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone132W</Name>
+<DisplayName>British Columbia-3TM 132W</DisplayName>
+<Comment>British Columbia-3TM Zone 132W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1320000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone135W</Name>
+<DisplayName>British Columbia-3TM 135W</DisplayName>
+<Comment>British Columbia-3TM Zone 135W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1350000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone138W</Name>
+<DisplayName>British Columbia-3TM 138W</DisplayName>
+<Comment>British Columbia-3TM Zone 138W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1380000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>BC-Zone141W</Name>
+<DisplayName>British Columbia-3TM 141W</DisplayName>
+<Comment>British Columbia-3TM Zone 141W</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1410000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">0</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>NB-NB</Name>
+<DisplayName>New Brunswick-NB_NAD83(CORS96)</DisplayName>
+<Comment>New Brunswick double stereographic projection</Comment>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum><Datum>NAD83_NO_TRANS</Datum>
+<Region>Canada</Region>
+<Type>DSTER</Type>
+<P0 name="Lat0">463000.00000</P0>
+<P1 name="Lon0">-663000.00000</P1>
+<P2 name="Scale">0.999912</P2>
+<P3 name="E0">2500000</P3>
+<P4 name="N0">7500000</P4>
+</Projection>
+<Projection>
+<Name>NB-NB_NAD27</Name>
+<DisplayName>New Brunswick-NB_NAD27</DisplayName>
+<Comment>New Brunswick double stereographic projection</Comment>
+<Unit>IFeet</Unit>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum>
+<Region>Canada</Region>
+<Type>DSTER</Type>
+<P0 name="Lat0">463000.00000</P0>
+<P1 name="Lon0">-663000.00000</P1>
+<P2 name="Scale">0.999912</P2>
+<P3 name="E0">1000000</P3>
+<P4 name="N0">1000000</P4>
+</Projection>
+<Projection>
+<Name>NB-NB_ATS77</Name>
+<DisplayName>New Brunswick-NB_ATS77</DisplayName>
+<Comment>New Brunswick double stereographic projection</Comment>
+<Unit>Meters</Unit>
+<Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>DSTER</Type>
+<P0 name="Lat0">463000.00000</P0>
+<P1 name="Lon0">-663000.00000</P1>
+<P2 name="Scale">0.999912</P2>
+<P3 name="E0">300000</P3>
+<P4 name="N0">800000</P4>
+</Projection>
+<Projection>
+<Name>Newfoundland-Zone1</Name>
+<DisplayName>Newfoundland-MTM Zone 1</DisplayName>
+<Comment>Newfoundland MTM Zone 53 00 W</Comment>
+  <Code name="EPSG">32181</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-530000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Newfoundland-Zone2</Name>
+<DisplayName>Newfoundland-MTM Zone 2</DisplayName>
+<Comment>Newfoundland MTM Zone 56 00 W</Comment>
+  <Code name="EPSG">32182</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-560000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection><Projection>
+<Name>Newfoundland-Zone3</Name>
+<DisplayName>Newfoundland-MTM Zone 3</DisplayName>
+<Comment>Newfoundland MTM Zone 58 30 W</Comment>
+  <Code name="EPSG">32183</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-583000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Newfoundland-Zone4</Name>
+<DisplayName>Newfoundland-MTM Zone 4</DisplayName>
+<Comment>Newfoundland MTM Zone 61 30 W</Comment>
+  <Code name="EPSG">32184</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-613000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Newfoundland-Zone5</Name>
+<DisplayName>Newfoundland-MTM Zone 5</DisplayName>
+<Comment>Newfoundland MTM Zone 64 30 W</Comment>
+  <Code name="EPSG">32185</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-643000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Newfoundland-Zone6</Name>
+<DisplayName>Newfoundland-MTM Zone 6</DisplayName>
+<Comment>Newfoundland MTM Zone 67 30 W</Comment>
+  <Code name="EPSG">32186</Code>
+<Unit>Meters</Unit>
+<Datum>NAD83(CSRS1997)</Datum>
+<Datum>NAD83(CSRS)</Datum>
+<Datum>NAD83(CORS96)</Datum>
+<Datum>NAD27(CSRS)</Datum>
+<Datum>NAD27</Datum><Datum>NAD83_NO_TRANS</Datum><Datum>ATS77-7PRMS</Datum>
+<Region>Canada</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-673000.00000</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">304800</P3>
+<P4 name="North0">0</P4>
+</Projection>
+</data>

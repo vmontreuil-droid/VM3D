@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<data>
+<Projection>
+<Name>Poland-PL_UTM33</Name>
+<Comment>PL_ETRF89 Transverse Mercator 15E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">33500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL_UTM34</Name>
+<Comment>PL_ETRF89 Transverse Mercator 21E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">34500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL_UTM35</Name>
+<Comment>PL_ETRF89 Transverse Mercator 27E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF89</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">270000.00000</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">35500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL2000_5</Name>
+<Comment>PL_ETRF2000 Transverse Mercator 15E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">150000.00000</P0>
+<P1 name="Scale">0.999923</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">5500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL2000_6</Name>
+<Comment>PL_ETRF2000 Transverse Mercator 18E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">180000.00000</P0>
+<P1 name="Scale">0.999923</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">6500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL2000_7</Name>
+<Comment>PL_ETRF2000 Transverse Mercator 21E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">210000.00000</P0>
+<P1 name="Scale">0.999923</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">7500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+<Projection>
+<Name>Poland-PL2000_8</Name>
+<Comment>PL_ETRF2000 Transverse Mercator 24E CRS for Poland</Comment>
+<Unit>Meters</Unit>
+<Datum>PL_ETRF2000</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">240000.00000</P0>
+<P1 name="Scale">0.999923</P1>
+<P2 name="Lat0">00000.00000</P2>
+<P3 name="East0">8500000</P3>
+<P4 name="North0">0</P4>
+</Projection>
+
+</data>

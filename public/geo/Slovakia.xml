@@ -1,0 +1,18 @@
+<?xml version="1.0"?><data><Projection><Name>Slovakia-Krovak</Name>
+<DisplayName>Slovak Republik - Krovak</DisplayName>
+<Comment>Krovak projection</Comment>
+<Unit>Meters</Unit>
+<Datum>JTSK03</Datum>
+<AnyDatum>0</AnyDatum>
+<Region>Europe</Region>
+<Type>KROVAK</Type>
+<P0 name="Lat0">493000.00000</P0>
+<P1 name="Lon0">423000.00000</P1>
+<P2 name="dLon">174000.00000</P2>
+<P3 name="Uq">594242.69689</P3>
+<P4 name="S0">783000.00000</P4>
+<P5 name="Scale">0.9999</P5>
+<P6 name="East0">0</P6>
+<P7 name="North0">0</P7>
+</Projection>
+</data>

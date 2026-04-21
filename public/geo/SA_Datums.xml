@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<data>
+<Datum>
+<Name>SIRGAS</Name>
+<Comment>South American Datum</Comment>
+<Ellipsoid>GRS80</Ellipsoid>
+<DX>0</DX>
+<DY>0</DY>
+<DZ>0</DZ>
+<RX>0</RX>
+<RY>0</RY>
+<RZ>0</RZ>
+<Scale>0</Scale>
+<IsVoid>0</IsVoid>
+<IsChangeable>0</IsChangeable>
+</Datum>
+ <Datum>
+  <Name>BOGOTAI</Name> 
+  <Comment>Region BOGOTAI</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>-806.413</DX> 
+  <DY>-263.500</DY> 
+  <DZ>-622.671</DZ> 
+  <RX>12.41422</RX> 
+  <RY>-2.99084</RY> 
+  <RZ>-39.03469</RZ> 
+  <Scale>-0.00002081616</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAII</Name> 
+  <Comment>Region BOGOTAII</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>100.783</DX> 
+  <DY>187.382</DY> 
+  <DZ>-47.000</DZ> 
+  <RX>-9.22383</RX> 
+  <RY>2.42380</RY> 
+  <RZ>-8.30828</RZ> 
+  <Scale>-0.00001356561</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAIII</Name> 
+  <Comment>Region BOGOTAIII</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>336.026</DX> 
+  <DY>348.565</DY> 
+  <DZ>252.978</DZ> 
+  <RX>-17.24129</RX> 
+  <RY>-6.30649</RY> 
+  <RZ>1.56205</RZ> 
+  <Scale>-0.000005771909</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAIV</Name> 
+  <Comment>Region BOGOTAIV</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>963.273</DX> 
+  <DY>486.386</DY> 
+  <DZ>190.997</DZ> 
+  <RX>-16.48504</RX> 
+  <RY>-1.66883</RY> 
+  <RZ>21.69285</RZ> 
+  <Scale>-0.00001389914</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAV</Name> 
+  <Comment>Region BOGOTAV</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>-90.290</DX> 
+  <DY>247.559</DY> 
+  <DZ>-21.989</DZ> 
+  <RX>-8.69689</RX> 
+  <RY>-4.18803</RY> 
+  <RZ>-12.80827</RZ> 
+  <Scale>0.000002181658</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAVI</Name> 
+  <Comment>Region BOGOTAVI</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>-0.562</DX> 
+  <DY>244.299</DY> 
+  <DZ>-456.938</DZ> 
+  <RX>6.86687</RX> 
+  <RY>-8.25267</RY> 
+  <RZ>-9.29680</RZ> 
+  <Scale>0.00000374656</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAVII</Name> 
+  <Comment>Region BOGOTAVII</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>-305.356</DX> 
+  <DY>222.004</DY> 
+  <DZ>-30.023</DZ> 
+  <RX>-9.69049</RX> 
+  <RY> 1.03197</RY> 
+  <RZ>-19.75739</RZ> 
+  <Scale>0.000006325747</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+ <Datum>
+  <Name>BOGOTAVIII</Name> 
+  <Comment>Region BOGOTAVIII</Comment> 
+  <Ellipsoid>INTL</Ellipsoid> 
+  <DX>221.899</DX> 
+  <DY>274.136</DY> 
+  <DZ>-397.554</DZ> 
+  <RX>2.80845</RX> 
+  <RY>-0.44851</RY> 
+  <RZ>-2.81017</RZ> 
+  <Scale>-0.000002199943</Scale> 
+  <IsVoid>0</IsVoid> 
+  <IsChangeable>0</IsChangeable> 
+  </Datum>
+</data>

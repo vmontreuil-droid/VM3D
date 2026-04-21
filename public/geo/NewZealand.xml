@@ -1,0 +1,983 @@
+<data>
+
+<Projection>
+<Name>OffshoreIslands2000-CITM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>Offshore Islands 2000-Chatham Islands</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1763000.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>OffshoreIslands2000-AKTM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>Offshore Islands 2000-Auckland Islands</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1660000.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>OffshoreIslands2000-CATM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>Offshore Islands 2000-Campbell Island</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1690000.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>OffshoreIslands2000-AITM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>Offshore Islands 2000-Antipodes Islands</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1790000.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>OffshoreIslands2000-RITM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>Offshore Islands 2000-Raoul Island</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1780000.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">3500000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>NZTM2000</Name>
+<Comment>New Zealand </Comment>
+<DisplayName>NZTM2000</DisplayName>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1730000.0</P0>
+<P1 name="Scale">0.9996</P1>
+<P2 name="Lat0">0.0</P2>
+<P3 name="East0">1600000</P3>
+<P4 name="North0">10000000</P4>
+</Projection>
+<Projection>
+<Name>NZMG1949</Name>
+<DisplayName>NZMG1949</DisplayName>
+<Comment>New Zealand Map Grid</Comment>
+<Unit>Meters</Unit>
+<Datum>NZGD49</Datum>
+<Datum>NZGD49(7prms)</Datum>
+<Region>New Zealand</Region>
+<Type>NZMG</Type>
+<P0 name="Lat0">-410000.00000</P0>
+<P1 name="Lon0">1730000.00000</P1>
+<P2 name="East0">2510000</P2>
+<P3 name="North0">6023150</P3>
+</Projection>
+<Projection>
+<Name>Circuit1949-Amuri</Name>
+<Comment/>
+<Code name="EPSG">27219</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1730036.48020</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-424120.81969</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Bay_Of_Plenty</Name>
+<Comment>Bay Of Plenty Circuit 1949</Comment>
+<Code name="EPSG">27206</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1762758.31010</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-374540.49932</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Bluff</Name>
+<Comment>Bluff Circuit 1949</Comment>
+<Code name="EPSG">27232</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1682034.33920</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-463600.03460</P2>
+<P3 name="East0">300002.66</P3>
+<P4 name="North0">699999.58</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Buller</Name>
+<Comment>Buller Circuit 1949</Comment>
+<Code name="EPSG">27217</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1713452.53622</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-414838.89030</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Collingwood</Name>
+<Comment>Collingwood Circuit 1949</Comment>
+<Code name="EPSG">27214</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1724019.36740</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-404253.13262</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Gawler</Name>
+<Comment>Gawler Circuit 1949</Comment>
+<Code name="EPSG">27225</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1712138.69449</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-434455.36162</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Grey</Name>
+<Comment>Grey Circuit 1949</Comment>
+<Code name="EPSG">27218</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1713259.17672</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-422001.29941</P2>
+<P3 name="East0">300000.0</P3>
+<P4 name="North0">700000.0</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Hawkes_Bay</Name>
+<Comment>Hawkes Bay Circuit 1949</Comment>
+<Code name="EPSG">27208</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1764025.24991</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-393903.34552</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Hokitika</Name>
+<Comment>Hokitika Circuit 1949</Comment>
+<Code name="EPSG">27221</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1705847.97660</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-425310.76050</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Jacksons_Bay</Name>
+<Comment>Jacksons Bay Circuit 1949</Comment>
+<Code name="EPSG">27223</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1683622.56120</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-435840.09040</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Karamea</Name>
+<Comment>Karamea Circuit 1949</Comment>
+<Code name="EPSG">27216</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1720632.50148</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411723.68151</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Lindis_Peak</Name>
+<Comment>Lindis Peak Circuit 1949 </Comment>
+<Code name="EPSG">27227</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1692803.91829</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-444406.96469</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Marlborough</Name>
+<Comment>Marlborough Circuit 1949</Comment>
+<Code name="EPSG">27220</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1734807.46680</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-413240.15201</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Mount_Eden</Name>
+<Comment>Mount Eden Circuit 1949</Comment>
+<Code name="EPSG">27205</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1744551.62170</P0>
+<P1 name="Scale">0.99990</P1>
+<P2 name="Lat0">-365247.51501</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Mount_Nicholas</Name>
+<Comment>Mount Nicholas Circuit 1949 </Comment>
+<Code name="EPSG">27228</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1682355.10828</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-450758.44929</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Mount_Pleasant</Name>
+<Comment>Mount Pleasant Circuit 1949</Comment>
+<Code name="EPSG">27224</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1724337.89689</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-433526.29529</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Mount_York</Name>
+<Comment>Mount York Circuit 1949 </Comment>
+<Code name="EPSG">27229</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1674419.90241</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-453349.41421</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Nelson</Name>
+<Comment>Nelson Circuit 1949</Comment>
+<Code name="EPSG">27215</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1731757.54052</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411628.36099</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-North_Taieri</Name>
+<Comment>North Taieri Circuit 1949</Comment>
+<Code name="EPSG">27231</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1701657.32080</P0>
+<P1 name="Scale">0.99996</P1>
+<P2 name="Lat0">-455141.44810</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Observation_Pt</Name>
+<Comment>Observation Pt Circuit 1949</Comment>
+<Code name="EPSG">27230</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1703742.94261</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-454858.30780</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Okarito</Name>
+<Comment>Okarito Circuit 1949</Comment>
+<Code name="EPSG">27222</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1701539.33299</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-430636.46130</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Poverty_Bay</Name>
+<Comment>Poverty Bay Circuit 1949</Comment>
+<Code name="EPSG">27207</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1775308.29061</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-383728.93001</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Taranaki</Name>
+<Comment>Taranaki Circuit 1949</Comment>
+<Code name="EPSG">27209</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1741340.84230</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-390808.72992</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Timaru</Name>
+<Comment>Timaru Circuit 1949</Comment>
+<Code name="EPSG">27226</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1710326.10299</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-442407.99330</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Tuhirangi</Name>
+<Comment>Tuhirangi Circuit 1949</Comment>
+<Code name="EPSG">27210</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1753824.13252</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-393044.89340</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Wairarapa</Name>
+<Comment>Wairarapa Circuit 1949</Comment>
+<Code name="EPSG">27212</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1753850.45881</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-405531.91750</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit1949-Wanganui</Name>
+<Comment>Wanganui Circuit 1949</Comment>
+<Code name="EPSG">27211</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1752917.15860</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-401431.00970</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+</Projection>
+<Projection>
+<Name>Circuit1949-Wellington</Name>
+<Comment>Wellington Circuit 1949</Comment>
+<Code name="EPSG">27213</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD49</Datum><Datum>NZGD49(7prms)</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC_NZ</Type>
+<P0 name="Central Meridian">1744635.84320</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411804.75070</P2>
+<P3 name="East0">300000</P3>
+<P4 name="North0">700000</P4>
+<P5 name="UnitToMeter">0.999998261</P5>
+</Projection>
+<Projection>
+<Name>Circuit2000-Amuri</Name>
+<Comment/><Code name="EPSG">2119</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1730036.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-424120.00000</P2>
+<P3 name="East0">400000</P3>
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Bay_Of_Plenty</Name>
+<Comment>Bay Of Plenty Circuit 2000</Comment>
+<Code name="EPSG">2106</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1762758.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-374540.00</P2>
+<P3 name="East0">400000</P3>  
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Bluff</Name>
+<Comment>Bluff Circuit 2000</Comment>
+<Code name="EPSG">2132</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1682034.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-463600.00</P2>
+<P3 name="East0">400000</P3>
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Buller</Name>
+<Comment>Buller Circuit 2000</Comment>
+<Code name="EPSG">2117</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1713452.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-414838.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Chatham_Island</Name>
+<Comment>Chatham Island Circuit 2000</Comment>
+<Code name="EPSG">3764</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">-1763000.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-440000.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Collingwood</Name>
+<Comment>Collingwood Circuit 2000</Comment>
+<Code name="EPSG">2114</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1724019.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-404253.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Gawler</Name>
+<Comment>Gawler Circuit 2000</Comment>
+<Code name="EPSG">2125</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1712138.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-434455.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Grey</Name>
+<Comment>Grey Circuit 2000</Comment>
+<Code name="EPSG">2118</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1713259.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-422001.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Hawkes_Bay</Name>
+<Comment>Hawkes Bay Circuit 2000</Comment>
+<Code name="EPSG">2108</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1764025.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-393903.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Hokitika</Name>
+<Comment>Hokitika Circuit 2000</Comment>
+<Code name="EPSG">2121</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1705847.0000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-425310.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Jacksons_Bay</Name>
+<Comment>Jacksons Bay Circuit 2000</Comment>
+<Code name="EPSG">2123</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1683622.0000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-435840.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Karamea</Name>
+<Comment>Karamea Circuit 2000</Comment>
+<Code name="EPSG">2116</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1720632.0000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411723.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Lindis_Peak</Name>
+<Comment>Lindis Peak Circuit 2000 </Comment>
+<Code name="EPSG">2127</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1692803.0000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-444406.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Marlborough</Name>
+<Comment>Marlborough Circuit 2000</Comment>
+<Code name="EPSG">2120</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1734807.000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-413240.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Mount_Eden</Name>
+<Comment>Mount Eden Circuit 2000</Comment>
+<Code name="EPSG">2105</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1744551.00</P0>
+<P1 name="Scale">0.9999</P1>
+<P2 name="Lat0">-365247.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Mount_Nicholas</Name>
+<Comment>Mount Nicholas Circuit 2000 </Comment>
+<Code name="EPSG">2128</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1682355.000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-450758.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Mount_Pleasant</Name>
+<Comment>Mount Pleasant Circuit 2000</Comment>
+<Code name="EPSG">2124</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1724337.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-433526.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Mount_York</Name>
+<Comment>Mount York Circuit 2000 </Comment>
+<Code name="EPSG">2129</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1674419.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-453349.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Nelson</Name>
+<Comment>Nelson Circuit 2000</Comment>
+<Code name="EPSG">2115</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1731757.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411628.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-North_Taieri</Name>
+<Comment>North Taieri Circuit 2000</Comment>
+<Code name="EPSG">2131</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1701657.000</P0>
+<P1 name="Scale">0.99996 </P1>
+<P2 name="Lat0">-455141.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+
+<Projection>
+<Name>Circuit2000-Observation_Pt</Name>
+<Comment>Observation Pt Circuit 2000</Comment>
+<Code name="EPSG">2130</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1703742.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-454858.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Okarito</Name>
+<Comment>Okarito Circuit 2000</Comment>
+<Code name="EPSG">2122</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1701539.000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-430636.0000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Poverty_Bay</Name>
+<Comment>Poverty Bay Circuit 2000</Comment>
+<Code name="EPSG">2107</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1775308.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-383728.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Taranaki</Name>
+<Comment>Taranaki Circuit 2000</Comment>
+<Code name="EPSG">2109</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1741340.000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-390808.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4>
+</Projection>
+<Projection>
+<Name>Circuit2000-Timaru</Name>
+<Comment>Timaru Circuit 2000</Comment>
+<Code name="EPSG">2126</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1710326.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-442407.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Tuhirangi</Name>
+<Comment>Tuhirangi Circuit 2000</Comment>
+<Code name="EPSG">2110</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1753824.0</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-393044.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Wairarapa</Name>
+<Comment>Wairarapa Circuit 2000</Comment>
+<Code name="EPSG">2112</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1753850.00</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-405531.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Wanganui</Name>
+<Comment>Wanganui Circuit 2000</Comment>
+<Code name="EPSG">2111</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1752917.000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-401431.000</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+<Projection>
+<Name>Circuit2000-Wellington</Name>
+<Comment>Wellington Circuit 2000</Comment>
+<Code name="EPSG">2113</Code>
+<DisplayName/>
+<Region>New Zealand</Region>
+<Datum>NZGD2000</Datum>
+<Unit>Meters</Unit>
+<Type>TMERC</Type>
+<P0 name="Central Meridian">1744635.00000</P0>
+<P1 name="Scale">1</P1>
+<P2 name="Lat0">-411804.00</P2>
+<P3 name="East0">400000</P3> 
+<P4 name="North0">800000</P4> 
+</Projection>
+</data>
