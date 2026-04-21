@@ -196,7 +196,6 @@ export const REGIONS: Region[] = [
           { filename: 'raf98.ggf', path: '/geo/TRIMBLE/raf98.ggf', description: 'RAF98 geoide', available: true },
           { filename: 'raf96.ggf', path: '/geo/TRIMBLE/raf96.ggf', description: 'RAF96 geoide (oudst)', available: true },
           { filename: 'corse97.ggf', path: '/geo/TRIMBLE/corse97.ggf', description: 'Corsica geoide 1997', available: true },
-          { filename: '2824_french_antilles.gml', path: '/geo/TRIMBLE/2824_french_antilles.gml', description: 'Franse Antillen CRS', available: true },
           { filename: '1298_europe.gml', path: '/geo/TRIMBLE/1298_europe.gml', description: 'Europe GML database (bevat FR definities)', available: true },
         ],
       },
