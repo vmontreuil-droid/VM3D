@@ -6,6 +6,7 @@ import {
   UserPlus, Receipt, FolderPlus, Ticket, Construction,
   UserCog, MousePointerClick, Bell, BarChart3,
   Clock, StickyNote, Zap, FileCode2,
+  ArrowLeft, Sparkles, LayoutList, Rocket,
 } from 'lucide-react'
 
 const sections = [
@@ -73,23 +74,92 @@ export default async function ToolsPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
+  const createCount = sections.find(s => s.title === 'Aanmaken')?.items.length ?? 0
+  const overviewCount = sections.find(s => s.title === 'Overzichten')?.items.length ?? 0
+  const actionCount = sections.find(s => s.title === 'Acties')?.items.length ?? 0
+  const totalCount = sections.reduce((s, sec) => s + sec.items.length, 0)
+
   return (
     <AppShell isAdmin>
-      <div className="space-y-5">
-        {/* Page header */}
-        <div className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3">
-          <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-          <span className="flex items-start gap-2.5 pr-3">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-              <Zap className="h-3.5 w-3.5" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">Snelstartmenu</span>
-              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">Directe toegang tot alle functies</span>
-            </span>
-          </span>
-        </div>
+      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
 
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Dashboard
+                </Link>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  Snelstartmenu
+                </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  Directe toegang tot alle admin-functies — aanmaken, raadplegen en acties — op één centraal startscherm.
+                </p>
+              </div>
+
+              <div className="w-full xl:ml-auto xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.10),rgba(245,140,55,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Aanmaken</p>
+                        <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{createCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
+                        <Sparkles className="h-4.5 w-4.5 text-[var(--accent)]" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Overzichten</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{overviewCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                        <LayoutList className="h-4.5 w-4.5 text-sky-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Acties</p>
+                        <p className="mt-1 text-lg font-semibold text-emerald-400">{actionCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
+                        <Rocket className="h-4.5 w-4.5 text-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Sneltoetsen</p>
+                        <p className="mt-1 text-lg font-semibold text-violet-400">{totalCount}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
+                        <Zap className="h-4.5 w-4.5 text-violet-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 px-4 py-4 sm:px-5">
         {sections.map(section => {
           const c = colorMap[section.color as keyof typeof colorMap]
           return (
@@ -126,6 +196,8 @@ export default async function ToolsPage() {
             </div>
           )
         })}
+          </div>
+        </section>
       </div>
     </AppShell>
   )
