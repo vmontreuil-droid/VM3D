@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useState, useCallback } from 'react'
-import Image from 'next/image'
 import AppShell from '@/components/app-shell'
 import {
   Upload, Download, ArrowRight, ArrowLeft, FileCode2, Loader2,
@@ -15,6 +14,26 @@ import {
 
 const MAX_MB = 50
 const SURFACE_VERTS_LIMIT = 250
+
+// Brand logo met tekst-fallback als image niet aanwezig
+function BrandLogo({ name }: { name: 'topcon' | 'leica' }) {
+  const [ok, setOk] = useState(true)
+  if (ok) {
+    return (
+      <img
+        src={`/logos/${name}.png`}
+        alt={name === 'topcon' ? 'Topcon' : 'Leica Geosystems'}
+        onError={() => setOk(false)}
+        className="h-7 w-auto object-contain"
+      />
+    )
+  }
+  // Fallback: tekst badges met merk-kleur
+  if (name === 'topcon') {
+    return <span className="inline-flex items-center rounded-md bg-blue-600/90 px-2 py-1 text-[11px] font-bold text-white">TOPCON</span>
+  }
+  return <span className="inline-flex items-center rounded-md bg-red-600/90 px-2 py-1 text-[11px] font-bold text-white">LEICA</span>
+}
 
 function downloadBlob(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob)
@@ -102,9 +121,9 @@ function TopconToLeicaCard() {
     <div className="overflow-hidden rounded-2xl border border-blue-500/25 bg-[var(--bg-card)] shadow-sm">
       <div className="flex items-center gap-4 border-b border-blue-500/15 bg-gradient-to-br from-blue-500/8 to-transparent px-5 py-4">
         <div className="flex h-12 items-center gap-2">
-          <Image src="/logos/topcon.png" alt="Topcon" width={90} height={28} className="object-contain" />
+          <BrandLogo name="topcon" />
           <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
-          <Image src="/logos/leica.png" alt="Leica" width={68} height={36} className="object-contain" />
+          <BrandLogo name="leica" />
         </div>
         <div className="ml-2">
           <p className="text-sm font-semibold text-[var(--text-main)]">Topcon → Leica / Unicontrol</p>
@@ -277,9 +296,9 @@ function LeicaToTopconCard() {
     <div className="overflow-hidden rounded-2xl border border-red-500/25 bg-[var(--bg-card)] shadow-sm">
       <div className="flex items-center gap-4 border-b border-red-500/15 bg-gradient-to-br from-red-500/8 to-transparent px-5 py-4">
         <div className="flex h-12 items-center gap-2">
-          <Image src="/logos/leica.png" alt="Leica" width={68} height={36} className="object-contain" />
+          <BrandLogo name="leica" />
           <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
-          <Image src="/logos/topcon.png" alt="Topcon" width={90} height={28} className="object-contain" />
+          <BrandLogo name="topcon" />
         </div>
         <div className="ml-2">
           <p className="text-sm font-semibold text-[var(--text-main)]">Leica / Unicontrol → Topcon</p>
