@@ -1458,6 +1458,10 @@ const en: Dictionary = {
     deletePrompt: 'Permanently delete machine?\n\n{label}\n\nThis also removes all sites, file transfers and commands linked to this machine.',
     deleteFailed: 'Delete failed',
     noMachines: 'No machines found',
+    adminPortal: 'Admin portal',
+    machinesBack: 'Machines',
+    buildYear: 'Year',
+    lastSeen: 'Last seen',
   },
 
   adminMachineDetail: {
@@ -1556,6 +1560,9 @@ const en: Dictionary = {
     kpiOverview: 'Views',
     kpiActions: 'Actions',
     kpiShortcuts: 'Shortcuts',
+    sectionCreate: 'Create',
+    sectionOverview: 'Overview',
+    sectionActions: 'Actions',
   },
 
   adminConverter: {
@@ -1625,6 +1632,12 @@ const en: Dictionary = {
     changeRegion: 'Other region',
     changeVendor: 'Other vendor',
     bytes: '{n} kB',
+    countries: {
+      be: 'Belgium',
+      nl: 'Netherlands',
+      fr: 'France',
+      lu: 'Luxembourg',
+    },
   },
 }
 

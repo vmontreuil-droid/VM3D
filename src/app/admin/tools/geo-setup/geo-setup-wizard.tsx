@@ -108,7 +108,7 @@ export default function GeoSetupWizard({ regions }: { regions: Region[] }) {
                 </div>
                 <div className="min-w-0">
                   <p className={`truncate text-sm font-semibold ${active ? 'text-[var(--accent)]' : 'text-[var(--text-main)]'}`}>
-                    {r.name}
+                    {tt.countries[r.code]}
                   </p>
                   <p className="mt-0.5 truncate text-[10px] text-[var(--text-muted)]">
                     {r.crs} · {r.epsg}

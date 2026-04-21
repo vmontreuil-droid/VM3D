@@ -12,9 +12,15 @@ import {
 import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
 
-const sections = [
+type SectionKey = 'sectionCreate' | 'sectionOverview' | 'sectionActions'
+
+const sections: {
+  titleKey: SectionKey
+  color: 'orange' | 'blue' | 'green'
+  items: { label: string; href: string; icon: typeof UserPlus; sub: string }[]
+}[] = [
   {
-    title: 'Aanmaken',
+    titleKey: 'sectionCreate',
     color: 'orange',
     items: [
       { label: 'Nieuwe klant',   href: '/admin/customers/new',  icon: UserPlus,        sub: 'Klantfiche aanmaken' },
@@ -27,7 +33,7 @@ const sections = [
     ],
   },
   {
-    title: 'Overzichten',
+    titleKey: 'sectionOverview',
     color: 'blue',
     items: [
       { label: 'Offertes',        href: '/admin/offerte',          icon: MousePointerClick, sub: 'Offertebeheer' },
@@ -39,7 +45,7 @@ const sections = [
     ],
   },
   {
-    title: 'Acties',
+    titleKey: 'sectionActions',
     color: 'green',
     items: [
       { label: 'Herinneringen',  href: '/admin/herinneringen',         icon: Bell,      sub: 'Betalingsherinneringen' },
@@ -84,9 +90,9 @@ export default async function ToolsPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const createCount = sections.find(s => s.title === 'Aanmaken')?.items.length ?? 0
-  const overviewCount = sections.find(s => s.title === 'Overzichten')?.items.length ?? 0
-  const actionCount = sections.find(s => s.title === 'Acties')?.items.length ?? 0
+  const createCount = sections.find(s => s.titleKey === 'sectionCreate')?.items.length ?? 0
+  const overviewCount = sections.find(s => s.titleKey === 'sectionOverview')?.items.length ?? 0
+  const actionCount = sections.find(s => s.titleKey === 'sectionActions')?.items.length ?? 0
   const totalCount = sections.reduce((s, sec) => s + sec.items.length, 0)
 
   return (
@@ -173,10 +179,10 @@ export default async function ToolsPage() {
         {sections.map(section => {
           const c = colorMap[section.color as keyof typeof colorMap]
           return (
-            <div key={section.title} className={`overflow-hidden rounded-[18px] border ${c.section} shadow-sm`}>
+            <div key={section.titleKey} className={`overflow-hidden rounded-[18px] border ${c.section} shadow-sm`}>
               <div className="px-4 py-3 sm:px-5">
                 <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${c.header}`}>
-                  {section.title}
+                  {tt[section.titleKey]}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-2 px-4 pb-4 sm:grid-cols-3 sm:px-5 lg:grid-cols-4">

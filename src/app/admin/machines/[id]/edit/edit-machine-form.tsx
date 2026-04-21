@@ -24,6 +24,7 @@ import {
 import CustomerSelect, { type Customer } from '@/components/customers/customer-select'
 import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
 import MachinesMap from '@/components/machines/machines-map'
+import { useT } from '@/i18n/context'
 import {
   MachineIcon,
   BRAND_COLORS,
@@ -70,6 +71,8 @@ export default function EditMachineForm({
   owner: Customer | null
 }) {
   const router = useRouter()
+  const { t } = useT()
+  const tt = t.adminMachines
   const [customer, setCustomer] = useState<Customer | null>(owner)
 
   const [name, setName] = useState(machine.name || '')
@@ -221,10 +224,10 @@ export default function EditMachineForm({
                 className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
               >
                 <ArrowLeft className="h-3 w-3" />
-                Machines
+                {tt.machinesBack}
               </Link>
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                Adminportaal
+                {tt.adminPortal}
               </p>
 
               <div className="mt-1 flex items-start gap-3">
@@ -246,20 +249,20 @@ export default function EditMachineForm({
                     )}
                     {machine.is_online ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                        <Wifi className="h-3 w-3" /> Online
+                        <Wifi className="h-3 w-3" /> {tt.online}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
-                        <WifiOff className="h-3 w-3" /> Offline
+                        <WifiOff className="h-3 w-3" /> {tt.offline}
                       </span>
                     )}
                   </h1>
                   <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
                     {brand} {model}
-                    {` · ${machineType === 'bulldozer' ? 'Bulldozer' : machineType === 'grader' ? 'Grader' : 'Kraan'}`}
+                    {` · ${machineType === 'bulldozer' ? tt.typeBulldozer : machineType === 'grader' ? tt.typeGrader : tt.typeCrane}`}
                     {tonnage ? ` · ${formatTonnage(Number(tonnage))}` : ''}
-                    {year ? ` · Bouwjaar ${year}` : ''}
-                    {lastSeen ? ` · Laatst gezien ${lastSeen.toLocaleString()}` : ''}
+                    {year ? ` · ${tt.buildYear} ${year}` : ''}
+                    {lastSeen ? ` · ${tt.lastSeen} ${lastSeen.toLocaleString()}` : ''}
                   </p>
                 </div>
               </div>

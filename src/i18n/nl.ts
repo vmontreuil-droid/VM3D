@@ -1498,6 +1498,10 @@ const nl = {
     deletePrompt: 'Machine definitief verwijderen?\n\n{label}\n\nDit verwijdert ook alle werven, bestandsoverdrachten en commands van deze machine.',
     deleteFailed: 'Verwijderen mislukt',
     noMachines: 'Geen machines gevonden',
+    adminPortal: 'Adminportaal',
+    machinesBack: 'Machines',
+    buildYear: 'Bouwjaar',
+    lastSeen: 'Laatst gezien',
   },
 
   adminMachineDetail: {
@@ -1596,6 +1600,9 @@ const nl = {
     kpiOverview: 'Overzichten',
     kpiActions: 'Acties',
     kpiShortcuts: 'Sneltoetsen',
+    sectionCreate: 'Aanmaken',
+    sectionOverview: 'Overzichten',
+    sectionActions: 'Acties',
   },
 
   adminConverter: {
@@ -1665,6 +1672,12 @@ const nl = {
     changeRegion: 'Andere regio',
     changeVendor: 'Andere vendor',
     bytes: '{n} kB',
+    countries: {
+      be: 'België',
+      nl: 'Nederland',
+      fr: 'Frankrijk',
+      lu: 'Luxembourg',
+    },
   },
 } as const
 

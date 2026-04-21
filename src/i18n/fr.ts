@@ -1458,6 +1458,10 @@ const fr: Dictionary = {
     deletePrompt: 'Supprimer définitivement la machine ?\n\n{label}\n\nCela supprime également tous les chantiers, transferts de fichiers et commandes liés à cette machine.',
     deleteFailed: 'Échec de la suppression',
     noMachines: 'Aucune machine trouvée',
+    adminPortal: 'Portail admin',
+    machinesBack: 'Machines',
+    buildYear: 'Année',
+    lastSeen: 'Vu pour la dernière fois',
   },
 
   adminMachineDetail: {
@@ -1556,6 +1560,9 @@ const fr: Dictionary = {
     kpiOverview: 'Vues',
     kpiActions: 'Actions',
     kpiShortcuts: 'Raccourcis',
+    sectionCreate: 'Créer',
+    sectionOverview: 'Vues d\'ensemble',
+    sectionActions: 'Actions',
   },
 
   adminConverter: {
@@ -1625,6 +1632,12 @@ const fr: Dictionary = {
     changeRegion: 'Autre région',
     changeVendor: 'Autre vendeur',
     bytes: '{n} ko',
+    countries: {
+      be: 'Belgique',
+      nl: 'Pays-Bas',
+      fr: 'France',
+      lu: 'Luxembourg',
+    },
   },
 }
 
