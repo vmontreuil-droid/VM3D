@@ -188,6 +188,12 @@ export default function Sidebar({
           match: (pathname) => pathname === '/admin',
           icon: <LayoutDashboard className="h-[17px] w-[17px]" />,
         },
+        {
+          label: 'Snelstart',
+          href: '/admin/tools',
+          match: (pathname) => pathname === '/admin/tools',
+          icon: <Zap className="h-[17px] w-[17px]" />,
+        },
       ]
     : [
         {
@@ -291,22 +297,19 @@ export default function Sidebar({
       icon: <UserCog className="h-[17px] w-[17px]" />,
     },
     {
-      label: 'Snelstart',
-      href: '/admin/tools',
-      match: (pathname) => pathname === '/admin/tools',
-      icon: <Zap className="h-[17px] w-[17px]" />,
+      label: t.platform.statistics,
+      href: '/admin/statistieken',
+      match: (pathname) => pathname === '/admin/statistieken',
+      icon: <BarChart3 className="h-[17px] w-[17px]" />,
     },
+  ]
+
+  const adminToolsItems: NavItem[] = [
     {
       label: 'Converter',
       href: '/admin/tools/converter',
       match: (pathname) => pathname.startsWith('/admin/tools/converter'),
       icon: <FileCode2 className="h-[17px] w-[17px]" />,
-    },
-    {
-      label: t.platform.statistics,
-      href: '/admin/statistieken',
-      match: (pathname) => pathname === '/admin/statistieken',
-      icon: <BarChart3 className="h-[17px] w-[17px]" />,
     },
   ]
 
@@ -513,21 +516,21 @@ export default function Sidebar({
               <div>
                 {!collapsed && (
                   <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
-                    Tools
-                  </p>
-                )}
-                <div className="space-y-1.5">
-                  {adminItems.slice(0, 2).map(renderNavItem)}
-                </div>
-              </div>
-              <div>
-                {!collapsed && (
-                  <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--text-muted)]">
                     Beheer
                   </p>
                 )}
                 <div className="space-y-1.5">
-                  {adminItems.slice(2).map(renderNavItem)}
+                  {adminItems.map(renderNavItem)}
+                </div>
+              </div>
+              <div>
+                {!collapsed && (
+                  <p className="mb-2.5 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)]">
+                    Tools
+                  </p>
+                )}
+                <div className="space-y-1.5">
+                  {adminToolsItems.map(renderNavItem)}
                 </div>
               </div>
             </div>
