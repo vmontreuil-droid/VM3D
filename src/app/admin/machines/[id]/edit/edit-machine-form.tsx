@@ -207,116 +207,123 @@ export default function EditMachineForm({
   )}`
 
   return (
-    <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-24">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-        <Link href="/admin" className="hover:text-[var(--text-main)]">
-          Admin
-        </Link>
-        <span>/</span>
-        <Link href="/admin/machines" className="hover:text-[var(--text-main)]">
-          Machines
-        </Link>
-        <span>/</span>
-        <span className="text-[var(--text-main)]">
-          {brand} {model}
-        </span>
-      </div>
-
-      {/* Hero — uniform dashboard style */}
-      <section className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
-        <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5 sm:py-3.5">
+    <div className="mx-auto w-full max-w-[1600px] space-y-3 pb-24 sm:space-y-4 lg:space-y-5">
+      <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
           <div className="absolute inset-0 opacity-30">
-            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
           </div>
-          <div className="relative flex flex-wrap items-center justify-between gap-2">
-            <Link href="/admin/machines" className="btn-secondary text-xs">
-              <ArrowLeft className="inline h-3 w-3 mr-1" /> Terug
-            </Link>
-          </div>
-          <div className="relative mt-3 flex flex-wrap items-center gap-3">
-            <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-              style={{ backgroundColor: `${brandColor}22` }}
-            >
-              <MachineIcon type={machineType} size={32} />
-            </div>
+
+          <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-400">
-                Machine
+              <Link
+                href="/admin/machines"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+              >
+                <ArrowLeft className="h-3 w-3" />
+                Machines
+              </Link>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                Adminportaal
               </p>
-              <h1 className="mt-0.5 flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                <span>
-                  {brand} {model}
-                </span>
-                <span className="font-normal text-[var(--text-soft)]">
-                  · {name}
-                </span>
-                {guidanceStyle && guidance && (
-                  <span
-                    className={`rounded px-2 py-0.5 text-[10px] font-bold ${guidanceStyle.bg} ${guidanceStyle.text}`}
-                  >
-                    {guidance}
-                  </span>
-                )}
-                {machine.is_online ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                    <Wifi className="h-3 w-3" /> Online
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
-                    <WifiOff className="h-3 w-3" /> Offline
-                  </span>
-                )}
-              </h1>
-              <p className="mt-1 text-xs text-[var(--text-soft)]">
-                {machineType === 'bulldozer' ? 'Bulldozer' : 'Kraan'}
-                {tonnage ? ` · ${formatTonnage(Number(tonnage))}` : ''}
-                {year ? ` · Bouwjaar ${year}` : ''}
-                {lastSeen
-                  ? ` · Laatst gezien ${lastSeen.toLocaleString()}`
-                  : ''}
-              </p>
+
+              <div className="mt-1 flex items-start gap-3">
+                <div
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${brandColor}22` }}
+                >
+                  <MachineIcon type={machineType} size={28} />
+                </div>
+                <div className="min-w-0">
+                  <h1 className="flex flex-wrap items-center gap-2 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                    <span className="truncate">{name || `${brand} ${model}`}</span>
+                    {guidanceStyle && guidance && (
+                      <span
+                        className={`rounded px-2 py-0.5 text-[10px] font-bold ${guidanceStyle.bg} ${guidanceStyle.text}`}
+                      >
+                        {guidance}
+                      </span>
+                    )}
+                    {machine.is_online ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+                        <Wifi className="h-3 w-3" /> Online
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-card)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
+                        <WifiOff className="h-3 w-3" /> Offline
+                      </span>
+                    )}
+                  </h1>
+                  <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                    {brand} {model}
+                    {` · ${machineType === 'bulldozer' ? 'Bulldozer' : machineType === 'grader' ? 'Grader' : 'Kraan'}`}
+                    {tonnage ? ` · ${formatTonnage(Number(tonnage))}` : ''}
+                    {year ? ` · Bouwjaar ${year}` : ''}
+                    {lastSeen ? ` · Laatst gezien ${lastSeen.toLocaleString()}` : ''}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full xl:ml-auto xl:max-w-[820px]">
+              <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Code</p>
+                      <p className="mt-1 truncate font-mono text-sm font-semibold text-emerald-400">
+                        {machine.connection_code}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
+                      <Hash className="h-4.5 w-4.5 text-emerald-400" />
+                    </div>
+                  </div>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klant</p>
+                      <p className="mt-1 truncate text-sm font-semibold text-sky-400">
+                        {customer?.company_name || customer?.full_name || '—'}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                      <Building2 className="h-4.5 w-4.5 text-sky-400" />
+                    </div>
+                  </div>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Besturing</p>
+                      <p className="mt-1 truncate text-sm font-semibold text-violet-400">
+                        {guidance || '—'}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
+                      <Radio className="h-4.5 w-4.5 text-violet-400" />
+                    </div>
+                  </div>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.02))] px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Tonnage</p>
+                      <p className="mt-1 truncate text-sm font-semibold text-amber-400">
+                        {tonnage ? formatTonnage(Number(tonnage)) : '—'}
+                      </p>
+                    </div>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                      <Construction className="h-4.5 w-4.5 text-amber-400" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Stats tiles */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-            <Hash className="h-3 w-3" /> Code
-          </p>
-          <p className="mt-1 font-mono text-sm font-bold text-emerald-400">
-            {machine.connection_code}
-          </p>
-        </div>
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-            <Building2 className="h-3 w-3" /> Klant
-          </p>
-          <p className="mt-1 truncate text-sm font-semibold text-[var(--text-main)]">
-            {customer?.company_name || customer?.full_name || '—'}
-          </p>
-        </div>
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-            <Radio className="h-3 w-3" /> Besturing
-          </p>
-          <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-            {guidance || '—'}
-          </p>
-        </div>
-        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-          <p className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-            <Construction className="h-3 w-3" /> Tonnage
-          </p>
-          <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">
-            {tonnage ? formatTonnage(Number(tonnage)) : '—'}
-          </p>
-        </div>
-      </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
         {/* Main column */}
