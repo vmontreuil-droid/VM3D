@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Clock, Play, Square, Trash2, Loader2, Building2, FolderOpen, Construction, Link2, X } from 'lucide-react'
+import { useT } from '@/i18n/context'
 
 type Kind = 'customer' | 'project' | 'machine'
 
@@ -34,12 +35,6 @@ const kindClass: Record<Kind, string> = {
   machine: 'bg-orange-500/15 text-orange-400',
 }
 
-const kindLabels: Record<Kind, string> = {
-  customer: 'Klant',
-  project: 'Werf',
-  machine: 'Machine',
-}
-
 function formatDuration(totalSeconds: number) {
   const h = Math.floor(totalSeconds / 3600)
   const m = Math.floor((totalSeconds % 3600) / 60)
@@ -47,13 +42,21 @@ function formatDuration(totalSeconds: number) {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, locale: string) {
   const d = new Date(iso)
-  return d.toLocaleDateString('nl-BE', { day: '2-digit', month: '2-digit' }) +
-    ' ' + d.toLocaleTimeString('nl-BE', { hour: '2-digit', minute: '2-digit' })
+  const loc = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
+  return d.toLocaleDateString(loc, { day: '2-digit', month: '2-digit' }) +
+    ' ' + d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' })
 }
 
 export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader?: boolean } = {}) {
+  const { t, locale } = useT()
+  const tt = t.timeWidget
+  const kindLabels: Record<Kind, string> = {
+    customer: tt.linkCustomer,
+    project: tt.linkProject,
+    machine: tt.linkMachine,
+  }
   const [entries, setEntries] = useState<TimeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -203,17 +206,17 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
       {!hideHeader && (
         <div className="flex items-center gap-2 border-b border-[var(--border-soft)] px-3 py-2">
           <Clock className="h-3.5 w-3.5 text-emerald-400" />
-          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Tijdregistratie</h3>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{tt.title}</h3>
           {todaySeconds > 0 && (
             <span className="ml-auto text-[10px] font-medium text-emerald-400">
-              Vandaag: {formatDuration(todaySeconds)}
+              {tt.today}: {formatDuration(todaySeconds)}
             </span>
           )}
         </div>
       )}
       {hideHeader && todaySeconds > 0 && (
         <div className="border-b border-[var(--border-soft)] px-3 py-1 text-right text-[10px] font-medium text-emerald-400">
-          Vandaag: {formatDuration(todaySeconds)}
+          {tt.today}: {formatDuration(todaySeconds)}
         </div>
       )}
 
@@ -248,7 +251,7 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); void startTimer() } }}
-              placeholder="Werkzaamheid..."
+              placeholder={tt.descriptionPlaceholder}
               className="input-dark h-7 flex-1 px-2 text-[11px]"
             />
             <button
@@ -264,7 +267,7 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
           {/* Target picker */}
           <div className="relative" ref={pickerRef}>
             <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
-              <span className="text-[var(--text-muted)]">Koppel aan:</span>
+              <span className="text-[var(--text-muted)]">{tt.linkLabel}:</span>
               {(['customer', 'project', 'machine'] as Kind[]).map((k) => {
                 const Icon = kindIcon[k]
                 const active = kind === k
@@ -310,7 +313,7 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
                   autoFocus
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Zoeken..."
+                  placeholder={tt.searchPlaceholder}
                   className="input-dark mb-1 w-full px-2 py-1 text-[11px]"
                 />
                 <div className="max-h-32 overflow-y-auto">
@@ -352,7 +355,7 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
             <Loader2 className="h-4 w-4 animate-spin text-[var(--text-muted)]" />
           </div>
         ) : entries.filter((e) => e.ended_at).length === 0 ? (
-          <p className="px-3 py-4 text-center text-[11px] text-[var(--text-muted)]">Nog geen registraties.</p>
+          <p className="px-3 py-4 text-center text-[11px] text-[var(--text-muted)]">{tt.noEntries}</p>
         ) : (
           <div className="divide-y divide-[var(--border-soft)]">
             {entries.filter((e) => e.ended_at).slice(0, 6).map((entry) => {
@@ -371,7 +374,7 @@ export default function DashboardTimeWidget({ hideHeader = false }: { hideHeader
                         </span>
                       )}
                       <p className="text-[9px] text-[var(--text-muted)]">
-                        {formatDate(entry.started_at)} Â· {formatDuration(entry.duration_seconds ?? 0)}
+                        {formatDate(entry.started_at, locale)} · {formatDuration(entry.duration_seconds ?? 0)}
                       </p>
                     </div>
                   </div>

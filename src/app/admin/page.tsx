@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import {
   Users,
   FolderOpen,
@@ -29,6 +30,8 @@ import {
   getTicketNotificationConfig,
   sendTicketNotificationEmail,
 } from '@/lib/ticket-notifications'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 async function sendTicketTestEmail() {
   'use server'
@@ -146,6 +149,13 @@ type Props = {
 
 export default async function AdminPage({ searchParams }: Props) {
   const resolvedSearchParams = searchParams ? await searchParams : {}
+
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminDashboard
+
   const supabase = await createClient()
 
   const {
@@ -367,45 +377,45 @@ export default async function AdminPage({ searchParams }: Props) {
       <div className="space-y-3 sm:space-y-4 lg:space-y-5">
         {mailTestState === 'sent' && (
           <section className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-            Testmail succesvol verzonden.
+            {tt.mailSent}
           </section>
         )}
         {mailTestState === 'sent_sandbox' && (
           <section className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-            Testmail succesvol verstuurd via Resend sandbox (`delivered@resend.dev`). Voor echte inboxbezorging moet je later een eigen domein koppelen in Resend.
+            {tt.mailSentSandbox}
           </section>
         )}
         {mailTestState === 'config_missing' && (
           <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Testmail niet verzonden: ticketmail-config is niet volledig.
+            {tt.mailConfigMissing}
           </section>
         )}
         {mailTestState === 'no_email' && (
           <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Testmail niet verzonden: geen e-mailadres gevonden voor jouw profiel.
+            {tt.mailNoEmail}
           </section>
         )}
         {mailTestState === 'failed' && (
           <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            Testmail verzenden is mislukt.
-            {mailTestReason ? ` Reden: ${mailTestReason}.` : ''}
-            {mailTestStatus ? ` Status: ${mailTestStatus}.` : ''}
-            {mailTestDetail ? ` Detail: ${mailTestDetail}` : ''}
+            {tt.mailFailed}
+            {mailTestReason ? ` ${tt.mailFailedReason}: ${mailTestReason}.` : ''}
+            {mailTestStatus ? ` ${tt.mailFailedStatus}: ${mailTestStatus}.` : ''}
+            {mailTestDetail ? ` ${tt.mailFailedDetail}: ${mailTestDetail}` : ''}
           </section>
         )}
         {mailTestState === 'failed_own_email' && (
           <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Resend sandbox-beperking: met een `@resend.dev` afzender mag je enkel naar je eigen Resend-account e-mailadres sturen.
+            {tt.mailFailedOwnEmail}
           </section>
         )}
         {mailTestState === 'failed_domain' && (
           <section className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Afzenderdomein is niet geverifieerd in Resend. Koppel eerst een eigen domein en gebruik daarna dat e-mailadres als `TICKET_NOTIFICATIONS_FROM`.
+            {tt.mailFailedDomain}
           </section>
         )}
         {mailTestState === 'failed_api_key' && (
           <section className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            API key ongeldig. Maak een nieuwe key in Resend en update `RESEND_API_KEY` in Vercel.
+            {tt.mailFailedApiKey}
           </section>
         )}
 
@@ -418,16 +428,15 @@ export default async function AdminPage({ searchParams }: Props) {
             <div className="relative flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="min-w-0 flex-1">
                 <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
 
                 <h1 className="mt-2 text-2xl font-semibold text-[var(--text-main)] sm:text-3xl">
-                  Welkom, {profile?.full_name || profile?.company_name || 'Admin'}
+                  {tt.welcome}, {profile?.full_name || profile?.company_name || tt.defaultAdminName}
                 </h1>
 
                 <p className="mt-2.5 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-                  Centraal overzicht van klanten, werven, bestanden en opvolgingen
-                  binnen het platform.
+                  {tt.description}
                 </p>
               </div>
 
@@ -436,7 +445,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCustomers}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{customerCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -448,7 +457,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiProjects}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{totalProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -460,7 +469,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiActive}</p>
                         <p className="mt-1 text-lg font-semibold text-green-500">{activeProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
@@ -472,7 +481,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uploads</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiUploads}</p>
                         <p className="mt-1 text-lg font-semibold text-blue-500">{clientFiles}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
@@ -484,7 +493,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Oplevering</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiDelivery}</p>
                         <p className="mt-1 text-lg font-semibold text-purple-500">{finalFiles}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
@@ -496,7 +505,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Ingediend</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiSubmitted}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{submittedProjects}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -508,7 +517,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Tickets</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiTickets}</p>
                         <p className="mt-1 text-lg font-semibold text-sky-400">{ticketCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
@@ -520,7 +529,7 @@ export default async function AdminPage({ searchParams }: Props) {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(236,72,153,0.08),rgba(236,72,153,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Abonnementen</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiSubscriptions}</p>
                         <p className="mt-1 text-lg font-semibold text-pink-400">{subscriptionCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-400/10">
@@ -537,10 +546,10 @@ export default async function AdminPage({ searchParams }: Props) {
             <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)]">
               <div className="border-b border-[var(--border-soft)] px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Kaart
+                  {tt.mapTitle}
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Werven en klanten op de kaart.
+                  {tt.mapDesc}
                 </p>
               </div>
 
@@ -552,10 +561,10 @@ export default async function AdminPage({ searchParams }: Props) {
             <div className="flex h-full flex-col rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] p-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  Sneltoetsen
+                  {tt.shortcutsTitle}
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-soft)]">
-                  Snelle toegang tot klanten, werven en opvolging.
+                  {tt.shortcutsDesc}
                 </p>
               </div>
 
@@ -571,10 +580,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Nieuwe klant
+                        {tt.quickNewCustomer}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Maak meteen een nieuwe klantfiche aan.
+                        {tt.quickNewCustomerDesc}
                       </span>
                     </span>
                   </div>
@@ -591,10 +600,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Nieuwe werf
+                        {tt.quickNewProject}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Start snel een nieuw dossier op.
+                        {tt.quickNewProjectDesc}
                       </span>
                     </span>
                   </div>
@@ -615,10 +624,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Tickets
+                        {tt.quickTickets}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Volg supportvragen en meldingen op.
+                        {tt.quickTicketsDesc}
                       </span>
                     </span>
                   </div>
@@ -641,10 +650,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Offertes
+                        {tt.quickQuotes}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Beheer en volg offertes op.
+                        {tt.quickQuotesDesc}
                       </span>
                     </span>
                   </div>
@@ -664,10 +673,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Facturen
+                        {tt.quickInvoices}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk en beheer alle facturen.
+                        {tt.quickInvoicesDesc}
                       </span>
                     </span>
                   </div>
@@ -684,10 +693,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Statistieken
+                        {tt.quickStatistics}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Bekijk omzet, uren en grafieken.
+                        {tt.quickStatisticsDesc}
                       </span>
                     </span>
                   </div>
@@ -707,10 +716,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Machinebeheer
+                        {tt.quickMachines}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Beheer tablets, GPS en werven per machine.
+                        {tt.quickMachinesDesc}
                       </span>
                     </span>
                   </div>
@@ -730,10 +739,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Tijdsregistratie
+                        {tt.quickTime}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Start, stop en log uren per klant of werf.
+                        {tt.quickTimeDesc}
                       </span>
                     </span>
                   </div>
@@ -753,10 +762,10 @@ export default async function AdminPage({ searchParams }: Props) {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">
-                        Notities
+                        {tt.quickNotes}
                       </span>
                       <span className="mt-0.5 block text-[11px] leading-4 text-[var(--text-soft)]">
-                        Interne memo&apos;s per klant, werf of machine.
+                        {tt.quickNotesDesc}
                       </span>
                     </span>
                   </div>
@@ -771,8 +780,7 @@ export default async function AdminPage({ searchParams }: Props) {
 
         {hasLoadError && (
           <section className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-4 text-sm text-red-200 shadow-sm">
-            Werven, klantgegevens of bestanden konden niet volledig geladen
-            worden.
+            {tt.loadError}
           </section>
         )}
 

@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { StickyNote, Clock } from 'lucide-react'
+import { useT } from '@/i18n/context'
 import DashboardNotesWidget from './dashboard-notes-widget'
 import DashboardTimeWidget from './dashboard-time-widget'
 
 type Tab = 'notes' | 'time'
 
 export default function DashboardNotesTimeWidget() {
+  const { t } = useT()
   const [tab, setTab] = useState<Tab>('notes')
 
   return (
@@ -23,7 +25,7 @@ export default function DashboardNotesTimeWidget() {
           }`}
         >
           <StickyNote className="h-3.5 w-3.5" />
-          Notities
+          {t.platform.notes}
         </button>
         <button
           type="button"
@@ -35,7 +37,7 @@ export default function DashboardNotesTimeWidget() {
           }`}
         >
           <Clock className="h-3.5 w-3.5" />
-          Tijdregistratie
+          {t.platform.timeTracking}
         </button>
       </div>
 

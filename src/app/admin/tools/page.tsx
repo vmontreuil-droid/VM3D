@@ -13,45 +13,51 @@ import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
 
 type SectionKey = 'sectionCreate' | 'sectionOverview' | 'sectionActions'
+type ItemKey =
+  | 'itemNewCustomer' | 'itemNewQuote' | 'itemNewInvoice' | 'itemNewProject'
+  | 'itemNewTicket' | 'itemNewMachine' | 'itemNewAgent'
+  | 'itemViewQuotes' | 'itemViewInvoices' | 'itemViewTickets'
+  | 'itemViewTimeTracking' | 'itemViewNotes' | 'itemViewAgents'
+  | 'itemActionReminders' | 'itemActionStatistics' | 'itemActionConverter' | 'itemActionGeoSetup'
 
 const sections: {
   titleKey: SectionKey
   color: 'orange' | 'blue' | 'green'
-  items: { label: string; href: string; icon: typeof UserPlus; sub: string }[]
+  items: { labelKey: ItemKey; href: string; icon: typeof UserPlus }[]
 }[] = [
   {
     titleKey: 'sectionCreate',
     color: 'orange',
     items: [
-      { label: 'Nieuwe klant',   href: '/admin/customers/new',  icon: UserPlus,        sub: 'Klantfiche aanmaken' },
-      { label: 'Nieuwe offerte', href: '/admin/offerte/new',    icon: MousePointerClick, sub: 'Offerte opstellen' },
-      { label: 'Nieuwe factuur', href: '/admin/facturen/from-offerte', icon: Receipt,  sub: 'Factuur via offerte' },
-      { label: 'Nieuw project',  href: '/admin/projects/new',   icon: FolderPlus,      sub: 'Project/werf starten' },
-      { label: 'Nieuwe ticket',  href: '/admin/tickets/new',    icon: Ticket,          sub: 'Ondersteuningsticket' },
-      { label: 'Nieuwe machine', href: '/admin/machines/new',   icon: Construction,    sub: 'Machine registreren' },
-      { label: 'Nieuwe agent',   href: '/admin/agenten/new',    icon: UserCog,         sub: 'Agent uitnodigen' },
+      { labelKey: 'itemNewCustomer', href: '/admin/customers/new',          icon: UserPlus },
+      { labelKey: 'itemNewQuote',    href: '/admin/offerte/new',            icon: MousePointerClick },
+      { labelKey: 'itemNewInvoice',  href: '/admin/facturen/from-offerte',  icon: Receipt },
+      { labelKey: 'itemNewProject',  href: '/admin/projects/new',           icon: FolderPlus },
+      { labelKey: 'itemNewTicket',   href: '/admin/tickets/new',            icon: Ticket },
+      { labelKey: 'itemNewMachine',  href: '/admin/machines/new',           icon: Construction },
+      { labelKey: 'itemNewAgent',    href: '/admin/agenten/new',            icon: UserCog },
     ],
   },
   {
     titleKey: 'sectionOverview',
     color: 'blue',
     items: [
-      { label: 'Offertes',        href: '/admin/offerte',          icon: MousePointerClick, sub: 'Offertebeheer' },
-      { label: 'Facturen',        href: '/admin/facturen',         icon: Receipt,          sub: 'Facturatiebeheer' },
-      { label: 'Tickets',         href: '/admin/tickets',          icon: Ticket,           sub: 'Supporttickets' },
-      { label: 'Tijdsregistratie',href: '/admin/tijdsregistratie', icon: Clock,            sub: 'Uren overzicht' },
-      { label: 'Notities',        href: '/admin/notities',         icon: StickyNote,       sub: 'Admin notities' },
-      { label: 'Agenten',         href: '/admin/agenten',          icon: UserCog,          sub: 'Agentenbeheer' },
+      { labelKey: 'itemViewQuotes',       href: '/admin/offerte',          icon: MousePointerClick },
+      { labelKey: 'itemViewInvoices',     href: '/admin/facturen',         icon: Receipt },
+      { labelKey: 'itemViewTickets',      href: '/admin/tickets',          icon: Ticket },
+      { labelKey: 'itemViewTimeTracking', href: '/admin/tijdsregistratie', icon: Clock },
+      { labelKey: 'itemViewNotes',        href: '/admin/notities',         icon: StickyNote },
+      { labelKey: 'itemViewAgents',       href: '/admin/agenten',          icon: UserCog },
     ],
   },
   {
     titleKey: 'sectionActions',
     color: 'green',
     items: [
-      { label: 'Herinneringen',  href: '/admin/herinneringen',         icon: Bell,      sub: 'Betalingsherinneringen' },
-      { label: 'Statistieken',   href: '/admin/statistieken',          icon: BarChart3,  sub: 'Rapporten & grafieken' },
-      { label: 'Bestandsconverter', href: '/admin/tools/converter',    icon: FileCode2,  sub: 'GPS bestanden omzetten' },
-      { label: 'Geo-setup',      href: '/admin/tools/geo-setup',       icon: Globe2,     sub: 'Geoide & coördinaten per regio' },
+      { labelKey: 'itemActionReminders',  href: '/admin/herinneringen',   icon: Bell },
+      { labelKey: 'itemActionStatistics', href: '/admin/statistieken',    icon: BarChart3 },
+      { labelKey: 'itemActionConverter',  href: '/admin/tools/converter', icon: FileCode2 },
+      { labelKey: 'itemActionGeoSetup',   href: '/admin/tools/geo-setup', icon: Globe2 },
     ],
   },
 ]
@@ -199,10 +205,10 @@ export default async function ToolsPage() {
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate text-sm font-semibold text-[var(--text-main)]">
-                          {item.label}
+                          {tt[item.labelKey]}
                         </span>
                         <span className="block truncate text-[10px] text-[var(--text-muted)]">
-                          {item.sub}
+                          {tt[`${item.labelKey}Sub` as keyof typeof tt]}
                         </span>
                       </span>
                     </Link>
