@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
 import {
-  UserPlus, FileText, Receipt, FolderPlus, Ticket, Construction,
-  UserCog, Users, MousePointerClick, FolderOpen, Bell, BarChart3,
-  Clock, StickyNote, FilePlus, Zap, FileCode2,
+  UserPlus, Receipt, FolderPlus, Ticket, Construction,
+  UserCog, MousePointerClick, Bell, BarChart3,
+  Clock, StickyNote, Zap, FileCode2,
 } from 'lucide-react'
 
 const sections = [
@@ -26,10 +26,8 @@ const sections = [
     title: 'Overzichten',
     color: 'blue',
     items: [
-      { label: 'Klanten',         href: '/admin/customers',        icon: Users,            sub: 'Alle klantfiches' },
       { label: 'Offertes',        href: '/admin/offerte',          icon: MousePointerClick, sub: 'Offertebeheer' },
       { label: 'Facturen',        href: '/admin/facturen',         icon: Receipt,          sub: 'Facturatiebeheer' },
-      { label: 'Projecten',       href: '/admin/werven',           icon: FolderOpen,       sub: 'Wervenlijst' },
       { label: 'Tickets',         href: '/admin/tickets',          icon: Ticket,           sub: 'Supporttickets' },
       { label: 'Tijdsregistratie',href: '/admin/tijdsregistratie', icon: Clock,            sub: 'Uren overzicht' },
       { label: 'Notities',        href: '/admin/notities',         icon: StickyNote,       sub: 'Admin notities' },

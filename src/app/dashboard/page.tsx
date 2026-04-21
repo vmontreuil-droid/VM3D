@@ -170,13 +170,6 @@ export default async function DashboardPage() {
   const quickLinks: QuickLink[] = isAdmin
     ? [
         {
-          href: '/admin/customers',
-          label: t.adminCards.customers,
-          description: t.adminCards.customersDesc,
-          icon: Users,
-          badge: totalCustomers,
-        },
-        {
           href: '/admin',
           label: t.adminCards.sites,
           description: t.adminCards.sitesDesc,

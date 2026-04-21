@@ -1180,7 +1180,7 @@ export default function CustomerForm({
         {showSubmitAndBackButton && (
           <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <Link
-              href="/admin/customers"
+              href="/admin"
               className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 text-left transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
             >
               <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />

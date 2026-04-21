@@ -194,7 +194,7 @@ export default async function NewAdminProjectPage({ searchParams }: Props) {
 
                 <div className="mt-4 max-w-[270px]">
                   <Link
-                    href="/admin/werven"
+                    href="/admin"
                     className="group relative block overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
                   >
                     <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />

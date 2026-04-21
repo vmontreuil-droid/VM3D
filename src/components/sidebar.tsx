@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, Users, FolderOpen, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
+import { Home, LayoutDashboard, ChevronLeft, ChevronRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2 } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -230,35 +230,6 @@ export default function Sidebar({
 
   const adminItems: NavItem[] = [
     {
-      label: 'Snelstart',
-      href: '/admin/tools',
-      match: (pathname) => pathname === '/admin/tools',
-      icon: <Zap className="h-[17px] w-[17px]" />,
-    },
-    {
-      label: 'Converter',
-      href: '/admin/tools/converter',
-      match: (pathname) => pathname.startsWith('/admin/tools/converter'),
-      icon: <FileCode2 className="h-[17px] w-[17px]" />,
-    },
-    {
-      label: t.platform.customers,
-      href: '/admin/customers',
-      match: (pathname) =>
-        pathname === '/admin/customers' || pathname.startsWith('/admin/customers/'),
-      icon: <Users className="h-[17px] w-[17px]" />,
-      badge: customerCount ?? undefined,
-    },
-        // Offerte knop verwijderd
-    {
-      label: t.platform.projects,
-      href: '/admin/werven',
-      match: (pathname) =>
-        pathname === '/admin/werven' || pathname.startsWith('/admin/projects'),
-      icon: <FolderOpen className="h-[17px] w-[17px]" />,
-      badge: projectCount ?? undefined,
-    },
-    {
       label: t.platform.tickets,
       href: '/admin/tickets',
       match: (pathname) => pathname === '/admin/tickets' || pathname.startsWith('/admin/tickets/'),
@@ -318,6 +289,18 @@ export default function Sidebar({
       href: '/admin/agenten',
       match: (pathname) => pathname === '/admin/agenten' || pathname.startsWith('/admin/agenten/'),
       icon: <UserCog className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Snelstart',
+      href: '/admin/tools',
+      match: (pathname) => pathname === '/admin/tools',
+      icon: <Zap className="h-[17px] w-[17px]" />,
+    },
+    {
+      label: 'Converter',
+      href: '/admin/tools/converter',
+      match: (pathname) => pathname.startsWith('/admin/tools/converter'),
+      icon: <FileCode2 className="h-[17px] w-[17px]" />,
     },
     {
       label: t.platform.statistics,
@@ -555,8 +538,12 @@ export default function Sidebar({
       <div className="relative z-10 border-t border-[var(--border-soft)] p-3.5">
         {!collapsed ? (
           <div className="space-y-2.5">
-            <ThemeToggle collapsed={false} />
-            <LanguageSwitcher />
+            <div className="flex items-center gap-2">
+              <div className="min-w-0 flex-1">
+                <ThemeToggle collapsed={false} />
+              </div>
+              <LanguageSwitcher className="shrink-0" />
+            </div>
             {isAdmin && (
               <Link
                 href={isAdmin ? '/admin' : '/dashboard'}

@@ -827,11 +827,11 @@ export default async function AdminProjectDetailPage({
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <Link
-                    href="/admin/werven"
+                    href="/admin"
                     className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                   >
                     <ArrowLeft className="h-3 w-3" />
-                    Werven
+                    Dashboard
                   </Link>
                   {project.user_id && (
                     <Link

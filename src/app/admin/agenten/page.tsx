@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import AppShell from '@/components/app-shell'
 import Link from 'next/link'
-import { Users, Plus, Percent, TrendingUp, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Users, Plus, Percent, TrendingUp, ToggleLeft, ToggleRight, ArrowLeft, CheckCircle2, Wallet } from 'lucide-react'
 
 async function toggleAgentAction(agentId: string, active: boolean) {
   'use server'
@@ -69,30 +69,101 @@ export default async function AgentenPage() {
     }
   }
 
+  const totalAgents = agents?.length ?? 0
+  const activeAgents = (agents ?? []).filter(a => a.agent_active).length
+  const totalOmzet = Object.values(agentStats).reduce((s, x) => s + x.omzet, 0)
+  const totalCommissie = Object.values(agentStats).reduce((s, x) => s + x.commissie, 0)
+
   return (
     <AppShell isAdmin>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3">
-            <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-            <span className="flex items-start gap-2.5 pr-3">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)]/12 text-[var(--accent)]">
-                <Users className="h-3.5 w-3.5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">Agenten</span>
-                <span className="block text-[11px] leading-4 text-[var(--text-soft)]">{agents?.length ?? 0} actieve agenten</span>
-              </span>
-            </span>
+      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+        <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="relative border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-3 sm:px-5">
+            <div className="absolute inset-0 opacity-30">
+              <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(242,140,58,0.18),transparent_35%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_25%)]" />
+            </div>
+
+            <div className="relative flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
+                >
+                  <ArrowLeft className="h-3 w-3" />
+                  Dashboard
+                </Link>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
+                  Adminportaal
+                </p>
+                <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
+                  Agenten
+                </h1>
+                <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
+                  Beheer je verkoopagenten, hun commissiepercentage en bekijk de omzet die ze deze maand binnenbrachten.
+                </p>
+              </div>
+
+              <div className="w-full xl:ml-auto xl:max-w-[820px]">
+                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.10),rgba(14,165,233,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{totalAgents}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
+                        <Users className="h-4.5 w-4.5 text-sky-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(16,185,129,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Actief</p>
+                        <p className="mt-1 text-lg font-semibold text-emerald-400">{activeAgents}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(168,85,247,0.10),rgba(168,85,247,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Omzet (maand)</p>
+                        <p className="mt-1 text-lg font-semibold text-violet-400">€ {fmt(totalOmzet)}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-400/10">
+                        <TrendingUp className="h-4.5 w-4.5 text-violet-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(245,158,11,0.02))] px-3 py-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Commissie</p>
+                        <p className="mt-1 text-lg font-semibold text-amber-400">€ {fmt(totalCommissie)}</p>
+                      </div>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
+                        <Wallet className="h-4.5 w-4.5 text-amber-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <Link
-            href="/admin/agenten/new"
-            className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-90"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Nieuwe agent
-          </Link>
-        </div>
+
+          <div className="space-y-4 px-4 py-4 sm:px-5">
+            <div className="flex items-center justify-end">
+              <Link
+                href="/admin/agenten/new"
+                className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2.5 text-xs font-semibold text-white transition hover:opacity-90"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Nieuwe agent
+              </Link>
+            </div>
 
         {(!agents || agents.length === 0) ? (
           <div className="flex flex-col items-center justify-center rounded-[18px] border border-[var(--border-soft)] bg-[var(--bg-card-2)]/80 py-12 text-center shadow-sm">
@@ -181,6 +252,8 @@ export default async function AgentenPage() {
             </div>
           </div>
         )}
+          </div>
+        </section>
       </div>
     </AppShell>
   )
