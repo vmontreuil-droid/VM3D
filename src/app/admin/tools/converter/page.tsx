@@ -3,17 +3,16 @@
 import { useRef, useState, useCallback } from 'react'
 import AppShell from '@/components/app-shell'
 import {
-  Upload, Download, ArrowRight, ArrowLeft, FileCode2, Loader2,
-  CheckCircle, AlertCircle, RefreshCw, Scissors, Info,
+  Upload, Download, ArrowRight, FileCode2, Loader2,
+  CheckCircle, AlertCircle, RefreshCw, Scissors,
 } from 'lucide-react'
 import {
-  parseTP3, parseLandXML, parseDXF, parseTN3, parseLN3, triangulate,
+  parseTP3, parseLandXML, parseDXF, triangulate,
   generateLandXML, generateDXF2010LinesPythagoras, generateTP3FromTemplate,
   type Polyline,
 } from '@/lib/converters/machine-formats'
 
 const MAX_MB = 50
-const SURFACE_VERTS_LIMIT = 250
 
 // Brand logo met tekst-fallback als image niet aanwezig
 function BrandLogo({ name }: { name: 'topcon' | 'leica' }) {
@@ -230,11 +229,7 @@ function LeicaToTopconCard() {
         lines = parsed.lines
       }
 
-      // Size check
       const surfPts = surfaces.reduce((s, sf) => s + sf.points.length, 0)
-      if (surfPts > SURFACE_VERTS_LIMIT) {
-        throw new Error(`Oppervlak te complex: ${surfPts} punten (max ${SURFACE_VERTS_LIMIT}). Vereenvoudig vooraf in CAD.`)
-      }
 
       // Load template (project 006 — kleinste werkende Topcon TP3)
       const tplRes = await fetch('/converter/tp3-template-small.tp3')
@@ -312,11 +307,6 @@ function LeicaToTopconCard() {
           <FilePicker label=".DXF lijnen" accept=".dxf,.DXF" file={dxfFile} set={setDxfFile} inputRef={dxfInputRef} />
         </div>
 
-        <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
-          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
-          <p className="text-[11px] text-amber-200/80">Werkt voor projecten met max ~{SURFACE_VERTS_LIMIT} oppervlakte-punten. Grotere bestanden eerst vereenvoudigen in CAD.</p>
-        </div>
-
         {status.type === 'error' && (
           <div className="flex items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-500/8 px-4 py-3">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
@@ -380,8 +370,8 @@ export default function ConverterPage() {
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             <span className="font-semibold text-[var(--text-soft)]">Hoe werkt het: </span>
-            Topcon-bestanden (.TP3) bevatten zowel oppervlak als ontwerplijnen. Leica/Unicontrol gebruikt LandXML (.xml) voor het oppervlak en DXF (.dxf) voor de lijnen.
-            De converter splitst en hercombineert deze formaten. Voor Leica → Topcon werkt het automatisch voor projecten tot ~{SURFACE_VERTS_LIMIT} oppervlakte-punten.
+            Topcon-bestanden (.TP3) bevatten zowel oppervlak als ontwerplijnen. Leica / Unicontrol gebruikt LandXML (.xml) voor het oppervlak en DXF (.dxf) voor de lijnen.
+            De converter splitst TP3 automatisch in deze twee bestanden, of combineert XML + DXF terug naar TP3.
           </p>
         </div>
       </div>
