@@ -1652,24 +1652,48 @@ export function generateTP3FromTemplate(data: MachineFile): ArrayBuffer {
     break
   }
 
-  // PATCH 1: surface vertices in type=2. Skip bytes-overwrite als geen echte wijziging.
+  // PATCH 1: surface vertices in type=2 met PROXIMITY MATCHING.
+  // Topcon's TP3 heeft interne vertex volgorde, input DXF/XML heeft zijn eigen.
+  // Voor elke template-positie zoeken we de dichtst-bijzijnde input vertex en
+  // schrijven DIE coords op de template positie. Zo behoudt triangulatie zijn
+  // geldigheid (indices verwijzen nog steeds naar coherente punten).
   const surface = data.surfaces[0]
   if (surface && surface.points.length > 0 && surfaceVertCount > 0) {
     const t2Block = blocks.find(b => b.type === 2 && b.stride === 24)
     if (t2Block) {
       const t2 = t2Block.off + 18
       const t2MaxIdx = t2Block.count - 1
-      const n = Math.min(surface.points.length, surfaceVertCount)
-      for (let i = 0; i < n; i++) {
+      // Read current template vertex positions (absolute)
+      type TplV = { idx: number; absX: number; absY: number; z: number }
+      const tplVerts: TplV[] = []
+      for (let i = 0; i < surfaceVertCount; i++) {
         const idx = surfaceVertStart + i
         if (idx > t2MaxIdx) break
-        const p = surface.points[i]
         const o = t2 + idx * 24
-        const oldDx = dv.getFloat64(o, true)
-        const oldDy = dv.getFloat64(o + 8, true)
-        const oldZ  = dv.getFloat64(o + 16, true)
-        const reconstructed = { x: surfaceRefX + oldDx, y: surfaceRefY + oldDy, z: oldZ }
-        if (reconstructed.x === p.x && reconstructed.y === p.y && reconstructed.z === p.z) continue
+        tplVerts.push({
+          idx,
+          absX: surfaceRefX + dv.getFloat64(o, true),
+          absY: surfaceRefY + dv.getFloat64(o + 8, true),
+          z:    dv.getFloat64(o + 16, true),
+        })
+      }
+      // Build spatial index van input surface.points voor snelle nearest lookup
+      const inputPts = surface.points
+      // Voor ELKE template position, zoek nearest input point (greedy, met used flag)
+      const used = new Set<number>()
+      for (const tv of tplVerts) {
+        let bestIdx = -1, bestDist = Infinity
+        for (let j = 0; j < inputPts.length; j++) {
+          if (used.has(j)) continue
+          const p = inputPts[j]
+          const dx = p.x - tv.absX, dy = p.y - tv.absY, dz = p.z - tv.z
+          const d = dx*dx + dy*dy + dz*dz
+          if (d < bestDist) { bestDist = d; bestIdx = j }
+        }
+        if (bestIdx < 0) continue
+        used.add(bestIdx)
+        const p = inputPts[bestIdx]
+        const o = t2 + tv.idx * 24
         dv.setFloat64(o,      p.x - surfaceRefX, true)
         dv.setFloat64(o + 8,  p.y - surfaceRefY, true)
         dv.setFloat64(o + 16, p.z, true)

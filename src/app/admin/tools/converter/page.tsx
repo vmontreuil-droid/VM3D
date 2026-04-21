@@ -1,44 +1,20 @@
 'use client'
 
 import { useRef, useState, useCallback } from 'react'
+import Image from 'next/image'
 import AppShell from '@/components/app-shell'
-import { Upload, Download, ArrowRight, FileCode2, Loader2, CheckCircle, AlertCircle, RefreshCw, Scissors } from 'lucide-react'
 import {
-  convert, detectFormat, parseTN3, parseLN3, parseTP3, triangulate,
-  generateLandXML, generateLandXMLLines, generateDXF2010LinesPythagoras,
-  type FileFormat
+  Upload, Download, ArrowRight, ArrowLeft, FileCode2, Loader2,
+  CheckCircle, AlertCircle, RefreshCw, Scissors, Info,
+} from 'lucide-react'
+import {
+  parseTP3, parseLandXML, parseDXF, parseTN3, parseLN3, triangulate,
+  generateLandXML, generateDXF2010LinesPythagoras, generateTP3FromTemplate,
+  type Polyline,
 } from '@/lib/converters/machine-formats'
 
-const FORMAT_LABELS: Record<FileFormat, string> = {
-  landxml: 'LandXML (.xml)',
-  dxf:     'AutoCAD DXF (.dxf)',
-  tn3:     'Topcon TN3 (.TN3)',
-  ln3:     'Topcon LN3 (.LN3)',
-  tp3:     'Topcon TP3 (.TP3)',
-  svl:     'Trimble SVL (.svl)',
-  svd:     'Trimble SVD (.svd)',
-}
-
-const FORMAT_BRANDS: Record<FileFormat, string> = {
-  landxml: 'Universeel',
-  dxf:     'Universeel / CAD',
-  tn3:     'Topcon / Unicontrol',
-  ln3:     'Topcon / Unicontrol',
-  tp3:     'Topcon / Unicontrol',
-  svl:     'Trimble / Leica',
-  svd:     'Trimble / Leica',
-}
-
-const FORMATS: FileFormat[] = ['landxml', 'dxf', 'tn3', 'ln3', 'tp3']
-const ACCEPT = '.xml,.dxf,.TN3,.tn3,.LN3,.ln3,.TP3,.tp3'
-const MAX_MB = 30
-
-type Status =
-  | { type: 'idle' }
-  | { type: 'ready'; name: string; format: FileFormat }
-  | { type: 'converting' }
-  | { type: 'done'; files: string[] }
-  | { type: 'error'; message: string }
+const MAX_MB = 50
+const SURFACE_VERTS_LIMIT = 250
 
 function downloadBlob(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob)
@@ -49,10 +25,15 @@ function downloadBlob(blob: Blob, name: string) {
   URL.revokeObjectURL(url)
 }
 
-export default function ConverterPage() {
+type Status =
+  | { type: 'idle' }
+  | { type: 'converting' }
+  | { type: 'done'; files: string[] }
+  | { type: 'error'; message: string }
+
+// ─── Topcon → Leica card ──────────────────────────────────────────────────
+function TopconToLeicaCard() {
   const [file, setFile] = useState<File | null>(null)
-  const [inputFormat, setInputFormat] = useState<FileFormat>('landxml')
-  const [outputFormat, setOutputFormat] = useState<FileFormat>('dxf')
   const [status, setStatus] = useState<Status>({ type: 'idle' })
   const [dragging, setDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -62,67 +43,48 @@ export default function ConverterPage() {
       setStatus({ type: 'error', message: `Bestand te groot (max ${MAX_MB} MB)` })
       return
     }
-    setFile(f)
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const bytes = new Uint8Array(e.target!.result as ArrayBuffer)
-      const fmt = detectFormat(f.name, bytes)
-      setInputFormat(fmt)
-      setOutputFormat(
-        fmt === 'landxml' ? 'dxf' :
-        fmt === 'dxf'     ? 'landxml' :
-        fmt === 'ln3'     ? 'dxf' :
-        fmt === 'tp3'     ? 'landxml' :
-        'landxml'
-      )
-      setStatus({ type: 'ready', name: f.name, format: fmt })
+    if (!/\.tp3$/i.test(f.name)) {
+      setStatus({ type: 'error', message: 'Verwacht een .TP3 bestand' })
+      return
     }
-    reader.readAsArrayBuffer(f.slice(0, 512))
+    setFile(f)
+    setStatus({ type: 'idle' })
   }, [])
 
   const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setDragging(false)
+    e.preventDefault(); setDragging(false)
     const f = e.dataTransfer.files[0]
     if (f) handleFile(f)
   }, [handleFile])
 
-  const onPick = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]
-    if (f) handleFile(f)
-  }, [handleFile])
-
-  // Split TN3 → XML oppervlak + (optioneel) XML lijnen
-  const handleSplitTN3 = useCallback(async () => {
+  const handleConvert = useCallback(async () => {
     if (!file) return
     setStatus({ type: 'converting' })
     try {
-      const arrayBuf = await file.arrayBuffer()
-      const parsed = parseTN3(arrayBuf)
-
-      for (const surf of parsed.surfaces) {
-        if (surf.triangles.length === 0 && surf.points.length >= 3) {
-          surf.triangles = triangulate(surf.points)
-        }
-      }
-
+      const ab = await file.arrayBuffer()
+      const parsed = parseTP3(ab)
       const baseName = file.name.replace(/\.[^.]+$/, '')
-      const downloadedFiles: string[] = []
 
-      // File 1: LandXML oppervlak
-      const surfaceOnly = { ...parsed, lines: [] }
+      // Surface XML
+      const surfaceOnly = { ...parsed, lines: [] as Polyline[] }
+      for (const surf of surfaceOnly.surfaces) {
+        if (surf.triangles.length === 0 && surf.points.length >= 3) surf.triangles = triangulate(surf.points)
+      }
       const xmlSurface = generateLandXML(surfaceOnly)
       downloadBlob(new Blob([xmlSurface], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
-      downloadedFiles.push(`${baseName}_oppervlak.xml (${parsed.surfaces[0]?.points.length ?? 0} punten, ${parsed.surfaces[0]?.triangles.length ?? 0} driehoeken)`)
 
-      // File 2: DXF lijnen — alleen als er echte breaklines zijn
+      const downloadedFiles: string[] = [
+        `${baseName}_oppervlak.xml (${parsed.surfaces[0]?.points.length ?? 0} pnt, ${parsed.surfaces[0]?.triangles.length ?? 0} drhk)`,
+      ]
+
+      // Lines DXF (only if any)
       if (parsed.lines.length > 0) {
         await new Promise(r => setTimeout(r, 300))
         const linesOnly = { ...parsed, surfaces: [] }
         const dxfLines = await generateDXF2010LinesPythagoras(linesOnly, baseName)
         downloadBlob(new Blob([dxfLines], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
         const lnPts = parsed.lines.reduce((s, l) => s + l.points.length, 0)
-        downloadedFiles.push(`${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${lnPts} punten)`)
+        downloadedFiles.push(`${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${lnPts} pnt)`)
       }
 
       setStatus({ type: 'done', files: downloadedFiles })
@@ -131,105 +93,254 @@ export default function ConverterPage() {
     }
   }, [file])
 
-  // Normal single-file conversion
+  const reset = () => {
+    setFile(null); setStatus({ type: 'idle' })
+    if (inputRef.current) inputRef.current.value = ''
+  }
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-blue-500/25 bg-[var(--bg-card)] shadow-sm">
+      <div className="flex items-center gap-4 border-b border-blue-500/15 bg-gradient-to-br from-blue-500/8 to-transparent px-5 py-4">
+        <div className="flex h-12 items-center gap-2">
+          <Image src="/logos/topcon.png" alt="Topcon" width={90} height={28} className="object-contain" />
+          <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
+          <Image src="/logos/leica.png" alt="Leica" width={68} height={36} className="object-contain" />
+        </div>
+        <div className="ml-2">
+          <p className="text-sm font-semibold text-[var(--text-main)]">Topcon → Leica / Unicontrol</p>
+          <p className="text-[11px] text-[var(--text-soft)]">.TP3 → .XML (oppervlak) + .DXF (lijnen)</p>
+        </div>
+      </div>
+
+      <div className="space-y-4 p-5">
+        <div
+          onDragOver={e => { e.preventDefault(); setDragging(true) }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={onDrop}
+          onClick={() => inputRef.current?.click()}
+          className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-8 text-center transition ${
+            dragging ? 'border-blue-500 bg-blue-500/6'
+              : file ? 'border-emerald-500/40 bg-emerald-500/5'
+              : 'border-[var(--border-soft)] hover:border-blue-500/30 hover:bg-blue-500/4'
+          }`}
+        >
+          <input ref={inputRef} type="file" accept=".TP3,.tp3" className="hidden"
+            onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f) }} />
+          {file ? (
+            <>
+              <CheckCircle className="h-7 w-7 text-emerald-400" />
+              <div>
+                <p className="text-sm font-semibold text-[var(--text-main)]">{file.name}</p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">{(file.size / 1024).toFixed(0)} KB</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <Upload className={`h-7 w-7 ${dragging ? 'text-blue-400' : 'text-[var(--text-muted)]'}`} />
+              <div>
+                <p className="text-sm font-semibold text-[var(--text-main)]">Sleep .TP3 hier of klik</p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">max {MAX_MB} MB</p>
+              </div>
+            </>
+          )}
+        </div>
+
+        {status.type === 'error' && (
+          <div className="flex items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-500/8 px-4 py-3">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+            <p className="text-sm text-red-300">{status.message}</p>
+          </div>
+        )}
+        {status.type === 'done' && (
+          <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 px-4 py-3">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
+              <p className="text-sm font-semibold text-emerald-300">Conversie geslaagd</p>
+            </div>
+            {status.files.map(f => <p key={f} className="mt-1 text-[11px] text-[var(--text-soft)]">↓ {f}</p>)}
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button
+            onClick={handleConvert}
+            disabled={!file || status.type === 'converting'}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-400 transition hover:bg-blue-500/18 disabled:pointer-events-none disabled:opacity-50"
+          >
+            {status.type === 'converting'
+              ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
+              : <><Scissors className="h-4 w-4" /> Converteren</>}
+          </button>
+          {(file || status.type !== 'idle') && (
+            <button onClick={reset} className="flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition">
+              <RefreshCw className="h-3.5 w-3.5" /> Nieuw
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Leica → Topcon card ──────────────────────────────────────────────────
+function LeicaToTopconCard() {
+  const [xmlFile, setXmlFile] = useState<File | null>(null)
+  const [dxfFile, setDxfFile] = useState<File | null>(null)
+  const [status, setStatus] = useState<Status>({ type: 'idle' })
+  const xmlInputRef = useRef<HTMLInputElement>(null)
+  const dxfInputRef = useRef<HTMLInputElement>(null)
+
   const handleConvert = useCallback(async () => {
-    if (!file) return
-    if (inputFormat === outputFormat) {
-      setStatus({ type: 'error', message: 'Invoer- en uitvoerformaat zijn hetzelfde.' })
+    if (!xmlFile && !dxfFile) {
+      setStatus({ type: 'error', message: 'Upload minstens 1 bestand' })
       return
     }
     setStatus({ type: 'converting' })
     try {
-      const arrayBuf = await file.arrayBuffer()
-      const isText = inputFormat === 'landxml' || inputFormat === 'dxf'
-      const input = isText ? new TextDecoder().decode(arrayBuf) : arrayBuf
-      const result = convert(input, inputFormat, outputFormat, file.name)
-      const baseName = file.name.replace(/\.[^.]+$/, '')
-      const outName = `${baseName}_converted.${result.extension}`
-      const blob = result.data instanceof ArrayBuffer
-        ? new Blob([result.data], { type: result.mimeType })
-        : new Blob([result.data as string], { type: result.mimeType })
-      downloadBlob(blob, outName)
-      setStatus({ type: 'done', files: [outName] })
-    } catch (err) {
-      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
-    }
-  }, [file, inputFormat, outputFormat])
-
-  const reset = () => {
-    setFile(null)
-    setStatus({ type: 'idle' })
-    if (inputRef.current) inputRef.current.value = ''
-  }
-
-  // LN3 → DXF lijnen
-  const handleConvertLN3 = useCallback(async () => {
-    if (!file) return
-    setStatus({ type: 'converting' })
-    try {
-      const arrayBuf = await file.arrayBuffer()
-      const parsed = parseLN3(arrayBuf)
-      const baseName = file.name.replace(/\.[^.]+$/, '')
-      const dxfStr = await generateDXF2010LinesPythagoras(parsed, baseName)
-      downloadBlob(new Blob([dxfStr], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
-      setStatus({ type: 'done', files: [
-        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${parsed.lines.reduce((s, l) => s + l.points.length, 0)} punten)`,
-      ] })
-    } catch (err) {
-      setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
-    }
-  }, [file])
-
-  // TP3 splitsen → XML oppervlak + DXF lijnen — klanten editen in Pythagoras
-  const handleSplitTP3 = useCallback(async () => {
-    if (!file) return
-    setStatus({ type: 'converting' })
-    try {
-      const arrayBuf = await file.arrayBuffer()
-      const parsed = parseTP3(arrayBuf)
-
-      for (const surf of parsed.surfaces) {
-        if (surf.triangles.length === 0 && surf.points.length >= 3) {
-          surf.triangles = triangulate(surf.points)
-        }
+      // Parse inputs
+      let surfaces: Awaited<ReturnType<typeof parseLandXML>>['surfaces'] = []
+      let lines: Polyline[] = []
+      if (xmlFile) {
+        const xmlText = await xmlFile.text()
+        const parsed = parseLandXML(xmlText)
+        surfaces = parsed.surfaces
+      }
+      if (dxfFile) {
+        const dxfText = await dxfFile.text()
+        const parsed = parseDXF(dxfText)
+        if (surfaces.length === 0) surfaces = parsed.surfaces
+        lines = parsed.lines
       }
 
-      const baseName = file.name.replace(/\.[^.]+$/, '')
+      // Size check
+      const surfPts = surfaces.reduce((s, sf) => s + sf.points.length, 0)
+      if (surfPts > SURFACE_VERTS_LIMIT) {
+        throw new Error(`Oppervlak te complex: ${surfPts} punten (max ${SURFACE_VERTS_LIMIT}). Vereenvoudig vooraf in CAD.`)
+      }
 
-      // File 1: LandXML — oppervlakte (Surface met Pnts + Faces)
-      const surfaceOnly = { ...parsed, lines: [] }
-      const xmlSurface = generateLandXML(surfaceOnly)
-      downloadBlob(new Blob([xmlSurface], { type: 'application/xml' }), `${baseName}_oppervlak.xml`)
+      // Load template (project 006 — kleinste werkende Topcon TP3)
+      const tplRes = await fetch('/converter/tp3-template-small.tp3')
+      if (!tplRes.ok) throw new Error('Template niet gevonden')
+      const tplAb = await tplRes.arrayBuffer()
+      const tplParsed = parseTP3(tplAb)
 
-      await new Promise(r => setTimeout(r, 300))
+      // Map customer lines to template metadata
+      const linesWithMeta = lines.map((l, i) => {
+        const tpl = tplParsed.lines[i] ?? tplParsed.lines[tplParsed.lines.length - 1]
+        return { ...l, _tp3RangeStart: tpl?._tp3RangeStart, _tp3RefX: tpl?._tp3RefX, _tp3RefY: tpl?._tp3RefY }
+      })
 
-      // File 2: DXF — lijnen (LINE entiteiten, Pythagoras-compatible template)
-      const linesOnly = { ...parsed, surfaces: [] }
-      const dxfLines = await generateDXF2010LinesPythagoras(linesOnly, baseName)
-      downloadBlob(new Blob([dxfLines], { type: 'application/dxf' }), `${baseName}_lijnen.dxf`)
-
-      const ptCount = parsed.surfaces[0]?.points.length ?? 0
-      const triCount = parsed.surfaces[0]?.triangles.length ?? 0
-      const lnPts = parsed.lines.reduce((s, l) => s + l.points.length, 0)
-      setStatus({ type: 'done', files: [
-        `${baseName}_oppervlak.xml (${ptCount} punten, ${triCount} driehoeken)`,
-        `${baseName}_lijnen.dxf (${parsed.lines.length} lijnen, ${lnPts} punten)`,
-      ] })
+      const baseName = (xmlFile?.name ?? dxfFile?.name ?? 'output').replace(/\.[^.]+$/, '').replace(/[_-]?(oppervlak|lijnen)/i, '')
+      const out = generateTP3FromTemplate({ name: baseName, surfaces, lines: linesWithMeta, tp3Source: tplAb })
+      downloadBlob(new Blob([out], { type: 'application/octet-stream' }), `${baseName}.TP3`)
+      setStatus({ type: 'done', files: [`${baseName}.TP3 (${surfPts} oppervlakte-pnt, ${lines.length} lijnen)`] })
     } catch (err) {
       setStatus({ type: 'error', message: err instanceof Error ? err.message : 'Onbekende fout' })
     }
-  }, [file])
+  }, [xmlFile, dxfFile])
 
-  const isTN3 = inputFormat === 'tn3'
-  const isLN3 = inputFormat === 'ln3'
-  const isTP3 = inputFormat === 'tp3'
-  const selCls = 'w-full rounded-xl border border-[var(--border-soft)] bg-[var(--bg-main)] px-3 py-2.5 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]/50 appearance-none'
-  const lblCls = 'block text-[10px] font-semibold uppercase tracking-wider text-[var(--text-soft)] mb-1.5'
+  const reset = () => {
+    setXmlFile(null); setDxfFile(null); setStatus({ type: 'idle' })
+    if (xmlInputRef.current) xmlInputRef.current.value = ''
+    if (dxfInputRef.current) dxfInputRef.current.value = ''
+  }
+
+  const FilePicker = ({ label, accept, file, set, inputRef }: {
+    label: string; accept: string; file: File | null;
+    set: (f: File | null) => void;
+    inputRef: React.RefObject<HTMLInputElement | null>;
+  }) => (
+    <div
+      onClick={() => inputRef.current?.click()}
+      className={`flex cursor-pointer flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed px-3 py-5 text-center transition ${
+        file ? 'border-emerald-500/40 bg-emerald-500/5'
+          : 'border-[var(--border-soft)] hover:border-red-500/30 hover:bg-red-500/4'
+      }`}
+    >
+      <input ref={inputRef} type="file" accept={accept} className="hidden"
+        onChange={e => { const f = e.target.files?.[0]; if (f) set(f) }} />
+      {file ? (
+        <>
+          <CheckCircle className="h-5 w-5 text-emerald-400" />
+          <p className="text-xs font-semibold text-[var(--text-main)] truncate max-w-full">{file.name}</p>
+        </>
+      ) : (
+        <>
+          <Upload className="h-5 w-5 text-[var(--text-muted)]" />
+          <p className="text-xs text-[var(--text-soft)]">{label}</p>
+        </>
+      )}
+    </div>
+  )
 
   return (
+    <div className="overflow-hidden rounded-2xl border border-red-500/25 bg-[var(--bg-card)] shadow-sm">
+      <div className="flex items-center gap-4 border-b border-red-500/15 bg-gradient-to-br from-red-500/8 to-transparent px-5 py-4">
+        <div className="flex h-12 items-center gap-2">
+          <Image src="/logos/leica.png" alt="Leica" width={68} height={36} className="object-contain" />
+          <ArrowRight className="h-4 w-4 text-[var(--text-muted)]" />
+          <Image src="/logos/topcon.png" alt="Topcon" width={90} height={28} className="object-contain" />
+        </div>
+        <div className="ml-2">
+          <p className="text-sm font-semibold text-[var(--text-main)]">Leica / Unicontrol → Topcon</p>
+          <p className="text-[11px] text-[var(--text-soft)]">.XML (oppervlak) + .DXF (lijnen) → .TP3</p>
+        </div>
+        <span className="ml-auto rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">Beta</span>
+      </div>
+
+      <div className="space-y-4 p-5">
+        <div className="grid grid-cols-2 gap-3">
+          <FilePicker label=".XML oppervlak" accept=".xml,.XML" file={xmlFile} set={setXmlFile} inputRef={xmlInputRef} />
+          <FilePicker label=".DXF lijnen" accept=".dxf,.DXF" file={dxfFile} set={setDxfFile} inputRef={dxfInputRef} />
+        </div>
+
+        <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+          <p className="text-[11px] text-amber-200/80">Werkt voor projecten met max ~{SURFACE_VERTS_LIMIT} oppervlakte-punten. Grotere bestanden eerst vereenvoudigen in CAD.</p>
+        </div>
+
+        {status.type === 'error' && (
+          <div className="flex items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-500/8 px-4 py-3">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+            <p className="text-sm text-red-300">{status.message}</p>
+          </div>
+        )}
+        {status.type === 'done' && (
+          <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 px-4 py-3">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
+              <p className="text-sm font-semibold text-emerald-300">TP3 gegenereerd</p>
+            </div>
+            {status.files.map(f => <p key={f} className="mt-1 text-[11px] text-[var(--text-soft)]">↓ {f}</p>)}
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <button
+            onClick={handleConvert}
+            disabled={(!xmlFile && !dxfFile) || status.type === 'converting'}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 py-2.5 text-sm font-semibold text-red-400 transition hover:bg-red-500/18 disabled:pointer-events-none disabled:opacity-50"
+          >
+            {status.type === 'converting'
+              ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
+              : <><Download className="h-4 w-4" /> Genereer .TP3</>}
+          </button>
+          {(xmlFile || dxfFile || status.type !== 'idle') && (
+            <button onClick={reset} className="flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition">
+              <RefreshCw className="h-3.5 w-3.5" /> Nieuw
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────
+export default function ConverterPage() {
+  return (
     <AppShell isAdmin>
-      <div className="mx-auto max-w-3xl space-y-5">
-        {/* Header */}
+      <div className="mx-auto max-w-5xl space-y-6">
         <div className="group relative inline-flex overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-4 py-3">
           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
           <span className="flex items-start gap-2.5 pr-3">
@@ -238,225 +349,21 @@ export default function ConverterPage() {
             </span>
             <span className="min-w-0">
               <span className="block text-[13px] font-semibold leading-5 text-[var(--text-main)]">Bestandsconverter</span>
-              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">Machinebesturingsbestanden — max {MAX_MB} MB</span>
+              <span className="block text-[11px] leading-4 text-[var(--text-soft)]">Topcon ↔ Leica / Unicontrol</span>
             </span>
           </span>
         </div>
 
-        {/* Supported formats */}
-        <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
-          <div className="border-b border-[var(--border-soft)] px-4 py-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-soft)]">Ondersteunde formaten</p>
-          </div>
-          <div className="grid grid-cols-2 gap-px bg-[var(--border-soft)] sm:grid-cols-5">
-            {FORMATS.map(fmt => (
-              <div key={fmt} className="bg-[var(--bg-card)] px-3 py-3">
-                <p className="text-xs font-semibold text-[var(--text-main)]">{FORMAT_LABELS[fmt]}</p>
-                <p className="mt-0.5 text-[10px] text-[var(--text-muted)]">{FORMAT_BRANDS[fmt]}</p>
-              </div>
-            ))}
-          </div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <TopconToLeicaCard />
+          <LeicaToTopconCard />
         </div>
 
-        {/* Converter card */}
-        <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)]">
-          <div className="border-b border-[var(--border-soft)] px-5 py-4">
-            <h2 className="text-sm font-semibold text-[var(--text-main)]">Bestand omzetten</h2>
-          </div>
-
-          <div className="space-y-5 p-5">
-            {/* Drop zone */}
-            <div
-              onDragOver={e => { e.preventDefault(); setDragging(true) }}
-              onDragLeave={() => setDragging(false)}
-              onDrop={onDrop}
-              onClick={() => inputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 text-center transition ${
-                dragging
-                  ? 'border-[var(--accent)] bg-[var(--accent)]/6'
-                  : status.type === 'ready' || status.type === 'done'
-                  ? 'border-emerald-500/40 bg-emerald-500/5'
-                  : 'border-[var(--border-soft)] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/4'
-              }`}
-            >
-              <input ref={inputRef} type="file" accept={ACCEPT} className="hidden" onChange={onPick} />
-              {status.type === 'ready' || status.type === 'done' ? (
-                <>
-                  <CheckCircle className="h-8 w-8 text-emerald-400" />
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--text-main)]">{file?.name}</p>
-                    <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
-                      Herkend als <span className="text-[var(--accent)]">{FORMAT_LABELS[inputFormat]}</span>
-                      {' · '}{file ? (file.size / 1024).toFixed(0) : 0} KB
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Upload className={`h-8 w-8 ${dragging ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'}`} />
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--text-main)]">Sleep bestand hier of klik om te kiezen</p>
-                    <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">.xml · .dxf · .TN3 · .LN3 · .TP3 — max {MAX_MB} MB</p>
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* TP3 split section — combined surface + lines */}
-            {isTP3 && (
-              <div className="overflow-hidden rounded-xl border border-emerald-500/20 bg-emerald-500/4">
-                <div className="flex items-center gap-3 border-b border-emerald-500/15 px-4 py-3">
-                  <Scissors className="h-4 w-4 shrink-0 text-emerald-400" />
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--text-main)]">TP3 splitsen (gecombineerd project)</p>
-                    <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert <strong>XML oppervlak</strong> (Pythagoras-compatible Surface) + <strong>DXF lijnen</strong> (editeerbaar in Pythagoras / AutoCAD)
-                    </p>
-                  </div>
-                </div>
-                <div className="px-4 py-3">
-                  <button
-                    onClick={handleSplitTP3}
-                    disabled={!file || status.type === 'converting'}
-                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-emerald-500/40 bg-emerald-500/10 py-2.5 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/18 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {status.type === 'converting'
-                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Scissors className="h-4 w-4" /> Splitsen → XML + DXF</>
-                    }
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* LN3 section */}
-            {isLN3 && (
-              <div className="overflow-hidden rounded-xl border border-blue-500/20 bg-blue-500/4">
-                <div className="flex items-center gap-3 border-b border-blue-500/15 px-4 py-3">
-                  <Download className="h-4 w-4 shrink-0 text-blue-400" />
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--text-main)]">LN3 naar DXF</p>
-                    <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert alle ontwerplijnen als <strong>DXF LINE entiteiten</strong> (editeerbaar in Pythagoras)
-                    </p>
-                  </div>
-                </div>
-                <div className="px-4 py-3">
-                  <button
-                    onClick={handleConvertLN3}
-                    disabled={!file || status.type === 'converting'}
-                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 text-sm font-semibold text-blue-400 transition hover:bg-blue-500/18 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {status.type === 'converting'
-                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Download className="h-4 w-4" /> Exporteren → DXF</>
-                    }
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* TN3 split section */}
-            {isTN3 && (
-              <div className="overflow-hidden rounded-xl border border-[var(--accent)]/20 bg-[var(--accent)]/4">
-                <div className="flex items-center gap-3 border-b border-[var(--accent)]/15 px-4 py-3">
-                  <Scissors className="h-4 w-4 shrink-0 text-[var(--accent)]" />
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--text-main)]">TN3 splitsen</p>
-                    <p className="text-[11px] text-[var(--text-soft)]">
-                      Exporteert <strong>XML oppervlak</strong> (Pythagoras-compatible Surface) + <strong>DXF lijnen</strong> (editeerbaar in Pythagoras / AutoCAD)
-                    </p>
-                  </div>
-                </div>
-                <div className="px-4 py-3">
-                  <button
-                    onClick={handleSplitTN3}
-                    disabled={!file || status.type === 'converting'}
-                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 py-2.5 text-sm font-semibold text-[var(--accent)] transition hover:bg-[var(--accent)]/18 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {status.type === 'converting'
-                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Bezig…</>
-                      : <><Scissors className="h-4 w-4" /> Splitsen → XML + DXF</>
-                    }
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Normal conversion (alleen LandXML ↔ DXF; Topcon formaten gebruiken dedicated knoppen) */}
-            <div className="space-y-4">
-              {!isTN3 && !isLN3 && !isTP3 && (
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr]">
-                  <div>
-                    <label className={lblCls}>Van formaat</label>
-                    <select value={inputFormat} onChange={e => setInputFormat(e.target.value as FileFormat)} className={selCls}>
-                      <option value="landxml">{FORMAT_LABELS.landxml}</option>
-                      <option value="dxf">{FORMAT_LABELS.dxf}</option>
-                    </select>
-                  </div>
-                  <div className="flex items-end pb-3">
-                    <ArrowRight className="h-5 w-5 text-[var(--text-muted)]" />
-                  </div>
-                  <div>
-                    <label className={lblCls}>Naar formaat</label>
-                    <select value={outputFormat} onChange={e => setOutputFormat(e.target.value as FileFormat)} className={selCls}>
-                      {inputFormat === 'landxml'
-                        ? <option value="dxf">{FORMAT_LABELS.dxf}</option>
-                        : <option value="landxml">{FORMAT_LABELS.landxml}</option>}
-                    </select>
-                  </div>
-                </div>
-              )}
-
-              {/* Status */}
-              {status.type === 'error' && (
-                <div className="flex items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-500/8 px-4 py-3">
-                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
-                  <p className="text-sm text-red-300">{status.message}</p>
-                </div>
-              )}
-              {status.type === 'done' && (
-                <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
-                    <p className="text-sm font-semibold text-emerald-300">Download gestart!</p>
-                  </div>
-                  {status.files.map(f => (
-                    <p key={f} className="mt-1 text-[11px] text-[var(--text-soft)]">↓ {f}</p>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                {!isTN3 && !isLN3 && !isTP3 && (
-                  <button
-                    onClick={handleConvert}
-                    disabled={!file || status.type === 'converting' || inputFormat === outputFormat}
-                    className="group relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] py-2.5 text-sm font-semibold text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {status.type === 'converting'
-                      ? <><Loader2 className="h-4 w-4 animate-spin text-[var(--accent)]" /> Bezig…</>
-                      : <><Download className="h-4 w-4 text-[var(--accent)]" /> Omzetten & downloaden</>
-                    }
-                    <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-                  </button>
-                )}
-                {(file || status.type !== 'idle') && (
-                  <button onClick={reset} className={`flex items-center gap-1.5 rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5 text-sm text-[var(--text-soft)] hover:text-[var(--text-main)] transition ${(isTN3 || isLN3 || isTP3) ? 'flex-1 justify-center' : ''}`}>
-                    <RefreshCw className="h-3.5 w-3.5" /> Nieuw bestand
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Info */}
         <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)]/50 px-4 py-3">
           <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-semibold text-[var(--text-soft)]">Let op: </span>
-            LandXML ↔ DXF, TN3, LN3 en TP3 hebben volledige ondersteuning. TP3 splitst direct in XML oppervlak
-            (voor Pythagoras) en DXF lijnen (editeerbaar in Pythagoras / AutoCAD).
+            <span className="font-semibold text-[var(--text-soft)]">Hoe werkt het: </span>
+            Topcon-bestanden (.TP3) bevatten zowel oppervlak als ontwerplijnen. Leica/Unicontrol gebruikt LandXML (.xml) voor het oppervlak en DXF (.dxf) voor de lijnen.
+            De converter splitst en hercombineert deze formaten. Voor Leica → Topcon werkt het automatisch voor projecten tot ~{SURFACE_VERTS_LIMIT} oppervlakte-punten.
           </p>
         </div>
       </div>
