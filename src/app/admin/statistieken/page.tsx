@@ -1,12 +1,22 @@
 import { ArrowLeft, Users, FolderOpen, Receipt, Ticket, TrendingUp, Clock, BarChart3, CheckCircle2, FileText, Euro } from 'lucide-react'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import AppShell from '@/components/app-shell'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getStatusLabel } from '@/lib/status'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export default async function StatistiekenPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminStatistics
+  const intlLocale = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -47,7 +57,7 @@ export default async function StatistiekenPage() {
   const statusOrder = ['offerte_aangevraagd', 'offerte_verstuurd', 'in_behandeling', 'facturatie', 'factuur_verstuurd', 'afgerond']
   const statusCounts = statusOrder.map((s) => ({
     status: s,
-    label: getStatusLabel(s),
+    label: getStatusLabel(s, t),
     count: safeProjects.filter((p: any) => p.status === s).length,
   }))
   // Include legacy statuses
@@ -127,7 +137,7 @@ export default async function StatistiekenPage() {
     const d = new Date()
     d.setMonth(d.getMonth() - i)
     const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-    monthLabels.push(d.toLocaleDateString('nl-BE', { month: 'short' }))
+    monthLabels.push(d.toLocaleDateString(intlLocale, { month: 'short' }))
     monthCounts.push(
       safeProjects.filter((p: any) => p.created_at?.startsWith(key)).length
     )
@@ -154,12 +164,12 @@ export default async function StatistiekenPage() {
     if (p.user_id) customerProjectMap.set(p.user_id, (customerProjectMap.get(p.user_id) ?? 0) + 1)
   }
   const topCustomers = safeCustomers
-    .map((c: any) => ({ name: c.company_name || c.full_name || 'Onbekend', count: customerProjectMap.get(c.id) ?? 0 }))
+    .map((c: any) => ({ name: c.company_name || c.full_name || tt.unknown, count: customerProjectMap.get(c.id) ?? 0 }))
     .sort((a: any, b: any) => b.count - a.count)
     .slice(0, 5)
 
   function formatCurrency(val: number) {
-    return new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR' }).format(val)
+    return new Intl.NumberFormat(intlLocale, { style: 'currency', currency: 'EUR' }).format(val)
   }
 
   return (
@@ -178,16 +188,16 @@ export default async function StatistiekenPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Statistieken
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Volledig overzicht van klanten, werven, omzet, tickets en tijdregistratie.
+                  {tt.description}
                 </p>
               </div>
               <div className="w-full xl:ml-auto xl:max-w-[820px]">
@@ -195,7 +205,7 @@ export default async function StatistiekenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCustomers}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{safeCustomers.length}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -206,7 +216,7 @@ export default async function StatistiekenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiProjects}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{safeProjects.length}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -217,7 +227,7 @@ export default async function StatistiekenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(76,175,80,0.08),rgba(76,175,80,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Betaald</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiPaid}</p>
                         <p className="mt-1 text-lg font-semibold text-green-500">{formatCurrency(factuurOmzetBetaald)}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
@@ -228,8 +238,8 @@ export default async function StatistiekenPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(14,165,233,0.08),rgba(14,165,233,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Uren totaal</p>
-                        <p className="mt-1 text-lg font-semibold text-sky-400">{totalHours}u {totalMinutes}m</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiTotalHours}</p>
+                        <p className="mt-1 text-lg font-semibold text-sky-400">{totalHours}{tt.hoursShort} {totalMinutes}{tt.minutesShort}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-400/10">
                         <Clock className="h-4.5 w-4.5 text-sky-400" />
@@ -247,7 +257,7 @@ export default async function StatistiekenPage() {
           {/* Status breakdown */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Werven per status</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionStatusBreakdown}</h2>
             </div>
             <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3">
               {statusCounts.map((item, i) => (
@@ -262,7 +272,7 @@ export default async function StatistiekenPage() {
           {/* New projects per month chart */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Nieuwe werven per maand</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionNewProjects}</h2>
             </div>
             <div className="flex items-end gap-2 px-4 py-4" style={{ height: 180 }}>
               {monthCounts.map((count, i) => (
@@ -284,7 +294,7 @@ export default async function StatistiekenPage() {
           {/* Revenue per month chart */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Omzet per maand (betaald)</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionRevenue}</h2>
             </div>
             <div className="flex items-end gap-2 px-4 py-4" style={{ height: 180 }}>
               {revenueMonths.map((amount, i) => (
@@ -305,25 +315,25 @@ export default async function StatistiekenPage() {
           {/* Facturen overview */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Facturen overzicht</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionInvoices}</h2>
             </div>
             <div className="grid grid-cols-2 gap-2 p-3">
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
-                <p className="text-[10px] text-[var(--text-muted)]">Totaal</p>
+                <p className="text-[10px] text-[var(--text-muted)]">{tt.cellTotal}</p>
                 <p className="mt-1 text-xl font-bold text-[var(--text-main)]">{factuurTotaal}</p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-emerald-400">Betaald</p>
+                <p className="text-[10px] text-emerald-400">{tt.cellPaid}</p>
                 <p className="mt-1 text-xl font-bold text-emerald-300">{factuurBetaald}</p>
                 <p className="mt-0.5 text-[10px] text-emerald-400/70">{formatCurrency(factuurOmzetBetaald)}</p>
               </div>
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-amber-400">Verstuurd</p>
+                <p className="text-[10px] text-amber-400">{tt.cellSent}</p>
                 <p className="mt-1 text-xl font-bold text-amber-300">{factuurVerstuurd}</p>
                 <p className="mt-0.5 text-[10px] text-amber-400/70">{formatCurrency(factuurOpenstaand)}</p>
               </div>
               <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-red-400">Vervallen</p>
+                <p className="text-[10px] text-red-400">{tt.cellOverdue}</p>
                 <p className="mt-1 text-xl font-bold text-red-300">{factuurVervallen}</p>
               </div>
             </div>
@@ -335,19 +345,19 @@ export default async function StatistiekenPage() {
           {/* Offertes */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Offertes</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionQuotes}</h2>
             </div>
             <div className="grid grid-cols-3 gap-2 p-3">
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
-                <p className="text-[10px] text-[var(--text-muted)]">Totaal</p>
+                <p className="text-[10px] text-[var(--text-muted)]">{tt.cellTotal}</p>
                 <p className="mt-1 text-xl font-bold text-[var(--text-main)]">{offerteTotaal}</p>
               </div>
               <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-blue-400">Verstuurd</p>
+                <p className="text-[10px] text-blue-400">{tt.cellSent}</p>
                 <p className="mt-1 text-xl font-bold text-blue-300">{offerteVerstuurd}</p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-emerald-400">Omzet (geaccepteerd)</p>
+                <p className="text-[10px] text-emerald-400">{tt.cellRevenueAccepted}</p>
                 <p className="mt-1 text-lg font-bold text-emerald-300">{formatCurrency(offerteOmzet)}</p>
               </div>
             </div>
@@ -356,19 +366,19 @@ export default async function StatistiekenPage() {
           {/* Tickets */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Tickets</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionTickets}</h2>
             </div>
             <div className="grid grid-cols-3 gap-2 p-3">
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
-                <p className="text-[10px] text-[var(--text-muted)]">Totaal</p>
+                <p className="text-[10px] text-[var(--text-muted)]">{tt.cellTotal}</p>
                 <p className="mt-1 text-xl font-bold text-[var(--text-main)]">{ticketTotaal}</p>
               </div>
               <div className="rounded-xl border border-sky-500/20 bg-sky-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-sky-400">Open</p>
+                <p className="text-[10px] text-sky-400">{tt.cellOpen}</p>
                 <p className="mt-1 text-xl font-bold text-sky-300">{ticketOpen}</p>
               </div>
               <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2.5">
-                <p className="text-[10px] text-red-400">Hoog/Urgent</p>
+                <p className="text-[10px] text-red-400">{tt.cellHighUrgent}</p>
                 <p className="mt-1 text-xl font-bold text-red-300">{ticketHigh}</p>
               </div>
             </div>
@@ -380,38 +390,38 @@ export default async function StatistiekenPage() {
           {/* Tijdregistratie */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Tijdregistratie</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionTime}</h2>
             </div>
             <div className="space-y-2 p-3">
               <div className="flex items-center justify-between rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-[var(--text-muted)]">Vandaag</p>
-                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{todayH}u {todayM}m</p>
+                  <p className="text-[10px] text-[var(--text-muted)]">{tt.cellToday}</p>
+                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{todayH}{tt.hoursShort} {todayM}{tt.minutesShort}</p>
                 </div>
                 <Clock className="h-5 w-5 text-sky-400" />
               </div>
               <div className="flex items-center justify-between rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-[var(--text-muted)]">Deze week</p>
-                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{weekH}u {weekM}m</p>
+                  <p className="text-[10px] text-[var(--text-muted)]">{tt.cellThisWeek}</p>
+                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{weekH}{tt.hoursShort} {weekM}{tt.minutesShort}</p>
                 </div>
                 <BarChart3 className="h-5 w-5 text-amber-400" />
               </div>
               <div className="flex items-center justify-between rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-[var(--text-muted)]">Totaal (factureerbaar)</p>
-                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{totalHours}u {totalMinutes}m</p>
+                  <p className="text-[10px] text-[var(--text-muted)]">{tt.cellTotalBillable}</p>
+                  <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{totalHours}{tt.hoursShort} {totalMinutes}{tt.minutesShort}</p>
                 </div>
                 <TrendingUp className="h-5 w-5 text-emerald-400" />
               </div>
-              <p className="text-[10px] text-[var(--text-muted)]">{completedEntries.length} registraties totaal</p>
+              <p className="text-[10px] text-[var(--text-muted)]">{tt.entriesTotal.replace('{n}', String(completedEntries.length))}</p>
             </div>
           </section>
 
           {/* Top klanten */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Top klanten</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionTopCustomers}</h2>
             </div>
             <div className="divide-y divide-[var(--border-soft)]">
               {topCustomers.map((c: any, i: number) => (
@@ -423,12 +433,12 @@ export default async function StatistiekenPage() {
                     {c.name}
                   </span>
                   <span className="rounded-full border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-2 py-0.5 text-[10px] font-semibold text-[var(--text-soft)]">
-                    {c.count} {c.count === 1 ? 'werf' : 'werven'}
+                    {c.count} {c.count === 1 ? tt.siteSingular : tt.sitePlural}
                   </span>
                 </div>
               ))}
               {topCustomers.length === 0 && (
-                <p className="px-4 py-4 text-center text-[11px] text-[var(--text-muted)]">Geen klanten gevonden.</p>
+                <p className="px-4 py-4 text-center text-[11px] text-[var(--text-muted)]">{tt.noCustomersFound}</p>
               )}
             </div>
           </section>
@@ -436,26 +446,26 @@ export default async function StatistiekenPage() {
           {/* Bestanden */}
           <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">Bestanden</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">{tt.sectionFiles}</h2>
             </div>
             <div className="space-y-2 p-3">
               <div className="flex items-center justify-between rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card-2)] px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-[var(--text-muted)]">Totaal bestanden</p>
+                  <p className="text-[10px] text-[var(--text-muted)]">{tt.cellTotalFiles}</p>
                   <p className="mt-0.5 text-lg font-bold text-[var(--text-main)]">{safeFiles.length}</p>
                 </div>
                 <FileText className="h-5 w-5 text-[var(--accent)]" />
               </div>
               <div className="flex items-center justify-between rounded-xl border border-blue-500/20 bg-blue-500/10 px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-blue-400">Klantbestanden</p>
+                  <p className="text-[10px] text-blue-400">{tt.cellClientFiles}</p>
                   <p className="mt-0.5 text-lg font-bold text-blue-300">{clientUploads}</p>
                 </div>
                 <CheckCircle2 className="h-5 w-5 text-blue-400" />
               </div>
               <div className="flex items-center justify-between rounded-xl border border-purple-500/20 bg-purple-500/10 px-3 py-2.5">
                 <div>
-                  <p className="text-[10px] text-purple-400">Opleverbestanden</p>
+                  <p className="text-[10px] text-purple-400">{tt.cellDeliveryFiles}</p>
                   <p className="mt-0.5 text-lg font-bold text-purple-300">{finalFiles}</p>
                 </div>
                 <CheckCircle2 className="h-5 w-5 text-purple-400" />

@@ -1,12 +1,21 @@
 import Link from 'next/link'
 import { ArrowLeft, StickyNote, Pin, Building2, FolderOpen, Construction } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import AppShell from '@/components/app-shell'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import DashboardNotesWidget from '@/components/dashboard/dashboard-notes-widget'
+import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
+import { getDictionary } from '@/i18n/dictionaries'
 
 export default async function AdminNotitiesPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
+  const locale: Locale = (locales as readonly string[]).includes(raw) ? (raw as Locale) : defaultLocale
+  const t = getDictionary(locale)
+  const tt = t.adminNotities
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -42,16 +51,16 @@ export default async function AdminNotitiesPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-soft)] transition hover:text-[var(--accent)]"
                 >
                   <ArrowLeft className="h-3 w-3" />
-                  Dashboard
+                  {tt.dashboard}
                 </Link>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--accent)]">
-                  Adminportaal
+                  {tt.adminPortal}
                 </p>
                 <h1 className="mt-1 text-xl font-semibold text-[var(--text-main)] sm:text-2xl">
-                  Notities
+                  {tt.title}
                 </h1>
                 <p className="mt-1 max-w-2xl text-sm text-[var(--text-soft)]">
-                  Snelle interne memo&apos;s, gekoppeld aan klanten, werven of machines.
+                  {tt.description}
                 </p>
               </div>
               <div className="w-full xl:ml-auto xl:max-w-[820px]">
@@ -59,7 +68,7 @@ export default async function AdminNotitiesPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Totaal</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiTotal}</p>
                         <p className="mt-1 text-lg font-semibold text-amber-400">{total}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/10">
@@ -70,7 +79,7 @@ export default async function AdminNotitiesPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(245,140,55,0.08),rgba(245,140,55,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Klanten</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiCustomers}</p>
                         <p className="mt-1 text-lg font-semibold text-[var(--accent)]">{customerCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent)]/10">
@@ -81,7 +90,7 @@ export default async function AdminNotitiesPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(33,150,243,0.08),rgba(33,150,243,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Werven</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiProjects}</p>
                         <p className="mt-1 text-lg font-semibold text-blue-500">{projectCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
@@ -92,7 +101,7 @@ export default async function AdminNotitiesPage() {
                   <div className="overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.02))] px-3 py-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <div>
-                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Machines</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{tt.kpiMachines}</p>
                         <p className="mt-1 text-lg font-semibold text-emerald-400">{machineCount}</p>
                       </div>
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/10">
@@ -109,8 +118,8 @@ export default async function AdminNotitiesPage() {
         <section className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--bg-card)] shadow-sm">
           <div className="flex items-center gap-2 border-b border-[var(--border-soft)] bg-[var(--bg-card-2)] px-4 py-2.5">
             <Pin className="h-4 w-4 text-amber-400" />
-            <span className="text-xs font-semibold text-[var(--text-main)]">Alle notities</span>
-            <span className="ml-auto text-[10px] text-[var(--text-muted)]">{pinnedCount} vastgepind</span>
+            <span className="text-xs font-semibold text-[var(--text-main)]">{tt.allNotes}</span>
+            <span className="ml-auto text-[10px] text-[var(--text-muted)]">{tt.pinnedCount.replace('{n}', String(pinnedCount))}</span>
           </div>
           <div className="min-h-[360px]">
             <DashboardNotesWidget hideHeader />
