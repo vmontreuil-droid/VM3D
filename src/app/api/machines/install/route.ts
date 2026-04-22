@@ -221,26 +221,54 @@ else
   HAS_REMOTE=1
 fi
 
-# 6b. websockify via pip — Termux pip vereist soms --break-system-packages (PEP 668)
+# 6b. websockify — pip met --no-deps (numpy compilatie vermijden) of source-download
 if [ "\${HAS_REMOTE:-0}" = "1" ]; then
+  # Probeer pip met --no-deps (websockify werkt prima zonder numpy)
   if ! command -v websockify >/dev/null 2>&1; then
     if command -v pip >/dev/null 2>&1; then
-      pip install --quiet --no-cache-dir --break-system-packages websockify >/dev/null 2>&1 \\
-        || pip install --quiet --no-cache-dir websockify >/dev/null 2>&1 \\
+      pip install --quiet --break-system-packages --no-deps websockify >/dev/null 2>&1 \\
+        || pip install --quiet --no-deps websockify >/dev/null 2>&1 \\
         || true
     elif command -v pip3 >/dev/null 2>&1; then
-      pip3 install --quiet --no-cache-dir --break-system-packages websockify >/dev/null 2>&1 \\
-        || pip3 install --quiet --no-cache-dir websockify >/dev/null 2>&1 \\
+      pip3 install --quiet --break-system-packages --no-deps websockify >/dev/null 2>&1 \\
+        || pip3 install --quiet --no-deps websockify >/dev/null 2>&1 \\
         || true
-    else
-      echo "  pip/pip3 ontbreekt. Probeer eerst: pkg install python-pip"
     fi
   fi
+
+  # Fallback: download websockify-source van GitHub (pure Python, geen compilatie nodig)
+  if ! command -v websockify >/dev/null 2>&1; then
+    if command -v python >/dev/null 2>&1; then
+      WS_DIR="\$HOME/.mv3d/websockify"
+      if [ ! -d "\$WS_DIR" ]; then
+        mkdir -p "\$HOME/.mv3d"
+        TMP_WS="\$(mktemp).tar.gz"
+        if curl -fsSL --connect-timeout 30 -o "\$TMP_WS" \\
+           "https://github.com/novnc/websockify/archive/refs/tags/v0.12.0.tar.gz"; then
+          tar xzf "\$TMP_WS" -C "\$HOME/.mv3d" 2>/dev/null && \\
+            rm -rf "\$WS_DIR" 2>/dev/null && \\
+            mv "\$HOME/.mv3d/websockify-0.12.0" "\$WS_DIR"
+          rm -f "\$TMP_WS"
+        fi
+      fi
+      if [ -f "\$WS_DIR/run" ]; then
+        cat > "\$PREFIX/bin/websockify" <<EOF_WS
+#!/data/data/com.termux/files/usr/bin/env bash
+exec python "\$WS_DIR/run" "\\\$@"
+EOF_WS
+        chmod +x "\$PREFIX/bin/websockify"
+      fi
+    fi
+  fi
+
   if ! command -v websockify >/dev/null 2>&1; then
     echo "  WAARSCHUWING: websockify kon niet geinstalleerd worden. Remote-view wordt overgeslagen."
     echo "  Handmatig herstellen op tablet:"
-    echo "    pkg install python python-pip"
-    echo "    pip install --break-system-packages websockify"
+    echo "    curl -fsSL https://github.com/novnc/websockify/archive/refs/tags/v0.12.0.tar.gz | tar xz -C \\\$HOME/.mv3d/"
+    echo "    mv \\\$HOME/.mv3d/websockify-0.12.0 \\\$HOME/.mv3d/websockify"
+    echo "    echo '#!/bin/sh' > \\\$PREFIX/bin/websockify"
+    echo "    echo 'exec python \\\$HOME/.mv3d/websockify/run \\\\\\\"\\\\\\\$@\\\\\\\"' >> \\\$PREFIX/bin/websockify"
+    echo "    chmod +x \\\$PREFIX/bin/websockify"
     echo "    bash \\\$HOME/remote.sh &"
     HAS_REMOTE=0
   else
