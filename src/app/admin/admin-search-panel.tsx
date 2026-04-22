@@ -57,36 +57,14 @@ function getProjectCustomerName(project: ProjectItem) {
   )
 }
 
-function formatDate(value?: string | null) {
+function formatDate(value: string | null | undefined, locale: string) {
   if (!value) return '—'
 
+  const loc = locale === 'fr' ? 'fr-BE' : locale === 'en' ? 'en-US' : 'nl-BE'
   try {
-    return new Date(value).toLocaleDateString('nl-BE')
+    return new Date(value).toLocaleDateString(loc)
   } catch {
     return '—'
-  }
-}
-
-function getStatusLabel(status?: string | null) {
-  switch (status) {
-    case 'offerte_aangevraagd':
-      return 'Offerte aangevraagd'
-    case 'offerte_verstuurd':
-      return 'Offerte verstuurd'
-    case 'in_behandeling':
-      return 'In behandeling'
-    case 'facturatie':
-      return 'Facturatie'
-    case 'factuur_verstuurd':
-      return 'Factuur verstuurd'
-    case 'afgerond':
-      return 'Afgerond'
-    case 'ingediend':
-      return 'Ingediend'
-    case 'klaar_voor_betaling':
-      return 'Klaar voor betaling'
-    default:
-      return 'Onbekend'
   }
 }
 
@@ -128,7 +106,7 @@ function getActionButtonClass(tone: 'neutral' | 'blue' | 'orange' | 'green') {
 }
 
 export default function AdminSearchPanel({ customers, projects }: Props) {
-  const { t } = useT()
+  const { t, locale } = useT()
   const unknownCustomerLabel = t.adminSearchPanel.unknownCustomer
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -192,7 +170,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               {t.adminSearchPanel.customers} &amp; {t.adminSearchPanel.sites}
             </h3>
             <p className="mt-0.5 text-[11px] leading-4 text-[var(--text-soft)]">
-              Zoek klantnaam, btw, stad, e-mail, werf, adres of status.
+              {t.adminSearchPanel.combinedSearchDesc}
             </p>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-1">
@@ -210,7 +188,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Zoek klant, werf, stad, btw, adres..."
+            placeholder={t.adminSearchPanel.combinedSearchPlaceholder}
             className="input-dark h-9 w-full px-3 py-1.5 text-[12px]"
           />
 
@@ -221,7 +199,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
               className="group relative flex h-9 items-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] px-3 text-[10px] font-medium text-[var(--text-main)] transition hover:border-[var(--accent)]/50 hover:bg-[var(--bg-card)]/80"
             >
               <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-[var(--accent)]/80" />
-              <span className="pr-2">Reset</span>
+              <span className="pr-2">{t.adminSearchPanel.reset}</span>
             </button>
           ) : (
             <div className="hidden md:block" />
@@ -321,7 +299,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/12 text-emerald-200">
                             <Ticket className="h-3 w-3" />
                           </span>
-                          <span className="pr-1">Ticket</span>
+                          <span className="pr-1">{t.adminSearchPanel.ticket}</span>
                           <span className="absolute right-0 top-0 h-full w-[2px] rounded-l-full bg-emerald-400/80" />
                         </Link>
                       </div>
@@ -364,7 +342,7 @@ export default function AdminSearchPanel({ customers, projects }: Props) {
                           {project.name || '—'}
                         </p>
                         <p className="mt-0.5 text-[11px] text-[var(--text-soft)]">
-                          {[project.address, getProjectCustomerName(project), formatDate(project.created_at)]
+                          {[project.address, getProjectCustomerName(project), formatDate(project.created_at, locale)]
                             .filter(Boolean)
                             .join(' · ')}
                         </p>

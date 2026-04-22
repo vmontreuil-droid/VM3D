@@ -757,6 +757,10 @@ const fr: Dictionary = {
     newSite: 'Nouveau chantier',
     noSitesFound: 'Aucun chantier trouvé pour cette recherche.',
     unknownCustomer: 'Client inconnu',
+    combinedSearchDesc: 'Recherchez par nom client, TVA, ville, e-mail, chantier, adresse ou statut.',
+    combinedSearchPlaceholder: 'Rechercher client, chantier, ville, TVA, adresse...',
+    reset: 'Réinitialiser',
+    ticket: 'Ticket',
   },
 
   adminUploadPanel: {

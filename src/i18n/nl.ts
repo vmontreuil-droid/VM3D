@@ -782,6 +782,10 @@ const nl = {
     newSite: 'Nieuwe werf',
     noSitesFound: 'Geen werven gevonden voor deze zoekopdracht.',
     unknownCustomer: 'Onbekende klant',
+    combinedSearchDesc: 'Zoek klantnaam, btw, stad, e-mail, werf, adres of status.',
+    combinedSearchPlaceholder: 'Zoek klant, werf, stad, btw, adres...',
+    reset: 'Reset',
+    ticket: 'Ticket',
   },
 
   /* ── Admin upload panel ── */

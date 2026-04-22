@@ -757,6 +757,10 @@ const en: Dictionary = {
     newSite: 'New site',
     noSitesFound: 'No sites found for this search.',
     unknownCustomer: 'Unknown customer',
+    combinedSearchDesc: 'Search by customer name, VAT, city, email, project, address or status.',
+    combinedSearchPlaceholder: 'Search customer, project, city, VAT, address...',
+    reset: 'Reset',
+    ticket: 'Ticket',
   },
 
   adminUploadPanel: {
