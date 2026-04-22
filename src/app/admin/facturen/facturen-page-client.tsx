@@ -189,29 +189,29 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <Euro className="h-4 w-4 text-[var(--accent)]" />
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Financieel overzicht</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.financialOverview}</h2>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 p-4">
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Totaal gefactureerd</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.totalInvoiced}</p>
                 <p className="mt-1 text-xl font-bold text-[var(--text-main)]">€{fmt(totalBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">{total} factuur{total !== 1 ? 'en' : ''}</p>
+                <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">{total} {t.facturenPage.invoices.toLowerCase()}</p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Betaald</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.paid}</p>
                 <p className="mt-1 text-xl font-bold text-emerald-400">€{fmt(betaaldBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-emerald-300/60">{betaaldC} betaald</p>
+                <p className="mt-0.5 text-[10px] text-emerald-300/60">{betaaldC}</p>
               </div>
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.outstanding}</p>
                 <p className="mt-1 text-xl font-bold text-amber-400">€{fmt(openBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-amber-300/60">{verstuurdC} verstuurd</p>
+                <p className="mt-0.5 text-[10px] text-amber-300/60">{verstuurdC}</p>
               </div>
               <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Vervallen</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.overdue}</p>
                 <p className="mt-1 text-xl font-bold text-red-400">€{fmt(vervallenBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-red-300/60">{vervallenC} factuur{vervallenC !== 1 ? 'en' : ''}</p>
+                <p className="mt-0.5 text-[10px] text-red-300/60">{vervallenC}</p>
               </div>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 text-[var(--accent)]" />
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Betalingsstatus</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.paymentStatus}</h2>
               </div>
             </div>
             <div className="p-4">
@@ -240,7 +240,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                   <span className="text-base font-bold text-emerald-400">{betaalRatio}%</span>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-[var(--text-main)]">Betaalratio</p>
+                  <p className="text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.paymentRatio}</p>
                   <p className="text-xs text-[var(--text-soft)]">{betaaldC} van {total} facturen betaald</p>
                   {vervallenC > 0 && (
                     <p className="mt-0.5 text-[10px] text-red-400">{vervallenC} vervallen</p>
@@ -249,10 +249,10 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
               </div>
               {/* Pipeline bars */}
               <div className="space-y-2.5">
-                <PipelineBar label="Verstuurd"    count={verstuurdC}    total={total} color="bg-amber-400" />
-                <PipelineBar label="Betaald"      count={betaaldC}      total={total} color="bg-emerald-400" />
-                <PipelineBar label="Vervallen"    count={vervallenC}    total={total} color="bg-red-400" />
-                <PipelineBar label="Gecrediteerd" count={gecrediteerdC} total={total} color="bg-purple-400" />
+                <PipelineBar label={t.facturenPage.statusSent}     count={verstuurdC}    total={total} color="bg-amber-400" />
+                <PipelineBar label={t.facturenPage.statusPaid}     count={betaaldC}      total={total} color="bg-emerald-400" />
+                <PipelineBar label={t.facturenPage.statusOverdue}  count={vervallenC}    total={total} color="bg-red-400" />
+                <PipelineBar label={t.facturenPage.statusCredited} count={gecrediteerdC} total={total} color="bg-purple-400" />
               </div>
             </div>
           </div>
@@ -311,7 +311,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <CreditCard className="h-4 w-4 text-[var(--accent)]" />
               </span>
               <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Alle facturen</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.facturenPage.allInvoices}</h2>
                 <p className="text-[10px] text-[var(--text-soft)]">{filtered.length} van {total}</p>
               </div>
             </div>
@@ -322,7 +322,7 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--text-muted)]" />
                 <input
                   type="text"
-                  placeholder="Zoek op nummer, klant, onderwerp…"
+                  placeholder={t.facturenPage.searchPlaceholder}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="h-8 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] pl-8 pr-7 text-xs text-[var(--text-main)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent)] sm:w-64"
@@ -373,13 +373,13 @@ export default function FacturenPageClient({ facturen }: { facturen: Factuur[] }
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-[var(--border-soft)] bg-[var(--bg-card)]">
-                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Nummer</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Klant</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Onderwerp</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Status</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Vervaldatum</th>
-                      <th className="px-3 py-2.5 text-right text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Bedrag</th>
-                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Aangemaakt</th>
+                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colNumber}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colCustomer}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colSubject}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colStatus}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colDueDate}</th>
+                      <th className="px-3 py-2.5 text-right text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colAmount}</th>
+                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.facturenPage.colCreated}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--border-soft)]">

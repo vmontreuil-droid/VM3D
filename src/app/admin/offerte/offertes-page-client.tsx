@@ -203,29 +203,28 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <Euro className="h-4 w-4 text-[var(--accent)]" />
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Financieel overzicht</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.offertesPage.financialOverview}</h2>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 p-4">
               <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Totale waarde</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.totalValue}</p>
                 <p className="mt-1 text-xl font-bold text-[var(--text-main)]">€{fmt(totalBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">{total} offerte{total !== 1 ? 's' : ''}</p>
+                <p className="mt-0.5 text-[10px] text-[var(--text-soft)]">{total} {t.offertesPage.offertes.toLowerCase()}</p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Goedgekeurd</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.approved}</p>
                 <p className="mt-1 text-xl font-bold text-emerald-400">€{fmt(goedBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-emerald-300/60">{goedC} goedgekeurd</p>
+                <p className="mt-0.5 text-[10px] text-emerald-300/60">{goedC} {t.offertesPage.approved.toLowerCase()}</p>
               </div>
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Openstaand</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.outstanding}</p>
                 <p className="mt-1 text-xl font-bold text-amber-400">€{fmt(openBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-amber-300/60">{actief} actief</p>
+                <p className="mt-0.5 text-[10px] text-amber-300/60">{actief}</p>
               </div>
               <div className="rounded-xl border border-sky-500/20 bg-sky-500/5 p-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Gem. bedrag</p>
+                <p className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.averageAmount}</p>
                 <p className="mt-1 text-xl font-bold text-sky-400">€{fmt(gemBedrag)}</p>
-                <p className="mt-0.5 text-[10px] text-sky-300/60">per offerte</p>
               </div>
             </div>
           </div>
@@ -235,7 +234,7 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
             <div className="border-b border-[var(--border-soft)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 text-[var(--accent)]" />
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Pipeline & conversie</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.offertesPage.pipelineConversion}</h2>
               </div>
             </div>
             <div className="p-4">
@@ -254,7 +253,7 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
                   <span className="text-base font-bold text-emerald-400">{conversie}%</span>
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-[var(--text-main)]">Conversieratio</p>
+                  <p className="text-sm font-semibold text-[var(--text-main)]">{t.offertesPage.conversionRatio}</p>
                   <p className="text-xs text-[var(--text-soft)]">{goedC} van {total} offertes goedgekeurd</p>
                   {afgekeurdC > 0 && (
                     <p className="mt-0.5 text-[10px] text-red-400">{afgekeurdC} afgekeurd</p>
@@ -263,11 +262,11 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
               </div>
               {/* Pipeline bars */}
               <div className="space-y-2.5">
-                <PipelineBar label="Verstuurd"   count={verstuurdC} total={total} color="bg-amber-400" />
-                <PipelineBar label="Wacht klant" count={wachtC}     total={total} color="bg-blue-400" />
-                <PipelineBar label="Goedgekeurd" count={goedC}      total={total} color="bg-emerald-400" />
-                <PipelineBar label="Afgekeurd"   count={afgekeurdC} total={total} color="bg-red-400" />
-                <PipelineBar label="Verlopen"    count={verlopenC}  total={total} color="bg-purple-400" />
+                <PipelineBar label={t.offertesPage.statusSent}     count={verstuurdC} total={total} color="bg-amber-400" />
+                <PipelineBar label={t.offertesPage.statusWaiting}  count={wachtC}     total={total} color="bg-blue-400" />
+                <PipelineBar label={t.offertesPage.statusApproved} count={goedC}      total={total} color="bg-emerald-400" />
+                <PipelineBar label={t.offertesPage.statusRejected} count={afgekeurdC} total={total} color="bg-red-400" />
+                <PipelineBar label={t.offertesPage.statusExpired}  count={verlopenC}  total={total} color="bg-purple-400" />
               </div>
             </div>
           </div>
@@ -323,7 +322,7 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
                 <FileText className="h-4 w-4 text-[var(--accent)]" />
               </span>
               <div>
-                <h2 className="text-sm font-semibold text-[var(--text-main)]">Alle offertes</h2>
+                <h2 className="text-sm font-semibold text-[var(--text-main)]">{t.offertesPage.allOffertes}</h2>
                 <p className="text-[10px] text-[var(--text-soft)]">{filtered.length} van {total}</p>
               </div>
             </div>
@@ -334,7 +333,7 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
                 <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--text-muted)]" />
                 <input
                   type="text"
-                  placeholder="Zoek op nummer, klant, onderwerp…"
+                  placeholder={t.offertesPage.searchPlaceholder}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="h-8 w-full rounded-lg border border-[var(--border-soft)] bg-[var(--bg-card)] pl-8 pr-7 text-xs text-[var(--text-main)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent)] sm:w-64"
@@ -394,13 +393,13 @@ export default function OffertesPageClient({ offertes }: { offertes: Offerte[] }
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-[var(--border-soft)] bg-[var(--bg-card)]">
-                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Nummer</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Klant</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Onderwerp</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Status</th>
-                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Geldig tot</th>
-                      <th className="px-3 py-2.5 text-right text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Bedrag</th>
-                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">Aangemaakt</th>
+                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colNumber}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colCustomer}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colSubject}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colStatus}</th>
+                      <th className="px-3 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colValidUntil}</th>
+                      <th className="px-3 py-2.5 text-right text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colAmount}</th>
+                      <th className="px-4 py-2.5 text-left text-[9px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{t.offertesPage.colCreated}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--border-soft)]">
