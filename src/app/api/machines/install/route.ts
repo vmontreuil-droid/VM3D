@@ -402,8 +402,25 @@ gps_folder() {
   esac
 }
 
+# Whitelisted root folders: alle bestanden in deze sub-mappen worden
+# gerapporteerd zodat admin overal bij kan, ongeacht waar de gebruiker
+# bestanden plaatst (Downloads, screenshots, machine-specifieke folders).
+SCAN_ROOTS=(
+  "Download"
+  "Documents"
+  "Pictures"
+  "DCIM"
+  "MachineFiles"
+  "Unicontrol"
+  "Trimble Data"
+  "TopconData"
+  "Leica iCON"
+  "CHCData"
+)
+
 # The folder we REPORT to the server (listing root). For Unicontrol this is
 # one level above Projects so the UI shows the whole Unicontrol workspace.
+# (Behouden voor backwards-compat met andere code paths.)
 listing_folder() {
   case "$1" in
     UNICONTROL) echo "/sdcard/Unicontrol" ;;
@@ -426,22 +443,29 @@ json_escape() {
   printf '%s' "$s"
 }
 
-# Build a JSON object {"root":"...","files":[{"path":"a/b.xml","size":123}, ...]}
-# Recursive, pure bash (jq not required). Capped at 5000 files.
+# Build a JSON object {"root":"/sdcard","files":[{"path":"sub/a/b.xml","size":123}, ...]}
+# Scans alle SCAN_ROOTS sub-mappen onder /sdcard zodat de admin alle relevante
+# bestanden ziet (Download, Documents, Pictures, DCIM én alle guidance-folders),
+# niet alleen de map van het actieve besturingssysteem. Pad bevat de sub-mapnaam
+# zodat de UI ze correct als top-level folders groepeert.
+# Cap: 5000 bestanden in totaal om grote tablets niet te bevriezen.
 build_listing() {
-  local root="$1"
-  if [ -z "$root" ]; then printf 'null'; return; fi
-  mkdir -p "$root" 2>/dev/null
-  local out='{"root":"'"$(json_escape "$root")"'","files":['
+  local out='{"root":"/sdcard","files":['
   local first=1
   local count=0
-  while IFS=$'\\t' read -r p sz; do
-    [ -z "$p" ] && continue
-    if [ $count -ge 5000 ]; then break; fi
-    if [ $first -eq 1 ]; then first=0; else out+=","; fi
-    out+='{"path":"'"$(json_escape "$p")"'","size":'"\${sz:-0}"'}'
-    count=$((count+1))
-  done < <(cd "$root" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
+  for sub in "\${SCAN_ROOTS[@]}"; do
+    local dir="/sdcard/$sub"
+    [ ! -d "$dir" ] && continue
+    while IFS=$'\\t' read -r p sz; do
+      [ -z "$p" ] && continue
+      if [ $count -ge 5000 ]; then break; fi
+      if [ $first -eq 1 ]; then first=0; else out+=","; fi
+      local full="$sub/$p"
+      out+='{"path":"'"$(json_escape "$full")"'","size":'"\${sz:-0}"'}'
+      count=$((count+1))
+    done < <(cd "$dir" 2>/dev/null && find . -type f -printf '%P\\t%s\\n' 2>/dev/null)
+    [ $count -ge 5000 ] && break
+  done
   out+=']}'
   printf '%s' "$out"
 }
@@ -503,7 +527,7 @@ get_location() {
 }
 
 while true; do
-  LISTING=$(build_listing "$LAST_LIST")
+  LISTING=$(build_listing)
   [ -z "$LISTING" ] && LISTING='null'
 
   # Haal GPS op bij eerste poll en daarna om de ~10 polls (~5 min bij 30s interval)

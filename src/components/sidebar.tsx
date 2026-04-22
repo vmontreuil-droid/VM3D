@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useT } from '@/i18n/context'
 import ThemeToggle from '@/components/theme-toggle'
 import LanguageSwitcher from '@/components/language-switcher'
-import { Home, LayoutDashboard, ChevronsLeft, ChevronsRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2, Globe2 } from 'lucide-react'
+import { Home, LayoutDashboard, ChevronsLeft, ChevronsRight, X, Plus, List, UploadCloud, BarChart3, Ticket, CreditCard, Eye, UserRound, FileText, FilePlus, MousePointerClick, Receipt, Construction, StickyNote, Clock, Bell, UserCog, Zap, FileCode2, Globe2, FolderTree } from 'lucide-react'
 
 type Props = {
   isAdmin?: boolean
@@ -275,6 +275,12 @@ export default function Sidebar({
       match: (pathname) => pathname === '/admin/machines' || pathname.startsWith('/admin/machines/'),
       icon: <Construction className="h-[17px] w-[17px]" />,
       badge: machineCount ?? undefined,
+    },
+    {
+      label: t.platform.tabletFiles,
+      href: '/admin/tablets',
+      match: (pathname) => pathname === '/admin/tablets' || pathname.startsWith('/admin/tablets/'),
+      icon: <FolderTree className="h-[17px] w-[17px]" />,
     },
     {
       label: t.platform.timeTracking,
