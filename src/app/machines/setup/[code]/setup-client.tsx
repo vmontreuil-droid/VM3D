@@ -18,6 +18,7 @@ interface Props {
 // Direct APK download link van F-Droid (geen zoeken nodig)
 const TERMUX_APK = 'https://f-droid.org/repo/com.termux_1000.apk'
 const TERMUX_BOOT_APK = 'https://f-droid.org/repo/com.termux.boot_7.apk'
+const DROIDVNC_PLAYSTORE = 'https://play.google.com/store/apps/details?id=net.christianbeier.droidvnc_ng'
 
 export default function SetupClient({ machine }: Props) {
   const { t } = useT()
@@ -179,6 +180,39 @@ export default function SetupClient({ machine }: Props) {
                   </button>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Step 4 — Install droidVNC-NG */}
+        <div
+          className={`rounded-2xl border p-5 transition-all ${
+            step >= 3 ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/10 bg-white/5 opacity-40'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+              step >= 3 ? 'bg-emerald-500 text-white' : 'bg-white/20 text-white/50'
+            }`}>
+              4
+            </div>
+            <div className="flex-1">
+              <h2 className="font-bold text-base">{tt.installVnc}</h2>
+              <p className="mt-1 text-sm text-white/60">{tt.installVncDesc}</p>
+              <a
+                href={DROIDVNC_PLAYSTORE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 flex items-center justify-center gap-2 w-full rounded-xl bg-emerald-500 py-4 text-center text-base font-bold text-white active:bg-emerald-600"
+              >
+                {tt.installVncCta}
+              </a>
+              <p className="mt-3 text-[12px] text-emerald-400 font-semibold">
+                {tt.vncReminder}
+              </p>
+              <p className="mt-2 text-[11px] text-white/40">
+                {tt.installVncDone}
+              </p>
             </div>
           </div>
         </div>

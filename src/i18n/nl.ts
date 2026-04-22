@@ -1472,6 +1472,11 @@ const nl = {
     pasteStep4: 'Druk',
     autoFinish: 'Daarna gaat alles automatisch! ✅',
     copyAgain: 'Opnieuw kopiëren',
+    installVnc: 'Installeer droidVNC-NG',
+    installVncDesc: 'Voor live tablet-bekijken vanuit het admin-portaal moet je éénmalig de gratis app droidVNC-NG installeren en op "Start" tikken.',
+    installVncCta: '⬇️ Open Play Store',
+    installVncDone: 'droidVNC-NG geopend? Dan ben je klaar — admin kan nu live meekijken en bedienen.',
+    vncReminder: 'Vergeet niet droidVNC-NG te openen en op Start te tikken na installatie.',
   },
 
   sharedUI: {

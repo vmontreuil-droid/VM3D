@@ -123,6 +123,19 @@ export default function EditMachineForm({
     }
   }, [customer?.id])
 
+  // Live-refresh: ververs server-state elke 15s zodat is_online, last_seen_at,
+  // GPS-locatie en tunnel_url automatisch bijwerken zonder volledige page reload.
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const tick = () => {
+      // Pauzeer wanneer tab onzichtbaar is om bandwidth te sparen
+      if (document.visibilityState !== 'visible') return
+      router.refresh()
+    }
+    const id = setInterval(tick, 15000)
+    return () => clearInterval(id)
+  }, [router])
+
   const setupUrl = useMemo(() => {
     if (typeof window === 'undefined') return ''
     return `${window.location.origin}/machines/setup/${machine.connection_code}`

@@ -1432,6 +1432,11 @@ const fr: Dictionary = {
     pasteStep4: 'Appuyez sur',
     autoFinish: 'Tout se fait automatiquement ensuite ! ✅',
     copyAgain: 'Copier à nouveau',
+    installVnc: 'Installer droidVNC-NG',
+    installVncDesc: 'Pour la vue en direct de la tablette depuis le portail admin, installez une seule fois l\'application gratuite droidVNC-NG et appuyez sur "Start".',
+    installVncCta: '⬇️ Ouvrir le Play Store',
+    installVncDone: 'droidVNC-NG ouvert ? Alors c\'est terminé — l\'admin peut désormais voir et contrôler en direct.',
+    vncReminder: 'N\'oubliez pas d\'ouvrir droidVNC-NG et d\'appuyer sur Start après installation.',
   },
 
   sharedUI: {

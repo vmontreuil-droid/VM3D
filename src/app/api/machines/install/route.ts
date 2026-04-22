@@ -207,12 +207,151 @@ do
   mkdir -p "$F" 2>/dev/null || true
 done
 
+# ---------- 6. Remote-view (cloudflared + websockify + noVNC) -------------
+echo "[6/6] Remote-view setup (cloudflared + websockify + noVNC)..."
+
+# 6a. cloudflared via apt
+if [ -n "$WORKING_MIRROR" ]; then
+  apt install -y --no-install-recommends cloudflared python unzip >/dev/null 2>&1 || true
+fi
+if ! command -v cloudflared >/dev/null 2>&1; then
+  echo "  WAARSCHUWING: cloudflared kon niet geïnstalleerd worden. Remote-view wordt overgeslagen."
+  HAS_REMOTE=0
+else
+  HAS_REMOTE=1
+fi
+
+# 6b. websockify via pip
+if [ "\${HAS_REMOTE:-0}" = "1" ]; then
+  if ! command -v websockify >/dev/null 2>&1; then
+    pip install --quiet --no-cache-dir websockify >/dev/null 2>&1 || true
+  fi
+  if ! command -v websockify >/dev/null 2>&1; then
+    echo "  WAARSCHUWING: websockify kon niet geïnstalleerd worden. Remote-view wordt overgeslagen."
+    HAS_REMOTE=0
+  fi
+fi
+
+# 6c. noVNC client downloaden
+NOVNC_DIR="$HOME/.mv3d/noVNC"
+if [ "\${HAS_REMOTE:-0}" = "1" ] && [ ! -f "$NOVNC_DIR/vnc.html" ]; then
+  mkdir -p "$HOME/.mv3d"
+  TMP="$(mktemp).zip"
+  if curl -fsSL --connect-timeout 30 -o "$TMP" "https://github.com/novnc/noVNC/archive/refs/tags/v1.5.0.zip" \\
+     && unzip -q "$TMP" -d "$HOME/.mv3d" 2>/dev/null; then
+    rm -rf "$NOVNC_DIR" 2>/dev/null
+    mv "$HOME/.mv3d/noVNC-1.5.0" "$NOVNC_DIR"
+    rm -f "$TMP"
+  else
+    echo "  WAARSCHUWING: noVNC download mislukt — remote-view skip"
+    HAS_REMOTE=0
+  fi
+fi
+
+# 6d. remote.sh schrijven (tunnel + websockify + URL melden)
+if [ "\${HAS_REMOTE:-0}" = "1" ]; then
+  pkill -f "$HOME/remote.sh" 2>/dev/null || true
+  cat > "$HOME/remote.sh" <<'__REMOTE_EOF__'
+#!/data/data/com.termux/files/usr/bin/env bash
+CODE="__CODE__"
+SERVER="__SERVER__"
+NOVNC_DIR="$HOME/.mv3d/noVNC"
+TUNNEL_LOG="$HOME/.mv3d/cloudflared.log"
+mkdir -p "$HOME/.mv3d"
+
+LOG() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] [remote] $*"; }
+
+cleanup() {
+  curl -fsS -X POST "$SERVER/api/machines/tunnel" \
+    -H "Content-Type: application/json" \
+    -d "{\"connection_code\":\"$CODE\",\"tunnel_url\":null}" >/dev/null 2>&1 || true
+  pkill -f "websockify.*6080" 2>/dev/null || true
+  pkill -f "cloudflared.*tunnel" 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM
+
+LOG "websockify starten op poort 6080 -> localhost:5900"
+pkill -f "websockify.*6080" 2>/dev/null || true
+sleep 1
+nohup websockify --web "$NOVNC_DIR" 6080 localhost:5900 > "$HOME/.mv3d/websockify.log" 2>&1 &
+
+LOG "cloudflared quick-tunnel starten"
+pkill -f "cloudflared.*tunnel" 2>/dev/null || true
+sleep 1
+> "$TUNNEL_LOG"
+nohup cloudflared tunnel --url "http://localhost:6080" --no-autoupdate > "$TUNNEL_LOG" 2>&1 &
+
+TUNNEL_URL=""
+for _ in $(seq 1 30); do
+  TUNNEL_URL=$(grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' "$TUNNEL_LOG" | head -n1 || true)
+  [ -n "$TUNNEL_URL" ] && break
+  sleep 1
+done
+
+if [ -z "$TUNNEL_URL" ]; then
+  LOG "Geen tunnel-URL gevonden; remote-view niet beschikbaar"
+  exit 1
+fi
+LOG "Tunnel actief: $TUNNEL_URL"
+
+curl -fsS -X POST "$SERVER/api/machines/tunnel" \
+  -H "Content-Type: application/json" \
+  -d "{\"connection_code\":\"$CODE\",\"tunnel_url\":\"$TUNNEL_URL\"}" >/dev/null 2>&1 || true
+
+# Watchdog: herstart cloudflared bij crash en meld nieuwe URL
+LAST_URL="$TUNNEL_URL"
+while true; do
+  sleep 30
+  if ! pgrep -f "cloudflared.*tunnel" >/dev/null; then
+    LOG "cloudflared gecrasht — herstarten"
+    > "$TUNNEL_LOG"
+    nohup cloudflared tunnel --url "http://localhost:6080" --no-autoupdate > "$TUNNEL_LOG" 2>&1 &
+    sleep 8
+    NEW_URL=$(grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' "$TUNNEL_LOG" | head -n1 || true)
+    if [ -n "$NEW_URL" ] && [ "$NEW_URL" != "$LAST_URL" ]; then
+      LAST_URL="$NEW_URL"
+      curl -fsS -X POST "$SERVER/api/machines/tunnel" \
+        -H "Content-Type: application/json" \
+        -d "{\"connection_code\":\"$CODE\",\"tunnel_url\":\"$NEW_URL\"}" >/dev/null 2>&1 || true
+    fi
+  fi
+done
+__REMOTE_EOF__
+  sed -i "s|__CODE__|$CODE|g" "$HOME/remote.sh"
+  sed -i "s|__SERVER__|$SERVER|g" "$HOME/remote.sh"
+  chmod +x "$HOME/remote.sh"
+
+  # Boot-hook ook voor remote.sh
+  cat > "$HOME/.termux/boot/start-vm-remote.sh" <<'__BOOT_REMOTE_EOF__'
+#!/data/data/com.termux/files/usr/bin/env bash
+termux-wake-lock
+exec bash "$HOME/remote.sh" >> "$HOME/remote.log" 2>&1
+__BOOT_REMOTE_EOF__
+  chmod +x "$HOME/.termux/boot/start-vm-remote.sh"
+
+  # Start remote.sh nu in achtergrond
+  nohup bash "$HOME/remote.sh" >> "$HOME/remote.log" 2>&1 &
+  echo "  OK: remote-view actief — admin kan nu live tablet bekijken"
+  echo "  (zorg dat droidVNC-NG geopend is en op Start staat)"
+
+  # Open droidVNC-NG Play Store als de app niet geïnstalleerd is
+  if command -v pm >/dev/null 2>&1 && ! pm list packages 2>/dev/null | grep -q "net.christianbeier.droidvnc_ng"; then
+    echo ""
+    echo "  ! droidVNC-NG nog niet geïnstalleerd op deze tablet."
+    echo "  ! Installeer via Play Store: net.christianbeier.droidvnc_ng"
+    am start -a android.intent.action.VIEW \\
+      -d "https://play.google.com/store/apps/details?id=net.christianbeier.droidvnc_ng" \\
+      >/dev/null 2>&1 || true
+  fi
+fi
+
 echo ""
 echo "======================================"
 echo "  Installatie voltooid"
 echo "======================================"
 echo "  Logbestand: $HOME/sync.log"
-echo "  Stoppen:    pkill -f sync.sh"
+echo "  Remote log: $HOME/remote.log"
+echo "  Stoppen:    pkill -f sync.sh ; pkill -f remote.sh"
 echo ""
 echo "  Sync start nu..."
 echo ""
