@@ -1,9 +1,34 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { locales, defaultLocale, COOKIE_NAME, type Locale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/dictionaries'
 import { LocaleProvider } from '@/i18n/context'
+
+function pickLocaleFromAcceptLanguage(header: string | null): Locale | null {
+  if (!header) return null
+  // Header format: "fr-FR,fr;q=0.9,en;q=0.8,nl;q=0.7"
+  const parts = header.split(',').map(p => {
+    const [tag, q] = p.trim().split(';q=')
+    return { tag: tag.trim().toLowerCase(), q: q ? Number(q) : 1 }
+  }).sort((a, b) => b.q - a.q)
+  for (const { tag } of parts) {
+    const primary = tag.split('-')[0]
+    if ((locales as readonly string[]).includes(primary)) return primary as Locale
+  }
+  return null
+}
+
+async function getLocaleForRequest(): Promise<Locale> {
+  const cookieStore = await cookies()
+  const cookieRaw = cookieStore.get(COOKIE_NAME)?.value
+  if (cookieRaw && (locales as readonly string[]).includes(cookieRaw)) {
+    return cookieRaw as Locale
+  }
+  const headerStore = await headers()
+  const detected = pickLocaleFromAcceptLanguage(headerStore.get('accept-language'))
+  return detected ?? defaultLocale
+}
 
 function getLocaleFromCookies(cookieStore: Awaited<ReturnType<typeof cookies>>): Locale {
   const raw = cookieStore.get(COOKIE_NAME)?.value ?? defaultLocale
@@ -50,8 +75,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const cookieStore = await cookies()
-  const locale = getLocaleFromCookies(cookieStore)
+  const locale = await getLocaleForRequest()
   const dictionary = getDictionary(locale)
 
   return (
