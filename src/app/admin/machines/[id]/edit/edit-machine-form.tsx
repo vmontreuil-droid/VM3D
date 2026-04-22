@@ -24,6 +24,7 @@ import {
 import CustomerSelect, { type Customer } from '@/components/customers/customer-select'
 import MachineTransferPanel from '@/components/machines/machine-transfer-panel'
 import MachinesMap from '@/components/machines/machines-map'
+import RemoteTabletViewer from './remote-tablet-viewer'
 import { useT } from '@/i18n/context'
 import {
   MachineIcon,
@@ -54,6 +55,8 @@ type Machine = {
   longitude?: number | string | null
   location_accuracy?: number | string | null
   location_updated_at?: string | null
+  tunnel_url?: string | null
+  tunnel_seen_at?: string | null
 }
 
 const BRANDS = [
@@ -327,6 +330,13 @@ export default function EditMachineForm({
           </div>
         </div>
       </section>
+
+      <RemoteTabletViewer
+        tunnelUrl={machine.tunnel_url}
+        tunnelSeenAt={machine.tunnel_seen_at}
+        isOnline={machine.is_online}
+        connectionCode={machine.connection_code}
+      />
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px]">
         {/* Main column */}
