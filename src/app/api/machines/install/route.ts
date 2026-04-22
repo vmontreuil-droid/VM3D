@@ -210,25 +210,41 @@ done
 # ---------- 6. Remote-view (cloudflared + websockify + noVNC) -------------
 echo "[6/6] Remote-view setup (cloudflared + websockify + noVNC)..."
 
-# 6a. cloudflared via apt
+# 6a. cloudflared + python(+pip) + unzip via apt
 if [ -n "$WORKING_MIRROR" ]; then
-  apt install -y --no-install-recommends cloudflared python unzip >/dev/null 2>&1 || true
+  apt install -y --no-install-recommends cloudflared python python-pip unzip >/dev/null 2>&1 || true
 fi
 if ! command -v cloudflared >/dev/null 2>&1; then
-  echo "  WAARSCHUWING: cloudflared kon niet geïnstalleerd worden. Remote-view wordt overgeslagen."
+  echo "  WAARSCHUWING: cloudflared kon niet geinstalleerd worden. Remote-view wordt overgeslagen."
   HAS_REMOTE=0
 else
   HAS_REMOTE=1
 fi
 
-# 6b. websockify via pip
+# 6b. websockify via pip — Termux pip vereist soms --break-system-packages (PEP 668)
 if [ "\${HAS_REMOTE:-0}" = "1" ]; then
   if ! command -v websockify >/dev/null 2>&1; then
-    pip install --quiet --no-cache-dir websockify >/dev/null 2>&1 || true
+    if command -v pip >/dev/null 2>&1; then
+      pip install --quiet --no-cache-dir --break-system-packages websockify >/dev/null 2>&1 \\
+        || pip install --quiet --no-cache-dir websockify >/dev/null 2>&1 \\
+        || true
+    elif command -v pip3 >/dev/null 2>&1; then
+      pip3 install --quiet --no-cache-dir --break-system-packages websockify >/dev/null 2>&1 \\
+        || pip3 install --quiet --no-cache-dir websockify >/dev/null 2>&1 \\
+        || true
+    else
+      echo "  pip/pip3 ontbreekt. Probeer eerst: pkg install python-pip"
+    fi
   fi
   if ! command -v websockify >/dev/null 2>&1; then
-    echo "  WAARSCHUWING: websockify kon niet geïnstalleerd worden. Remote-view wordt overgeslagen."
+    echo "  WAARSCHUWING: websockify kon niet geinstalleerd worden. Remote-view wordt overgeslagen."
+    echo "  Handmatig herstellen op tablet:"
+    echo "    pkg install python python-pip"
+    echo "    pip install --break-system-packages websockify"
+    echo "    bash \\\$HOME/remote.sh &"
     HAS_REMOTE=0
+  else
+    echo "  OK: websockify beschikbaar"
   fi
 fi
 
